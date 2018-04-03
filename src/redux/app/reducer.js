@@ -14,10 +14,7 @@ const initState = new Map({
 });
 export default function appReducer(state = initState, action) {
   switch (action.type) {
-    case actions.COLLPSE_CHANGE:
-      return state.set('collapsed', !state.get('collapsed'));
-    case actions.COLLPSE_OPEN_DRAWER:
-      return state.set('openDrawer', !state.get('openDrawer'));
+
     case actions.TOGGLE_ALL:
       if (state.get('view') !== action.view || action.height !== state.height) {
         const height = action.height ? action.height : state.height;

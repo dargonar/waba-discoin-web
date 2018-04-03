@@ -8,6 +8,8 @@ import authAction from '../../redux/auth/actions';
 import IntlMessages from '../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
 
+import { siteConfig } from '../../config.js';
+
 const { login } = authAction;
 
 class SignIn extends Component {
@@ -66,14 +68,6 @@ class SignIn extends Component {
                 <IntlMessages id="page.signInPreview" />
               </p>
 
-              <div className="isoInputWrapper isoOtherLogin">
-                <Button onClick={this.handleLogin} type="primary btnFacebook">
-                  <IntlMessages id="page.signInFacebook" />
-                </Button>
-                <Button onClick={this.handleLogin} type="primary btnGooglePlus">
-                  <IntlMessages id="page.signInGooglePlus" />
-                </Button>
-              </div>
               <div className="isoCenterComponent isoHelperWrapper">
                 <Link to="" className="isoForgotPass">
                   <IntlMessages id="page.signInForgotPass" />

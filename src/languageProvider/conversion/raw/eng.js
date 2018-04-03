@@ -466,7 +466,7 @@ Sign in with Facebook
 Sign in with Google Plus
 Sign in with Auth0
 Forgot password
-Create an Isomorphoic account
+Create an WABA account
 Isomorphic
 I agree with terms and condtions
 Sign Up

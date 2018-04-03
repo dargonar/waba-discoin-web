@@ -108,12 +108,56 @@ class Sidebar extends Component {
               onOpenChange={this.onOpenChange}
               className="isoDashboardMenu"
             >
-              <Menu.Item key="blankPage">
-                <Link to={`${url}/blankPage`}>
+              <Menu.Item key="discountRewards">
+                <Link to={`${url}/discount-and-rewards`}>
                   <span className="isoMenuHolder" style={submenuColor}>
-                    <i className="ion-document" />
                     <span className="nav-text">
-                      <IntlMessages id="sidebar.blankPage" />
+                      <IntlMessages id="sidebar.discountRewards" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="transactions">
+                <Link to={`${url}/transactions`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.transactions" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="subAccounts">
+                <Link to={`${url}/sub-accounts`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.subAccounts" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="contactList">
+                <Link to={`${url}/contact-list`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.contactList" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="notifications">
+                <Link to={`${url}/notifications`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.notifications" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="profile">
+                <Link to={`${url}/profile`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.profile" />
                     </span>
                   </span>
                 </Link>

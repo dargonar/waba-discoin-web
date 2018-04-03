@@ -1,11 +1,8 @@
-export default {
-  apiUrl: 'http://yoursite.com/api/',
-};
-
 const siteConfig = {
-  siteName: 'ISOMORPHIC',
+  siteName: 'Waba',
   siteIcon: 'ion-flash',
-  footerText: 'Isomorphic ©2017 Created by RedQ, Inc',
+  footerText: 'Waba ©2018',
+  apiUrl: 'https://w5xlvm3vzz.lp.gql.zone/graphql',
 };
 const themeConfig = {
   topbar: 'themedefault',
@@ -14,6 +11,7 @@ const themeConfig = {
   theme: 'themedefault',
 };
 const language = 'english';
+
 export {
   siteConfig,
   language,
