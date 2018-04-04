@@ -108,11 +108,29 @@ class Sidebar extends Component {
               onOpenChange={this.onOpenChange}
               className="isoDashboardMenu"
             >
+              <Menu.Item key="home">
+                <Link to={`${url}`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.home" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
               <Menu.Item key="discountRewards">
                 <Link to={`${url}/discount-and-rewards`}>
                   <span className="isoMenuHolder" style={submenuColor}>
                     <span className="nav-text">
                       <IntlMessages id="sidebar.discountRewards" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="refound">
+                <Link to={`${url}/refound`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.refound" />
                     </span>
                   </span>
                 </Link>

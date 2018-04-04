@@ -1,4 +1,5 @@
 {
+  "sidebar.home": "Home",
   "sidebar.email": "Email",
   "sidebar.ecommerce": "Ecommerce",
   "sidebar.shop": "Shop",
@@ -634,6 +635,7 @@
   "sidebar.contactList": "Contact List",
   "sidebar.profile": "Profile",
   "sidebar.notifications": "Notifications",
+  "sidebar.refound": "Refound",
   "topbar.help": "Help",
   "topbar.logout": "Logout",
   "topbar.viewAll": "View All",
