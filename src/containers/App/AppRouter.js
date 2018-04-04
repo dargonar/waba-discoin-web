@@ -14,8 +14,8 @@ class AppRouter extends React.Component {
         />
         <Route
           exact
-          path={`${url}/blankPage`}
-          component={asyncComponent(() => import('../blankPage'))}
+          path={`${url}/discount-and-rewards`}
+          component={asyncComponent(() => import('../Page/discountAndRewards'))}
         />
       </Switch>
     );
