@@ -34,74 +34,71 @@ export default class extends Component {
       }
     }
     return (
-      <LayoutContentWrapper style={{ height: '100vh' }}>
-        <LayoutContent>
-          <Row style={rowStyle} gutter={0} justify="start">
-            <Col md={6} sm={12} xs={24} style={colStyle}>
-              <IsoWidgetsWrapper>
-                <BalanceSticker
-                  amount={state.balance.amount}
-                  text="Discoin Balance"
-                  coin={state.balance.coin}
-                  fontColor="#1C222C"
-                  bgColor="#f5f5f5"/>
-              </IsoWidgetsWrapper>
-            </Col>
+      <LayoutContentWrapper>
+        <Row style={rowStyle} gutter={0} justify="start">
+          <Col md={6} sm={12} xs={24} style={colStyle}>
+            <IsoWidgetsWrapper>
+              <BalanceSticker
+                amount={state.balance.amount}
+                text="Discoin Balance"
+                coin={state.balance.coin}
+                fontColor="#1C222C"
+                bgColor="#fff"/>
+            </IsoWidgetsWrapper>
+          </Col>
 
-            <Col md={6} sm={12} xs={24} style={colStyle}>
-              <IsoWidgetsWrapper>
-                <BalanceSticker
-                  amount={state.initialCredit.amount}
-                  text="Initial Credit"
-                  coin={state.initialCredit.coin}
-                  fontColor="#1C222C"
-                  bgColor="#f5f5f5"/>
-              </IsoWidgetsWrapper>
-            </Col>
+          <Col md={6} sm={12} xs={24} style={colStyle}>
+            <IsoWidgetsWrapper>
+              <BalanceSticker
+                amount={state.initialCredit.amount}
+                text="Initial Credit"
+                coin={state.initialCredit.coin}
+                fontColor="#1C222C"
+                bgColor="#fff"/>
+            </IsoWidgetsWrapper>
+          </Col>
 
-            <Col md={6} sm={12} xs={24} style={colStyle}>
-              <IsoWidgetsWrapper>
-                <BalanceSticker
-                  amount={state.aceptedReceived.amount}
-                  text="Accepted / Received ratio"
-                  scale={[
-                    {value:10, color:"red"},
-                    {value:50, color:"yellow"},
-                      {value:100, color:"green"}
-                    ]}
-                    percentage={true}
-                    fontColor="#1C222C"
-                    bgColor="#f5f5f5"/>
-              </IsoWidgetsWrapper>
-            </Col>
-
-            <Col md={6} sm={12} xs={24} style={colStyle}>
-              <IsoWidgetsWrapper>
-                <BalanceSticker
-                  amount={state.refund.amount}
+          <Col md={6} sm={12} xs={24} style={colStyle}>
+            <IsoWidgetsWrapper>
+              <BalanceSticker
+                amount={state.aceptedReceived.amount}
+                text="Accepted / Received ratio"
+                scale={[
+                  {value:10, color:"red"},
+                  {value:50, color:"yellow"},
+                    {value:100, color:"green"}
+                  ]}
                   percentage={true}
-                  text="Reward & Refund"
-                  subtext={state.refund.category + "% @ category"}
                   fontColor="#1C222C"
-                    bgColor="#f5f5f5"/>
-              </IsoWidgetsWrapper>
-            </Col>
+                  bgColor="#fff"/>
+            </IsoWidgetsWrapper>
+          </Col>
 
-            <Col md={6} sm={12} xs={24} style={colStyle}>
-              <IsoWidgetsWrapper>
-                <RatingSticker
-                  full={state.rating.total}
-                  stars={state.rating.stars}
-                  text={state.rating.users}
-                  icon="user"
-                  fontColor="#1C222C"
-                  bgColor="#f5f5f5"/>
-              </IsoWidgetsWrapper>
-            </Col>
+          <Col md={6} sm={12} xs={24} style={colStyle}>
+            <IsoWidgetsWrapper>
+              <BalanceSticker
+                amount={state.refund.amount}
+                percentage={true}
+                text="Reward & Refund"
+                subtext={state.refund.category + "% @ category"}
+                fontColor="#1C222C"
+                bgColor="#fff"/>
+            </IsoWidgetsWrapper>
+          </Col>
 
-          </Row>
-      </LayoutContent>
-    </LayoutContentWrapper>
-  );
-}
+          <Col md={6} sm={12} xs={24} style={colStyle}>
+            <IsoWidgetsWrapper>
+              <RatingSticker
+                full={state.rating.total}
+                stars={state.rating.stars}
+                text={state.rating.users}
+                icon="user"
+                fontColor="#1C222C"
+                bgColor="#fff"/>
+            </IsoWidgetsWrapper>
+          </Col>
+        </Row>
+      </LayoutContentWrapper>
+    );
+  }
 }
