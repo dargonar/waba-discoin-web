@@ -24,10 +24,7 @@ export default class extends Component {
       backgroundColor: bgColor,
       width: width
     };
-    const iconStyle = {
-      color: fontColor
-    };
-
+ 
     return (
       <BalanceStickerWidgetWrapper className="isoBalanceStickerWidget" style={widgetStyle}>
 
