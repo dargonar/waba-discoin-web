@@ -15,7 +15,7 @@ export default class extends Component {
   }
   
   render() {
-    const { fontColor, bgColor, width, coin, scale, number, text, percentage, subtext } = this.props;
+    const { fontColor, bgColor, width, coin, scale, amount, text, percentage, subtext } = this.props;
 
     const textColor = {
       color: fontColor
@@ -33,7 +33,7 @@ export default class extends Component {
           <span className="isoCoinLabel" style={textColor}>
             {coin}
             { scale? (
-              <span className="circle" style={this.getColorScale(scale,number)}></span>
+              <span className="circle" style={this.getColorScale(scale,amount)}></span>
             ): null }
           </span>
         </div>
@@ -41,7 +41,7 @@ export default class extends Component {
 
         <div className="isoContentWrapper">
           <h3 className="isoStatNumber" style={textColor}>
-            {number} { percentage?'%': null }
+            {Number(amount).toLocaleString()} { percentage?'%': null }
           </h3>
           <span className="isoLabel" style={textColor}>
             {text}

@@ -11,6 +11,28 @@ import RatingSticker from '../components/rating-sticker/rating-sticker'
 export default class extends Component {
   render() {
     const { rowStyle, colStyle } = basicStyle;
+    const state = {
+      balance: {
+        coin: 'DSC',
+        amount: 53155
+      },
+      initialCredit: {
+        coin: 'DSC',
+        amount: 90000
+      },
+      aceptedReceived: {
+        amount: 59.5
+      },
+      refund: {
+        amount: 30,
+        category: 24
+      },
+      rating: {
+        stars: 3,
+        total: 5,
+        users: 14
+      }
+    }
     return (
       <LayoutContentWrapper style={{ height: '100vh' }}>
         <LayoutContent>
@@ -18,9 +40,9 @@ export default class extends Component {
             <Col md={6} sm={12} xs={24} style={colStyle}>
               <IsoWidgetsWrapper>
                 <BalanceSticker
-                  number="53,155"
+                  amount={state.balance.amount}
                   text="Discoin Balance"
-                  coin="DSC"
+                  coin={state.balance.coin}
                   fontColor="#1C222C"
                   bgColor="#f5f5f5"/>
               </IsoWidgetsWrapper>
@@ -29,9 +51,9 @@ export default class extends Component {
             <Col md={6} sm={12} xs={24} style={colStyle}>
               <IsoWidgetsWrapper>
                 <BalanceSticker
-                  number="90,000"
+                  amount={state.initialCredit.amount}
                   text="Initial Credit"
-                  coin="DSC"
+                  coin={state.initialCredit.coin}
                   fontColor="#1C222C"
                   bgColor="#f5f5f5"/>
               </IsoWidgetsWrapper>
@@ -40,7 +62,7 @@ export default class extends Component {
             <Col md={6} sm={12} xs={24} style={colStyle}>
               <IsoWidgetsWrapper>
                 <BalanceSticker
-                  number={59.6}
+                  amount={state.aceptedReceived.amount}
                   text="Accepted / Received ratio"
                   scale={[
                     {value:10, color:"red"},
@@ -56,10 +78,10 @@ export default class extends Component {
             <Col md={6} sm={12} xs={24} style={colStyle}>
               <IsoWidgetsWrapper>
                 <BalanceSticker
-                  number={59.6}
+                  amount={state.refund.amount}
                   percentage={true}
                   text="Reward & Refund"
-                  subtext="24% @ category"
+                  subtext={state.refund.category + "% @ category"}
                   fontColor="#1C222C"
                     bgColor="#f5f5f5"/>
               </IsoWidgetsWrapper>
@@ -68,9 +90,9 @@ export default class extends Component {
             <Col md={6} sm={12} xs={24} style={colStyle}>
               <IsoWidgetsWrapper>
                 <RatingSticker
-                  full={5}
-                  stars={3}
-                  text="14"
+                  full={state.rating.total}
+                  stars={state.rating.stars}
+                  text={state.rating.users}
                   icon="user"
                   fontColor="#1C222C"
                   bgColor="#f5f5f5"/>
