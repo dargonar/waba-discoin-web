@@ -8,8 +8,6 @@ import authAction from '../../redux/auth/actions';
 import IntlMessages from '../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
 
-import { siteConfig } from '../../config.js';
-
 const { login } = authAction;
 
 class SignIn extends Component {
