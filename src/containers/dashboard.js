@@ -6,6 +6,7 @@ import { Row, Col } from 'antd';
 import basicStyle from '../config/basicStyle';
 
 import BalanceSticker from '../components/balance-sticker/balance-sticker'
+import RatingSticker from '../components/rating-sticker/rating-sticker'
 
 export default class extends Component {
   render() {
@@ -61,6 +62,18 @@ export default class extends Component {
                   subtext="24% @ category"
                   fontColor="#1C222C"
                     bgColor="#f5f5f5"/>
+              </IsoWidgetsWrapper>
+            </Col>
+
+            <Col md={6} sm={12} xs={24} style={colStyle}>
+              <IsoWidgetsWrapper>
+                <RatingSticker
+                  full={5}
+                  stars={3}
+                  text="14"
+                  icon="user"
+                  fontColor="#1C222C"
+                  bgColor="#f5f5f5"/>
               </IsoWidgetsWrapper>
             </Col>
 
