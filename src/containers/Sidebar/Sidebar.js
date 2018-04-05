@@ -13,6 +13,8 @@ import Logo from '../../components/utility/logo';
 import { getCurrentTheme } from '../ThemeSwitcher/config';
 import { themeConfig } from '../../config';
 
+const SubMenu = Menu.SubMenu;
+
 const { Sider } = Layout;
 const {
   toggleOpenDrawer,
@@ -85,6 +87,10 @@ class Sidebar extends Component {
     const submenuColor = {
       color: customizedTheme.textColor,
     };
+    const submenuStyle = {
+      backgroundColor: 'rgba(0,0,0,0.3)',
+      color: customizedTheme.textColor,
+    };
     return (
       <SidebarWrapper>
         <Sider
@@ -117,69 +123,55 @@ class Sidebar extends Component {
                   </span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="discountRewards">
-                <Link to={`${url}/discount-and-rewards`}>
+              <Menu.Item key="kpis">
+                <Link to={`${url}/kpis`}>
                   <span className="isoMenuHolder" style={submenuColor}>
                     <span className="nav-text">
-                      <IntlMessages id="sidebar.discountRewards" />
+                      <IntlMessages id="sidebar.kpis" />
                     </span>
                   </span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="refound">
-                <Link to={`${url}/refound`}>
+              <SubMenu
+                key="configuration"
+                title={
                   <span className="isoMenuHolder" style={submenuColor}>
                     <span className="nav-text">
-                      <IntlMessages id="sidebar.refound" />
+                      <IntlMessages id="sidebar.configuration" />
                     </span>
                   </span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="transactions">
-                <Link to={`${url}/transactions`}>
+                }>
+                  <Menu.Item key="parameters" style={submenuStyle}>
+                    <Link to={`${url}/parameters`}  style={submenuColor}>
+                      <IntlMessages id="sidebar.parameters" />
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item key="categories" style={submenuStyle}>
+                    <Link to={`${url}/categories`} style={submenuColor}>
+                      <IntlMessages id="sidebar.categories" />
+                    </Link>
+                  </Menu.Item>
+              </SubMenu>
+              <SubMenu
+                key="stores"
+                title={
                   <span className="isoMenuHolder" style={submenuColor}>
                     <span className="nav-text">
-                      <IntlMessages id="sidebar.transactions" />
+                      <IntlMessages id="sidebar.stores" />
                     </span>
                   </span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="subAccounts">
-                <Link to={`${url}/sub-accounts`}>
-                  <span className="isoMenuHolder" style={submenuColor}>
-                    <span className="nav-text">
-                      <IntlMessages id="sidebar.subAccounts" />
-                    </span>
-                  </span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="contactList">
-                <Link to={`${url}/contact-list`}>
-                  <span className="isoMenuHolder" style={submenuColor}>
-                    <span className="nav-text">
-                      <IntlMessages id="sidebar.contactList" />
-                    </span>
-                  </span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="notifications">
-                <Link to={`${url}/notifications`}>
-                  <span className="isoMenuHolder" style={submenuColor}>
-                    <span className="nav-text">
-                      <IntlMessages id="sidebar.notifications" />
-                    </span>
-                  </span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="profile">
-                <Link to={`${url}/profile`}>
-                  <span className="isoMenuHolder" style={submenuColor}>
-                    <span className="nav-text">
-                      <IntlMessages id="sidebar.profile" />
-                    </span>
-                  </span>
-                </Link>
-              </Menu.Item>
+                }>
+                <Menu.Item key="store-list" style={submenuStyle}>
+                  <Link to={`${url}/store-list`} style={submenuColor}>
+                    <IntlMessages id="sidebar.list" />
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="store-create" style={submenuStyle}>
+                  <Link to={`${url}/store-create`} style={submenuColor}>
+                    <IntlMessages id="sidebar.createStore" />
+                  </Link>
+                </Menu.Item>
+              </SubMenu>
             </Menu>
           </Scrollbars>
         </Sider>
