@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
 import LayoutContentWrapper from '../../components/utility/layoutWrapper';
-import LayoutContent from '../../components/utility/layoutContent';
-import IsoWidgetsWrapper from '../../components/utility/widgets-wrapper';
 import { Row, Col } from 'antd';
 import basicStyle from '../../config/basicStyle';
-import Box from '../../components/utility/box';
-import ContentHolder from '../../components/utility/contentHolder';
-import Input from '../../components/uielements/input';
 
 import { compose, graphql } from 'react-apollo';
 import getCurrentGame from '../../apollo/getCurrentGame';
@@ -14,7 +9,7 @@ import getCurrentGame from '../../apollo/getCurrentGame';
 import BalanceSticker from '../../components/balance-sticker/balance-sticker'
 import SingleProgressWidget from '../../components/progress/progress-single';
 import ReportsWidget from '../../components/report/report-widget';
-import {BarChart, Bar, PieChart, Legend, Pie, Sector, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts';
+import {BarChart, Bar, PieChart, Pie, Cell, LineChart, Line, XAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts';
 
 class SimpleLineChart extends Component {
 	render () {
@@ -202,14 +197,6 @@ class DiscountsAndRewards extends Component {
         }
       }
     };
-
-    const inputStyle = {
-      fontSize:'24px'
-    }
-    const avgStyle = {
-      display: 'block',
-      paddingTop: '15px'
-    }
 
     const aidropIssuing = {
       fontSize: '25px'
