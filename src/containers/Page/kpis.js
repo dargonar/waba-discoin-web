@@ -22,7 +22,6 @@ class SimpleLineChart extends Component {
       <ResponsiveContainer width="100%" height={165}>
         <LineChart data={this.props.deltas}>
           <XAxis dataKey="name"/>
-          <YAxis/>
           <CartesianGrid strokeDasharray="3 3"/>
           <Tooltip/>
           <Line type="monotone" dataKey="Amount" stroke="#82ca9d" />
@@ -39,10 +38,8 @@ class SimpleBarChart extends Component {
         <BarChart data={this.props.data}>
           <CartesianGrid strokeDasharray="3 3"/>
           <XAxis dataKey={"name"}/>
-          <YAxis yAxisId="left" orientation="left"/>
-          <YAxis yAxisId="right" orientation="right"/>
           <Tooltip/>
-              <Bar yAxisId="left" fill={this.props.color || '#ccc'} dataKey={'amount'} label={{ position: 'top' }} />
+              <Bar fill={this.props.color || '#ccc'} dataKey={'amount'} label={{ position: 'top' }} />
         </BarChart>
       </ResponsiveContainer>
     );
@@ -219,7 +216,7 @@ class DiscountsAndRewards extends Component {
     }
 
     const getDeltas = (values) => values.map(data => ({
-      name: new Date(data.timestamp).toDateString(),
+      name: new Date(data.timestamp).getMonth()+1 + '/' + new Date(data.timestamp).getDate(),
       Amount: Number(data.amount || data.quantity || 0)
     }));
 
