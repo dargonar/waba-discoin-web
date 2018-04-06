@@ -1,5 +1,5 @@
 const siteConfig = {
-  siteName: 'Waba',
+  siteName: 'DISCOIN',
   siteIcon: 'ion-flash',
   footerText: 'Waba ©2018',
   apiUrl: 'https://w5xlvm3vzz.lp.gql.zone/graphql',
