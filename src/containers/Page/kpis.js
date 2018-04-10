@@ -3,9 +3,7 @@ import LayoutContentWrapper from '../../components/utility/layoutWrapper';
 import { Row, Col } from 'antd';
 import basicStyle from '../../config/basicStyle';
 
-import { compose, graphql } from 'react-apollo';
-import getCurrentGame from '../../apollo/getCurrentGame';
-
+import { connect } from 'react-redux';
 import BalanceSticker from '../../components/balance-sticker/balance-sticker'
 import SingleProgressWidget from '../../components/progress/progress-single';
 import ReportsWidget from '../../components/report/report-widget';
@@ -310,10 +308,4 @@ class DiscountsAndRewards extends Component {
   }
 }
 
-export default compose(
-  graphql(getCurrentGame, {
-    props: ({data: { currentGame } }) => ({
-      currentGame
-    })
-  })
-)(DiscountsAndRewards)
+export default connect()(DiscountsAndRewards)

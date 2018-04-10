@@ -5,7 +5,7 @@ import { Debounce } from 'react-throttle';
 import WindowResizeListener from 'react-window-size-listener';
 import { ThemeProvider } from 'styled-components';
 import authAction from '../../redux/auth/actions';
-//import appActions from '../../redux/app/actions';
+import appActions from '../../redux/app/actions';
 import Sidebar from '../Sidebar/Sidebar';
 import Topbar from '../Topbar/Topbar';
 import AppRouter from './AppRouter';
@@ -15,12 +15,9 @@ import { themeConfig } from '../../config';
 import AppHolder from './commonStyle';
 import './global.css';
 
-import  { compose, graphql } from 'react-apollo';
-import gql from 'graphql-tag';
-
 const { Content, Footer } = Layout;
 const { logout } = authAction;
-//const { toggleAll } = appActions;
+const { toggleAll } = appActions;
 
 export class App extends Component {
   render() {
@@ -33,10 +30,8 @@ export class App extends Component {
               <WindowResizeListener
                 onResize={windowSize =>
                   this.props.toggleAll({
-                    variables: {
                       width: windowSize.windowWidth,
                       height: windowSize.windowHeight
-                    }
                   })
                 }
               />
@@ -78,19 +73,9 @@ export class App extends Component {
   }
 }
 
-const addToggleAllMutation = gql`
-  mutation toggleAll($width: Int!, $height: Int!) {
-    toggleAll(width: $width, height: $height) @client
-  }
-`;
-
-export const AppQl = compose(
-    graphql(addToggleAllMutation, { name: 'toggleAll' })
-  )(App)
-
 export default connect(
   state => ({
     auth: state.Auth
   }),
-  { logout }
-)(AppQl);
+  { logout, toggleAll }
+)(App);
