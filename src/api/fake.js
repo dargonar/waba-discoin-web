@@ -52,3 +52,53 @@ export const parametersJSON = {
     "new_member_percent_pool": "10"
   }
 };
+
+export const categoriesJSON = {
+  "updated_at": "2017-01-16T23:12:18",
+  "rows": [
+      {
+          "row" : 1,
+          "description": "Menos de 200 mil"
+      },
+      {
+          "row" : 2,
+          "description": "200 mil - 500 mil"
+      },
+      {
+          "row" : 3,
+          "description": "500 mil - 750 mil"
+      }
+  ],
+  "cols": [
+      {
+          "col" : 1,
+          "refund_rate": 10
+      },
+      {
+          "col" : 2,
+          "refund_rate": 15
+      },
+      {
+          "col" : 3,
+          "refund_rate": 20
+      }
+  ],
+  "categories": [
+      {
+          "row" : 1,
+          "col" : 1,
+          "initial_credit" : 2000
+      },
+      {
+          "row" : 1,
+          "col" : 2,
+          "initial_credit" : 3000
+      },
+      {
+          "row" : 1,
+          "col" : 3,
+          "initial_credit" : 4000
+      }
+  ]
+};
+
