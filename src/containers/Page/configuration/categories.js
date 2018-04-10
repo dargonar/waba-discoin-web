@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import LayoutContentWrapper from '../../../components/utility/layoutWrapper';
 import PageHeader from '../../../components/utility/pageHeader';
 import IntlMessages from '../../../components/utility/intlMessages';
-import { Table, Input, Icon, Modal } from 'antd';
+import { Input, Icon } from 'antd';
 import Button from '../../../components/uielements/button';
 import TableWrapper from './antTable.style';
 import LayoutContent from '../../../components/utility/layoutContent';
@@ -131,7 +131,7 @@ class Categories extends Component {
     return (value) => {
       this.setState({
         rows: this.state.rows
-        .map(row => (row.row === row.row)? Object.assign({},row,{desctription: value || ''}): row)
+        .map(row_ => (row_.row === row.row)? Object.assign({},row_,{desctription: value || ''}): row_)
       })
     }
   }

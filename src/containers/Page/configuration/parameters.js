@@ -6,16 +6,10 @@ import Button from '../../../components/uielements/button';
 import { Col, Row } from 'antd';
 import ContentHolder from '../../../components/utility/contentHolder';
 import Box from '../../../components/utility/box';
-import Input, {
-    InputSearch,
-    InputGroup,
-  } from '../../../components/uielements/input';
-import Select, { SelectOption } from '../../../components/uielements/select';
-import Number from '../../../components/uielements/InputNumber';
+import Input from '../../../components/uielements/input';
+
 
 import { parametersJSON } from '../../../api/fake';
-
-const Option = SelectOption;
 
 class Parameters extends Component {
 
@@ -37,10 +31,6 @@ class Parameters extends Component {
     const label = {
         width:'100%'
     };
-
-    const updateValue = function(path, value) {
-
-    }
 
     return (
       <LayoutContentWrapper style={{width:'100%'}}>
