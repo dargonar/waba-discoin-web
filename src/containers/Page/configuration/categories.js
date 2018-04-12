@@ -7,10 +7,8 @@ import Button from '../../../components/uielements/button';
 import TableWrapper from './antTable.style';
 import LayoutContent from '../../../components/utility/layoutContent';
 
-import { categoriesJSON } from '../../../api/fake'
 import clone from 'clone';
 
-import set from 'lodash.set';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import actions from '../../../redux/configuration/actions'
@@ -71,34 +69,28 @@ class Categories extends Component {
   
   constructor(props) {
     super(props);
+    this.initState = this.initState.bind(this);
     this.addColumn = this.addColumn.bind(this);
     this.addRow = this.addRow.bind(this);
     this.getCell = this.getCell.bind(this);
     this.onCellChange = this.onCellChange.bind(this);
     this.onRowChange = this.onRowChange.bind(this);
-    this.onFormChange = this.onFormChange.bind(this)
     this.submit = this.submit.bind(this)
     this.state = {
-      rows: categoriesJSON.rows,
-      columns: categoriesJSON.cols,
-      categories: categoriesJSON.categories,
       rowModal: false,
       columnModal: false,
-      data: {}
+      data: false
     }    
+  }
+
+  initState(prop) {
+    if (this.state.data === false) {
+      this.setState({data: prop});
+    }
   }
 
   componentWillMount() {
     this.props.fetch();
-  }
-
-  onFormChange(e) {
-    const result = set(
-        { data: this.props.configuration.categories },
-        e.target.id,
-        e.target.value
-    )
-    this.setState({data: result.data});    
   }
 
   submit() {
@@ -106,31 +98,32 @@ class Categories extends Component {
   }
 
   addRow(description) {
-    this.setState({
-      rows: this.state.rows.concat({
-        row: this.state.rows.length + 1,
-        description
-      }),
-      columns: clone(this.state.columns),
-      categories: clone(this.state.categories)
+    this.setState({ data: {
+        ...this.state.data,
+        rows: this.state.data.rows.concat({
+          row: this.state.data.rows.length + 1,
+          description
+        })
+      }
     });
     return null;
   }
 
   addColumn(refund_rate) {
-    this.setState({
-      columns: this.state.columns.concat({
-        col: this.state.columns.length + 1,
-        refund_rate
-      }),
-      rows: clone(this.state.rows),
-      categories: clone(this.state.categories)
+    this.setState({ 
+      data : {
+        ...this.state.data,
+        cols: this.state.data.cols.concat({
+          col: this.state.data.cols.length + 1,
+          refund_rate
+        })
+      }
     });
     return null;
   }
 
   getCell(col,row) {
-    return this.state.categories
+    return this.state.data.categories
       .filter(cell => cell.col === col && cell.row === row)
       .reduce((prev,act) => (typeof act !== 'undefined')? act: prev, {empty: true})
   }
@@ -138,8 +131,11 @@ class Categories extends Component {
   onColumnChange(col) {
     return (value) => {
       this.setState({
-        columns: this.state.columns
-        .map(column => (column.col === col.col)? Object.assign({},col,{refund_rate:Number(value)|| 0}): column)
+        data : {
+          ...this.state.data,
+          cols: this.state.data.cols
+          .map(column => (column.col === col.col)? Object.assign({},col,{refund_rate:Number(value)|| 0}): column)
+        }
       })
     }
   }
@@ -147,15 +143,18 @@ class Categories extends Component {
   onRowChange(row) {
     return (value) => {
       this.setState({
-        rows: this.state.rows
-        .map(row_ => (row_.row === row.row)? Object.assign({},row_,{desctription: value || ''}): row_)
+        data: {
+          ...this.state.data,
+          rows: this.state.data.rows
+          .map(row_ => (row_.row === row.row)? Object.assign({},row_,{description: value || ''}): row_)
+        }
       })
     }
   }
 
   onCellChange(col, row) {
     return (value) => {
-      let categories = this.state.categories;
+      let categories = this.state.data.categories;
       //If is new -> create
       if (this.getCell(col,row).empty) {
         categories = categories.concat({
@@ -175,9 +174,10 @@ class Categories extends Component {
       }
 
       this.setState({
-        categories: categories,
-        rows: clone(this.state.rows),
-        columns: clone(this.state.columns)
+        data: {
+          ...this.state.data,
+          categories: categories
+        }
       });
       return null;
     }
@@ -215,7 +215,7 @@ class Categories extends Component {
       })))
     }
 
-    const getRows = (columns, rows, categories) => {
+    const getRows = ({columns, rows, categories}) => {
       let result = rows.map(row => {
         let newRow = {
           description:  (
@@ -236,16 +236,22 @@ class Categories extends Component {
       return result;
     }
     if(this.props.configuration.loading === false && this.props.configuration.categories.cols) {
+      this.initState(this.props.configuration.categories);
+    }
+    
+    if(this.props.configuration.loading === false && this.state.data !== false) {
+      console.log(this.state.data)
       return (
         <LayoutContentWrapper>
           <PageHeader>
             <IntlMessages id="sidebar.categories" />
           </PageHeader>
           <LayoutContent>
-              <TableWrapper pagination={false} columns={getColumns(this.props.configuration.categories.cols)} dataSource={getRows(this.props.configuration.categories.cols, this.props.configuration.categories.rows, this.props.configuration.categories.categories)}/>
+              <TableWrapper pagination={false} columns={getColumns(this.state.data.cols)} dataSource={getRows(this.state.data)}/>
           </LayoutContent>
-          <Button type="primary" style={margin} onClick={()=>this.addColumn()}>Add Category</Button>
-          <Button type="primary" style={margin} onClick={()=>this.addRow()}>Add Discount</Button>
+          <Button type="" style={margin} onClick={()=>this.addColumn()}>Add Category</Button>
+          <Button type="" style={margin} onClick={()=>this.addRow()}>Add Discount</Button>
+          <Button type="primary" style={margin} onClick={()=>this.submit()}>Save</Button>
         </LayoutContentWrapper>
       );
     } else {
