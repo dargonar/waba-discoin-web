@@ -10,6 +10,11 @@ import LayoutContent from '../../../components/utility/layoutContent';
 import { categoriesJSON } from '../../../api/fake'
 import clone from 'clone';
 
+import set from 'lodash.set';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import actions from '../../../redux/configuration/actions'
+
 class EditableCell extends React.Component {
   state = {
     value: this.props.value,
@@ -66,26 +71,38 @@ class Categories extends Component {
   
   constructor(props) {
     super(props);
-    this.toggleModal = this.toggleModal.bind(this);
     this.addColumn = this.addColumn.bind(this);
     this.addRow = this.addRow.bind(this);
     this.getCell = this.getCell.bind(this);
     this.onCellChange = this.onCellChange.bind(this);
     this.onRowChange = this.onRowChange.bind(this);
+    this.onFormChange = this.onFormChange.bind(this)
+    this.submit = this.submit.bind(this)
     this.state = {
       rows: categoriesJSON.rows,
       columns: categoriesJSON.cols,
       categories: categoriesJSON.categories,
       rowModal: false,
-      columnModal: false
-
+      columnModal: false,
+      data: {}
     }    
   }
-  
-  toggleModal(modal) {
-    let modalBox = {}
-    modalBox[modal] = !this.state[modal];
-    this.setState(modalBox);
+
+  componentWillMount() {
+    this.props.fetch();
+  }
+
+  onFormChange(e) {
+    const result = set(
+        { data: this.props.configuration.categories },
+        e.target.id,
+        e.target.value
+    )
+    this.setState({data: result.data});    
+  }
+
+  submit() {
+      this.props.sendCategories(this.state.data)
   }
 
   addRow(description) {
@@ -210,7 +227,7 @@ class Categories extends Component {
           row: row.row
         };
         categories.forEach( category => {
-          if(category.row === row.row ) {
+          if(Number(category.row) === row.row ) {
             newRow[category.col] = category.initial_credit
           }
         });
@@ -218,20 +235,32 @@ class Categories extends Component {
       })
       return result;
     }
-
-    return (
-      <LayoutContentWrapper>
-        <PageHeader>
-          <IntlMessages id="sidebar.categories" />
-        </PageHeader>
-        <LayoutContent>
-            <TableWrapper pagination={false} columns={getColumns(this.state.columns)} dataSource={getRows(this.state.columns, this.state.rows, this.state.categories)}/>
-        </LayoutContent>
-        <Button type="primary" style={margin} onClick={()=>this.addColumn()}>Add Category</Button>
-        <Button type="primary" style={margin} onClick={()=>this.addRow()}>Add Discount</Button>
-      </LayoutContentWrapper>
-    );
+    if(this.props.configuration.loading === false && this.props.configuration.categories.cols) {
+      return (
+        <LayoutContentWrapper>
+          <PageHeader>
+            <IntlMessages id="sidebar.categories" />
+          </PageHeader>
+          <LayoutContent>
+              <TableWrapper pagination={false} columns={getColumns(this.props.configuration.categories.cols)} dataSource={getRows(this.props.configuration.categories.cols, this.props.configuration.categories.rows, this.props.configuration.categories.categories)}/>
+          </LayoutContent>
+          <Button type="primary" style={margin} onClick={()=>this.addColumn()}>Add Category</Button>
+          <Button type="primary" style={margin} onClick={()=>this.addRow()}>Add Discount</Button>
+        </LayoutContentWrapper>
+      );
+    } else {
+      return (<div></div>);
+    }
   }
 }
 
-export default Categories
+const mapStateToProps = (state) => ({
+  configuration : state.Configuration
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetch: bindActionCreators(actions.fetchCategories, dispatch),
+  sendCategories: bindActionCreators(actions.sendCategories, dispatch)
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Categories)

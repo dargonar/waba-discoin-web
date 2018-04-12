@@ -21,7 +21,7 @@ export default (state = initState, action = {}) => {
         return {
             ...state,
             loading: false,
-            categories: action.payload
+            categories: action.payload.categories
         };
       case actions.FETCH_CONFIGURATION_PARAMETERS:
         return {
