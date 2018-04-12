@@ -6,11 +6,16 @@ const actions = {
     FETCH_CONFIGURATION_CATEGORIES: 'CONFIGURATION/CATEGORIES/FETCH',
     FETCH_CONFIGURATION_CATEGORIES_SUCCESS: 'CONFIGURATION/CATEGORIES/FETCH_SUCCESS',
     FETCH_CONFIGURATION_CATEGORIES_FAILD: 'CONFIGURATION/CATEGORIES/FETCH_FAILD',
+    SEND_CONFIGURATION_PARAMETERS: 'CONFIGURATION/PARAMETERS/SEND',
 
     fetchParameteres: ()=> (dispatch, getState) => {
         dispatch({ type: actions.FETCH_CONFIGURATION_PARAMETERS });
     },
     
+    sendParameters: (data)=> (dispatch, getState) => {
+        dispatch({ type: actions.SEND_CONFIGURATION_PARAMETERS, payload: data });
+    },
+
     fetchCategories: ()=> (dispatch, getState) => {
         dispatch({ type: actions.FETCH_CONFIGURATION_CATEGORIES });
     }
