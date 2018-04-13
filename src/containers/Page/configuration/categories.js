@@ -249,8 +249,8 @@ class Categories extends Component {
           <LayoutContent>
               <TableWrapper pagination={false} columns={getColumns(this.state.data.cols)} dataSource={getRows(this.state.data)}/>
           </LayoutContent>
-          <Button type="" style={margin} onClick={()=>this.addColumn()}>Add Category</Button>
-          <Button type="" style={margin} onClick={()=>this.addRow()}>Add Discount</Button>
+          <Button style={margin} onClick={()=>this.addColumn()}>Add Category</Button>
+          <Button style={margin} onClick={()=>this.addRow()}>Add Discount</Button>
           <Button type="primary" style={margin} onClick={()=>this.submit()}>Save</Button>
         </LayoutContentWrapper>
       );
