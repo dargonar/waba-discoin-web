@@ -2,6 +2,9 @@ import actions from './actions';
 
 const initState = {
     loading: false,
+    actionLoading: false,
+    error: false,
+    msg: null,
     stores: null
 }
 
@@ -17,6 +20,42 @@ export default function authReducer(state = initState, action) {
           ...state,
           stores: [].concat(action.payload),
           loading: false
+      }
+    case actions.BUSINESS_SET_OVERDRAFT:
+      return {
+        ...state,
+        actionLoading: true
+      }
+    case actions.BUSINESS_SET_OVERDRAFT_SUCCESS:
+      return {
+        ...state,
+        actionLoading: false,
+        error: false,
+        msg: 'Overdraft change successfully applied'
+      }
+    case actions.BUSINESS_SET_OVERDRAFT_FAILD:
+      return {
+        ...state,
+        actionLoading: false,
+        error: true,
+        msg: 'Something didn\'t go right.'
+      }
+    case actions.BUSINESS_UPDATE_PROFILE:
+      return {
+        ...state,
+        stores : state.stores.map(store => {
+          if (store.account_id === action.payload.business.account_id)
+            return action.payload.business
+          else
+            return store
+        })
+      }
+    case actions.REMOVE_MSG:
+      return {
+        ...state,
+        actionLoading: false,
+        error: false,
+        msg: null
       }
     default:
       return state;
