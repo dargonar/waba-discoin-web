@@ -7,7 +7,7 @@ const StoreCardWrapper = styled.div`
     margin: 0 0 20px 0;
     padding: 10px 10px 0 10px;
     border-radius: 5px;
-    
+    box-shadow: 0px 0px 7px rgba(0,0,0,0.1);
     ul {
         list-style: none;
         padding-left: 10px;

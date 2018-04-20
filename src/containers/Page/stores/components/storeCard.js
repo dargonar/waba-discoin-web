@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Row } from 'antd';
+import { Col, Row, Tooltip } from 'antd';
 import StoreCardWrapper from '../store.style'
 import BalanceSticker from '../../../../components/balance-sticker/balance-sticker';
 import Button from '../../../../components/uielements/button';
@@ -76,7 +76,9 @@ class StoreCard extends Component {
           </Col>
           <Col xs={12} style={{textAlign:'right'}} className={'rightButtons'}>
             <Button shape="circle" onClick={this.props.info} icon="info" />
-            <Button shape="circle" onClick={() => this.props.overdraft(this.props)}>$</Button>
+            <Tooltip title="Change initial credit">
+              <Button shape="circle" onClick={() => this.props.overdraft(this.props)}>$</Button>
+            </Tooltip>
             <Button shape="circle" onClick={this.props.key} icon="key" />
           </Col>
         </Row>
