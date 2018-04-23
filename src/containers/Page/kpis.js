@@ -8,6 +8,9 @@ import BalanceSticker from '../../components/balance-sticker/balance-sticker'
 import SingleProgressWidget from '../../components/progress/progress-single';
 import ReportsWidget from '../../components/report/report-widget';
 import {BarChart, Bar, PieChart, Pie, Cell, LineChart, Line, XAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts';
+import PageLoading from '../../components/pageLoading'
+import PageHeader from '../../components/utility/pageHeader';
+import IntlMessages from '../../components/utility/intlMessages';
 
 import actions from '../../redux/kpis/actions';
 import { bindActionCreators } from 'redux'
@@ -98,9 +101,9 @@ class DiscountsAndRewards extends Component {
       amount: data.quantity
     }));
 
-    if(this.props.kpis.loading === false) {
+    const renderKpis = () => {
       return (
-        <LayoutContentWrapper>
+        <div style={{width: '100%'}}>
           <Row style={rowStyle} gutter={16} justify="start">
               <Col md={7} sm={24} xs={24} style={colStyle}>
                 <BalanceSticker
@@ -182,11 +185,18 @@ class DiscountsAndRewards extends Component {
                 </Row>  
               </Col>
           </Row>
-        </LayoutContentWrapper>
+        </div>
       );
-    } else {
-      return (<div></div>);
     }
+
+    return (
+      <LayoutContentWrapper>
+        <PageHeader>
+          <IntlMessages id="sidebar.kpis" />
+        </PageHeader>
+        { (this.props.kpis.loading)? <PageLoading /> : renderKpis() }
+      </LayoutContentWrapper>
+    );
   }
 }
 
