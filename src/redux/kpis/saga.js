@@ -1,22 +1,11 @@
 import { takeLatest, put, call, all, fork  } from 'redux-saga/effects';
-
-const getPath = 'http://35.163.59.126:8080/api/v3/dashboard/kpis';
-const setPath = 'http://35.163.59.126:8080/api/v3/dashboard/kpis';
-
-function fetchData(url) {    
-    return () => {
-        return fetch(url)
-        .then(res => res.json() )
-        .then(data => ({ data }) )
-        .catch(ex => {
-            return ({ ex });
-        });
-    };
-}
+import { getPath, apiCall } from "../../httpService";
 
 function* getKpis(action) {
     yield takeLatest('KPIS/FETCH', function*() {
-        const { data, ex } = yield call(fetchData(getPath));
+        const url = getPath('URL/GET_KPIS');
+        const fetchData = apiCall(url);
+        const { data, ex } = yield call(fetchData);
         if (data)
             yield put({ type: 'KPIS/SET', payload: data });
         else

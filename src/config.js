@@ -19,9 +19,23 @@ const mapboxConfig = {
   center: [-34.603722,-58.381592] // Buenos Aires
 };
 
+const apiConfig = {
+  base: 'http://35.163.59.126:8080/api/',
+  version: 'v3',
+  urls: [
+    { action: 'URL/GET_KPIS',       path: '/dashboard/kpis' },
+    { action: 'URL/GET_PARAMETERS', path: '/dashboard/configuration' },
+    { action: 'URL/GET_CATEGORIES', path: '/dashboard/categories' },
+    { action: 'URL/GET_BUSINESSES', path: '/dashboard/business/list/:from/:limit' },
+    { action: 'URL/GET_BUSINESS',   path: '/dashboard/business/profile/:id/load' },
+    { action: 'URL/SET_OVERDRAFT',  path: '/business/endorse/create' },
+  ]
+}
+
 export {
   siteConfig,
   language,
   themeConfig,
-  mapboxConfig
+  mapboxConfig,
+  apiConfig
 };

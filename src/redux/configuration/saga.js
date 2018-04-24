@@ -1,23 +1,14 @@
 import { takeLatest, put, call, all, fork  } from 'redux-saga/effects';
 import actions from './actions';
+import { getPath, apiCall } from '../../httpService';
 
-const getParametersPath = 'http://35.163.59.126:8080/api/v3/dashboard/configuration';
 const getCategoriesPath = 'http://35.163.59.126:8080/api/v3/dashboard/categories';
-
-function fetchData(url) {    
-    return () => {
-        return fetch(url)
-        .then(res => res.json() )
-        .then(data => ({ data }) )
-        .catch(ex => {
-            return ({ ex });
-        });
-    };
-}
 
 function* getParameters(action) {
     yield takeLatest(actions.FETCH_CONFIGURATION_PARAMETERS, function*() {
-        const { data, ex } = yield call(fetchData(getParametersPath));
+        const url = getPath('URL/GET_PARAMETERS')
+        const fetchData = apiCall(url)
+        const { data, ex } = yield call(fetchData);
         if (data)
             yield put({ type: actions.FETCH_CONFIGURATION_PARAMETERS_SUCCESS, payload: data });
         else
@@ -27,7 +18,9 @@ function* getParameters(action) {
 
 function* getCategories(action) {
     yield takeLatest(actions.FETCH_CONFIGURATION_CATEGORIES, function*() {
-        const { data, ex } = yield call(fetchData(getCategoriesPath));
+        const url = getPath('URL/GET_CATEGORIES')
+        const fetchData = apiCall(url)
+        const { data, ex } = yield call(fetchData);
         if (data)
             yield put({ type: actions.FETCH_CONFIGURATION_CATEGORIES_SUCCESS, payload: data });
         else
