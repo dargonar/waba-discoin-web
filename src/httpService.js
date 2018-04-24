@@ -37,3 +37,35 @@ export const getPath = (action, parameters) => {
 
     return apiConfig.base + apiConfig.version + path;
 };
+
+
+/*
+// HOW TO USE:
+
+//1. Set your api configutarion:
+const apiConfig = {
+    base: 'http://localhost/',
+    verion: 'v1',
+    urls: [{action:'test', patch: '/test/:id}]
+};
+
+//2. Build your path:
+const testPath = getPath('test', {id: 1234}); //-> 'http://localhost/v1/test/1234'
+
+//3. Get your call function:
+const callTestAPI = apiCall(testPath)
+
+//4. Execute!
+callTestAPI() //-> return Promise
+
+// Anothers examples: 
+
+// POST
+apiCall(testPath, 'POST', {name: 'marcos'})()
+
+// SECUNDARY CALLBACK
+// apiCall returns a promise but you can also run an additional callback.
+apiCall(testPath, 'POST', {name: 'marcos'}, (res) => {console.log('RESPONSE', res)})
+apiCall(testPath, 'GET', undefined, (res) => {console.log('RESPONSE', res)})
+
+*/
