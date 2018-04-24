@@ -27,9 +27,10 @@ class StoreCard extends Component {
       <StoreCardWrapper>
         <h3>{this.props.description}</h3>
         <Row gutter={12}>
-          <Col md={6} sm={24} xs={24}>
+          <Col md={5} sm={24} xs={24}>
             <ul>
               <li>{this.props.category.description} > {this.props.subcategory.description}</li>
+              <li>Id > {this.props.account_id}</li>
               <li>{ this.shortNumber(this.props.total_refunded)} REFUNDED</li>
               <li>{ this.shortNumber(this.props.total_discounted)} DISCOUNTED</li>
             </ul>  
@@ -38,19 +39,26 @@ class StoreCard extends Component {
             <BalanceSticker
               coin={'DSC'}
               amount={this.props.balance} 
-              text={'Discoin balance'} 
+              text={'Balance'} 
               bgColor={'#f5f5f5'} />
           </Col>
           <Col md={4} sm={24} xs={24} style={{marginBottom: '10px'}} >
             <BalanceSticker
               coin={'DSC'}
-              amount={this.props.initial_credit}
+              amount={this.props.balances.initial_credit}
               text={'Initial Credit'} 
               bgColor={'#f5f5f5'} />
           </Col>
-          <Col md={5} sm={24} xs={24} style={{marginBottom: '10px'}}>
+          <Col md={4} sm={24} xs={24} style={{marginBottom: '10px'}} >
             <BalanceSticker
-              amount={(this.props.balance * 100 / this.props.initial_credit) || 0}
+              coin={'DSC'}
+              amount={this.props.balances.ready_to_access}
+              text={'Endorsed'} 
+              bgColor={'#f5f5f5'} />
+          </Col>
+          <Col md={4} sm={24} xs={24} style={{marginBottom: '10px'}}>
+            <BalanceSticker
+              amount={(this.props.balances.balance * 100 / this.props.balances.initial_credit) || 0}
               text="Accepted / Received ratio"
               scale={[
                 {value:10, color:"red"},
@@ -61,7 +69,7 @@ class StoreCard extends Component {
               fontColor="#1C222C"
               bgColor="#f5f5f5"/>
           </Col>
-          <Col md={5} sm={24} xs={24} style={{marginBottom: '10px'}}>
+          <Col md={3} sm={24} xs={24} style={{marginBottom: '10px'}}>
             <BalanceSticker
               amount={this.props.discount}
               percentage={true}
