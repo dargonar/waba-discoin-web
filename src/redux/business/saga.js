@@ -38,7 +38,7 @@ function sendData(url, payload) {
 
 function* getBusinesses(action) {
     yield takeLatest(actions.FETCH_CONFIGURATION_BUSINESSES, function*(action) {
-        const url = getBusinessPath + 'list/' + action.payload.balance + '/' + action.payload.from + '/' + action.payload.limit;
+        const url = getBusinessPath + 'list/' + action.payload.from + '/' + action.payload.limit;
         const { data, ex } = yield call(fetchData(url));
         if (data)
             yield put({ type: actions.FETCH_CONFIGURATION_BUSINESSES_SUCCESS, payload: data.businesses });

@@ -37,7 +37,7 @@ const actions = {
             }
         });
     },
-
+    
     removeMsg: () => (dispatch) => dispatch({ type: actions.REMOVE_MSG })
   };
   export default actions;

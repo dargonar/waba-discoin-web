@@ -12,8 +12,16 @@ const themeConfig = {
 };
 const language = 'english';
 
+const mapboxConfig = {
+  tileLayer: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  maxZoom: 22,
+  defaultZoom: 16,
+  center: [-34.603722,-58.381592] // Buenos Aires
+};
+
 export {
   siteConfig,
   language,
-  themeConfig
+  themeConfig,
+  mapboxConfig
 };

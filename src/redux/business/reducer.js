@@ -1,11 +1,12 @@
 import actions from './actions';
-
+import fakeData from './fakeData';
 const initState = {
     loading: false,
     actionLoading: false,
     error: false,
     msg: null,
-    stores: null
+    stores: null,
+    categories: fakeData.categories
 }
 
 export default function authReducer(state = initState, action) {
