@@ -15,7 +15,7 @@ export default class extends Component {
     if (!element) return;
     const { L } = window;
     const map = L.map(element).setView(
-      mapboxConfig.center,
+      (!isNaN(this.props.marker.lat))? this.props.marker: mapboxConfig.center,
       !isNaN(mapboxConfig.defaultZoom) ? mapboxConfig.defaultZoom : 13
     );
     const osmAttr =

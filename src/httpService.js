@@ -25,7 +25,7 @@ export const apiCall = (path, method, data, cb) => {
             cb(data)
             return { data };
         })
-        .catch(ex => ({ ex }));
+        .catch(ex => ({ data: null, ex }));
     };
 };
 

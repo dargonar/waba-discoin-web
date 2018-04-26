@@ -83,7 +83,7 @@ class StoreCard extends Component {
             <Button shape="circle" icon="delete" onClick={this.props.delete} />
           </Col>
           <Col xs={12} style={{textAlign:'right'}} className={'rightButtons'}>
-            <Button shape="circle" onClick={this.props.info} icon="info" />
+            <Button shape="circle" onClick={()=>this.props.edit(this.props.account_id)} icon="info" />
             <Tooltip title="Change initial credit">
               <Button shape="circle" onClick={() => this.props.overdraft(this.props)}>$</Button>
             </Tooltip>

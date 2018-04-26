@@ -44,12 +44,12 @@ export default function authReducer(state = initState, action) {
     case actions.BUSINESS_UPDATE_PROFILE:
       return {
         ...state,
-        stores : state.stores.map(store => {
-          if (store.account_id === action.payload.business.account_id)
-            return action.payload.business
-          else
-            return store
-        })
+        stores : (state.stores !== null)? state.stores.map(store => {
+            if (store.account_id === action.payload.business.account_id)
+              return action.payload.business
+            else
+              return store
+          }): [ action.payload.business ]
       }
     case actions.REMOVE_MSG:
       return {

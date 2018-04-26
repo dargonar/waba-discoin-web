@@ -35,6 +35,7 @@ class Parameters extends Component {
         e.target.value
     )
     this.setState({data: result.data});    
+    console.log(this.state.data)
   }
 
   submit() {

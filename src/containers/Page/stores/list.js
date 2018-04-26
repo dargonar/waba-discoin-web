@@ -14,6 +14,8 @@ import StoreMessageBox from './components/storeMessageBox'
 import StoreCard from './components/storeCard';
 import StoreOverdarfBox from './components/storeOvercraftBox'
 
+import { push } from 'react-router-redux';
+
 
 class ListStores extends Component {
 
@@ -27,11 +29,16 @@ class ListStores extends Component {
     this.submitOverdraftBox = this.submitOverdraftBox.bind(this);
     this.removeOverdraftBox = this.removeOverdraftBox.bind(this);
     this.showOverdraft = this.showOverdraft.bind(this);
-
+    this.edit = this.edit.bind(this);
   }
 
   componentWillMount() {
     this.props.fetch();
+  }
+
+  edit(businessId) {
+    console.log(this.props)
+    this.props.goTo('/dashboard/store/'+businessId+'/edit')
   }
 
   showOverdraft(bussines) {
@@ -61,6 +68,7 @@ class ListStores extends Component {
             {...store}
             key={store.id}
             overdraft={this.showOverdraft}
+            edit={this.edit}
           />
         ))}
       </div>
@@ -105,7 +113,10 @@ const mapDispatchToProps = (dispatch) => ({
   fetch: bindActionCreators(actions.fetchBusinesses, dispatch),
   setOverdraft: bindActionCreators(actions.overdraft, dispatch),
   removeMsg: bindActionCreators(actions.removeMsg, dispatch),
+  goTo: (url)=>dispatch(push(url))
 })
+
+
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListStores);

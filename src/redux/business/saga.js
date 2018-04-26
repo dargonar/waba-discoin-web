@@ -10,9 +10,11 @@ function* signTx(action) {
         const url = getPath('URL/SIGN_TX',{ ...action.payload })
         const fetchData = apiCall(url, 'POST', action.payload.toSign)
         const { data, ex } = yield call(fetchData);
-        if (data)
+        if (data) {
+            yield put({type: actions.FETCH_CONFIGURATION_BUSINESS, payload: data.businesses }) 
             yield put({ type: action.payload.onSuccess, payload: data.businesses });
-           else
+        }
+        else
             yield put({ type: action.payload.onFail, ex });
     })
 };
@@ -52,7 +54,7 @@ function* setOverdraft(action) {
 }
 
 function* reloadBusiness(action) {
-    yield takeEvery(actions.BUSINESS_SET_OVERDRAFT_SUCCESS, function*(action) {
+    yield takeEvery(actions.FETCH_CONFIGURATION_BUSINESS, function*(action) {
         const url = getPath('URL/GET_BUSINESS',{ ...action.payload })
         const fetchData = apiCall(url)
         const { data, ex } = yield call(fetchData);
@@ -63,12 +65,32 @@ function* reloadBusiness(action) {
     })
 }
 
+const makeSignature = ( data ) => {
+    return 'lafirmaqueteparezca'
+}
+
+function* saveBusiness(action) {
+    yield takeEvery(actions.SAVE_BUSINESS, function*(action) {
+        const url = getPath('URL/REGISTER_BUSINESS')
+
+        const signature = makeSignature(action.payload)
+
+        const fetchData = apiCall(url,'POST', { bussines: action.payload, secret: signature })
+        const { data, ex } = yield call(fetchData);
+        if (data)
+            yield put({ type: actions.SAVE_BUSINESS_SUCCESS, payload: data });
+        else
+            yield put({ type: actions.SAVE_BUSINESS_FAIL, payload: ex });
+    })
+}
+
 export default function* rootSaga() {
     yield all([
       fork(getBusinesses),
       fork(setOverdraft),
       fork(reloadBusiness),
-      fork(signTx)
+      fork(signTx),
+      fork(saveBusiness)
     ]);
   }
   
