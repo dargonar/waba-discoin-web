@@ -42,13 +42,15 @@ class AccountsStores extends Component {
   }
 
   render() {
+    const account = this.props.account(this.state.account_id)
+    const subaccounts = this.props.subaccounts(this.state.account_id)
     return (
       <LayoutContentWrapper>
         
         <PageHeader>
-          <IntlMessages id="sidebar.accounts" />
+          <IntlMessages id="sidebar.accounts" />: {account.name}
         </PageHeader>
-        { (this.props.actionLoading || this.props.subaccounts(this.state.account_id) === null)? <PageLoading />: this.renderAccounts() }
+        { (this.props.actionLoading || subaccounts === null)? <PageLoading />: this.renderAccounts() }
       </LayoutContentWrapper>
     );
   }
@@ -62,7 +64,11 @@ const filterSubaccounts = (state) => (account_id) => {
     })
 };
 const filterStores = (state) => (account_id) => {
-  return state.Business.stores.filter(x => x.account_id === account_id)
+  return state.Business.stores
+    .filter(x => x.account_id === account_id)
+    .reduce((pre,act)=> act, {
+      name: ''
+    })
 };
 
 const mapStateToProps = (state) => ({
