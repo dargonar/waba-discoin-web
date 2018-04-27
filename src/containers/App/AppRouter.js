@@ -37,6 +37,11 @@ class AppRouter extends React.Component {
           path={`${url}/store/:id/edit`}
           component={asyncComponent(() => import('../Page/stores/create'))}
         />
+        <Route
+          exact
+          path={`${url}/store/:id/accounts`}
+          component={asyncComponent(() => import('../Page/stores/accounts'))}
+        />
         <Redirect
           from={`${url}/`}
           to={`${url}/kpis`}
