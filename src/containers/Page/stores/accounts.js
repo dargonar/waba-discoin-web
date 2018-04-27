@@ -20,6 +20,7 @@ class AccountsStores extends Component {
       this.setState({
         accoutn_id: this.props.match.params.id
       })
+      this.props.fetch({id:this.props.match.params.id})
       return
     };
     this.setState({ error: 'No account id'})
@@ -65,7 +66,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  
+  fetch: bindActionCreators(actions.fetchSubaccounts, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountsStores);

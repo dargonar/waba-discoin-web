@@ -16,6 +16,26 @@ const actions = {
     SAVE_BUSINESS_SUCCESS: 'BUSINESS/SAVE_SUCCESS',
     SAVE_BUSINESS_FAIL: 'BUSINESS/SAVE_FAILD',
     
+    FETCH_CONFIGURATION_SUBACCOUNTS: 'BUSINESS/SUBACCOUNTS_FETCH',
+    GET_SUBACCOUNTS_SUCCESS: 'BUSINESS/SUBACCOUNTS_FETCH_SUCCESS',
+    GET_SUBACCOUNTS_FAIL: 'BUSINESS/SUBACCOUNTS_FETCH_FAIL',
+
+
+    fetchSubaccounts: (payload) => (dispatch, getState) => {
+        if (payload.id === null && payload.id === undefined) {
+            return dispatch({
+                type: actions.SAVE_BUSINESS_FAIL,
+                payload: {
+                    msg: 'No account id'
+                }
+            })
+        }
+        dispatch({
+            type: actions.FETCH_CONFIGURATION_SUBACCOUNTS,
+            payload
+        })
+    },
+
     fetchBusinesses: (payload)=> (dispatch, getState) => {
         payload = (payload)? payload: {}
         dispatch({ 

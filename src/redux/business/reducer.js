@@ -5,7 +5,8 @@ const initState = {
     actionLoading: false,
     error: false,
     msg: null,
-    stores: null,
+    stores: [],
+    subaccounts: [],
     categories: fakeData.categories
 }
 
@@ -50,6 +51,26 @@ export default function authReducer(state = initState, action) {
             else
               return store
           }): [ action.payload.business ]
+      }
+    case actions.FETCH_CONFIGURATION_SUBACCOUNTS:
+      return {
+        ...state,
+        actionLoading: true
+      }
+    case actions.GET_SUBACCOUNTS_SUCCESS:
+      return {
+        ...state,
+        actionLoading: false,
+        subaccounts: state.subaccounts
+          .filter(x => x.account_id !== action.payload.account_id) //If exist -> remove
+          .concat(action.payload) // add subaccuounts
+      }
+    case actions.GET_SUBACCOUNTS_FAIL:
+      return {
+        ...state,
+        actionLoading: false,
+        error: true,
+        msg: action.payload.ex
       }
     case actions.REMOVE_MSG:
       return {
