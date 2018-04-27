@@ -153,12 +153,12 @@ class Sidebar extends Component {
                   </span>
                 }>
                 <Menu.Item key="store-list" style={submenuStyle}>
-                  <Link to={`${url}/store-list`} style={submenuColor}>
+                  <Link to={`${url}/store/list`} style={submenuColor}>
                     <IntlMessages id="sidebar.list" />
                   </Link>
                 </Menu.Item>
                 <Menu.Item key="store-create" style={submenuStyle}>
-                  <Link to={`${url}/store-create`} style={submenuColor}>
+                  <Link to={`${url}/store/create`} style={submenuColor}>
                     <IntlMessages id="sidebar.createStore" />
                   </Link>
                 </Menu.Item>
