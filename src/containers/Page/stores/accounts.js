@@ -74,8 +74,8 @@ const mapStateToProps = (state) => ({
   msg: state.Business.msg
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  fetch: bindActionCreators(actions.fetchSubaccounts, dispatch)
+const mapDispatchToProps = (dispatch,state) => ({
+  fetch: bindActionCreators(actions.fetchSubaccounts, dispatch, state)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountsStores);

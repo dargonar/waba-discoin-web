@@ -45,12 +45,9 @@ export default function authReducer(state = initState, action) {
     case actions.BUSINESS_UPDATE_PROFILE:
       return {
         ...state,
-        stores : (state.stores !== null)? state.stores.map(store => {
-            if (store.account_id === action.payload.business.account_id)
-              return action.payload.business
-            else
-              return store
-          }): [ action.payload.business ]
+        stores : state.stores
+          .filter(store => store.account_id !== action.payload.business.account_id)
+          .concat(action.payload.business)
       }
     case actions.FETCH_CONFIGURATION_SUBACCOUNTS:
       return {

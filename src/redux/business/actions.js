@@ -1,3 +1,6 @@
+
+const storeExist = (stores,id) => stores.filter(x => x.account_id === id).length
+
 const actions = {
     
     FETCH_CONFIGURATION_BUSINESSES: 'BUSINESSES/FETCH',
@@ -21,15 +24,24 @@ const actions = {
     GET_SUBACCOUNTS_FAIL: 'BUSINESS/SUBACCOUNTS_FETCH_FAIL',
 
 
-    fetchSubaccounts: (payload) => (dispatch, getState) => {
+    fetchSubaccounts: (payload) => (dispatch, state) => {       
         if (payload.id === null && payload.id === undefined) {
-            return dispatch({
+            dispatch({
                 type: actions.SAVE_BUSINESS_FAIL,
                 payload: {
                     msg: 'No account id'
                 }
             })
+            return
         }
+
+        if (!storeExist(state().Business.stores, payload.id)) {
+            dispatch({
+                type: actions.FETCH_CONFIGURATION_BUSINESS,
+                payload
+            })
+        }
+
         dispatch({
             type: actions.FETCH_CONFIGURATION_SUBACCOUNTS,
             payload
