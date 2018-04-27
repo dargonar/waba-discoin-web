@@ -16,20 +16,27 @@ class AccountsStores extends Component {
   }
 
   componentWillMount() {
+  
     if (typeof this.props.match.params.id !== 'undefined') {
       this.setState({
-        accoutn_id: this.props.match.params.id
+        account_id: this.props.match.params.id
       })
-      this.props.fetch({id:this.props.match.params.id})
+      this.props.fetch({
+        id:this.props.match.params.id
+      })
       return
     };
     this.setState({ error: 'No account id'})
   }
 
   renderAccounts() {
+    const subaccounts = this.props.subaccounts(this.state.account_id)
     return (
       <div style={{width:'100%'}}>
-        {(this.props.accounts(this.state.account_id).length === 0)? 'This store does not have an account': ''}
+        {(subaccounts.subaccounts.length === 0)? 'This store does not have an account': (
+        <pre>
+          {JSON.stringify(subaccounts, null, '  ')}
+        </pre>)}
       </div>
     );
   }
@@ -41,24 +48,26 @@ class AccountsStores extends Component {
         <PageHeader>
           <IntlMessages id="sidebar.accounts" />
         </PageHeader>
-        { (this.props.loading || this.props.accounts(this.state.account_id) === null)? <PageLoading />: this.renderAccounts() }
+        { (this.props.actionLoading || this.props.subaccounts(this.state.account_id) === null)? <PageLoading />: this.renderAccounts() }
       </LayoutContentWrapper>
     );
   }
 }
 
-const filterAccounts = (state) => (account_id) => {
-    if (state.Business.stores !== null) {
-        const store = state.Business.stores.filter(x => x.account_id === account_id)
-        if (store.length !== 0) {
-            return store[0].accounts
-        }
-    }
-    return [];
+const filterSubaccounts = (state) => (account_id) => {
+  return state.Business.subaccounts
+    .filter(x => x.account_id === account_id)
+    .reduce((pre,act)=> act.subaccounts, {
+      subaccounts:[]
+    })
+};
+const filterStores = (state) => (account_id) => {
+  return state.Business.stores.filter(x => x.account_id === account_id)
 };
 
 const mapStateToProps = (state) => ({
-  accounts : filterAccounts(state),
+  subaccounts : filterSubaccounts(state),
+  account: filterStores(state),
   loading : state.Business.loading,
   actionLoading : state.Business.actionLoading,
   error: state.Business.error,
