@@ -14,7 +14,7 @@ const customizedTheme = themes[themeConfig.theme];
 class Topbar extends Component {
   render() {
     const { toggleCollapsed } = this.props;
-    const collapsed = this.props.collapsed && !this.props.openDrawer;
+    const collapsed = this.props.App.collapsed && !this.props.App.openDrawer;
     const styling = {
       background: customizedTheme.backgroundColor,
       position: 'fixed',
@@ -44,7 +44,7 @@ class Topbar extends Component {
               onClick={() => this.setState({ selectedItem: 'user' })}
               className="isoUser"
             >
-              <TopbarUser />
+              <TopbarUser account={this.props.Auth.account}/>
             </li>
           </ul>
         </Header>
@@ -55,7 +55,8 @@ class Topbar extends Component {
 
 export default connect(
   state => ({
-    ...state.App.toJS()
+    App: {...state.App.toJS()},
+    Auth: {...state.Auth.toJS()}
   }),
   { toggleCollapsed }
 )(Topbar);

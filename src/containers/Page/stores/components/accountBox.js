@@ -1,7 +1,8 @@
 import React from 'react';
 import Button from '../../../../components/uielements/button';
 import Card from '../../../../components/uielements/card';
-import { Icon, Tooltip } from 'antd'
+import HashImage from '../../../../components/hashImage';
+import { Icon, Tooltip, Avatar } from 'antd'
 
 const style={
     box: {
@@ -23,13 +24,16 @@ const BtnInfo = ({ text, icon, action }) => (
 const AccountBox = ({name, type, dailyPermission, changeAmount, changePassword}) => (
     <Card 
         style={style.box}
-        title={'Account: '+ name}
         actions={[
             (<BtnInfo text='Change amount' icon='edit' action={changeAmount} />),
             (<BtnInfo text='Change password' icon='unlock' action={changePassword} />)
         ]}>
-        <p><b>Type:</b> {type}</p>
-        <p><b>Daily Permission:</b> {Number(dailyPermission).toLocaleString()}</p>
+        <Card.Meta
+        avatar={<HashImage text={name} size={50} />}
+        title={name}
+        description={(<p>
+            <b>Type:</b> {type}<br/>
+            <b>Daily Permission:</b> {Number(dailyPermission).toLocaleString()}</p>)} />
     </Card> 
 )
 

@@ -5,6 +5,7 @@ import IntlMessages from '../../components/utility/intlMessages';
 import userpic from '../../image/user1.png';
 import authAction from '../../redux/auth/actions';
 import TopbarDropdownWrapper from './topbarDropdown.style';
+import HashImg from '../../components/hashImage'
 
 const { logout } = authAction;
 
@@ -42,6 +43,8 @@ class TopbarUser extends Component {
       </TopbarDropdownWrapper>
     );
 
+
+    
     return (
       <Popover
         content={content}
@@ -52,7 +55,7 @@ class TopbarUser extends Component {
         placement="bottomLeft"
       >
         <div className="isoImgWrapper">
-          <img alt="user" src={userpic} />
+          <HashImg text={this.props.account} size={430} style={{borderRadius:'100%'}} />
           <span className="userActivity online" />
         </div>
       </Popover>
