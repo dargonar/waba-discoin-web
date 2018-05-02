@@ -30,6 +30,7 @@ class ListStores extends Component {
     this.removeOverdraftBox = this.removeOverdraftBox.bind(this);
     this.showOverdraft = this.showOverdraft.bind(this);
     this.edit = this.edit.bind(this);
+    this.accounts = this.accounts.bind(this);
   }
 
   componentWillMount() {
@@ -37,8 +38,11 @@ class ListStores extends Component {
   }
 
   edit(businessId) {
-    console.log(this.props)
     this.props.goTo('/dashboard/store/'+businessId+'/edit')
+  }
+
+  accounts(businessId) {
+    this.props.goTo('/dashboard/store/'+businessId+'/accounts')
   }
 
   showOverdraft(bussines) {
@@ -68,6 +72,7 @@ class ListStores extends Component {
             {...store}
             key={store.id}
             overdraft={this.showOverdraft}
+            accounts={this.accounts}
             edit={this.edit}
           />
         ))}
