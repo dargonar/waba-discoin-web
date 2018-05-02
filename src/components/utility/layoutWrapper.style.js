@@ -5,7 +5,7 @@ const LayoutContentWrapper = styled.div`
   display: flex;
   flex-flow: row wrap;
   overflow: hidden;
-  background: rgba(0,0,0,0.04);
+  align-items: top;
   @media only screen and (max-width: 767px) {
     padding: 50px 20px;
   }
