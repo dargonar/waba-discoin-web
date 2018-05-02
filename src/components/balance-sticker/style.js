@@ -13,7 +13,7 @@ const BalanceStickerWidgetWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 80px;
+    width: 40px;
     flex-shrink: 0;
     background-color: rgba(0, 0, 0, 0.1);
 
