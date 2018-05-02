@@ -38,7 +38,7 @@ class StoreCard extends Component {
           <Col md={4} sm={24} xs={24} style={{marginBottom: '10px'}} >
             <BalanceSticker
               coin={'DSC'}
-              amount={this.props.balance} 
+              amount={this.props.balances.balance} 
               text={'Balance'} 
               bgColor={'#f5f5f5'} />
           </Col>
