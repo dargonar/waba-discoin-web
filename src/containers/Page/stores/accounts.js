@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import actions from '../../../redux/business/actions';
 import { Col, Row } from 'antd';
 import PageLoading from '../../../components/pageLoading'
+import Alert from '../../../components/feedback/alert'
 import LayoutContentWrapper from '../../../components/utility/layoutWrapper';
 import PageHeader from '../../../components/utility/pageHeader';
 import IntlMessages from '../../../components/utility/intlMessages';
@@ -44,11 +45,11 @@ class AccountsStores extends Component {
     return (
       <Row style={{width:'100%'}}>
         {(subaccounts.length === 0)?
-          'This store does not have an account':
+          (<Alert message="Ups!" type="warning" description="This store does not have subaccounts" style={{margin:'10px'}}/> ):
           subaccounts.map(account => (
             <Col lg={8} md={12} sd={24}>
               <AccountBox 
-                key={account.id}
+                key={account.id+'-'+account.since}
                 name={account.name}
                 dailyPermission={account.ammount}
                 changeAmmount={()=>this.changeAmmount(account)}
