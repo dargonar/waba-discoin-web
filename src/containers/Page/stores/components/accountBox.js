@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '../../../../components/uielements/button';
 import Card from '../../../../components/uielements/card';
+import { Icon, Tooltip } from 'antd'
 
 const style={
     box: {
@@ -13,13 +14,19 @@ const style={
     }
 }
 
+const BtnInfo = ({ text, icon, action }) => (
+    <Tooltip title={text}>
+        <Icon type={icon} onClick={action} />
+    </Tooltip>
+)
+
 const AccountBox = ({name, type, dailyPermission, changeAmmount, changePassword}) => (
     <Card 
         style={style.box}
         title={'Account: '+ name}
         actions={[
-            (<Button onClick={changeAmmount}>Change Ammount</Button>),
-            (<Button onClick={changePassword}>Change Password</Button>)
+            (<BtnInfo text='Change ammount' icon='edit' action={changeAmmount} />),
+            (<BtnInfo text='Change password' icon='unlock' action={changePassword} />)
         ]}>
         <p><b>Type:</b> {type}</p>
         <p><b>Daily Permission:</b> {dailyPermission}</p>
