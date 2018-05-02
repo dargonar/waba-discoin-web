@@ -36,8 +36,8 @@ class AccountsStores extends Component {
     console.log('Change password', account)
   }
 
-  changeAmmount(account) {
-    console.log('Change ammount', account)
+  changeAmount(account) {
+    console.log('Change amount', account)
   }
 
   renderAccounts() {
@@ -51,8 +51,8 @@ class AccountsStores extends Component {
               <AccountBox 
                 key={account.id+'-'+account.since}
                 name={account.name}
-                dailyPermission={account.ammount}
-                changeAmmount={()=>this.changeAmmount(account)}
+                dailyPermission={account.amount}
+                changeAmount={()=>this.changeAmount(account)}
                 changePassword={()=>this.changePassword(account)}
               />
             </Col>

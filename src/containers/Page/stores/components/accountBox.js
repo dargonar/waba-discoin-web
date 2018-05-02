@@ -20,12 +20,12 @@ const BtnInfo = ({ text, icon, action }) => (
     </Tooltip>
 )
 
-const AccountBox = ({name, type, dailyPermission, changeAmmount, changePassword}) => (
+const AccountBox = ({name, type, dailyPermission, changeAmount, changePassword}) => (
     <Card 
         style={style.box}
         title={'Account: '+ name}
         actions={[
-            (<BtnInfo text='Change ammount' icon='edit' action={changeAmmount} />),
+            (<BtnInfo text='Change amount' icon='edit' action={changeAmount} />),
             (<BtnInfo text='Change password' icon='unlock' action={changePassword} />)
         ]}>
         <p><b>Type:</b> {type}</p>
