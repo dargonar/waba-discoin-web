@@ -6,12 +6,13 @@ import actions from './actions';
 const fakeApiCall = true; // auth0 or express JWT
 
 export function* loginRequest() {
-  yield takeEvery('LOGIN_REQUEST', function*() {
+  yield takeEvery('LOGIN_REQUEST', function*(action) {
     if (fakeApiCall) {
       yield put({
         type: actions.LOGIN_SUCCESS,
         token: 'secret token',
-        profile: 'Profile'
+        profile: 'Profile',
+        account: action.payload.account
       });
     } else {
       yield put({ type: actions.LOGIN_ERROR });

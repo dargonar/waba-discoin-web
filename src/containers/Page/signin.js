@@ -13,6 +13,7 @@ const { login } = authAction;
 class SignIn extends Component {
   state = {
     redirectToReferrer: false,
+    account: null,
   };
   componentWillReceiveProps(nextProps) {
     if (
@@ -24,7 +25,7 @@ class SignIn extends Component {
   }
   handleLogin = () => {
     const { login } = this.props;
-    login();
+    login({account: this.state.account});
     this.props.history.push('/dashboard');
   };
   render() {
@@ -46,7 +47,7 @@ class SignIn extends Component {
 
             <div className="isoSignInForm">
               <div className="isoInputWrapper">
-                <Input size="large" placeholder="Username" />
+                <Input size="large" placeholder="Username" onChange={(e)=> this.setState({account: e.target.value})}/>
               </div>
 
               <div className="isoInputWrapper">
