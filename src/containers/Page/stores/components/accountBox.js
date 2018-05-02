@@ -29,7 +29,7 @@ const AccountBox = ({name, type, dailyPermission, changeAmount, changePassword})
             (<BtnInfo text='Change password' icon='unlock' action={changePassword} />)
         ]}>
         <p><b>Type:</b> {type}</p>
-        <p><b>Daily Permission:</b> {dailyPermission}</p>
+        <p><b>Daily Permission:</b> {Number(dailyPermission).toLocaleString()}</p>
     </Card> 
 )
 
