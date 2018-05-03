@@ -27,7 +27,7 @@ class StoreOverdarfBox extends Component {
       return (
           <Modal
             visible={this.props.business.description}
-            title={(<b>Overcraft</b>)} 
+            title={(<b>New Overcraft</b>)} 
             onOk={this.submit}
             onCancel={this.cancel}>
             <label>{this.props.visible}</label>
