@@ -33,7 +33,7 @@ const AccountBox = ({name, type, dailyPermission, changeAmount, changePassword})
         title={name}
         description={(<p>
             <b>Type:</b> {type}<br/>
-            <b>Daily Permission:</b> {Number(dailyPermission).toLocaleString()}</p>)} />
+            <b>Daily Permission:</b> DSC {Number(dailyPermission).toLocaleString()}</p>)} />
     </Card> 
 )
 
