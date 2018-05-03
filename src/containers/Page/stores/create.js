@@ -202,10 +202,10 @@ class CreateStore extends Component {
 
     const renderForm = () => {
       return (
-        <Form>
+        <Form style={{width:'100%'}}>
           <Box>
             <Row style={{width:'100%'}} gutter={16} >
-              <Col md={12} sm={24}>
+              <Col lg={12} md={24} sm={24}>
                 
                 <FormItem label="Name">
                   <Input type="text"  defaultValue={this.state.form.name} id="form.name" onChange={this.inputChange} />
@@ -281,7 +281,7 @@ class CreateStore extends Component {
                   </Row>
                 </FormItem>
               </Col>
-              <Col md={12} sm={24}>
+              <Col lg={12} md={24} sm={24}>
                 <FormItem label="Image">
                   <DropzoneWrapper>
                     <Dropzone
