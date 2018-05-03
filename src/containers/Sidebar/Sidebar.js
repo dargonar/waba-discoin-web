@@ -80,7 +80,7 @@ class Sidebar extends Component {
       }
       return;
     };
-    const scrollheight = app.height;
+    const scrollheight = app.height || window.innerHeight;
     const styling = {
       backgroundColor: customizedTheme.backgroundColor,
     };
