@@ -68,13 +68,18 @@ const makeSignature = ( data ) => {
 }
 
 function* saveBusiness(action) {
+    console.log( " saveBusiness ========= #1" );
     yield takeEvery(actions.SAVE_BUSINESS, function*(action) {
-        const url = getPath('URL/REGISTER_BUSINESS')
-
+        
+        const url = getPath('URL/UPDATE_BUSINESS', { ...action.payload })
+        console.log( " saveBusiness ========= #2");
         const signature = makeSignature(action.payload)
 
-        const fetchData = apiCall(url,'POST', { bussines: action.payload, secret: signature })
+        console.log( " ===> about to POST");
+        const fetchData = apiCall(url, 'POST', { business: action.payload, secret: signature })
         const { data, ex } = yield call(fetchData);
+        console.log('=====> saveBusiness')
+        console.log(JSON.stringify(data))
         if (data)
             yield put({ type: actions.SAVE_BUSINESS_SUCCESS, payload: data });
         else

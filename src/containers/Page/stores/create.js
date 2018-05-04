@@ -19,6 +19,8 @@ import actions from '../../../redux/business/actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import { updateBusinessProfile } from '../../../httpService';
+
 const FormItem = Form.Item;
 
 const BasicLeafletMapWithMarker = props => (
@@ -90,7 +92,10 @@ class CreateStore extends Component {
 
   submit () {
     // TODO: Validation!
-    this.props.saveBusiness(this.state.form)
+    console.log( '*****> submit');
+    console.log(JSON.stringify(this.state.form));
+    this.props.saveBusiness(this.state.form);
+    // updateBusinessProfile()
   }
 
   changeSchedule(type, key, value) {
@@ -106,7 +111,8 @@ class CreateStore extends Component {
 
   componentWillReceiveProps(nextProps) {
     const checkLoading = (businesses) => {
-      console.log(businesses,this.state.id)
+      // console.log( " ===> componentWillReceiveProps");
+      // console.log(businesses,this.state.id)
       if (businesses) {
         const business = businesses.filter(x => x.account_id === this.state.id)
         if(business.length !== 0) {
@@ -122,6 +128,8 @@ class CreateStore extends Component {
   }
 
   initForm(business) {
+    // console.log('==========initForm:');
+    // console.log(JSON.stringify(business));
     this.setState({form: {
       ...this.state.form,
       ...business
@@ -146,17 +154,43 @@ class CreateStore extends Component {
         longitude: e.latlng.lng
       }
     })
-    console.log(this.state)
+    console.log( " **********> locationChange");
+    console.log(e);
   }
 
   inputChange(e) {
-    const result = set(
-      { data: this.state.form },
-      e.target.id,
-      e.target.value
-    )
-    this.setState({ form : result.form   });   
-    console.log(this.state.form)
+    // this.setState({
+    //   form: {
+    //     ...this.state.form,
+    //     latitude: e.latlng.lat,
+    //     longitude: e.latlng.lng
+    //   }
+    // })
+
+    // const result = set(
+    //   { data: this.state.form },
+    //   e.target.id,
+    //   e.target.value
+    // )
+
+    var key = e.target.id.replace('form.', '');
+    var val = e.target.value;
+    var obj  = this.state.form;
+    obj[key] = val;
+    this.setState(obj)
+
+    
+
+    // console.log( " ===> inputChange e.target.id");
+    // console.log(e.target.id);
+    // console.log( " ===> inputChange e.target.value");
+    // console.log(e.target.value);
+
+    // console.log( " ===> inputChange result form");
+    // console.log(result.form);
+    // this.setState({ form : result.form   });   
+    // console.log( " ===> inputChange state form");
+    // console.log(this.state.form)
   }
 
   categoryChange(id) {
@@ -200,6 +234,10 @@ class CreateStore extends Component {
     };
 
     const renderForm = () => {
+
+      // console.log( " ===> render");
+      // console.log( JSON.stringify(this.state.form));
+
       return (
         <Form style={{width:'100%'}}>
           <Box>
@@ -214,10 +252,18 @@ class CreateStore extends Component {
                   <Input type="email" defaultValue={this.state.form.email} id="form.email" onChange={this.inputChange} />
                 </FormItem>
                 
-                <FormItem label="Location">
-                  <BasicLeafletMapWithMarker onChange={this.locationChange} marker={{lat: this.state.form.latitude, lng: this.state.form.longitude }}/>
+                <FormItem label="Telephone">
+                  <Input type="tel" defaultValue={this.state.form.telephone} id="form.telephone" onChange={this.inputChange} />
                 </FormItem>
-                
+
+                <FormItem label="Address">
+                  <Input type="text" defaultValue={this.state.form.address} id="form.address" onChange={this.inputChange} />
+                </FormItem>
+
+                <FormItem  label="Description">
+                  <textarea id="form.description" defaultValue= {this.state.form.description} onChange={this.inputChange} style={textAreaStyle}></textarea>
+                </FormItem>
+
                 <FormItem label="Category">
                   <Select
                       style={{ width: '100%' }}
@@ -231,6 +277,7 @@ class CreateStore extends Component {
                     }
                   </Select>
                 </FormItem>
+                
                 <FormItem label="Subcategory">
                   <Select
                       style={{ width: '100%' }}
@@ -245,6 +292,22 @@ class CreateStore extends Component {
                   </Select>
                 </FormItem>
                 
+              </Col>
+              <Col md={12} sm={24}>
+                <FormItem label="Location">
+                  <BasicLeafletMapWithMarker onChange={this.locationChange} marker={{lat: this.state.form.latitude, lng: this.state.form.longitude }}/>
+                </FormItem>
+
+                <FormItem label="Image">
+                  <DropzoneWrapper>
+                    <Dropzone
+                      config={this.componentConfig}
+                      eventHandlers={eventHandlers}
+                      djsConfig={this.djsConfig}
+                    />
+                  </DropzoneWrapper>
+                </FormItem>
+                
                 <FormItem label="Rates">
                   <Row style={{width:'100%'}}>
                     <Col sm={3}>
@@ -256,42 +319,28 @@ class CreateStore extends Component {
                           Refound
                         </Col>
                         <Col>
-                          Discoun
+                          Discount
                         </Col>
                       </Row>
                     </Col>
                     {
-                    this.state.form.discount_schedule.map((discount, key) => (
-                      <Col sm={3} key={'discount-' + key}>
-                        <Row>
-                          <Col style={{textAlign:'center',textTransform:'capitalize'}}>
-                            {discount.date.substr(0,3)}
-                          </Col>
-                          <Col>
-                            <Input type='number' defaultValue={this.state.form.refound_schedule[key].refound} onChange={(e) => this.changeSchedule('refound',key,e.target.value)} style={{width:'100%'}} />
-                          </Col>
-                          <Col>
-                            <Input type='number' defaultValue={discount.discount} onChange={(e) => this.changeSchedule('discount',key,e.target.value)} style={{width:'100%'}} />
-                          </Col>
-                        </Row>
-                      </Col>
-                    ))
+                      this.state.form.discount_schedule.map((discount, key) => (
+                        <Col sm={3} key={'discount-' + key}>
+                          <Row>
+                            <Col style={{textAlign:'center',textTransform:'capitalize'}}>
+                              {discount.date.substr(0,3)}
+                            </Col>
+                            <Col>
+                              <Input type='number' defaultValue={this.state.form.refound_schedule[key].refound} onChange={(e) => this.changeSchedule('refound',key,e.target.value)} style={{width:'100%'}} />
+                            </Col>
+                            <Col>
+                              <Input type='number' defaultValue={discount.discount} onChange={(e) => this.changeSchedule('discount',key,e.target.value)} style={{width:'100%'}} />
+                            </Col>
+                          </Row>
+                        </Col>
+                      ))
                     }
                   </Row>
-                </FormItem>
-              </Col>
-              <Col lg={12} md={24} sm={24}>
-                <FormItem label="Image">
-                  <DropzoneWrapper>
-                    <Dropzone
-                      config={this.componentConfig}
-                      eventHandlers={eventHandlers}
-                      djsConfig={this.djsConfig}
-                    />
-                  </DropzoneWrapper>
-                </FormItem>
-                <FormItem  label="Description">
-                  <textarea id="form.description" defaultValue= {this.state.form.description} onChange={this.inputChange} style={textAreaStyle}></textarea>
                 </FormItem>
               </Col>
             </Row>
@@ -305,7 +354,7 @@ class CreateStore extends Component {
     return (
       <LayoutContentWrapper>
         <PageHeader>
-          { (this.state.mode !== 'edit')? (<IntlMessages id="sidebar.createStore" />): 'Edit store' }
+          { (this.state.mode !== 'edit')? (<IntlMessages id="sidebar.createStore" />): (<IntlMessages id="store.edit" />) }
         </PageHeader>
           { (this.state.loading)? <PageLoading /> : renderForm() }
       </LayoutContentWrapper>
