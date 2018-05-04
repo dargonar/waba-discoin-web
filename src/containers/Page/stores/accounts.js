@@ -9,13 +9,41 @@ import Alert from '../../../components/feedback/alert'
 import LayoutContentWrapper from '../../../components/utility/layoutWrapper';
 import PageHeader from '../../../components/utility/pageHeader';
 import IntlMessages from '../../../components/utility/intlMessages';
-
+import MessageBox from '../../../components/MessageBox'
 import AccountBox from './components/accountBox';
+import AccountDailyBox from './components/storeOvercraftBox'
 
 class AccountsStores extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      dailyBox: false,
+      accountSelected: null
+    }
+    this.submitDailyBox = this.submitDailyBox.bind(this);
+    this.removeDailyBox = this.removeDailyBox.bind(this);
+    this.showDaily = this.showDaily.bind(this);
+    this.changeAmount = this.changeAmount.bind(this);
+  }
+
+  showDaily(bussines) {
+    this.setState({
+      accountSelected: bussines,
+      dailyBox: true
+    })
+  }
+
+  submitDailyBox(value) {
+    this.props.updateSubaccount(this.state.accountSelected, value)
+    this.removeDailyBox()
+  }
+
+  removeDailyBox() {
+    this.setState({
+      dailyBox: false,
+      accountSelected: null
+    })
   }
 
   componentWillMount() {
@@ -37,7 +65,7 @@ class AccountsStores extends Component {
   }
 
   changeAmount(account) {
-    console.log('Change amount', account)
+    this.showDaily(account)
   }
 
   renderAccounts() {
@@ -47,9 +75,8 @@ class AccountsStores extends Component {
         {(subaccounts.length === 0)?
           (<Alert message="Ups!" type="warning" description="This store does not have subaccounts" style={{margin:'10px'}}/> ):
           subaccounts.map(account => (
-            <Col lg={8} md={12} sd={24}>
+            <Col lg={8} md={12} sd={24} key={account.id+'-'+account.since}>
               <AccountBox 
-                key={account.id+'-'+account.since}
                 name={account.name}
                 dailyPermission={account.amount}
                 changeAmount={()=>this.changeAmount(account)}
@@ -67,11 +94,24 @@ class AccountsStores extends Component {
     const subaccounts = this.props.subaccounts(this.state.account_id)
     return (
       <LayoutContentWrapper>
-        
+        {(this.state.dailyBox)? (
+          <AccountDailyBox
+            title={'Daily limit - '+ this.state.accountSelected.name}
+            visible={this.state.dailyBox}
+            business={this.state.accountSelected}
+            value={(this.state.accountSelected)? this.state.accountSelected.amount: 0}
+            cancel = {this.removeDailyBox}
+            submit = {this.submitDailyBox}
+          />
+        ): false}
+          <MessageBox
+            msg={this.props.msg}
+            error={this.props.error}
+            clean={this.props.removeMsg} />
         <PageHeader>
           <IntlMessages id="sidebar.accounts" />: {account.name}
         </PageHeader>
-        { (this.props.actionLoading || subaccounts === null)? <PageLoading />: this.renderAccounts() }
+        { (this.props.loading || subaccounts === null)? <PageLoading />: this.renderAccounts() }
       </LayoutContentWrapper>
     );
   }
@@ -102,7 +142,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch,state) => ({
-  fetch: bindActionCreators(actions.fetchSubaccounts, dispatch, state)
+  fetch: bindActionCreators(actions.fetchSubaccounts, dispatch, state),
+  updateSubaccount: bindActionCreators(actions.updateSubaccount, dispatch),
+  removeMsg: bindActionCreators(actions.removeMsg, dispatch),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountsStores);

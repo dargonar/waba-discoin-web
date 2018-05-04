@@ -23,6 +23,9 @@ const actions = {
     GET_SUBACCOUNTS_SUCCESS: 'BUSINESS/SUBACCOUNTS_FETCH_SUCCESS',
     GET_SUBACCOUNTS_FAIL: 'BUSINESS/SUBACCOUNTS_FETCH_FAIL',
 
+    UPDATE_SUBACCOUNT: 'UPDATE_SUBACCOUNT',
+    UPDATE_SUBACCOUNT_FAIL: 'UPDATE_SUBACCOUNT_FAIL',
+    UPDATE_SUBACCOUNT_SUCCESS: 'UPDATE_SUBACCOUNT_SUCCESS',
 
     fetchSubaccounts: (payload) => (dispatch, state) => {       
         if (payload.id === null && payload.id === undefined) {
@@ -78,10 +81,18 @@ const actions = {
             payload: { id }
        }) 
     },
+    
     saveBusiness: (data) => (dispatch) => {
         dispatch({
             type: actions.SAVE_BUSINESS,
             payload: data
+        })
+    },
+
+    updateSubaccount: (account, parameteres) => (dispatch) => {
+        dispatch({
+            type: actions.UPDATE_SUBACCOUNT,
+            payload: { ...account, ...parameteres }
         })
     },
 

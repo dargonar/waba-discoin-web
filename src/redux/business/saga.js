@@ -94,10 +94,24 @@ function* getSubaccounts(action) {
 
         const fetchData = apiCall(url)
         const { data, ex } = yield call(fetchData);
-        if (typeof data !== 'undefined')
+        if (typeof data !== 'undefined' && typeof data !== 'null')
             yield put({ type: actions.GET_SUBACCOUNTS_SUCCESS, payload: { account_id: action.payload.id, subaccounts: data }});
         else
             yield put({ type: actions.GET_SUBACCOUNTS_FAIL, payload: ex });
+    })
+}
+
+function* updateSubaccounts(action) {
+    yield takeEvery(actions.UPDATE_SUBACCOUNT, function*(action) {
+        const url = getPath('URL/UPDATE_SUBACCOUNTS', 'POST', action.payload)
+        const fetchData = apiCall(url,'POST', { account: action.payload })
+
+        const { data, ex } = yield call(fetchData);
+        console.log(data, ex)
+        if (data)
+            yield put({ type: actions.UPDATE_SUBACCOUNT_SUCCESS, payload: { account_id: action.payload.id, data }});
+        else
+            yield put({ type: actions.UPDATE_SUBACCOUNT_FAIL, payload: ex });
     })
 }
 
@@ -109,6 +123,7 @@ export default function* rootSaga() {
       fork(signTx),
       fork(saveBusiness),
       fork(getSubaccounts),
+      fork(updateSubaccounts),
     ]);
   }
   
