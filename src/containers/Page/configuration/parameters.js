@@ -1,7 +1,9 @@
 import React, { ReactDOM, Component } from 'react';
 import LayoutContentWrapper from '../../../components/utility/layoutWrapper';
 import PageHeader from '../../../components/utility/pageHeader';
+import PageLoading from '../../../components/pageLoading'
 import IntlMessages from '../../../components/utility/intlMessages';
+import MessageBox from '../../../components/MessageBox'
 import Button from '../../../components/uielements/button';
 import { Col, Row } from 'antd';
 import ContentHolder from '../../../components/utility/contentHolder';
@@ -62,14 +64,10 @@ class Parameters extends Component {
         width:'100%'
     };
 
-    if(this.props.configuration.loading === false && this.props.configuration.parameters.warnings) {
-        return (
-        <LayoutContentWrapper style={{width:'100%'}}>
-            <PageHeader>
-            <IntlMessages id="sidebar.parameters" />
-            </PageHeader>
-            <form ref="form">
-                <Row style={rowStyle} gutter={gutter} justify="start">
+    const renderForm = () => {
+       return (this.props.configuration.parameters !== null)? (
+        <form ref="form">
+            <Row style={rowStyle} gutter={gutter} justify="start">
                 <Col md={12} sm={24} xs={24} style={colStyle}>
                     <Box title="Warnings indicators">
                         <ContentHolder>
@@ -188,24 +186,36 @@ class Parameters extends Component {
                         </ContentHolder>
                     </Box>
                 </Col>
-                </Row>
-                <Button type="primary" style={{marginLeft: 'auto', marginRight: '16px'}} onClick={this.submit} >Apply changes</Button>
-                </form>
-        </LayoutContentWrapper>
-        );
-    } else {
-        return (<div></div>);
-    }
+            </Row>
+            <Button type="primary" style={{marginLeft: 'auto', marginRight: '16px'}} onClick={this.submit} >Apply changes</Button>
+        </form>): false;
+    };
+
+    return (
+    <LayoutContentWrapper style={{width:'100%'}}>
+        <MessageBox
+            msg={this.props.msg}
+            error={this.props.error}
+            clean={this.props.removeMsg} />
+        <PageHeader>
+            <IntlMessages id="sidebar.parameters" />
+        </PageHeader>
+        {(this.props.configuration.loading === false)? renderForm() : (<PageLoading />)}
+    </LayoutContentWrapper>
+    );
   }
 }
 
 const mapStateToProps = (state) => ({
-    configuration : state.Configuration
+    configuration : state.Configuration,
+    error: state.Configuration.error,
+    msg: state.Configuration.msg
   });
   
   const mapDispatchToProps = (dispatch) => ({
     fetch: bindActionCreators(actions.fetchParameteres, dispatch),
-    sendParameters: bindActionCreators(actions.sendParameters, dispatch)
+    sendParameters: bindActionCreators(actions.sendParameters, dispatch),
+    removeMsg: bindActionCreators(actions.removeMsg, dispatch)
   })
   
   
