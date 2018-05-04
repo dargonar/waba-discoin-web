@@ -69,6 +69,15 @@ export default function authReducer(state = initState, action) {
         error: true,
         msg: action.payload.ex
       }
+
+    case actions.FETCH_CONFIGURATION_BUSINESSES_FAILD:
+    return {
+        ...state,
+        loading: false,
+        error: true,
+        msg: 'Error loading businesses. Please try again leater.'
+    }
+
     case actions.REMOVE_MSG:
       return {
         ...state,
