@@ -2,8 +2,6 @@ import { takeLatest, put, call, all, fork  } from 'redux-saga/effects';
 import actions from './actions';
 import { getPath, apiCall } from '../../httpService';
 
-const getCategoriesPath = 'http://35.163.59.126:8080/api/v3/dashboard/categories';
-
 function* getParameters(action) {
     yield takeLatest(actions.FETCH_CONFIGURATION_PARAMETERS, function*() {
         const url = getPath('URL/GET_PARAMETERS')

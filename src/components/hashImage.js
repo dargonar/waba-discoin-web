@@ -8,8 +8,8 @@ const getSHA = (text) => {
     return result.getHash("HEX");
 }
 
-const HashImg = ({size, text, style}) => (
-    <img src={'data:image/png;base64,' + new Identicon(getSHA(text || ''), size || 430).toString()} style={style}/>
+const HashImg = ({size, text, style, alt}) => (
+    <img src={'data:image/png;base64,' + new Identicon(getSHA(text || ''), size || 430).toString()} style={style} alt={alt || ''}/>
 )
 
 export default HashImg

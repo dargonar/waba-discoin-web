@@ -8,9 +8,6 @@ import Button from '../../../components/uielements/button';
 import TableWrapper from './antTable.style';
 import LayoutContent from '../../../components/utility/layoutContent';
 import MessageBox from '../../../components/MessageBox'
-
-import clone from 'clone';
-
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import actions from '../../../redux/configuration/actions'

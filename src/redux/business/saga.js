@@ -1,7 +1,5 @@
 import { takeLatest, put, call, all, fork, takeEvery  } from 'redux-saga/effects';
 import actions from './actions';
-import fakeApi from './fakeData';
-
 import { getPath, apiCall } from '../../httpService';
 
 
@@ -94,7 +92,7 @@ function* getSubaccounts(action) {
 
         const fetchData = apiCall(url)
         const { data, ex } = yield call(fetchData);
-        if (typeof data !== 'undefined' && typeof data !== 'null')
+        if (data && typeof data !== 'undefined')
             yield put({ type: actions.GET_SUBACCOUNTS_SUCCESS, payload: { account_id: action.payload.id, subaccounts: data }});
         else
             yield put({ type: actions.GET_SUBACCOUNTS_FAIL, payload: ex });

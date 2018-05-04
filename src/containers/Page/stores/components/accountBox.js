@@ -1,8 +1,7 @@
 import React from 'react';
-import Button from '../../../../components/uielements/button';
 import Card from '../../../../components/uielements/card';
 import HashImage from '../../../../components/hashImage';
-import { Icon, Tooltip, Avatar } from 'antd'
+import { Icon, Tooltip } from 'antd'
 
 const style={
     box: {

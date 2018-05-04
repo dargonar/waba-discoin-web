@@ -69,7 +69,7 @@ class AccountsStores extends Component {
   }
 
   renderAccounts() {
-    const {subaccounts, permissions } = this.props.subaccounts(this.state.account_id)
+    const {subaccounts } = this.props.subaccounts(this.state.account_id)
     return (
       <Row style={{width:'100%'}}>
         {(subaccounts.length === 0)?
