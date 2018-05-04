@@ -52,12 +52,12 @@ export default function authReducer(state = initState, action) {
     case actions.FETCH_CONFIGURATION_SUBACCOUNTS:
       return {
         ...state,
-        actionLoading: true
+        loading: true
       }
     case actions.GET_SUBACCOUNTS_SUCCESS:
       return {
         ...state,
-        actionLoading: false,
+        loading: false,
         subaccounts: state.subaccounts
           .filter(x => x.account_id !== action.payload.account_id) //If exist -> remove
           .concat(action.payload) // add subaccuounts
@@ -65,10 +65,43 @@ export default function authReducer(state = initState, action) {
     case actions.GET_SUBACCOUNTS_FAIL:
       return {
         ...state,
-        actionLoading: false,
+        loading: false,
         error: true,
         msg: action.payload.ex
       }
+
+    case actions.FETCH_CONFIGURATION_BUSINESSES_FAILD:
+    return {
+        ...state,
+        loading: false,
+        error: true,
+        msg: 'Error loading businesses. Please try again leater.'
+    }
+
+
+    case actions.UPDATE_SUBACCOUNT:
+      return {
+        ...state,
+        actionLoading: true
+      }
+
+    case actions.UPDATE_SUBACCOUNT_SUCCESS:
+      return {
+        ...state,
+        actionLoading: false,
+        subaccounts: state.subaccounts
+          .filter(x => x.account_id !== action.payload.account_id) //If exist -> remove
+          .concat(action.payload.data) // add subaccuounts
+      }
+
+    case actions.UPDATE_SUBACCOUNT_FAIL:
+      return {
+          ...state,
+          actionLoading: false,
+          error: true,
+          msg: 'Error when updating subaccount.'
+      }
+
     case actions.REMOVE_MSG:
       return {
         ...state,

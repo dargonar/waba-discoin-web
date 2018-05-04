@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import LayoutContentWrapper from '../../../components/utility/layoutWrapper';
 import PageHeader from '../../../components/utility/pageHeader';
+import PageLoading from '../../../components/pageLoading'
 import IntlMessages from '../../../components/utility/intlMessages';
 import { Input, Icon } from 'antd';
 import Button from '../../../components/uielements/button';
 import TableWrapper from './antTable.style';
 import LayoutContent from '../../../components/utility/layoutContent';
-
-import clone from 'clone';
-
+import MessageBox from '../../../components/MessageBox'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import actions from '../../../redux/configuration/actions'
@@ -235,38 +234,48 @@ class Categories extends Component {
       })
       return result;
     }
-    if(this.props.configuration.loading === false && this.props.configuration.categories.cols) {
+
+    if(this.props.configuration.loading === false && this.props.configuration.categories !== null) {
       this.initState(this.props.configuration.categories);
     }
     
-    if(this.props.configuration.loading === false && this.state.data !== false) {
-      console.log(this.state.data)
-      return (
-        <LayoutContentWrapper>
-          <PageHeader>
-            <IntlMessages id="sidebar.categories" />
-          </PageHeader>
-          <LayoutContent>
-              <TableWrapper pagination={false} columns={getColumns(this.state.data.cols)} dataSource={getRows(this.state.data)}/>
-          </LayoutContent>
+    const renderTable = () => {
+      return (this.state.data !== false)? (
+        <LayoutContent>
+          <TableWrapper pagination={false} columns={getColumns(this.state.data.cols)} dataSource={getRows(this.state.data)}/>
           <Button style={margin} onClick={()=>this.addColumn()}>Add Category</Button>
           <Button style={margin} onClick={()=>this.addRow()}>Add Discount</Button>
           <Button type="primary" style={margin} onClick={()=>this.submit()}>Save</Button>
-        </LayoutContentWrapper>
-      );
-    } else {
-      return (<div></div>);
+        </LayoutContent>
+      ): false;
     }
+
+
+    return (
+      <LayoutContentWrapper>
+        <MessageBox
+          msg={this.props.msg}
+          error={this.props.error}
+          clean={this.props.removeMsg} />
+        <PageHeader>
+          <IntlMessages id="sidebar.categories" />
+        </PageHeader>
+        {(this.props.configuration.loading === false)? renderTable(): (<PageLoading />)}
+      </LayoutContentWrapper>
+      );
   }
 }
 
 const mapStateToProps = (state) => ({
-  configuration : state.Configuration
+  configuration : state.Configuration,
+  error: state.Configuration.error,
+  msg: state.Configuration.msg
 });
 
 const mapDispatchToProps = (dispatch) => ({
   fetch: bindActionCreators(actions.fetchCategories, dispatch),
-  sendCategories: bindActionCreators(actions.sendCategories, dispatch)
+  sendCategories: bindActionCreators(actions.sendCategories, dispatch),
+  removeMsg: bindActionCreators(actions.removeMsg, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Categories)

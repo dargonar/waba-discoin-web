@@ -15,7 +15,6 @@ import Select, { SelectOption } from '../../../components/uielements/select'
 import Async from '../../../helpers/asyncComponent';
 import Dropzone from '../../../components/uielements/dropzone.js';
 import DropzoneWrapper from './components/dropzone.style';
-import { notification } from '../../../components';
 import actions from '../../../redux/business/actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -202,10 +201,10 @@ class CreateStore extends Component {
 
     const renderForm = () => {
       return (
-        <Form>
+        <Form style={{width:'100%'}}>
           <Box>
             <Row style={{width:'100%'}} gutter={16} >
-              <Col md={12} sm={24}>
+              <Col lg={12} md={24} sm={24}>
                 
                 <FormItem label="Name">
                   <Input type="text"  defaultValue={this.state.form.name} id="form.name" onChange={this.inputChange} />
@@ -228,7 +227,7 @@ class CreateStore extends Component {
                     {
                       this.props.categories
                         .filter(category => category.parent === '0')
-                        .map(category => (<SelectOption key={category.id} value={Number(category.id)} selected={this.state.form.category_id == category.id}>{category.title}</SelectOption>))
+                        .map(category => (<SelectOption key={category.id} value={Number(category.id)} selected={this.state.form.category_id.toString() === category.id.toString()}>{category.title}</SelectOption>))
                     }
                   </Select>
                 </FormItem>
@@ -241,7 +240,7 @@ class CreateStore extends Component {
                     {
                       this.props.categories
                         .filter(category => Number(category.parent) === Number(this.state.form.category_id))
-                        .map(category => (<SelectOption key={category.id} value={Number(category.id)} selected={this.state.form.subcategory_id == category.id}>{category.title}</SelectOption>))
+                        .map(category => (<SelectOption key={category.id} value={Number(category.id)} selected={this.state.form.subcategory_id.toString() === category.id.toString()}>{category.title}</SelectOption>))
                     }
                   </Select>
                 </FormItem>
@@ -281,7 +280,7 @@ class CreateStore extends Component {
                   </Row>
                 </FormItem>
               </Col>
-              <Col md={12} sm={24}>
+              <Col lg={12} md={24} sm={24}>
                 <FormItem label="Image">
                   <DropzoneWrapper>
                     <Dropzone

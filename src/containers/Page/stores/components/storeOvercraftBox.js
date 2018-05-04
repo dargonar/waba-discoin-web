@@ -26,14 +26,14 @@ class StoreOverdarfBox extends Component {
       }
       return (
           <Modal
-            visible={this.props.business.description}
-            title={(<b>New Overcraft</b>)} 
+            visible={(typeof this.props.business.name !== 'undefined')? true : false }
+            title={this.props.title || (<b>New Overcraft</b>)} 
             onOk={this.submit}
             onCancel={this.cancel}>
             <label>{this.props.visible}</label>
             <Input
               type="number"
-              defaultValue={this.props.business.initial_credit || 0}
+              defaultValue={this.props.business.initial_credit || this.props.value || 0}
               onChange={(e)=> this.setState({value: e.target.value})} /><br/>
           </Modal>
       )

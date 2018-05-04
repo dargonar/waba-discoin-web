@@ -1,7 +1,7 @@
 import React, { Component} from 'react'
 import { Modal } from 'antd';
 
-class StoreMessageBox extends Component {
+class MessageBox extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -26,4 +26,4 @@ class StoreMessageBox extends Component {
   }
 }
 
-export default StoreMessageBox;
+export default MessageBox;

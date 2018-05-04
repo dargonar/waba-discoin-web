@@ -1,7 +1,5 @@
 import { takeLatest, put, call, all, fork, takeEvery  } from 'redux-saga/effects';
 import actions from './actions';
-import fakeApi from './fakeData';
-
 import { getPath, apiCall } from '../../httpService';
 
 
@@ -27,7 +25,7 @@ function* getBusinesses(action) {
         if (data)
             yield put({ type: actions.FETCH_CONFIGURATION_BUSINESSES_SUCCESS, payload: data.businesses });
         else
-            yield put({ type: actions.FETCH_CONFIGURATION_BUSINESSES_SUCCESS, ex });
+            yield put({ type: actions.FETCH_CONFIGURATION_BUSINESSES_FAILD, ex });
     })
 }
 
@@ -94,10 +92,24 @@ function* getSubaccounts(action) {
 
         const fetchData = apiCall(url)
         const { data, ex } = yield call(fetchData);
-        if (typeof data !== 'undefined')
+        if (data && typeof data !== 'undefined')
             yield put({ type: actions.GET_SUBACCOUNTS_SUCCESS, payload: { account_id: action.payload.id, subaccounts: data }});
         else
             yield put({ type: actions.GET_SUBACCOUNTS_FAIL, payload: ex });
+    })
+}
+
+function* updateSubaccounts(action) {
+    yield takeEvery(actions.UPDATE_SUBACCOUNT, function*(action) {
+        const url = getPath('URL/UPDATE_SUBACCOUNTS', 'POST', action.payload)
+        const fetchData = apiCall(url,'POST', { account: action.payload })
+
+        const { data, ex } = yield call(fetchData);
+        console.log(data, ex)
+        if (data)
+            yield put({ type: actions.UPDATE_SUBACCOUNT_SUCCESS, payload: { account_id: action.payload.id, data }});
+        else
+            yield put({ type: actions.UPDATE_SUBACCOUNT_FAIL, payload: ex });
     })
 }
 
@@ -109,6 +121,7 @@ export default function* rootSaga() {
       fork(signTx),
       fork(saveBusiness),
       fork(getSubaccounts),
+      fork(updateSubaccounts),
     ]);
   }
   
