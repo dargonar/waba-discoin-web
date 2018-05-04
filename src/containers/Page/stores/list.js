@@ -10,7 +10,7 @@ import PageHeader from '../../../components/utility/pageHeader';
 import IntlMessages from '../../../components/utility/intlMessages';
 
 import StoreCardWrapper from './store.style'
-import StoreMessageBox from './components/storeMessageBox'
+import MessageBox from '../../../components/MessageBox'
 import StoreCard from './components/storeCard';
 import StoreOverdarfBox from './components/storeOvercraftBox'
 
@@ -88,7 +88,7 @@ class ListStores extends Component {
           <IntlMessages id="sidebar.stores" />
         </PageHeader>
 
-        <StoreMessageBox
+        <MessageBox
           msg={this.props.msg}
           error={this.props.error}
           clean={this.props.removeMsg} />
