@@ -2,17 +2,20 @@ import { all, takeEvery, put, fork } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import { getToken, clearToken } from '../../helpers/utility';
 import actions from './actions';
+import { getKeys } from './fakeAccount';
 
 const fakeApiCall = true; // auth0 or express JWT
 
 export function* loginRequest() {
-  yield takeEvery('LOGIN_REQUEST', function*(action) {
-    if (fakeApiCall) {
+  yield takeEvery('LOGIN_REQUEST', function*(action) {  
+    const { keys, err } = yield getKeys('askpassword?')
+    if (fakeApiCall && !err) {
       yield put({
         type: actions.LOGIN_SUCCESS,
         token: 'secret token',
         profile: 'Profile',
-        account: action.payload.account
+        account: action.payload.account,
+        keys: keys
       });
     } else {
       yield put({ type: actions.LOGIN_ERROR });
@@ -39,11 +42,13 @@ export function* logout() {
 export function* checkAuthorization() {
   yield takeEvery(actions.CHECK_AUTHORIZATION, function*() {
     const token = getToken().get('idToken');
-    if (token) {
+    const { keys, err } = yield getKeys('askpassword?')
+    if (token && !err) {
       yield put({
         type: actions.LOGIN_SUCCESS,
         token,
-        profile: 'Profile'
+        profile: 'Profile',
+        keys: keys
       });
     }
   });
