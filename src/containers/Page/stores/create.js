@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import LayoutContentWrapper from '../../../components/utility/layoutWrapper';
 import PageHeader from '../../../components/utility/pageHeader';
 import IntlMessages from '../../../components/utility/intlMessages';
-import set from 'lodash.set';
 
 import Box from '../../../components/utility/box';
 import Form from '../../../components/uielements/form';
@@ -18,8 +17,6 @@ import DropzoneWrapper from './components/dropzone.style';
 import actions from '../../../redux/business/actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
-import { updateBusinessProfile } from '../../../httpService';
 
 const FormItem = Form.Item;
 

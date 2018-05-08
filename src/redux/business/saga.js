@@ -1,9 +1,7 @@
-import { takeLatest, put, call, all, fork, takeEvery, select  } from 'redux-saga/effects';
+import { takeLatest, put, call, all, fork, takeEvery } from 'redux-saga/effects';
 import actions from './actions';
 import { getPath, apiCall } from '../../httpService';
 import { signTx } from './sagas/signTx';
-
-const getKey = (state) => state.Auth.keys;
 
 function* getBusinesses(action) {
     yield takeLatest(actions.FETCH_CONFIGURATION_BUSINESSES, function*(action) {

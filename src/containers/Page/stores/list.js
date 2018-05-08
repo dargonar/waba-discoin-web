@@ -15,8 +15,6 @@ import StoreOverdarfBox from './components/storeOvercraftBox'
 
 import { push } from 'react-router-redux';
 
-import { getAndSignTx } from '../../../httpService';
-
 class ListStores extends Component {
 
   constructor(props) {

@@ -1,5 +1,4 @@
 import { put, call, takeEvery  } from 'redux-saga/effects';
-import actions from '../actions';
 import { getPath, apiCall } from '../../../httpService';
 
 /*
@@ -31,20 +30,10 @@ export const signTx = function* (action) {
 
         // FETCH
         const push_url = getPath('URL/PUSH_SIGN_TX');
-        const getTx = () => fetch(push_url, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                tx:tx,
-                pk:signature
-            })
-        });
+        const getTx = apiCall(push_url, 'POST', { tx:tx, pk:signature })
 
         // EXTRACT FETCH RESULTS and DISPATCH ACTIONS
-        const { data, ex } = yield call(getTx());
+        const { data, ex } = yield call(getTx);
 
         if (data) {
             // SUCCESS ACTION (Specified in the payload)
