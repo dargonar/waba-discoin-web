@@ -661,5 +661,11 @@
   "topbar.logout": "Cerrar sesión",
   "topbar.viewAll": "Ver todo",
   "topbar.viewCart": "Ver carro",
-  "topbar.totalPrice": "Precio total"
+  "topbar.totalPrice": "Precio total",
+  "sidebar.discountRewards": "Descuentos y recompenzas",
+  "sidebar.refound": "Reembolsos",
+  "sidebar.transactions": "Transacciones",
+  "sidebar.subAccounts": "Subcuentas",
+  "sidebar.contactList": "Lista de contactos",
+  "sidebar.profile": "Perfil"
 }

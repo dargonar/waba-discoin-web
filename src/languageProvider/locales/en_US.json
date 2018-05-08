@@ -646,5 +646,11 @@
   "topbar.viewCart": "View Cart",
   "topbar.totalPrice": "Total Price",
   "store.edit": "Edit Store",
-  "store.name": "Name"
+  "store.name": "Name",
+  "sidebar.discountRewards": "Discounts and rewards",
+  "sidebar.refound": "Refunds",
+  "sidebar.transactions": "Transactions",
+  "sidebar.subAccounts": "Sub Accounts",
+  "sidebar.contactList": "Contact list",
+  "sidebar.profile": "Profile"
 }
