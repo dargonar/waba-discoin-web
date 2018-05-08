@@ -114,55 +114,6 @@ class Sidebar extends Component {
               onOpenChange={this.onOpenChange}
               className="isoDashboardMenu"
             >
-              <Menu.Item key="kpis">
-                <Link to={`${url}/kpis`}>
-                  <span className="isoMenuHolder" style={submenuColor}>
-                    <span className="nav-text">
-                      <IntlMessages id="sidebar.kpis" />
-                    </span>
-                  </span>
-                </Link>
-              </Menu.Item>
-              <SubMenu
-                key="configuration"
-                title={
-                  <span className="isoMenuHolder" style={submenuColor}>
-                    <span className="nav-text">
-                      <IntlMessages id="sidebar.configuration" />
-                    </span>
-                  </span>
-                }>
-                  <Menu.Item key="parameters" style={submenuStyle}>
-                    <Link to={`${url}/parameters`}  style={submenuColor}>
-                      <IntlMessages id="sidebar.parameters" />
-                    </Link>
-                  </Menu.Item>
-                  <Menu.Item key="categories" style={submenuStyle}>
-                    <Link to={`${url}/categories`} style={submenuColor}>
-                      <IntlMessages id="sidebar.categories" />
-                    </Link>
-                  </Menu.Item>
-              </SubMenu>
-              <SubMenu
-                key="stores"
-                title={
-                  <span className="isoMenuHolder" style={submenuColor}>
-                    <span className="nav-text">
-                      <IntlMessages id="sidebar.stores" />
-                    </span>
-                  </span>
-                }>
-                <Menu.Item key="store-list" style={submenuStyle}>
-                  <Link to={`${url}/store/list`} style={submenuColor}>
-                    <IntlMessages id="sidebar.list" />
-                  </Link>
-                </Menu.Item>
-                <Menu.Item key="store-create" style={submenuStyle}>
-                  <Link to={`${url}/store/create`} style={submenuColor}>
-                    <IntlMessages id="sidebar.createStore" />
-                  </Link>
-                </Menu.Item>
-              </SubMenu>
             </Menu>
           </Scrollbars>
         </Sider>

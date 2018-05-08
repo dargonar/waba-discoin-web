@@ -2,7 +2,6 @@ const siteConfig = {
   siteName: 'DISCOIN',
   siteIcon: 'ion-flash',
   footerText: 'WABA.network ©2018',
-  apiUrl: 'https://w5xlvm3vzz.lp.gql.zone/graphql',
 };
 const themeConfig = {
   topbar: 'themedefault',
@@ -23,15 +22,6 @@ const apiConfig = {
   base: 'http://35.163.59.126:8080/api/',
   version: 'v3',
   urls: [
-    { action: 'URL/GET_KPIS',          path: '/dashboard/kpis' },
-    { action: 'URL/GET_PARAMETERS',    path: '/dashboard/configuration' },
-    { action: 'URL/GET_CATEGORIES',    path: '/dashboard/categories' },
-    { action: 'URL/GET_BUSINESSES',    path: '/dashboard/business/list/:from/:limit' },
-    { action: 'URL/GET_BUSINESS',      path: '/dashboard/business/profile/:id/load' },
-    { action: 'URL/SET_OVERDRAFT',     path: '/business/endorse/create' },
-    { action: 'URL/REGISTER_BUSINESS', path: '/business/register' },
-    { action: 'URL/GET_SUBACCOUNTS',   path: '/business/:id/subaccount/list/:start'},
-    { action: 'URL/UPDATE_BUSINESS',   path: '/dashboard/business/profile/:account_id/update'},
     { action: 'URL/PUSH_TX',           path: '/push_tx' },
     { action: 'URL/PUSH_SIGN_TX',      path: '/sign_and_push_tx' }
 
