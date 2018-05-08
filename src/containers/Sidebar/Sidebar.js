@@ -68,6 +68,7 @@ class Sidebar extends Component {
     const collapsed = clone(app.collapsed) && !clone(app.openDrawer);
     const { openDrawer } = app;
     const mode = collapsed === true ? 'vertical' : 'inline';
+    const hidden = { display: 'none' }
     const onMouseEnter = event => {
       if (openDrawer === false) {
         toggleOpenDrawer();
@@ -150,7 +151,7 @@ class Sidebar extends Component {
                   </span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="subAccounts">
+              <Menu.Item key="subAccounts" style={hidden}>
                 <Link to={`${url}/sub-accounts`}>
                   <span className="isoMenuHolder" style={submenuColor}>
                     <span className="nav-text">
@@ -159,7 +160,7 @@ class Sidebar extends Component {
                   </span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="contactList">
+              <Menu.Item key="contactList" style={hidden}>
                 <Link to={`${url}/contact-list`}>
                   <span className="isoMenuHolder" style={submenuColor}>
                     <span className="nav-text">
@@ -168,7 +169,7 @@ class Sidebar extends Component {
                   </span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="notifications">
+              <Menu.Item key="notifications" style={hidden}>
                 <Link to={`${url}/notifications`}>
                   <span className="isoMenuHolder" style={submenuColor}>
                     <span className="nav-text">
@@ -177,7 +178,7 @@ class Sidebar extends Component {
                   </span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="profile">
+              <Menu.Item key="profile" style={hidden}>
                 <Link to={`${url}/profile`}>
                   <span className="isoMenuHolder" style={submenuColor}>
                     <span className="nav-text">
