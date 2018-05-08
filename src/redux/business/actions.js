@@ -63,14 +63,15 @@ const actions = {
         });
     },
 
-    overdraft: (business, overdraft) => (dispatch) =>{
+    overdraft: (business, overdraft) => (dispatch, getState) =>{    
         // This payload will be sent to the server
         dispatch({
             type: actions.BUSINESS_SET_OVERDRAFT,
             payload: {
                 business_name: business.account,
                 initial_credit: overdraft,
-                account_id: business.account_id
+                account_id: business.account_id,
+                pkey: getState().Auth.get('keys').privKey
             }
         });
     },

@@ -15,7 +15,7 @@ import StoreOverdarfBox from './components/storeOvercraftBox'
 
 import { push } from 'react-router-redux';
 
-import { getAndSignTx, privKey } from '../../../httpService';
+import { getAndSignTx } from '../../../httpService';
 
 class ListStores extends Component {
 
@@ -53,12 +53,13 @@ class ListStores extends Component {
   }
 
   submitOverdraftBox(value) {
-    // this.props.setOverdraft(this.state.businessSelected, value)
-    const action = 'URL/SET_OVERDRAFT' ; //getPath();
+    this.props.setOverdraft(this.state.businessSelected, value)
+    /* const action = 'URL/SET_OVERDRAFT' ; //getPath();
     const parameters = {
         business_name: this.state.businessSelected.account,
         initial_credit: value
     };
+    const privKey = this.props.keys.privKey;
 
     getAndSignTx(action, parameters, privKey).then( res => {
         console.log(action, '====OK===>', JSON.stringify(res));
@@ -67,7 +68,7 @@ class ListStores extends Component {
         console.log(action, '====ERR===>', JSON.stringify(err));
         this.removeOverdraftBox();
     });
-    
+    */
   }
 
   removeOverdraftBox() {
@@ -124,7 +125,8 @@ const mapStateToProps = (state) => ({
   loading : state.Business.loading,
   actionLoading : state.Business.actionLoading,
   error: state.Business.error,
-  msg: state.Business.msg
+  msg: state.Business.msg,
+  keys: state.Auth.keys
 });
 
 const mapDispatchToProps = (dispatch) => ({
