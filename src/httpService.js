@@ -1,22 +1,6 @@
 import pathToRegexp from 'path-to-regexp';
 import { apiConfig } from './config';
 
-// ********************************************************************
-// ********************************************************************
-// HACK ***************************************************************
-import {Signature, ChainStore, FetchChain, PrivateKey, TransactionHelper, Aes, TransactionBuilder, key} from "bitsharesjs";
-import {hash, PublicKey, BigInteger, sign, recoverPubKey, verify, calcPubKeyRecoveryParam } from 'bitsharesjs'; // bitsharesjs/lib/ecc/src/signature.js
-import {Serializer, ops, sha256 } from 'bitsharesjs'; //'./hash';
-import {getCurveByName} from 'ecurve';
-
-export const privKey   = '5JQGCnJCDyraociQmhDRDxzNFCd8WdcJ4BAj8q1YDZtVpk5NDw9';
-let pKey        = PrivateKey.fromWif(privKey);
-let pubKey      = pKey.toPublicKey().toString();
-const chain_id  = '2cfcf449d44f477bc8415666766d2258aa502240cb29d290c1b0de91e756c559';
-var secp256k1 = getCurveByName('secp256k1');
-// ********************************************************************
-// ********************************************************************
-
 export const apiCall = (path, method, data, cb) => {
     // Check if there are any callbacks established
     return () => {
@@ -51,59 +35,6 @@ export const getPath = (action, parameters) => {
         .reduce((pre,act) => act.getPath(parameters),'')
 
     return apiConfig.base + apiConfig.version + path;
-};
-
-
-export const getAndSignTx = (action, parameters, signature) => {
-    
-  return new Promise( (resolve, reject) => {
-
-    // const url = getPath('URL/SET_OVERDRAFT');
-    const url = getPath(action)
-    const body = parameters;
-    
-    console.log( ' SENDING ============= > ' , JSON.stringify(body));
-    console.log( ' TO ============= > ' , url);
-
-    fetch(url, {
-        method: 'POST',
-        headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-        body: JSON.stringify(body)
-      })
-    .then((response) => response.json()
-        , err => {
-          console.log(' ===== #1' ,JSON.stringify(err));
-          reject(err);
-        }) 
-      .then((responseJson) => {
-        console.log(url, ' ======> ' , JSON.stringify(responseJson));
-        
-        const push_url = getPath('URL/PUSH_SIGN_TX');
-        let tx = responseJson.tx;
-
-        fetch(push_url, {
-            method: 'POST',
-            headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-            body: JSON.stringify( {tx:tx, pk:signature})
-          })
-        .then((response) => response.json()
-            , err => {
-              console.log(' ===== #2' ,JSON.stringify(err));
-              reject(err);
-        })
-        .then((responseJson) => {
-          console.log('===========> pushAndSignTX()::res ==> ', JSON.stringify(responseJson));
-          resolve(responseJson);
-        }, err => {
-          console.log(' ===== #3' ,JSON.stringify(err));
-          reject(err);
-        });
-
-      }, err => {
-        console.log(' ===== #4' ,JSON.stringify(err));        
-        reject(err);
-      })
-  });
 };
 
 

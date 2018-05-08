@@ -14,7 +14,7 @@ export const getKeys = (password) => {
     // Hardcoded response:
     return Promise.resolve({
         keys: {
-            wif: privKey,
+            privKey: privKey,
             pubKey: PrivateKey.fromWif(privKey),
             chain_id: '2cfcf449d44f477bc8415666766d2258aa502240cb29d290c1b0de91e756c559',
             secp256k1: getCurveByName('secp256k1')
