@@ -5,36 +5,6 @@ import { signTx } from './sagas/signTx';
 
 const getKey = (state) => state.Auth.keys;
 
-function* signTx(action) {
-    yield takeEvery('signTX', function*(action) {
-
-        const push_url = getPath('URL/PUSH_SIGN_TX');
-        const tx = action.payload.toSign.tx;
-        const signature = action.payload.signature;
-
-        const getTx = () => fetch(push_url, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                tx:tx,
-                pk:signature
-            })
-        });
-
-        const { data, ex } = yield call(getTx());
-        
-        if (data) {
-            yield put({type: actions.FETCH_CONFIGURATION_BUSINESS, payload: data.businesses }) 
-            yield put({ type: action.payload.onSuccess, payload: data.businesses });
-        }
-        else
-            yield put({ type: action.payload.onFail, ex });
-    })
-};
-
 function* getBusinesses(action) {
     yield takeLatest(actions.FETCH_CONFIGURATION_BUSINESSES, function*(action) {
         const url = getPath('URL/GET_BUSINESSES',{ ...action.payload })

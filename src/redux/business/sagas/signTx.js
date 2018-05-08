@@ -1,6 +1,6 @@
 import { put, call, takeEvery  } from 'redux-saga/effects';
-import actions from './actions';
-import { getPath, apiCall } from '../../httpService';
+import actions from '../actions';
+import { getPath, apiCall } from '../../../httpService';
 
 /*
     The expected payload has the following structure: 
