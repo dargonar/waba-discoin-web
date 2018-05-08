@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import asyncComponent from '../../helpers/AsyncFunc';
 
 class AppRouter extends React.Component {
@@ -7,6 +7,16 @@ class AppRouter extends React.Component {
     const { url } = this.props;
     return (
       <Switch>
+        <Route
+          exact
+          path={`${url}/`}
+          component={asyncComponent(() => import('../dashboard'))}
+        />
+        <Route
+          exact
+          path={`${url}/discount-and-rewards`}
+          component={asyncComponent(() => import('../Page/discountAndRewards'))}
+        />
       </Switch>
     );
   }
