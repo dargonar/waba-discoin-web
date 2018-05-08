@@ -1,13 +1,31 @@
-import { takeLatest, put, call, all, fork, takeEvery  } from 'redux-saga/effects';
+import { takeLatest, put, call, all, fork, takeEvery, select  } from 'redux-saga/effects';
 import actions from './actions';
 import { getPath, apiCall } from '../../httpService';
+import { signTx } from './sagas/signTx';
 
+const getKey = (state) => state.Auth.keys;
 
 function* signTx(action) {
     yield takeEvery('signTX', function*(action) {
-        const url = getPath('URL/SIGN_TX',{ ...action.payload })
-        const fetchData = apiCall(url, 'POST', action.payload.toSign)
-        const { data, ex } = yield call(fetchData);
+
+        const push_url = getPath('URL/PUSH_SIGN_TX');
+        const tx = action.payload.toSign.tx;
+        const signature = action.payload.signature;
+
+        const getTx = () => fetch(push_url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                tx:tx,
+                pk:signature
+            })
+        });
+
+        const { data, ex } = yield call(getTx());
+        
         if (data) {
             yield put({type: actions.FETCH_CONFIGURATION_BUSINESS, payload: data.businesses }) 
             yield put({ type: action.payload.onSuccess, payload: data.businesses });
@@ -40,12 +58,16 @@ function* setOverdraft(action) {
         const { data, ex } = yield call(fetchData);
 
         if (data && typeof data.error === 'undefined' ) 
-            //Dispatch other action -> signTX
-            yield put({ type: 'signTX', payload: {
-                toSign: data,
-                onSuccess: actions.BUSINESS_SET_OVERDRAFT_SUCCESS,
-                onFail: actions.BUSINESS_SET_OVERDRAFT_FAILD
-            }});
+            //Sign transaction
+            yield put({ 
+                type: 'signTX',
+                payload: {
+                    toSign: data,
+                    signature: action.payload.pkey,
+                    onSuccess: actions.BUSINESS_SET_OVERDRAFT_SUCCESS,
+                    onFail: actions.BUSINESS_SET_OVERDRAFT_FAILD
+                }
+            });
         else
             yield put({ type: actions.BUSINESS_SET_OVERDRAFT_FAILD, payload: ex });
     })
