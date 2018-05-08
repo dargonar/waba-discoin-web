@@ -13,8 +13,6 @@ import Logo from '../../components/utility/logo';
 import { getCurrentTheme } from '../ThemeSwitcher/config';
 import { themeConfig } from '../../config';
 
-const SubMenu = Menu.SubMenu;
-
 const { Sider } = Layout;
 const {
   toggleOpenDrawer,
@@ -80,15 +78,11 @@ class Sidebar extends Component {
       }
       return;
     };
-    const scrollheight = app.height || window.innerHeight;
+    const scrollheight = app.height;
     const styling = {
       backgroundColor: customizedTheme.backgroundColor,
     };
     const submenuColor = {
-      color: customizedTheme.textColor,
-    };
-    const submenuStyle = {
-      backgroundColor: 'rgba(0,0,0,0.3)',
       color: customizedTheme.textColor,
     };
     return (
@@ -114,6 +108,78 @@ class Sidebar extends Component {
               onOpenChange={this.onOpenChange}
               className="isoDashboardMenu"
             >
+              <Menu.Item key="home">
+                <Link to={`${url}`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.home" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="discountRewards">
+                <Link to={`${url}/discount-and-rewards`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.discountRewards" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="refound">
+                <Link to={`${url}/refound`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.refound" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="transactions">
+                <Link to={`${url}/transactions`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.transactions" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="subAccounts">
+                <Link to={`${url}/sub-accounts`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.subAccounts" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="contactList">
+                <Link to={`${url}/contact-list`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.contactList" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="notifications">
+                <Link to={`${url}/notifications`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.notifications" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="profile">
+                <Link to={`${url}/profile`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.profile" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
             </Menu>
           </Scrollbars>
         </Sider>
