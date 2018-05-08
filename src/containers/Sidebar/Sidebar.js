@@ -13,6 +13,8 @@ import Logo from '../../components/utility/logo';
 import { getCurrentTheme } from '../ThemeSwitcher/config';
 import { themeConfig } from '../../config';
 
+const SubMenu = Menu.SubMenu;
+
 const { Sider } = Layout;
 const {
   toggleOpenDrawer,
@@ -78,11 +80,15 @@ class Sidebar extends Component {
       }
       return;
     };
-    const scrollheight = app.height;
+    const scrollheight = app.height || window.innerHeight;
     const styling = {
       backgroundColor: customizedTheme.backgroundColor,
     };
     const submenuColor = {
+      color: customizedTheme.textColor,
+    };
+    const submenuStyle = {
+      backgroundColor: 'rgba(0,0,0,0.3)',
       color: customizedTheme.textColor,
     };
     return (
