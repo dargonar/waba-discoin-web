@@ -4,7 +4,9 @@ import actions from './actions';
 const initState = new Map({ 
   idToken: null,
   account: null,
-  keys: null
+  keys: null,
+  accountId: '1.2.27',
+  businessId: '1.2.25'
 });
 
 export default function authReducer(state = initState, action) {
