@@ -22,6 +22,7 @@ const apiConfig = {
   base: 'http://35.163.59.126:8080/api/',
   version: 'v3',
   urls: [
+    { action: 'URL/GET_PROFILE',       path: '/dashboard/business/profile/:id/load' },
     { action: 'URL/PUSH_TX',           path: '/push_tx' },
     { action: 'URL/PUSH_SIGN_TX',      path: '/sign_and_push_tx' }
 
