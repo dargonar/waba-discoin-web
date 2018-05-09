@@ -8,7 +8,15 @@ import basicStyle from '../config/basicStyle';
 import BalanceSticker from '../components/balance-sticker/balance-sticker'
 import RatingSticker from '../components/rating-sticker/rating-sticker'
 
-export default class extends Component {
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import actions from '../redux/api/actions';
+
+export class Dashboard extends Component {
+  componentWillMount() {
+    this.props.fetchProfile();
+  }
+
   render() {
     const { rowStyle, colStyle } = basicStyle;
     const state = {
@@ -32,7 +40,8 @@ export default class extends Component {
         total: 5,
         users: 14
       }
-    }
+    };
+
     return (
       <LayoutContentWrapper>
         <Row style={rowStyle} gutter={0} justify="start">
@@ -102,3 +111,14 @@ export default class extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  ...state.Api
+})
+
+const dispatchToProps = (dispatch) => ({
+  cleanMsg: bindActionCreators(actions.cleanMsg, dispatch),
+  fetchProfile: bindActionCreators(actions.fetchProfile, dispatch),
+})
+
+export default connect(mapStateToProps, dispatchToProps)(Dashboard)
