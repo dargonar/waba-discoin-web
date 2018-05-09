@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { RatingStickerWidgetWrapper } from './style';
 import { Icon } from 'antd';
 
+
+const StarIcon = ({full}) => 
+  (<Icon type={(full)? 'star': 'star-o'} />);
+
 export default class extends Component {
   
   render() {
@@ -15,14 +19,12 @@ export default class extends Component {
       width: width
     };
 
-    const makeStars = function(stars,full) {
-        const iconFull = (<Icon type="star" />);
-        const iconEmpty = (<Icon type="star-o" />);
+    const makeStars = function(stars,full) {        
 
         return (
             <div>
                 {
-                    Array(full).fill(1).map((el, i) => (i < stars)? iconFull: iconEmpty )
+                    Array(full).fill(1).map((el, i) => (i < stars)? (<StarIcon full={true} key={i} />) : (<StarIcon full={false} key={i} />) )
                 }
             </div>
         )
