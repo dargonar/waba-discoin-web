@@ -3,14 +3,15 @@ import { BalanceStickerWidgetWrapper } from './style';
 
 export default class extends Component {
   
-  getColorScale(scale,x) {
+  getColorScale(scale,amount) {
+    console.log(scale,amount)
     const color = scale.reduce((prev,curr)=> {
-      if ((x-prev.value)*(x-curr.value)<0 ) { 
+      if (amount > curr.value) { 
         return curr
       } else {
         return prev
       }
-    },{value:0, color:'gray'});
+    },{value:0, color:'gray'}).color;
     return { backgroundColor: color || 'gray'}
   }
   

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import LayoutContentWrapper from '../components/utility/layoutWrapper';
 import LayoutContent from '../components/utility/layoutContent';
+import PageHeader from '../components/utility/pageHeader'
 import IsoWidgetsWrapper from '../components/utility/widgets-wrapper';
+import PageLoading from '../components/pageLoading';
 import { Row, Col } from 'antd';
 import basicStyle from '../config/basicStyle';
 
@@ -13,44 +15,35 @@ import { bindActionCreators } from 'redux';
 import actions from '../redux/api/actions';
 
 export class Dashboard extends Component {
-  componentWillMount() {
-    this.props.fetchProfile();
+
+  constructor(props) {
+    super(props);
+    this.renderContent = this.renderContent.bind(this)
   }
 
-  render() {
-    const { rowStyle, colStyle } = basicStyle;
-    const state = {
-      balance: {
-        coin: 'DSC',
-        amount: 53155
-      },
-      initialCredit: {
-        coin: 'DSC',
-        amount: 90000
-      },
-      aceptedReceived: {
-        amount: 59.5
-      },
-      refund: {
-        amount: 30,
-        category: 24
-      },
-      rating: {
-        stars: 3,
-        total: 5,
-        users: 14
-      }
-    };
+  componentWillMount() {
+    this.props.fetchProfile();
+    this.props.fetchConfiguration();
+  }
 
-    return (
-      <LayoutContentWrapper>
+  renderContent() {
+    const { rowStyle, colStyle } = basicStyle;
+    
+    const getBalanceWarnings = (warnings) => {
+      return Object.keys(warnings).map(key => {
+        return { value: warnings[key].amount, color: warnings[key].color }
+      })
+    }
+
+    if (this.props.api.business !== null && this.props.api.configuration !== null) {
+      return (
         <Row style={rowStyle} gutter={0} justify="start">
           <Col md={6} sm={12} xs={24} style={colStyle}>
             <IsoWidgetsWrapper>
               <BalanceSticker
-                amount={state.balance.amount}
+                amount={this.props.api.business.balances.balance}
                 text="Discoin Balance"
-                coin={state.balance.coin}
+                coin="DSC"
                 fontColor="#1C222C"
                 bgColor="#fff"/>
             </IsoWidgetsWrapper>
@@ -59,9 +52,9 @@ export class Dashboard extends Component {
           <Col md={6} sm={12} xs={24} style={colStyle}>
             <IsoWidgetsWrapper>
               <BalanceSticker
-                amount={state.initialCredit.amount}
+                amount={this.props.api.business.balances.initial_credit}
                 text="Initial Credit"
-                coin={state.initialCredit.coin}
+                coin={'DSC'}
                 fontColor="#1C222C"
                 bgColor="#fff"/>
             </IsoWidgetsWrapper>
@@ -70,26 +63,21 @@ export class Dashboard extends Component {
           <Col md={6} sm={12} xs={24} style={colStyle}>
             <IsoWidgetsWrapper>
               <BalanceSticker
-                amount={state.aceptedReceived.amount}
+                amount={this.props.api.business.balances.balance * 100 / this.props.api.business.balances.initial_credit}
                 text="Accepted / Received ratio"
-                scale={[
-                  {value:10, color:"red"},
-                  {value:50, color:"yellow"},
-                    {value:100, color:"green"}
-                  ]}
-                  percentage={true}
-                  fontColor="#1C222C"
-                  bgColor="#fff"/>
+                scale={getBalanceWarnings(this.props.api.configuration.warnings)}
+                percentage={true}
+                fontColor="#1C222C"
+                bgColor="#fff"/>
             </IsoWidgetsWrapper>
           </Col>
 
           <Col md={6} sm={12} xs={24} style={colStyle}>
             <IsoWidgetsWrapper>
               <BalanceSticker
-                amount={state.refund.amount}
+                amount={this.props.api.business.discount}
                 percentage={true}
                 text="Reward & Refund"
-                subtext={state.refund.category + "% @ category"}
                 fontColor="#1C222C"
                 bgColor="#fff"/>
             </IsoWidgetsWrapper>
@@ -98,27 +86,44 @@ export class Dashboard extends Component {
           <Col md={6} sm={12} xs={24} style={colStyle}>
             <IsoWidgetsWrapper>
               <RatingSticker
-                full={state.rating.total}
-                stars={state.rating.stars}
-                text={state.rating.users}
+                full={0}
+                stars={0}
+                text={0}
                 icon="user"
                 fontColor="#1C222C"
                 bgColor="#fff"/>
             </IsoWidgetsWrapper>
           </Col>
         </Row>
+      )
+    } else {
+      return false;
+    }
+  }
+
+  render() {
+    return (
+      <LayoutContentWrapper>
+        <PageHeader>
+          Dashboard
+        </PageHeader>
+        { (
+            this.props.api.loading !== false &&
+            typeof this.props.api.configuration === 'null'
+          )? (<PageLoading/>): this.renderContent() }     
       </LayoutContentWrapper>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  ...state.Api
+  api: state.Api
 })
 
 const dispatchToProps = (dispatch) => ({
   cleanMsg: bindActionCreators(actions.cleanMsg, dispatch),
   fetchProfile: bindActionCreators(actions.fetchProfile, dispatch),
+  fetchConfiguration: bindActionCreators(actions.fetchConfiguration, dispatch),
 })
 
 export default connect(mapStateToProps, dispatchToProps)(Dashboard)
