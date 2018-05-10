@@ -1,8 +1,10 @@
 import actions from "./actions";
 
 const initState = {
-    bussines: null,
+    business: null,
     transactions: null,
+    configuration: null,
+    categories: null,
     costumers: null,
     loading: false,
     error: false,
@@ -19,7 +21,7 @@ export default function apiReducer(state = initState, action) {
         case actions.GET_PROFILE_SUCCESS:
             return {
                 ...state,
-                bussines: action.payload.bussines,
+                business: action.payload.business,
                 loading: false
             }
         case actions.GET_PROFILE_FAILD:
@@ -28,6 +30,30 @@ export default function apiReducer(state = initState, action) {
                 loading: false,
                 error: true,
                 msg: action.payload.error
+            }
+        case actions.GET_CONFIGURATION_SUCCESS:
+            return {
+                ...state,
+                configuration: action.payload.configuration
+            }
+        case actions.GET_CONFIGURATION_FAILD:
+            return {
+                ...state,
+                loading: false,
+                error: true,
+                msg: action.payload
+            }
+            case actions.GET_CATEGORIES_SUCCESS:
+            return {
+                ...state,
+                categories: action.payload.categories
+            }
+        case actions.GET_CATEGORIES_FAILD:
+            return {
+                ...state,
+                loading: false,
+                error: true,
+                msg: action.payload
             }
         case actions.CLEAR_MSG:
             return {
