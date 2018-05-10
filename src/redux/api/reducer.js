@@ -8,6 +8,7 @@ const initState = {
     costumers: null,
     loading: false,
     error: false,
+    actionLoading: false,
     msg: null,
 }
 
@@ -55,6 +56,32 @@ export default function apiReducer(state = initState, action) {
                 error: true,
                 msg: action.payload
             }
+
+        // UPDATE SCHEDULE REDUCERS
+        case actions.UPDATE_SCHEDULE:
+            return {
+                ...state,
+                actionLoading: true
+            }
+
+        case actions.UPDATE_SCHEDULE_SUCCESS:
+            return {
+                ...state,
+                actionLoading: false,
+                business: {
+                    ...state.business,
+                    discount_schedule: action.payload.discount_schedule
+                }
+            }
+        
+        case actions.UPDATE_SCHEDULE_FAILD: 
+            return {
+                ...state,
+                error: action.payload,
+                msg: 'Error updating the schedule',
+                actionLoading: false    
+            }
+
         case actions.CLEAR_MSG:
             return {
                 ...state,

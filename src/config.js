@@ -25,6 +25,7 @@ const apiConfig = {
     { action: 'URL/GET_PROFILE',       path: '/dashboard/business/profile/:id/load' },
     { action: 'URL/GET_CONFIGURATION', path: '/dashboard/configuration' },
     { action: 'URL/GET_CATEGORIES',    path: '/dashboard/categories' },
+    { action: 'URL/UPDATE_SCHEDULE',   path: '/business/register'},
     { action: 'URL/PUSH_TX',           path: '/push_tx' },
     { action: 'URL/PUSH_SIGN_TX',      path: '/sign_and_push_tx' }
 

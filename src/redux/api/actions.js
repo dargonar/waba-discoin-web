@@ -11,6 +11,10 @@ const actions = {
     GET_CATEGORIES_SUCCESS: 'GET_CATEGORIES_SUCCESS',
     GET_CATEGORIES_FAILD: 'GET_CATEGORIES_FAILD',
 
+    UPDATE_SCHEDULE: 'UPDATE_SCHEDULE',
+    UPDATE_SCHEDULE_SUCCESS: 'UPDATE_SCHEDULE_SUCCESS',
+    UPDATE_SCHEDULE_FAILD: 'UPDATE_SCHEDULE_FAILD',
+
     CLEAR_MSG: 'CLEAR_MSG',
 
     fetchProfile: (account_id) => (dispatch, getState) => {
@@ -25,6 +29,17 @@ const actions = {
     fetchConfiguration: () => (dispatch) => {
         dispatch({
             type: actions.GET_CONFIGURATION,
+        })
+    },
+
+    updateSchedule: (newSchedule) => (dispatch, getState) => {
+        dispatch({
+            type: actions.UPDATE_SCHEDULE,
+            payload: { 
+                schedule: newSchedule,
+                pkey: getState().Auth.get('keys').privKey,
+                account_id: getState().Auth.get('businessId')
+            }
         })
     },
 
