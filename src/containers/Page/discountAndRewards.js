@@ -26,14 +26,14 @@ class DiscountsAndRewards extends Component {
   }
 
   componentWillMount() {
-    if (typeof this.props.api.business === 'null') {
-      this.props.fetchProfile();
+    if (this.props.api.schedule === null) {
+      this.props.getSchedule();
     }
   }
 
   updateRefounds(e, key) {
     const value = e.target.value
-    let discounts = this.state.discounts || this.props.api.business.discount_schedule;
+    let discounts = this.state.discounts || this.props.api.schedule;
     if (discounts[key]) { discounts[key] = { ...discounts[key], discount: value } }
     this.setState({ discounts: discounts });
   }
@@ -55,31 +55,35 @@ class DiscountsAndRewards extends Component {
       paddingTop: '15px'
     }
 
-    return (
-    <div>
-      <Row style={rowStyle} gutter={16} justify="start">
-        {this.props.api.business.discount_schedule.map((data, key) =>
-          (<Col md={6} sm={12} xs={24} style={colStyle} key={key}>
-            <Box title={(
-              <span style={{textTransform:'capitalize'}}>{data.date}</span>
-            )}>
-              <ContentHolder>
-                <Input type='number' defaultValue={data.discount} style={inputStyle} onChange={(e) => this.updateRefounds(e, key)} />
-                {(data.avg)? (<span style={avgStyle}>Avg. {Number(data.avg).toLocaleString()} %</span>): false }
-              </ContentHolder>
-            </Box>
-          </Col>)
-        )}
-      </Row>
-      <Button 
-        type="primary"
-        style={{marginLeft: 'auto', marginRight: '16px'}}
-        onClick={this.submit}
-        loading={this.props.api.actionLoading}>
-          Apply changes
-      </Button>
-    </div>
-    );
+    if (this.props.api.schedule !== null) {
+      return (
+      <div>
+        <Row style={rowStyle} gutter={16} justify="start">
+          {this.props.api.schedule.map((data, key) =>
+            (<Col md={6} sm={12} xs={24} style={colStyle} key={key}>
+              <Box title={(
+                <span style={{textTransform:'capitalize'}}>{data.date}</span>
+              )}>
+                <ContentHolder>
+                  <Input type='number' defaultValue={data.discount} style={inputStyle} onChange={(e) => this.updateRefounds(e, key)} />
+                  {(data.avg)? (<span style={avgStyle}>Avg. {Number(data.avg).toLocaleString()} %</span>): false }
+                </ContentHolder>
+              </Box>
+            </Col>)
+          )}
+        </Row>
+        <Button 
+          type="primary"
+          style={{marginLeft: 'auto', marginRight: '16px'}}
+          onClick={this.submit}
+          loading={this.props.api.actionLoading}>
+            Apply changes
+        </Button>
+      </div>
+      );
+    } else {
+      return false;
+    }
   }
 
   render() {
@@ -94,7 +98,7 @@ class DiscountsAndRewards extends Component {
         </PageHeader>
         { (
             this.props.api.loading !== false &&
-            typeof this.props.api.configuration === 'null'
+            this.props.api.schedule === null
           )? (<PageLoading/>): this.renderContent() }     
       </LayoutContentWrapper>
     );
@@ -107,8 +111,7 @@ const mapStateToProps = (state) =>  ({
 
 const mapDispatchToProps = (dispatch) => ({
   cleanMsg: bindActionCreators(actions.cleanMsg, dispatch),
-  fetchProfile: bindActionCreators(actions.fetchProfile, dispatch),
-  fetchConfiguration: bindActionCreators(actions.fetchConfiguration, dispatch),
+  getSchedule: bindActionCreators(actions.getSchedule, dispatch),
   updateSchedule: bindActionCreators(actions.updateSchedule, dispatch)
 })
 

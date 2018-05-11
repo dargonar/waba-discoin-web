@@ -4,7 +4,7 @@ const initState = {
     business: null,
     transactions: null,
     configuration: null,
-    categories: null,
+    schedule: null,
     costumers: null,
     loading: false,
     error: false,
@@ -55,6 +55,26 @@ export default function apiReducer(state = initState, action) {
                 loading: false,
                 error: true,
                 msg: action.payload
+            }
+
+        // GET SCHEDULE REDUCERS
+        case actions.GET_SCHEDULE:
+            return {
+                ...state,
+                actionLoading: true
+            }
+        case actions.GET_SCHEDULE_SUCCESS:
+            return {
+                ...state,
+                actionLoading: false,
+                schedule: action.payload.discount_schedule
+            }
+        case actions.GET_SCHEDULE_FAILD:
+            return {
+                ...state,
+                actionLoading: false,
+                error: action.payload.err,
+                msg: 'Error loading discount schedule'
             }
 
         // UPDATE SCHEDULE REDUCERS

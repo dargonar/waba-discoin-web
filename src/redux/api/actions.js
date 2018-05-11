@@ -11,6 +11,9 @@ const actions = {
     GET_CATEGORIES_SUCCESS: 'GET_CATEGORIES_SUCCESS',
     GET_CATEGORIES_FAILD: 'GET_CATEGORIES_FAILD',
 
+    GET_SCHEDULE: 'GET_SCHEDULE',
+    GET_SCHEDULE_SUCCESS: 'GET_SCHEDULE_SUCCESS',
+    GET_SCHEDULE_FAILD: 'GET_SCHEDULE_FAILD',
     UPDATE_SCHEDULE: 'UPDATE_SCHEDULE',
     UPDATE_SCHEDULE_SUCCESS: 'UPDATE_SCHEDULE_SUCCESS',
     UPDATE_SCHEDULE_FAILD: 'UPDATE_SCHEDULE_FAILD',
@@ -29,6 +32,15 @@ const actions = {
     fetchConfiguration: () => (dispatch) => {
         dispatch({
             type: actions.GET_CONFIGURATION,
+        })
+    },
+
+    getSchedule: () => (dispatch, getState) => {
+        dispatch({
+            type: actions.GET_SCHEDULE,
+            payload: {
+                account_id: getState().Auth.get('businessId')
+            }
         })
     },
 

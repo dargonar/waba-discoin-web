@@ -4,11 +4,9 @@ import { apiCall, getPath } from '../../../httpService';
 
 export const updateSchedule = function* () {
     yield takeEvery(actions.UPDATE_SCHEDULE, function*(action) {
-        const url = getPath('URL/UPDATE_SCHEDULE');
+        const url = getPath('URL/UPDATE_SCHEDULE', { id: action.payload.account_id});
         const fetchData = apiCall(url, 'POST', { 
-            bussines: {
-                discount_schedule: action.payload.schedule,
-            },
+            discount_schedule: action.payload.schedule,
             signed_secret: action.payload.pkey
         });
         

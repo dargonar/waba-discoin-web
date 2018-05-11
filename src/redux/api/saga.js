@@ -5,6 +5,7 @@ import { apiCall, getPath } from '../../httpService';
 import { getProfile } from './sagas/getProfile'
 import { getConfiguration } from './sagas/getConfiguration'
 import { getCategories } from './sagas/getCategories'
+import { getSchedule } from './sagas/getSchedule'
 import { updateSchedule } from './sagas/updateSchedule'
 
 export default function* rootSaga() {
@@ -12,6 +13,7 @@ export default function* rootSaga() {
         fork(getProfile),
         fork(getConfiguration),
         fork(getCategories),
+        fork(getSchedule),
         fork(updateSchedule)
     ]);
   }
