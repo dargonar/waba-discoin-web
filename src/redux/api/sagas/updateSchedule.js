@@ -11,7 +11,7 @@ export const updateSchedule = function* () {
         });
         
         const { data, err } = yield call(fetchData)
-        if(data && typeof data.error === 'undefined') 
+        if(data.ok === 'ok') 
             yield put({ type: actions.UPDATE_SCHEDULE_SUCCESS, payload: data })
         else
             yield put({ type: actions.UPDATE_SCHEDULE_FAILD, payload: {err, data} })
