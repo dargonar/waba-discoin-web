@@ -5,7 +5,7 @@ import {Signature, ChainStore, FetchChain, PrivateKey, TransactionHelper, Aes, T
 import {hash, PublicKey, BigInteger, sign, recoverPubKey, verify, calcPubKeyRecoveryParam } from 'bitsharesjs'; // bitsharesjs/lib/ecc/src/signature.js
 import {Serializer, ops, sha256 } from 'bitsharesjs'; //'./hash';
 import {getCurveByName} from 'ecurve';
-export const privKey   = '5JQGCnJCDyraociQmhDRDxzNFCd8WdcJ4BAj8q1YDZtVpk5NDw9';
+export const privKey   = '5Kjz35R9W3m5ZpznZMSpdySz35tZsXZbzsuSdbtV12YC9Zaxzd9';
 // ********************************************************************
 // ********************************************************************
 
