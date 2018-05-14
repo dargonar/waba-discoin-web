@@ -5,7 +5,7 @@ const initState = {
     transactions: null,
     configuration: null,
     schedule: null,
-    costumers: null,
+    customers: [],
     loading: false,
     error: false,
     actionLoading: false,
@@ -100,6 +100,12 @@ export default function apiReducer(state = initState, action) {
                 error: action.payload,
                 msg: 'Error updating the schedule',
                 actionLoading: false    
+            }
+
+        case actions.SEARCH_CUSTOMERS_SUCCESS:
+            return {
+                ...state,
+                customers: action.payload.res.map(customer => ({name: customer[0], account_id: customer[1]}))
             }
 
         case actions.CLEAR_MSG:

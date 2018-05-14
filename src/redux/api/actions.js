@@ -11,6 +11,10 @@ const actions = {
     GET_CATEGORIES_SUCCESS: 'GET_CATEGORIES_SUCCESS',
     GET_CATEGORIES_FAILD: 'GET_CATEGORIES_FAILD',
 
+    SEARCH_CUSTOMERS: 'SEARCH_CUSTOMERS',
+    SEARCH_CUSTOMERS_SUCCESS: 'SEARCH_CUSTOMERS_SUCCESS',
+    SEARCH_CUSTOMERS_FAILD: 'SEARCH_CUSTOMERS_FAILD',
+
     GET_SCHEDULE: 'GET_SCHEDULE',
     GET_SCHEDULE_SUCCESS: 'GET_SCHEDULE_SUCCESS',
     GET_SCHEDULE_FAILD: 'GET_SCHEDULE_FAILD',
@@ -52,6 +56,15 @@ const actions = {
                 pkey: getState().Auth.get('keys').privKey,
                 account_id: getState().Auth.get('businessId')
             }
+        })
+    },
+
+    searchCustomer: (customer) => (dispatch) => {
+        if (!customer)
+            return;
+        dispatch({
+            type: actions.SEARCH_CUSTOMERS,
+            payload: customer
         })
     },
 
