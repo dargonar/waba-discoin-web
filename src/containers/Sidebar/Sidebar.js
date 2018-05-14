@@ -133,8 +133,8 @@ class Sidebar extends Component {
                   </span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="refound">
-                <Link to={`${url}/refound`}>
+              <Menu.Item key="refunds">
+                <Link to={`${url}/refunds`}>
                   <span className="isoMenuHolder" style={submenuColor}>
                     <span className="nav-text">
                       <IntlMessages id="sidebar.refound" />

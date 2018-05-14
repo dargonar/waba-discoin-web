@@ -17,6 +17,11 @@ class AppRouter extends React.Component {
           path={`${url}/discount-and-rewards`}
           component={asyncComponent(() => import('../Page/discountAndRewards'))}
         />
+        <Route
+          exact
+          path={`${url}/refunds`}
+          component={asyncComponent(() => import('../Page/refunds'))}
+        />
       </Switch>
     );
   }
