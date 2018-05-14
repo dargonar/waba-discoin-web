@@ -44,6 +44,7 @@
     "styled-theme": "^0.3.3"
   },
   "devDependencies": {
+    "prop-types": "^15.6.1",
     "react-app-rewired": "^1.5.2"
   },
   "scripts": {
