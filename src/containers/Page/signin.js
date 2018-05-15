@@ -8,13 +8,24 @@ import authAction from '../../redux/auth/actions';
 import IntlMessages from '../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
 
+import { bizLogin } from '../../httpService';
+
 const { login } = authAction;
+
 
 class SignIn extends Component {
   state = {
-    redirectToReferrer: false,
-    account: null,
+    redirectToReferrer  : false,
+    account             : null
   };
+  
+  status = {
+    account             : null,
+    is_brainkey         : false,
+    words               : ''
+  };
+
+
   componentWillReceiveProps(nextProps) {
     if (
       this.props.isLoggedIn !== nextProps.isLoggedIn &&
@@ -23,11 +34,41 @@ class SignIn extends Component {
       this.setState({ redirectToReferrer: true });
     }
   }
+  
   handleLogin = () => {
     const { login } = this.props;
-    login({account: this.state.account});
-    this.props.history.push('/dashboard');
+    
+    // console.log ('this.state:', this.state);
+    // console.log ('this.status:', this.status);
+    // return;
+    bizLogin(this.state.account, this.state.words, true)
+    .then((responseJson) => {
+      console.log('===========> handleLogin()::res ==> ', JSON.stringify(responseJson));
+      
+      console.log ('handleLogin()::responseJson.login', responseJson.login);
+      if(responseJson.login)
+      {
+        login({account: this.state.account});
+        this.props.history.push('/dashboard');
+      }   
+      else{
+        alert('No te pudiste logear');
+      }
+      
+    }, err => {
+      console.log(' handleLogin() ===== #3' ,JSON.stringify(err));
+      alert('Error: No te pudiste logear');
+    });
+
   };
+
+  handleChange(){
+    // this.setState({
+    //   is_brainkey: !this.status.is_brainkey
+    // });
+    // this.status.is_brainkey = !this.status.is_brainkey;
+  }
+
   render() {
     const from = { pathname: '/dashboard' };
     const { redirectToReferrer } = this.state;
@@ -51,12 +92,17 @@ class SignIn extends Component {
               </div>
 
               <div className="isoInputWrapper">
-                <Input size="large" type="password" placeholder="Password" />
+                <Input size="large" type="text" placeholder="Password" onChange={(e)=> this.setState({words: e.target.value})} />
               </div>
 
               <div className="isoInputWrapper isoLeftRightComponent">
                 <Checkbox>
                   <IntlMessages id="page.signInRememberMe" />
+                </Checkbox>
+                <Checkbox 
+                  defaultChecked={this.status.is_brainkey}
+                  onChange={this.handleChange}>
+                  <IntlMessages id="page.isBrainKey" />
                 </Checkbox>
                 <Button type="primary" onClick={this.handleLogin}>
                   <IntlMessages id="page.signInButton" />

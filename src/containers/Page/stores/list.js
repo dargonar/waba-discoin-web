@@ -15,6 +15,8 @@ import StoreOverdarfBox from './components/storeOvercraftBox'
 
 import { push } from 'react-router-redux';
 
+import { signMemo, privKey, pubKey, pubKeyEx, bizLogin } from '../../../httpService';
+
 class ListStores extends Component {
 
   constructor(props) {
@@ -51,22 +53,28 @@ class ListStores extends Component {
   }
 
   submitOverdraftBox(value) {
+
     this.props.setOverdraft(this.state.businessSelected, value)
-    /* const action = 'URL/SET_OVERDRAFT' ; //getPath();
+    return;
+    
+
+
+    // this.props.setOverdraft(this.state.businessSelected, value)
+    const action = 'URL/SET_OVERDRAFT' ; //getPath();
     const parameters = {
         business_name: this.state.businessSelected.account,
         initial_credit: value
     };
     const privKey = this.props.keys.privKey;
 
-    getAndSignTx(action, parameters, privKey).then( res => {
-        console.log(action, '====OK===>', JSON.stringify(res));
-        this.removeOverdraftBox();
-      }, err => {
-        console.log(action, '====ERR===>', JSON.stringify(err));
-        this.removeOverdraftBox();
-    });
-    */
+    // getAndSignTx(action, parameters, privKey).then( res => {
+    //     console.log(action, '====OK===>', JSON.stringify(res));
+    //     this.removeOverdraftBox();
+    //   }, err => {
+    //     console.log(action, '====ERR===>', JSON.stringify(err));
+    //     this.removeOverdraftBox();
+    // });
+
   }
 
   removeOverdraftBox() {

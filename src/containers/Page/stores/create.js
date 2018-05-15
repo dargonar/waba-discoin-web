@@ -18,6 +18,8 @@ import actions from '../../../redux/business/actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import { generateAccount } from '../../../httpService';
+
 const FormItem = Form.Item;
 
 const BasicLeafletMapWithMarker = props => (
@@ -90,9 +92,21 @@ class CreateStore extends Component {
   submit () {
     // TODO: Validation!
     console.log( '*****> submit');
-    console.log(JSON.stringify(this.state.form));
-    this.props.saveBusiness(this.state.form);
+    
+    if (typeof this.props.match.params.id !== 'undefined')
+    {  
+      console.log(JSON.stringify(this.state.form));
+      this.props.saveBusiness(this.state.form);
+    }
+    else
+    {
+      console.log(this.state.form.name);
+      generateAccount(this.state.form.name);
+    }
+    
     // updateBusinessProfile()
+
+    
   }
 
   changeSchedule(type, key, value) {
@@ -270,7 +284,7 @@ class CreateStore extends Component {
                     {
                       this.props.categories
                         .filter(category => category.parent === '0')
-                        .map(category => (<SelectOption key={category.id} value={Number(category.id)} selected={this.state.form.category_id.toString() === category.id.toString()}>{category.title}</SelectOption>))
+                        .map((category, index) => (<SelectOption key={category.id} value={Number(category.id)} selected={ !this.state.form.category_id ? index==0 : this.state.form.category_id.toString() === category.id.toString() }>{category.title}</SelectOption>))
                     }
                   </Select>
                 </FormItem>
@@ -284,7 +298,7 @@ class CreateStore extends Component {
                     {
                       this.props.categories
                         .filter(category => Number(category.parent) === Number(this.state.form.category_id))
-                        .map(category => (<SelectOption key={category.id} value={Number(category.id)} selected={this.state.form.subcategory_id.toString() === category.id.toString()}>{category.title}</SelectOption>))
+                        .map((category, index) => (<SelectOption key={category.id} value={Number(category.id)} selected={ !this.state.form.subcategory_id ? index==0 : this.state.form.subcategory_id.toString() === category.id.toString() }>{category.title}</SelectOption>))
                     }
                   </Select>
                 </FormItem>
