@@ -56,7 +56,7 @@ class Topbar extends Component {
 export default connect(
   state => ({
     App: {...state.App.toJS()},
-    Auth: {...state.Auth.toJS()}
+    Auth: {...state.Auth}
   }),
   { toggleCollapsed }
 )(Topbar);

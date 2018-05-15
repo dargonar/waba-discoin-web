@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Input from '../../components/uielements/input';
-import Checkbox from '../../components/uielements/checkbox';
-import Button from '../../components/uielements/button';
-import authAction from '../../redux/auth/actions';
-import IntlMessages from '../../components/utility/intlMessages';
+import Input from '../../../components/uielements/input';
+import Checkbox from '../../../components/uielements/checkbox';
+import Button from '../../../components/uielements/button';
+import authAction from '../../../redux/auth/actions';
+import IntlMessages from '../../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
 
 const { login } = authAction;
@@ -72,7 +72,7 @@ class SignIn extends Component {
 
 export default connect(
   state => ({
-    isLoggedIn: state.Auth.get('idToken') !== null ? true : false,
+    isLoggedIn: state.Auth.idToken !== null ? true : false,
   }),
   { login }
 )(SignIn);

@@ -71,7 +71,7 @@ const actions = {
                 business_name: business.account,
                 initial_credit: overdraft,
                 account_id: business.account_id,
-                pkey: getState().Auth.get('keys').privKey
+                pkey: getState().Auth.keys.privKey
             }
         });
     },

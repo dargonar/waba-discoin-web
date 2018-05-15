@@ -26,12 +26,12 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
         <Route
           exact
           path={'/'}
-          component={asyncComponent(() => import('./containers/Page/signin'))}
+          component={asyncComponent(() => import('./containers/Page/signin/signin'))}
         />
         <Route
           exact
           path={'/signin'}
-          component={asyncComponent(() => import('./containers/Page/signin'))}
+          component={asyncComponent(() => import('./containers/Page/signin/signin'))}
         />
         <RestrictedRoute
           path="/dashboard"
@@ -44,5 +44,5 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
 };
 
 export default connect(state => ({
-  isLoggedIn: state.Auth.get('idToken') !== null,
+  isLoggedIn: state.Auth.idToken !== null,
 }))(PublicRoutes);

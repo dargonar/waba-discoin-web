@@ -41,23 +41,9 @@ export function* logout() {
     yield put(push('/'));
   });
 }
-export function* checkAuthorization() {
-  yield takeEvery(actions.CHECK_AUTHORIZATION, function*() {
-    const token = getToken().get('idToken');
-    const { keys, err } = yield getKeys('askpassword?')
-    if (token && !err) {
-      yield put({
-        type: actions.LOGIN_SUCCESS,
-        token,
-        profile: 'Profile',
-        keys: keys
-      });
-    }
-  });
-}
+
 export default function* rootSaga() {
   yield all([
-    fork(checkAuthorization),
     fork(loginRequest),
     fork(loginSuccess),
     fork(loginError),
