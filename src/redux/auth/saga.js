@@ -4,6 +4,8 @@ import { getToken, clearToken } from '../../helpers/utility';
 import actions from './actions';
 import { getKeys } from './fakeAccount';
 
+import { checkLS, writeLS, readLS, cleanLS } from './sagas/secureLocalStorage'
+
 const fakeApiCall = true; // auth0 or express JWT
 
 export function* loginRequest() {
@@ -59,6 +61,11 @@ export default function* rootSaga() {
     fork(loginRequest),
     fork(loginSuccess),
     fork(loginError),
-    fork(logout)
+    fork(logout),
+
+    fork(checkLS),
+    fork(readLS),
+    fork(writeLS),
+    fork(cleanLS)
   ]);
 }
