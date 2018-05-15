@@ -14,6 +14,25 @@ function* getParameters(action) {
     })
 }
 
+function* setParameters(action) {
+    yield takeLatest(actions.SEND_CONFIGURATION_PARAMETERS, function*(action) {
+        const url = getPath('URL/GET_PARAMETERS');
+        const body = {
+            configuration: action.payload
+        };
+        const fetchData = apiCall(url, 'POST', body, console.log)
+        const { data, ex } = yield call(fetchData);
+        if (data && typeof data.error === 'undefined' ) 
+            {
+                yield put({ type: actions.SEND_CONFIGURATION_PARAMETERS_SUCCESS });
+                yield put({ type: actions.FETCH_CONFIGURATION_PARAMETERS });
+            }
+        else
+            yield put({ type: actions.SEND_CONFIGURATION_PARAMETERS_FAILD, payload: ex });
+    })
+}
+
+
 function* getCategories(action) {
     yield takeLatest(actions.FETCH_CONFIGURATION_CATEGORIES, function*() {
         const url = getPath('URL/GET_CATEGORIES')

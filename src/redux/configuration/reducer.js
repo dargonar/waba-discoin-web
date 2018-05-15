@@ -45,6 +45,26 @@ export default (state = initState, action = {}) => {
             loading: false,
             parameters: action.payload.configuration
         };
+
+      case actions.SEND_CONFIGURATION_PARAMETERS:
+        return {
+            ...state,
+            error: false,
+            actionLoading: true
+        };
+      case actions.FETCH_CONFIGURATION_PARAMETERS_SUCCESS:
+        return {
+            ...state,
+            actionLoading: false
+        };
+      case actions.SEND_CONFIGURATION_PARAMETERS_FAILD:
+        return {
+            ...state,
+            actionLoading: false,
+            error: true,
+            msg: actions.payload.error
+            //'Error updating parameters, please try leater.'
+        };
       case actions.REMOVE_MSG:
         return {
           ...state,

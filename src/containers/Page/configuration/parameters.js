@@ -206,7 +206,7 @@ class Parameters extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+  const mapStateToProps = (state) => ({
     configuration : state.Configuration,
     error: state.Configuration.error,
     msg: state.Configuration.msg
@@ -216,7 +216,7 @@ const mapStateToProps = (state) => ({
     fetch: bindActionCreators(actions.fetchParameteres, dispatch),
     sendParameters: bindActionCreators(actions.sendParameters, dispatch),
     removeMsg: bindActionCreators(actions.removeMsg, dispatch)
-  })
+  });
   
   
   export default connect(mapStateToProps, mapDispatchToProps)(Parameters)
