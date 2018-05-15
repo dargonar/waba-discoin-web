@@ -132,8 +132,8 @@ class Parameters extends Component {
                                     <Input 
                                         onChange={this.onFormChange}
                                         type="number"
-                                        id="data.boostrap.referral.reward"
-                                        defaultValue={data.boostrap.referral.reward} />
+                                        id="data.bootstrap.referral.reward"
+                                        defaultValue={data.bootstrap.referral.reward} />
                                 </Col>
                                 <Col md={12} sm={24} xs={24} style={colStyle}>
                                     <span style={label}>Max times referred</span>
@@ -141,8 +141,8 @@ class Parameters extends Component {
                                         onChange={this.onFormChange}
                                         type="number"
                                         style={{width:'50%'}}
-                                        id="data.boostrap.referral.max_referrals"
-                                        defaultValue={data.boostrap.referral.max_referrals} />
+                                        id="data.bootstrap.referral.max_referrals"
+                                        defaultValue={data.bootstrap.referral.max_referrals} />
                                 </Col>
                             </Row>
                             <Row gutter={gutter}>
@@ -154,8 +154,8 @@ class Parameters extends Component {
                                     <Input 
                                         onChange={this.onFormChange}
                                         type="number"
-                                        id="data.boostrap.airdrop.max_registered_users"
-                                        defaultValue={data.boostrap.airdrop.max_registered_users} />
+                                        id="data.bootstrap.airdrop.max_registered_users"
+                                        defaultValue={data.bootstrap.airdrop.max_registered_users} />
                                 </Col>
                                 <Col md={15} sm={24} xs={24} style={colStyle}>
                                     <span style={label}>wallets will receive </span>
@@ -163,8 +163,8 @@ class Parameters extends Component {
                                         onChange={this.onFormChange}
                                         type="number"
                                         addonAfter={'D'} 
-                                        id="data.boostrap.airdrop.amount"
-                                        defaultValue={data.boostrap.airdrop.amount} />
+                                        id="data.bootstrap.airdrop.amount"
+                                        defaultValue={data.bootstrap.airdrop.amount} />
                                 </Col>
                             </Row>
                         </ContentHolder>        
@@ -179,8 +179,8 @@ class Parameters extends Component {
                                 <Input 
                                     onChange={this.onFormChange}
                                     type="number"
-                                    id="data.boostrap.transactions.max_refund_by_tx"
-                                    defaultValue={data.boostrap.transactions.max_refund_by_tx} />
+                                    id="data.bootstrap.transactions.max_refund_by_tx"
+                                    defaultValue={data.bootstrap.transactions.max_refund_by_tx} />
                                 </Col>
                             </Row>    
                         </ContentHolder>
