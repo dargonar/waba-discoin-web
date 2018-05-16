@@ -21,6 +21,12 @@ const actions = {
     type: actions.LOGIN_REQUEST,
     payload: { account }
   }),
+  loginFromLocal: (password) => (dispatch) => {
+    dispatch({
+      type: actions.LS_READ,
+      payload: { password }
+    })
+  },
   logout: () => ({
     type: actions.LOGOUT
   })

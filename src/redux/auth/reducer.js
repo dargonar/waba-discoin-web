@@ -2,7 +2,6 @@ import { Map } from 'immutable';
 import actions from './actions';
 
 const initState = { 
-  idToken: null,
   account: null,
   keys: null,
   inLocal: null,
@@ -23,7 +22,6 @@ export default function authReducer(state = initState, action) {
     case actions.LOGIN_SUCCESS:
       return {
         ...state,
-        idToken: action.token,
         account: action.account,
         keys: action.keys
       }

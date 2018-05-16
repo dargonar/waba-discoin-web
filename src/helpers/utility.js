@@ -1,19 +1,3 @@
-import { Map } from 'immutable';
-
-export function clearToken() {
-  localStorage.removeItem('id_token');
-}
-
-export function getToken() {
-  try {
-    const idToken = localStorage.getItem('id_token');
-    return new Map({ idToken });
-  } catch (err) {
-    clearToken();
-    return new Map();
-  }
-}
-
 export function timeDifference(givenTime) {
   givenTime = new Date(givenTime);
   const milliseconds = new Date().getTime() - givenTime.getTime();

@@ -14,8 +14,6 @@ export function* loginRequest() {
     if (fakeApiCall && !err) {
       yield put({
         type: actions.LOGIN_SUCCESS,
-        token: 'secret token',
-        profile: 'Profile',
         account: action.payload.account,
         keys: keys
       });
@@ -27,7 +25,7 @@ export function* loginRequest() {
 
 export function* loginSuccess() {
   yield takeEvery(actions.LOGIN_SUCCESS, function*(payload) {
-    yield localStorage.setItem('id_token', payload.token);
+    yield put(push('/dashboard'));
   });
 }
 
@@ -37,9 +35,23 @@ export function* loginError() {
 
 export function* logout() {
   yield takeEvery(actions.LOGOUT, function*() {
-    clearToken();
     yield put(push('/'));
   });
+}
+
+export function* loginFromLocal() {
+  yield takeEvery(actions.LS_READ_SUCCESS, function*(action) {
+    const { keys, err } = yield getKeys(action.payload.privKey)
+    if (!err) {
+      yield put({
+        type: actions.LOGIN_SUCCESS,
+        account: action.payload.account,
+        keys: keys
+      });
+    } else {
+      yield put({ type: actions.LOGIN_ERROR });
+    }
+  })
 }
 
 export default function* rootSaga() {
@@ -52,6 +64,8 @@ export default function* rootSaga() {
     fork(checkLS),
     fork(readLS),
     fork(writeLS),
-    fork(cleanLS)
+    fork(cleanLS),
+
+    fork(loginFromLocal)
   ]);
 }
