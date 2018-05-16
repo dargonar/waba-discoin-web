@@ -9,8 +9,9 @@ import authAction from '../../../redux/auth/actions';
 import IntlMessages from '../../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
 import LocalLogin from './components/localLogin';
+import { push } from 'react-router-redux';
 
-const { login, loginFromLocal } = authAction;
+const { login, loginFromLocal, cleanStorage } = authAction;
 
 class SignIn extends Component {
   constructor(props) {
@@ -26,8 +27,13 @@ class SignIn extends Component {
     };
     this.loginLocal = this.loginLocal.bind(this)
     this.toggle = this.toggle.bind(this)
+    this.cancelLocal = this.cancelLocal.bind(this)
   }
   
+  cancelLocal() {
+    this.props.cleanStorage()
+  }
+
   toggle(key) {
     this.setState({
       [key]: !this.state[key]
@@ -36,27 +42,21 @@ class SignIn extends Component {
 
    loginLocal(password) {
     this.props.loginFromLocal(password)
-    console.log(this.props)
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (
-      this.props.isLoggedIn !== nextProps.isLoggedIn &&
-      nextProps.isLoggedIn === true
-    ) {
-      this.setState({ redirectToReferrer: true });
-    }
-  }
   handleLogin = () => {
-    const { login } = this.props;
-    login({account: this.state.account});
-    this.props.history.push('/dashboard');
+    this.props.login({
+      account_name        : this.state.account,
+      is_brainkey         : this.state.is_brainkey,
+      remember            : this.state.remember,
+      rememberKey         : this.state.rememberKey,
+      mnemonics           : this.state.words
+    });
   };
   render() {
     const from = { pathname: '/dashboard' };
-    const { redirectToReferrer } = this.state;
     
-    if (redirectToReferrer) {
+    if (this.props.isLoggedIn) {
       return <Redirect to={from} />;
     }
 
@@ -65,7 +65,7 @@ class SignIn extends Component {
         <LocalLogin 
           visible={this.props.inLocal && !this.state.ignoreLocal }
           submit={this.loginLocal}
-          cancel={()=>this.toggle('ignoreLocal')}
+          cancel={this.cancelLocal}
         />
         <div className="isoLoginContentWrapper">
           <div className="isoLoginContent">
@@ -114,13 +114,14 @@ class SignIn extends Component {
 }
 
 const mapStateToProps = state => ({
-  isLoggedIn: (typeof state.Auth.account === 'string')? true : false,
+  isLoggedIn: typeof state.Auth.account === 'string',
   inLocal: state.Auth.inLocal,
 })
 
 const mapDisptachToPops = dispatch => ({
-  login: login,
-  loginFromLocal: bindActionCreators(loginFromLocal, dispatch)
+  login: bindActionCreators(login, dispatch),
+  loginFromLocal: bindActionCreators(loginFromLocal, dispatch),
+  cleanStorage: bindActionCreators(cleanStorage, dispatch)
 })
 
 export default connect(mapStateToProps, mapDisptachToPops)(SignIn);

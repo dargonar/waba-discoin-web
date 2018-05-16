@@ -17,10 +17,13 @@ const actions = {
   LS_CLEAN_SUCCESS: 'LS/CLEAN_SUCCESS',
 
   loadStorage: () => ({ type: actions.LS_CHECK }),
-  login: ({account}) => ({
-    type: actions.LOGIN_REQUEST,
-    payload: { account }
-  }),
+  cleanStorage: () => (dispatch) => dispatch({ type: actions.LS_CLEAN }),
+  login: (data) => (dispatch) => {
+    dispatch({
+      type: actions.LOGIN_REQUEST,
+      payload: data
+    })
+  },
   loginFromLocal: (password) => (dispatch) => {
     dispatch({
       type: actions.LS_READ,

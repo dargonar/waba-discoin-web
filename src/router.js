@@ -44,5 +44,5 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
 };
 
 export default connect(state => ({
-  isLoggedIn: state.Auth.keys !== null,
+  isLoggedIn: typeof state.Auth.account === 'string',
 }))(PublicRoutes);

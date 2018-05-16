@@ -35,12 +35,20 @@ export function* loginRequest() {
     const pushLogin = apiCall(url, 'POST', memo_obj)
     let { data, ex } = yield call(pushLogin)
 
-    if (data && data.login === true)
+    if (data && data.login === true) {
       yield put({ type: actions.LOGIN_SUCCESS, payload: {
         keys: account,
         account: account_name,
         secret: data.decrypted_secret
       }})
+
+      if (remember === true) {
+        yield put({ type: actions.LS_WRITE, payload: {
+          password: rememberKey,
+          credentials: action.payload
+        }})
+      }
+    }
     else
       yield put({ type: actions.LOGIN_ERROR })
   });
@@ -64,16 +72,10 @@ export function* logout() {
 
 export function* loginFromLocal() {
   yield takeEvery(actions.LS_READ_SUCCESS, function*(action) {
-    const { keys, err } = yield getKeys(action.payload.privKey)
-    if (!err) {
-      yield put({
-        type: actions.LOGIN_SUCCESS,
-        account: action.payload.account,
-        keys: keys
-      });
-    } else {
-      yield put({ type: actions.LOGIN_ERROR });
-    }
+    yield put({
+      type: actions.LOGIN_REQUEST,
+      payload: action.payload
+    });
   })
 }
 

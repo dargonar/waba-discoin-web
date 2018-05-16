@@ -17,6 +17,12 @@ export default function authReducer(state = initState, action) {
         ...state,
         inLocal: false
       }
+    case actions.LS_CLEAN_SUCCESS: {
+      return {
+        ...state,
+        inLocal: false
+      }
+    }
     case actions.LOGIN_SUCCESS:
       return {
         ...state,
