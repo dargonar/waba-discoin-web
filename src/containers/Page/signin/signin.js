@@ -55,7 +55,7 @@ class SignIn extends Component {
   render() {
     const from = { pathname: '/dashboard' };
     const { redirectToReferrer } = this.state;
-
+    
     if (redirectToReferrer) {
       return <Redirect to={from} />;
     }
@@ -114,9 +114,8 @@ class SignIn extends Component {
 }
 
 const mapStateToProps = state => ({
-  isLoggedIn: state.Auth.keys !== null ? true : false,
+  isLoggedIn: (typeof state.Auth.account === 'string')? true : false,
   inLocal: state.Auth.inLocal,
-  ...state.Auth,
 })
 
 const mapDisptachToPops = dispatch => ({
