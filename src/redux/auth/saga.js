@@ -2,15 +2,12 @@ import { all, call, takeEvery, put, fork } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import { getToken, clearToken } from '../../helpers/utility';
 import actions from './actions';
-import { getKeys } from './fakeAccount';
+
 import { getPath, apiCall } from '../../httpService';
 
 import { checkLS, writeLS, readLS, cleanLS } from './sagas/secureLocalStorage'
 
 import { signMemo, recoverAccountFromSeed } from '../../utils';
-
-
-const fakeApiCall = true; // auth0 or express JWT
 
 export function* loginRequest() {
   yield takeEvery(actions.LOGIN_REQUEST, function*(action) {
@@ -46,17 +43,6 @@ export function* loginRequest() {
       }})
     else
       yield put({ type: actions.LOGIN_ERROR })
-
-    /*const { keys, err } = yield getKeys('askpassword?')
-    if (fakeApiCall && !err) {
-      yield put({
-        type: actions.LOGIN_SUCCESS,
-        account: action.payload.account,
-        keys: keys
-      });
-    } else {
-      yield put({ type: actions.LOGIN_ERROR });
-    }*/
   });
 }
 
