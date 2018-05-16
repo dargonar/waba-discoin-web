@@ -24,7 +24,6 @@ class SignIn extends Component {
       rememberKey         : '',
       words               : ''
     };
-    this.cancelLocal = this.cancelLocal.bind(this)
     this.loginLocal = this.loginLocal.bind(this)
     this.toggle = this.toggle.bind(this)
   }
@@ -35,11 +34,7 @@ class SignIn extends Component {
     })
   }
 
-  cancelLocal() {
-    this.setState({ignoreLocal: true})
-  }
-
-  loginLocal(password) {
+   loginLocal(password) {
     this.props.loginFromLocal(password)
     console.log(this.props)
   }
@@ -70,7 +65,7 @@ class SignIn extends Component {
         <LocalLogin 
           visible={this.props.inLocal && !this.state.ignoreLocal }
           submit={this.loginLocal}
-          cancel={this.cancelLocal}
+          cancel={()=>this.toggle('ignoreLocal')}
         />
         <div className="isoLoginContentWrapper">
           <div className="isoLoginContent">
