@@ -54,10 +54,10 @@ class SimplePieChart extends Component {
         <PieChart>
           <Pie
             data={this.props.data} 
-            label={'name'}
             labelLine={true}
-            outerRadius={60} 
+            outerRadius={60}
             fill="#8884d8"
+            dataKey={'value'}
           >
             {
               this.props.data.map((entry, index) => <Cell fill={entry.color} key={index}/>)
