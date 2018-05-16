@@ -22,13 +22,20 @@ function* setParameters(action) {
         };
         const fetchData = apiCall(url, 'POST', body, console.log)
         const { data, ex } = yield call(fetchData);
-        if (data && typeof data.error === 'undefined' ) 
+        if (data) 
             {
-                yield put({ type: actions.SEND_CONFIGURATION_PARAMETERS_SUCCESS });
-                yield put({ type: actions.FETCH_CONFIGURATION_PARAMETERS });
+                if(typeof data.error !== 'undefined' )
+                    yield put({ type: actions.SEND_CONFIGURATION_PARAMETERS_FAILD, payload: data });
+                else
+                {
+                    yield put({ type: actions.SEND_CONFIGURATION_PARAMETERS_SUCCESS });
+                    yield put({ type: actions.FETCH_CONFIGURATION_PARAMETERS });
+                }
             }
         else
-            yield put({ type: actions.SEND_CONFIGURATION_PARAMETERS_FAILD, payload: ex });
+            {
+                yield put({ type: actions.SEND_CONFIGURATION_PARAMETERS_FAILD, payload: ex });
+            }
     })
 }
 
@@ -48,7 +55,8 @@ function* getCategories(action) {
 export default function* rootSaga() {
     yield all([
       fork(getParameters),
-      fork(getCategories)
+      fork(getCategories),
+      fork(setParameters)
     ]);
   }
   

@@ -277,9 +277,9 @@ export const bizLogin = (account_name, mnemonics, is_brainkey) => {
     .then((responseJson) => {
       console.log('===========> bizLogin()::res #2 ==> ', JSON.stringify(responseJson));
       
-      let secret            = responseJson.secret;
-      let destintation_key  = responseJson.destintation_key; 
-      let memo_obj          = signMemo(destintation_key, secret, account);
+      let secret                = responseJson.secret;
+      let destintation_key      = responseJson.destintation_key; 
+      let memo_obj              = signMemo(destintation_key, secret, account);
       memo_obj['signed_secret'] = memo_obj.message;
 
       fetch(push_url, {
@@ -289,13 +289,12 @@ export const bizLogin = (account_name, mnemonics, is_brainkey) => {
         })
       .then((response) => response.json()
         , err => {
-          console.log(' bizLogi()n ===== #3' ,JSON.stringify(err));
+          console.log(' bizLogin() ===== #3' ,JSON.stringify(err));
           reject(err);
           return;
       })
       .then((responseJson2) => {
         console.log('===========> bizLogin()::res #4 ==> ', JSON.stringify(responseJson2));
-        console.log(' == bizLogin() :: resolving!!!!!!!!');
         resolve(responseJson2);
         return;
       }, err => {

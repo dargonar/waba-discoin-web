@@ -52,7 +52,7 @@ export default (state = initState, action = {}) => {
             error: false,
             actionLoading: true
         };
-      case actions.FETCH_CONFIGURATION_PARAMETERS_SUCCESS:
+      case actions.SEND_CONFIGURATION_PARAMETERS_SUCCESS:
         return {
             ...state,
             actionLoading: false
@@ -62,7 +62,7 @@ export default (state = initState, action = {}) => {
             ...state,
             actionLoading: false,
             error: true,
-            msg: actions.payload.error
+            msg: action.payload.error
             //'Error updating parameters, please try leater.'
         };
       case actions.REMOVE_MSG:
