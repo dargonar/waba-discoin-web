@@ -16,14 +16,24 @@ class SignIn extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      redirectToReferrer: false,
-      account: null,
-      ignoreLocal: false,
+      redirectToReferrer  : false,
+      account             : null,
+      ignoreLocal         : false,
+      is_brainkey         : false,
+      remember            : false,
+      rememberKey         : '',
+      words               : ''
     };
     this.cancelLocal = this.cancelLocal.bind(this)
     this.loginLocal = this.loginLocal.bind(this)
+    this.toggle = this.toggle.bind(this)
   }
   
+  toggle(key) {
+    this.setState({
+      [key]: !this.state[key]
+    })
+  }
 
   cancelLocal() {
     this.setState({ignoreLocal: true})
@@ -76,12 +86,25 @@ class SignIn extends Component {
               </div>
 
               <div className="isoInputWrapper">
-                <Input size="large" type="password" placeholder="Password" />
+                <Input size="large" type="text" placeholder="Password" onChange={(e)=> this.setState({words: e.target.value})} />
               </div>
-
+              {
+                (this.state.remember)? (
+                  <div className="isoInputWrapper">
+                    <Input size="large" type="text" placeholder="Session password" onChange={(e)=> this.setState({rememberKey: e.target.value})} />
+                  </div>
+                ): false
+              }
+              
               <div className="isoInputWrapper isoLeftRightComponent">
-                <Checkbox>
+                <Checkbox
+                  onChange={()=>this.toggle('remember')}>
                   <IntlMessages id="page.signInRememberMe" />
+                </Checkbox>
+                <Checkbox 
+                  defaultChecked={this.state.is_brainkey}
+                  onChange={()=>this.toggle('id_brainkey')}>
+                  <IntlMessages id="page.isBrainKey" />
                 </Checkbox>
                 <Button type="primary" onClick={this.handleLogin}>
                   <IntlMessages id="page.signInButton" />
@@ -96,7 +119,7 @@ class SignIn extends Component {
 }
 
 const mapStateToProps = state => ({
-  isLoggedIn: state.Auth.idToken !== null ? true : false,
+  isLoggedIn: state.Auth.keys !== null ? true : false,
   inLocal: state.Auth.inLocal,
   ...state.Auth,
 })
