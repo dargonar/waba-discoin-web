@@ -25,8 +25,8 @@ export function* loginRequest() {
 
 export function* loginSuccess() {
   yield takeEvery(actions.LOGIN_SUCCESS, function*(payload) {
-    yield put(push('/dashboard'));
-  });
+    
+   });
 }
 
 export function* loginError() {
