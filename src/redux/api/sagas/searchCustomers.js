@@ -8,6 +8,7 @@ function* runRequestSuggest(name) {
   const fetchData = apiCall(url)
   
   const { data, error } = yield call(fetchData);
+  console.log(' --- runRequestSuggest:', name, data);
   if (data && !error) {
     yield put({ type: actions.SEARCH_CUSTOMERS_SUCCESS, payload: data });
   } else {

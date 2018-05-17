@@ -60,8 +60,8 @@ const actions = {
     },
 
     searchCustomer: (customer) => (dispatch) => {
-        if (!customer)
-            return;
+        // if (!customer)
+        //     return;
         dispatch({
             type: actions.SEARCH_CUSTOMERS,
             payload: customer
