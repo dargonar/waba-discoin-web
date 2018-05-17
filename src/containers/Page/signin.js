@@ -62,13 +62,6 @@ class SignIn extends Component {
 
   };
 
-  handleChange(){
-    // this.setState({
-    //   is_brainkey: !this.status.is_brainkey
-    // });
-    // this.status.is_brainkey = !this.status.is_brainkey;
-  }
-
   render() {
     const from = { pathname: '/dashboard' };
     const { redirectToReferrer } = this.state;
@@ -98,11 +91,6 @@ class SignIn extends Component {
               <div className="isoInputWrapper isoLeftRightComponent">
                 <Checkbox>
                   <IntlMessages id="page.signInRememberMe" />
-                </Checkbox>
-                <Checkbox 
-                  defaultChecked={this.status.is_brainkey}
-                  onChange={this.handleChange}>
-                  <IntlMessages id="page.isBrainKey" />
                 </Checkbox>
                 <Button type="primary" onClick={this.handleLogin}>
                   <IntlMessages id="page.signInButton" />
