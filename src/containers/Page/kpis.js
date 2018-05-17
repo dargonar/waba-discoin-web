@@ -54,13 +54,13 @@ class SimplePieChart extends Component {
         <PieChart>
           <Pie
             data={this.props.data} 
-            label={'name'}
             labelLine={true}
-            outerRadius={60} 
+            outerRadius={60}
             fill="#8884d8"
+            dataKey={'value'}
           >
             {
-              this.props.data.map((entry, index) => <Cell fill={entry.color}/>)
+              this.props.data.map((entry, index) => <Cell fill={entry.color} key={index}/>)
             }
           </Pie>
           <Tooltip />
@@ -123,16 +123,14 @@ class DiscountsAndRewards extends Component {
                     <span style={aidropIssuing}><span style={{color: "#999"}}>DSC</span> {Number(json.airdrop.issued).toLocaleString()} <br/></span>
                     <span style={{color: "#999"}}> Quantity of Dicoins in airdropped</span>
                   </p>
-                  <p>
-                    <span style={aidropIssuing}>{Number(json.airdrop.tx_quantity).toLocaleString()} TXs</span>
-                    <SingleProgressWidget
-                      label={"Goal " + Number(json.airdrop.max_tx_quantity).toLocaleString() + " TX"}
-                      percent={(json.airdrop.tx_quantity * 100 / json.airdrop.max_tx_quantity)}
-                      barHeight={7}
-                      status="active"
-                      info={false} // Boolean: true, false
-                    />
-                  </p>
+                  <span style={aidropIssuing}>{Number(json.airdrop.tx_quantity).toLocaleString()} TXs</span>
+                  <SingleProgressWidget
+                    label={"Goal " + Number(json.airdrop.max_tx_quantity).toLocaleString() + " TX"}
+                    percent={(json.airdrop.tx_quantity * 100 / json.airdrop.max_tx_quantity)}
+                    barHeight={7}
+                    status="active"
+                    info={false} // Boolean: true, false
+                  />
               </ReportsWidget>
               </Col>
           </Row>
