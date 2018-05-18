@@ -12,6 +12,7 @@ const actions = {
     GET_CATEGORIES_FAILD: 'GET_CATEGORIES_FAILD',
 
     SEARCH_CUSTOMERS: 'SEARCH_CUSTOMERS',
+    SEARCH_ALL_CUSTOMERS: 'SEARCH_ALL_CUSTOMERS',
     SEARCH_CUSTOMERS_SUCCESS: 'SEARCH_CUSTOMERS_SUCCESS',
     SEARCH_CUSTOMERS_FAILD: 'SEARCH_CUSTOMERS_FAILD',
 
@@ -60,8 +61,11 @@ const actions = {
     },
 
     searchCustomer: (customer) => (dispatch) => {
-        // if (!customer)
-        //     return;
+        console.log(customer)
+        if (typeof customer === 'undefined' || customer === '' || customer === null ) {
+            dispatch({ type: actions.SEARCH_ALL_CUSTOMERS })
+            return;
+        }
         dispatch({
             type: actions.SEARCH_CUSTOMERS,
             payload: customer

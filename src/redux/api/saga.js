@@ -7,7 +7,7 @@ import { getConfiguration } from './sagas/getConfiguration'
 import { getCategories } from './sagas/getCategories'
 import { getSchedule } from './sagas/getSchedule'
 import { updateSchedule } from './sagas/updateSchedule'
-import { searchCustomers } from './sagas/searchCustomers'
+import { searchCustomers, searchAllCustomers } from './sagas/searchCustomers'
 
 export default function* rootSaga() {
     yield all([
@@ -16,7 +16,8 @@ export default function* rootSaga() {
         fork(getCategories),
         fork(getSchedule),
         fork(updateSchedule),
-        fork(searchCustomers)
+        fork(searchCustomers),
+        fork(searchAllCustomers)
     ]);
   }
   
