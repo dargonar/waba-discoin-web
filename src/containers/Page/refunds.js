@@ -28,6 +28,8 @@ class Customers extends Component {
     this.submitRefundBox = this.submitRefundBox.bind(this);
     this.removeRefundBox = this.removeRefundBox.bind(this);
     this.showRefundBox = this.showRefundBox.bind(this);
+    this._handleChange = this._handleChange.bind(this);
+    this._handleKeyPress = this._handleKeyPress.bind(this);
   }
 
   handleOnProfile(){}
@@ -66,8 +68,7 @@ class Customers extends Component {
 
   submitRefundBox(value) {
     // this.props.setOverdraft(this.state.selectedCustomer, value)
-    // this.removeRefundBox()
-
+    this.removeRefundBox()
     console.log(' === submitRefundBox::', 'account:', JSON.stringify(this.state.selectedCustomer), value);
   }
 
@@ -91,7 +92,6 @@ class Customers extends Component {
     }
 
     return (
-      <div>
         <Row style={rowStyle} gutter={16} justify="start">
           <Col xs={24} style={{marginBottom: '15px'}}>
             <InputSearch placeholder={'Search customer'} onKeyPress={this._handleKeyPress} onChange={this._handleChange} />
@@ -107,7 +107,6 @@ class Customers extends Component {
           </Col>
           ))}
         </Row>
-      </div>
           );
   }
 
