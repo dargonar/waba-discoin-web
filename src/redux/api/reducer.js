@@ -10,6 +10,7 @@ const initState = {
     error: false,
     actionLoading: false,
     msg: null,
+    categories: [],
 }
 
 export default function apiReducer(state = initState, action) {

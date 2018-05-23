@@ -72,6 +72,12 @@ const actions = {
         })
     },
 
+    getCategories: () => (dispatch) => {
+        dispatch({
+            type: actions.GET_CATEGORIES
+        });
+    },
+
     cleanMsg: () => (dispatch) => 
         dispatch({
             type: actions.CLEAR_MSG

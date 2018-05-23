@@ -28,6 +28,7 @@ const apiConfig = {
     { action: 'URL/UPDATE_SCHEDULE',   path: '/dashboard/business/schedule/:id/update' },
     { action: 'URL/SEARCH_CUSTOMERS',  path: '/account/search?search=:name&seach_filter=:filter' },
     { action: 'URL/ALL_CUSTOMERS',     path: '/account/search' },
+    { action: 'URL/ACCOUNT_BY_NAME',   path: '/account/by_name/:name' },
     { action: 'URL/PUSH_TX',           path: '/push_tx' },
     { action: 'URL/PUSH_SIGN_TX',      path: '/sign_and_push_tx' }
 

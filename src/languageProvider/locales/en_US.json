@@ -652,5 +652,13 @@
   "sidebar.transactions": "Transactions",
   "sidebar.subAccounts": "Sub Accounts",
   "sidebar.contactList": "Contact list",
-  "sidebar.profile": "Profile"
+  "sidebar.profile": "Profile",
+  "register.email": "Email",
+  "register.bussines": "Register bussines",
+  "register.account_name": "Account name",
+  "register.telephone": "Telephone",
+  "register.category": "Category",
+  "register.subcategory": "Subcategory",
+  "register.email.invalid": "Email not valid",
+  "register.email.empty": "Email is required"
 }

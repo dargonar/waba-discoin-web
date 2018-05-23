@@ -667,5 +667,12 @@
   "sidebar.transactions": "Transacciones",
   "sidebar.subAccounts": "Subcuentas",
   "sidebar.contactList": "Lista de contactos",
-  "sidebar.profile": "Perfil"
+  "sidebar.profile": "Perfil",
+  "register.bussines": "Register bussines",
+  "register.account_name": "Nombre de cuenta",
+  "register.telephone": "Teléfono",
+  "register.category": "Categoría",
+  "register.subcategory": "Subcategoría",
+  "register.email.invalid": "Dirección de email invialida",
+  "register.email.empty": "La dirección de email es requerida"
 }
