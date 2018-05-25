@@ -1,5 +1,5 @@
 const siteConfig = {
-  siteName: 'DISCOIN',
+  siteName: 'DISCOIN - Business',
   siteIcon: 'ion-flash',
   footerText: 'WABA.network ©2018',
 };

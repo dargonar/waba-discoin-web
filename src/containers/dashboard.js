@@ -4,21 +4,32 @@ import LayoutContent from '../components/utility/layoutContent';
 import PageHeader from '../components/utility/pageHeader'
 import IsoWidgetsWrapper from '../components/utility/widgets-wrapper';
 import PageLoading from '../components/pageLoading';
-import { Row, Col } from 'antd';
+import { Modal, Col, Row, Tooltip } from 'antd';
 import basicStyle from '../config/basicStyle';
 
 import BalanceSticker from '../components/balance-sticker/balance-sticker'
 import RatingSticker from '../components/rating-sticker/rating-sticker'
 
+import { applyOverdraft, business } from '../httpService';
+
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import actions from '../redux/api/actions';
+
+import Button from '../components/uielements/button';
 
 export class Dashboard extends Component {
 
   constructor(props) {
     super(props);
-    this.renderContent  = this.renderContent.bind(this);
+    this.state = {
+      confirm_overdraft_visible:false
+    }
+    this.renderContent      = this.renderContent.bind(this);
+    this.showApplyOverdraft = this.showApplyOverdraft.bind(this);
+
+    this.doApplyOverdraft   = this.doApplyOverdraft.bind(this);
+    this.doCancelOverdraft  = this.doCancelOverdraft.bind(this);
   }
 
   componentWillMount() {
@@ -26,6 +37,26 @@ export class Dashboard extends Component {
     this.props.fetchConfiguration();
   }
 
+  showApplyOverdraft(){
+    // alert(' -- applyOverdraft clicked');
+    this.setState({ confirm_overdraft_visible: true })
+  }
+
+  doApplyOverdraft(){
+    this.setState({ confirm_overdraft_visible: false })
+    applyOverdraft(business.account_name, business.wif).then( res => {
+        console.log(action, '====OK===>', JSON.stringify(res));
+        alert(JSON.stringify(res));
+      }, err => {
+        console.log(action, '====ERR===>', JSON.stringify(err));
+        alert(JSON.stringify(err));
+    });
+
+  }
+
+  doCancelOverdraft(){
+    this.setState({ confirm_overdraft_visible: false })
+  }
   calcRatio(){
     if (this.props.api.business === null || this.props.api.configuration === null)
       return 0;
@@ -46,7 +77,15 @@ export class Dashboard extends Component {
         return { value: warnings[key].amount, color: warnings[key].color }
       })
     }
-
+    
+    const hasOverdraft = (this.props.api.business !== null && this.props.api.business.balances.ready_to_access>0);
+     
+    const button = hasOverdraft ? (
+      <Tooltip title="Aceptar crédito disponible"><Button shape="circle" onClick={() => this.showApplyOverdraft()} icon="check"></Button></Tooltip>
+    ) : (
+      <Button shape="circle" ></Button>
+    );    
+    
     if (this.props.api.business !== null && this.props.api.configuration !== null) {
       return (
         <Row style={rowStyle} gutter={0} justify="start">
@@ -80,6 +119,7 @@ export class Dashboard extends Component {
                 coin={'DSC'}
                 fontColor="#1C222C"
                 bgColor="#fff"/>
+              {button}
             </IsoWidgetsWrapper>
           </Col>
 
@@ -130,6 +170,15 @@ export class Dashboard extends Component {
         <PageHeader>
           Dashboard
         </PageHeader>
+
+        <Modal
+            visible={this.state.confirm_overdraft_visible}
+            title="Credito disponible"
+            onOk={this.doApplyOverdraft}
+            onCancel={this.doCancelOverdraft}>
+            <label>Desea aceptar el credito disponible?</label>
+        </Modal>
+
         { (
             this.props.api.loading !== false &&
             typeof this.props.api.configuration === 'null'

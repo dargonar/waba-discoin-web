@@ -8,9 +8,9 @@ const businessX = {
                 }
 
 
-const business = {  
-                    account_name:   'discoin.marina', 
-                    account_id:     '1.2.37',
+export const business = {  
+                    account_name:   'discoin.tuti', 
+                    account_id:     '1.2.38',
                     wif:            '5KRV1uP8YEFc5S1UwJiC3fQPLrs7ArqWabii5FpYQf19xX3YvKh'
                 }
 
@@ -87,6 +87,60 @@ export const register = (json_data) => {
   });
 }
 
+export const applyOverdraft = (business_name, signature) => {
+
+  const url  = getPath('URL/APPLY_ENDORSE');
+  
+  console.log(' -- httpService::applyOverdraft::', business_name);
+
+  return new Promise( (resolve, reject) => {
+    fetch(url, {
+        method:   'POST',
+        headers:  {'Accept': 'application/json', 'Content-Type': 'application/json'},
+        body:     JSON.stringify({'business_name' : business_name})
+      })
+    .then((response) => response.json()
+        , err => {
+          console.log(' httpService::applyOverdraft() ===== #1' ,JSON.stringify(err));
+          reject(err);
+          return;
+    })
+    .then((responseJson) => {
+      
+        console.log(' httpService::applyOverdraft() #2 ---- responseJson:');
+        console.log(JSON.stringify(responseJson));
+        console.log(' --------- !');
+
+        const push_url = getPath('URL/PUSH_SIGN_TX');
+        let tx = responseJson.tx;
+
+        fetch(push_url, {
+            method: 'POST',
+            headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
+            body: JSON.stringify( {tx:tx, pk:signature})
+          })
+        .then((response) => response.json()
+            , err => {
+              console.log(' ===== #3' ,JSON.stringify(err));
+              reject(err);
+        })
+        .then((responseJson) => {
+          console.log('===========> pushAndSignTX()::res ==> ', JSON.stringify(responseJson));
+          resolve(responseJson);
+        }, err => {
+          console.log(' ===== #4' ,JSON.stringify(err));
+          reject(err);
+        });
+
+
+
+    }, err => {
+      console.log(' httpService::applyOverdraft() ===== #3' ,JSON.stringify(err));
+      reject(err);
+      return;
+    });
+  });
+}
 export const rewardCustomer = (tx) => {
   
   const get_tx_url  = getPath('URL/REFUND_CREATE');
