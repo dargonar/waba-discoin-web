@@ -1,11 +1,19 @@
 import pathToRegexp from 'path-to-regexp';
 import { apiConfig } from './config';
 
-const business = {  
+const businessX = {  
                     account_name:   'discoin.biz3', 
                     account_id:     '1.2.25',
                     wif:            '5Kjz35R9W3m5ZpznZMSpdySz35tZsXZbzsuSdbtV12YC9Zaxzd9'
                 }
+
+
+const business = {  
+                    account_name:   'discoin.marina', 
+                    account_id:     '1.2.37',
+                    wif:            '5KRV1uP8YEFc5S1UwJiC3fQPLrs7ArqWabii5FpYQf19xX3YvKh'
+                }
+
 
 export const apiCall = (path, method, data, cb) => {
     // Check if there are any callbacks established
@@ -68,11 +76,11 @@ export const register = (json_data) => {
     .then((responseJson) => {
       
         // QUE HAGO?
-        console.log(' httpService::register() ---- OK!');
+        console.log(' httpService::register() #2 ---- OK!');
         console.log(JSON.stringify(responseJson));
         resolve(responseJson);
     }, err => {
-      console.log(' httpService::register() ===== #6' ,JSON.stringify(err));
+      console.log(' httpService::register() ===== #3' ,JSON.stringify(err));
       reject(err);
       return;
     });

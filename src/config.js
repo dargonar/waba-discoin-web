@@ -32,7 +32,8 @@ const apiConfig = {
     { action: 'URL/PUSH_TX',           path: '/push_tx' },
     { action: 'URL/PUSH_SIGN_TX',      path: '/sign_and_push_tx' },
     { action: 'URL/REFUND_CREATE',     path: '/refund/create' },
-    { action: 'URL/REGISTER_BUSINESS', path: '/business/register' }
+    { action: 'URL/REGISTER_BUSINESS', path: '/business/register' },
+    { action: 'URL/APPLY_ENDORSE',     path: '/business/endorse/apply' }
   ]
 }
 

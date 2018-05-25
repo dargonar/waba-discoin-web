@@ -18,7 +18,7 @@ export class Dashboard extends Component {
 
   constructor(props) {
     super(props);
-    this.renderContent = this.renderContent.bind(this)
+    this.renderContent  = this.renderContent.bind(this);
   }
 
   componentWillMount() {
@@ -26,9 +26,21 @@ export class Dashboard extends Component {
     this.props.fetchConfiguration();
   }
 
+  calcRatio(){
+    if (this.props.api.business === null || this.props.api.configuration === null)
+      return 0;
+    if (this.props.api.business.balances.balance===null || this.props.api.business.balances.initial_credit===null)
+      return 0;
+    if (isNaN(this.props.api.business.balances.balance) || isNaN(this.props.api.business.balances.initial_credit))
+      return 0;
+    if (this.props.api.business.balances.initial_credit==0)
+      return 0;
+    console.log(' RATIO::', this.props.api.business.balances.balance, this.props.api.business.balances.initial_credit)
+    return this.props.api.business.balances.balance * 100 / this.props.api.business.balances.initial_credit;
+  }
   renderContent() {
     const { rowStyle, colStyle } = basicStyle;
-    
+    let _ratio = this.calcRatio();
     const getBalanceWarnings = (warnings) => {
       return Object.keys(warnings).map(key => {
         return { value: warnings[key].amount, color: warnings[key].color }
@@ -63,7 +75,18 @@ export class Dashboard extends Component {
           <Col md={6} sm={12} xs={24} style={colStyle}>
             <IsoWidgetsWrapper>
               <BalanceSticker
-                amount={this.props.api.business.balances.balance * 100 / this.props.api.business.balances.initial_credit}
+                amount={this.props.api.business.balances.ready_to_access}
+                text="Endorsed"
+                coin={'DSC'}
+                fontColor="#1C222C"
+                bgColor="#fff"/>
+            </IsoWidgetsWrapper>
+          </Col>
+
+          <Col md={6} sm={12} xs={24} style={colStyle}>
+            <IsoWidgetsWrapper>
+              <BalanceSticker
+                amount={_ratio}
                 text="Accepted / Received ratio"
                 scale={getBalanceWarnings(this.props.api.configuration.warnings)}
                 percentage={true}

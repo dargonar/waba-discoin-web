@@ -5,9 +5,9 @@ const initState = new Map({
   idToken: null,
   account: null,
   keys: null,
-  accountId: '1.2.27',
-  businessId: '1.2.25',
-  account: 'discoin.biz3'
+  accountId: '1.2.38',
+  businessId: '1.2.38',
+  account: 'discoin.tuti'
 });
 
 export default function authReducer(state = initState, action) {
