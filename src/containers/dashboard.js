@@ -45,10 +45,10 @@ export class Dashboard extends Component {
   doApplyOverdraft(){
     this.setState({ confirm_overdraft_visible: false })
     applyOverdraft(business.account_name, business.wif).then( res => {
-        console.log(action, '====OK===>', JSON.stringify(res));
+        console.log('====OK===>', JSON.stringify(res));
         alert(JSON.stringify(res));
       }, err => {
-        console.log(action, '====ERR===>', JSON.stringify(err));
+        console.log('====ERR===>', JSON.stringify(err));
         alert(JSON.stringify(err));
     });
 

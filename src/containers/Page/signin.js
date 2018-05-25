@@ -11,6 +11,9 @@ import SignInStyleWrapper from './signin.style';
 
 import RegisterBox from './components/register';
 import { bindActionCreators } from 'redux';
+
+import { getToken } from '../../helpers/utility';
+
 const { login } = authAction;
 
 class SignIn extends Component {
@@ -26,17 +29,23 @@ class SignIn extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      this.props.isLoggedIn !== nextProps.isLoggedIn &&
-      nextProps.isLoggedIn === true
-    ) {
-      this.setState({ redirectToReferrer: true });
-    }
+    // if (this.props.isLoggedIn !== nextProps.isLoggedIn && nextProps.isLoggedIn === true) {
+    //   this.setState({ redirectToReferrer: true });
+    // }
   }
   
   componentWillMount() {
     this.props.getCategories();
-  }
+    
+    if (this.props.isLoggedIn) {
+      this.setState({ redirectToReferrer: true });
+    }
+
+    // const token = getToken().get('idToken');
+    // alert(token);
+    // alert(this.props.isLoggedIn);
+    
+  } 
 
   handleLogin = () => {
     const { login } = this.props;
