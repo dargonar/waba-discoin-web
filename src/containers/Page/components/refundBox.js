@@ -7,36 +7,58 @@ export class RefundBox extends Component {
         super(props)
         this.state = {
             amount: 0,
-            dsc: 0,
-            refound: 30
+            percentage: 30,
+            bill_id: '',
+            bill_amount: 0
         }
-        this.updateAmounts = this.updateAmounts.bind(this)
-        this.updateDsc = this.updateDsc.bind(this)
-        this.updateRefound = this.updateRefound.bind(this)
+        this.default_state = {
+            amount: 0,
+            percentage: 30,
+            bill_id: '',
+            bill_amount: 0
+        }
+        this.updateBillAmount  = this.updateBillAmount.bind(this)
+        this.updateAmount      = this.updateAmount.bind(this)
+        this.updatePercentage  = this.updatePercentage.bind(this)
+        this.updateBill     = this.updateBill.bind(this)
+        this.onOk           = this.onOk.bind(this)
     }   
 
-    updateRefound(e) {
-        let refound = e.target.value
+    onOk() {
+        this.props.submit(this.state)
+        // this.setState(this.default_state)
+
+    }
+    
+    updatePercentage(e) {
+        let percentage = e.target.value
         this.setState({
-            refound: refound,
-            dsc: Math.round(refound * this.state.amount / 100)
+            percentage: percentage,
+            dsc: Math.round(percentage * this.state.amount / 100)
         })
     }
 
 
-    updateAmounts(e) {
+    updateBillAmount(e) {
+        let bill_amount = e.target.value
+        this.setState({
+            bill_amount: bill_amount,
+            amount: Math.round(this.state.percentage * bill_amount / 100)
+        })
+    }
+
+    updateAmount(e) {
         let amount = e.target.value
         this.setState({
             amount: amount,
-            dsc: Math.round(this.state.refound * amount / 100)
+            percentage: Math.round(amount * 100 / this.state.bill_amount)
         })
     }
 
-    updateDsc(e) {
-        let dsc = e.target.value
+    updateBill(e) {
+        let bill_id = e.target.value
         this.setState({
-            dsc: dsc,
-            refound: Math.round(dsc * 100 / this.state.amount)
+            bill_id: bill_id
         })
     }
 
@@ -52,23 +74,27 @@ export class RefundBox extends Component {
 
             return (
                 <Modal 
-                    title={'Refound to '+ name}
+                    title={'Recompensar a '+ name}
                     visible={this.props.visible}
                     onCancel={this.props.cancel}
-                    onOk={this.props.submit}
+                    onOk={this.onOk}
                 >
                     <Row gutter={16}>
                         <Col style={colStyle} xs={24}>
                             Amount
-                            <Input addonBefore={'$'} defaultValue={this.state.amount} onChange={this.updateAmounts}/>
+                            <Input addonBefore={'$'} defaultValue={this.state.bill_amount} onChange={this.updateBillAmount}/>
                         </Col>
                         <Col style={colStyle} xs={24} md={12}>
-                            Discoins
-                            <Input addonBefore={'DSC'} value={this.state.dsc} onChange={this.updateDsc} />
+                            DisCoins
+                            <Input addonBefore={'DSC'} value={this.state.amount} onChange={this.updateAmount} />
                         </Col>
                         <Col style={colStyle} xs={24} md={12}>
-                            Refound
-                            <Input addonAfter={'%'} value={this.state.refound}  onChange={this.updateRefound} />
+                            Porcentaje
+                            <Input addonAfter={'%'} value={this.state.percentage}  onChange={this.updatePercentage} />
+                        </Col>
+                        <Col style={colStyle} xs={24}>
+                            Factura
+                            <Input onChange={this.updateBill}/>
                         </Col>
                     </Row>
                 </Modal>

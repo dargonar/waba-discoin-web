@@ -20,8 +20,8 @@ class SignIn extends Component {
       redirectToReferrer: false,
       account: null,
       register: false,
-    };
-    this.registerAccount = this.registerAccount.bind(this);
+    }
+    // this.registerAccount = this.registerAccount.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
   }
 

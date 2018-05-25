@@ -19,7 +19,7 @@ const mapboxConfig = {
 };
 
 const apiConfig = {
-  base: 'http://35.163.59.126:8080/api/',
+  base: 'http://35.163.59.126:8089/api/',
   version: 'v3',
   urls: [
     { action: 'URL/GET_PROFILE',       path: '/dashboard/business/profile/:id/load' },
@@ -30,8 +30,9 @@ const apiConfig = {
     { action: 'URL/ALL_CUSTOMERS',     path: '/account/search' },
     { action: 'URL/ACCOUNT_BY_NAME',   path: '/account/by_name/:name' },
     { action: 'URL/PUSH_TX',           path: '/push_tx' },
-    { action: 'URL/PUSH_SIGN_TX',      path: '/sign_and_push_tx' }
-
+    { action: 'URL/PUSH_SIGN_TX',      path: '/sign_and_push_tx' },
+    { action: 'URL/REFUND_CREATE',     path: '/refund/create' },
+    { action: 'URL/REGISTER_BUSINESS', path: '/business/register' }
   ]
 }
 

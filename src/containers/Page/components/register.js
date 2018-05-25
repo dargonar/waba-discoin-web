@@ -17,6 +17,10 @@ import { connect } from 'react-redux'
 import bip39 from 'bip39';
 import { PrivateKey, key } from "bitsharesjs"
 
+import { register } from '../../../httpService';
+
+import { push } from 'react-router-redux';
+
 const FormItem = Form.Item;
 const Step = Steps.Step;
 
@@ -50,8 +54,8 @@ export class Register extends Component {
                 console.log(this.state)
             }
         });
-        
     }
+
     prev() {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
@@ -68,9 +72,33 @@ export class Register extends Component {
     }
     
     submit() {
-        if(typeof this.state.form.privKey !== 'undefined') {
-            this.props.submit(this.state.form);
-        }
+      if(typeof this.state.form.privKey !== 'undefined') {
+        // this.props.submit(this.state.form);
+        console.log(JSON.stringify(this.state.form));
+        let data = this.state.form;
+        delete data['privKey'];
+        delete data['seed'];
+
+        register(data).then((responseJson) => {
+            console.log(' ---- FROM REGISTER FORM - OK!');
+            console.log(JSON.stringify(responseJson));
+            if(typeof responseJson.error !== 'undefined' )
+            {
+              console.log(' ---- FROM REGISTER FORM - ERROR!');
+              alert('Ha ocurrido un error #1:' + responseJson.error);
+            }
+            else{
+              alert('Usuario registrado, se puede logear');
+              push('/')
+            }
+        }, err => {
+          console.log(' ---- FROM REGISTER FORM - ERROR!');
+          console.log(JSON.stringify(err));
+          alert('Ha ocurrido un error #2:' + JSON.stringify(err));
+          
+        });
+      }
+
     }
 
     cancel() {
@@ -115,11 +143,17 @@ export class Register extends Component {
     }
 
     setPrivateKey() {
-        const seed = this.state.form.seed;
+        const seed      = this.state.form.seed;
+        let privKey     = PrivateKey.fromSeed(key.normalize_brainKey(seed))
+        let wif         = privKey.toWif();
+        let pubKey      = privKey.toPublicKey().toString("BTS");
         this.setState({
             form: {
                 ...this.state.form,
-                privKey: PrivateKey.fromSeed(key.normalize_brainKey(seed)).toWif()
+                privKey : wif, 
+                owner   : pubKey, 
+                active  : pubKey,
+                memo    : pubKey 
             }
         })
     }
@@ -161,6 +195,15 @@ export class Register extends Component {
               title: 'Account',
               content: (
                 <Form onSubmit={console.log}>
+                    <FormItem {...formItemLayout} label={(<IntlMessages id='register.name' />)} hasFeedback>
+                        {getFieldDecorator('name', {
+                            rules: [{
+                                required: true,
+                                message: this.props.intl.messages['register.name.empty'],
+                            }],
+                        })(<Input name="name" id="name" />)}
+                    </FormItem>
+    
                     <FormItem {...formItemLayout} label={(<IntlMessages id='register.account_name' />)} hasFeedback>
                         {getFieldDecorator('account_name', {
                             rules: [{
@@ -172,15 +215,6 @@ export class Register extends Component {
                             },
                             {
                                 validator: this.checkAccontNameAvailable
-                            }],
-                        })(<Input name="account_name" id="account_name" />)}
-                    </FormItem>
-    
-                    <FormItem {...formItemLayout} label={(<IntlMessages id='register.name' />)} hasFeedback>
-                        {getFieldDecorator('name', {
-                            rules: [{
-                                required: true,
-                                message: this.props.intl.messages['register.name.empty'],
                             }],
                         })(<Input name="account_name" id="account_name" />)}
                     </FormItem>

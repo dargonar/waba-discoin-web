@@ -15,6 +15,8 @@ import MessageBox from '../../components/MessageBox';
 import CustomersBox from './components/customerBox';
 import RefundBox from './components/refundBox'
 
+import { rewardCustomer } from '../../httpService';
+
 class Customers extends Component {
   constructor(props) {
     super(props);
@@ -66,10 +68,29 @@ class Customers extends Component {
     // onChange={e => this.props.searchCustomer(e.target.value)} 
   }
 
-  submitRefundBox(value) {
+  submitRefundBox(e) {
     // this.props.setOverdraft(this.state.selectedCustomer, value)
-    this.removeRefundBox()
-    console.log(' === submitRefundBox::', 'account:', JSON.stringify(this.state.selectedCustomer), value);
+    console.log(' === submitRefundBox::', 'account:', JSON.stringify(this.state.selectedCustomer));
+    console.log(e);
+
+    let tx = {
+      from_id:      '',
+      to_id:        this.state.selectedCustomer.account_id,
+      amount:       e.amount,
+      bill_amount:  e.bill_amount,
+      bill_id:      e.bill_id
+    }
+
+    // this.setState({loading:true})
+    rewardCustomer(tx).then( res => {
+        console.log('rewardCustomer', '====OK===>', JSON.stringify(res));
+        this.removeRefundBox();
+      }, err => {
+        console.log('rewardCustomer','====ERR===>', JSON.stringify(err));
+        this.removeRefundBox();
+    });
+
+    
   }
 
   removeRefundBox() {
