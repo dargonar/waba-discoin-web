@@ -4,8 +4,13 @@ import  bip39 from 'bip39';
 
 
 // HACK - Remove hardcoded keys
-export const adminPrivKey = '5JQGCnJCDyraociQmhDRDxzNFCd8WdcJ4BAj8q1YDZtVpk5NDw9';
-export const adminPubKey  = 'BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk'
+// export const adminPrivKey = '5JQGCnJCDyraociQmhDRDxzNFCd8WdcJ4BAj8q1YDZtVpk5NDw9';
+// export const adminPubKey  = 'BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk'
+
+export const adminPrivKey = '5Kjz35R9W3m5ZpznZMSpdySz35tZsXZbzsuSdbtV12YC9Zaxzd9';
+export const adminPubKey  = 'BTS5NQUTrdEgKH4fz5L5DLJZBSkdLWUY4CfnaNZ77yvZAnUZNC89d'
+
+// discoin.biz3
 
 export const recoverAccountFromSeed = (mnemonics, is_brainkey) => {
 
