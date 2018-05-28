@@ -36,27 +36,28 @@ class SignIn extends Component {
   
   componentWillMount() {
     this.props.getCategories();
-    
+    console.log(' --- signin::componentWillMount::redirecting to referrer ???? ');
+    console.log('SIGNED IN???', this.props.isLoggedIn);
     if (this.props.isLoggedIn) {
-      this.setState({ redirectToReferrer: true });
-    }
-
-    // const token = getToken().get('idToken');
-    // alert(token);
-    // alert(this.props.isLoggedIn);
-    
+      console.log(' --- signin::componentWillMount::redirecting to referrer');
+      // this.setState({ redirectToReferrer: true });
+      this.props.history.push('/dashboard');
+    }    
   } 
 
   handleLogin = () => {
     const { login } = this.props;
     login({account: this.state.account});
+    console.log(' --- signin::handleLogin::pushing to dashboard');
     this.props.history.push('/dashboard');
   };
+
   render() {
     const from = { pathname: '/dashboard' };
     const { redirectToReferrer } = this.state;
 
     if (redirectToReferrer) {
+      console.log(' --- signin::render::redirecting to referrer');
       return <Redirect to={from} />;
     }
     return (

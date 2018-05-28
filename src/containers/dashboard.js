@@ -57,6 +57,7 @@ export class Dashboard extends Component {
   doCancelOverdraft(){
     this.setState({ confirm_overdraft_visible: false })
   }
+
   calcRatio(){
     if (this.props.api.business === null || this.props.api.configuration === null)
       return 0;
@@ -69,6 +70,7 @@ export class Dashboard extends Component {
     console.log(' RATIO::', this.props.api.business.balances.balance, this.props.api.business.balances.initial_credit)
     return this.props.api.business.balances.balance * 100 / this.props.api.business.balances.initial_credit;
   }
+  
   renderContent() {
     const { rowStyle, colStyle } = basicStyle;
     let _ratio = this.calcRatio();
@@ -80,11 +82,11 @@ export class Dashboard extends Component {
     
     const hasOverdraft = (this.props.api.business !== null && this.props.api.business.balances.ready_to_access>0);
      
-    const button = hasOverdraft ? (
-      <Tooltip title="Aceptar crédito disponible"><Button shape="circle" onClick={() => this.showApplyOverdraft()} icon="check"></Button></Tooltip>
-    ) : (
-      <Button shape="circle" ></Button>
-    );    
+    let button = null;
+    if (hasOverdraft)
+      button =  (
+        <Tooltip title="Aceptar crédito disponible"><Button shape="circle" onClick={() => this.showApplyOverdraft()} icon="check"></Button></Tooltip>
+      ) ;    
     
     if (this.props.api.business !== null && this.props.api.configuration !== null) {
       return (

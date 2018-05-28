@@ -2,11 +2,12 @@ import { Map } from 'immutable';
 import actions from './actions';
 
 const initState = new Map({ 
-  idToken: null,
+  // idToken: null,
   // account: null,
   keys: null,
   accountId: '1.2.38',
   businessId: '1.2.38',
+  idToken: 'shittoken',
   account: 'discoin.tuti'
 });
 

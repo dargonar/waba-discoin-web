@@ -19,6 +19,7 @@ class Auth0Helper {
     this.isAuthenticated = this.isAuthenticated.bind(this);
   }
   login(handleLogin) {
+    console.log('---------Auth0Helper::login');
     this.lock.on('authenticated', authResult => {
       if (authResult && authResult.accessToken) {
         if (window) {
