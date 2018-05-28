@@ -124,7 +124,7 @@ class SignIn extends Component {
                   onChange={()=>this.toggle('id_brainkey')}>
                   <IntlMessages id="page.isBrainKey" />
                 </Checkbox>
-                <Button type="primary" onClick={this.handleLogin}>
+                <Button type="primary" onClick={this.handleLogin} loading={this.props.isLoading} disabled={this.props.loading}>
                   <IntlMessages id="page.signInButton" />
                 </Button>
               </div>
@@ -144,6 +144,7 @@ class SignIn extends Component {
 
 const mapStateToProps = (state) => ({
   isLoggedIn: typeof state.Auth.account === 'string',
+  isLoading: state.Auth.loading,
   inLocal: state.Auth.inLocal,
 })
 

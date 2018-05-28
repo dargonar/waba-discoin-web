@@ -2,6 +2,7 @@ import actions from './actions';
 
 const initState = { 
   inLocal: null,
+  loading: false
 };
 
 export default function authReducer(state = initState, action) {
@@ -22,14 +23,26 @@ export default function authReducer(state = initState, action) {
         inLocal: false
       }
     }
+    case actions.LOGIN_REQUEST:
+      return {
+        ...state,
+        loading: true
+      }
     case actions.LOGIN_SUCCESS:
       return {
         ...state,
+        loading: false,
         keys: action.payload.keys,
         account: action.payload.account,
         account_id: action.payload.account_id,
         secret: action.payload.secret,
         raw: action.payload.raw
+      }
+    case actions.LOGIN_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload
       }
     case actions.LOGOUT:
       return initState;
