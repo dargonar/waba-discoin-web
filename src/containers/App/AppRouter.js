@@ -22,6 +22,11 @@ class AppRouter extends React.Component {
           path={`${url}/refunds`}
           component={asyncComponent(() => import('../Page/refunds'))}
         />
+        <Route
+          exact
+          path={`${url}/transactions`}
+          component={asyncComponent(() => import('../Page/transactions/transactions'))}
+        />
       </Switch>
     );
   }
