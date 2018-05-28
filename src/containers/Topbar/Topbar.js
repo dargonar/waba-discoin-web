@@ -45,7 +45,7 @@ class Topbar extends Component {
               onClick={() => this.setState({ selectedItem: 'user' })}
               className="isoUser"
             >
-              <TopbarUser account={this.props.Auth.account}/>
+              <TopbarUser account={this.props.Auth.account  }/>
             </li>
           </ul>
         </Header>
@@ -57,7 +57,7 @@ class Topbar extends Component {
 export default connect(
   state => ({
     App: {...state.App.toJS()},
-    Auth: {...state.Auth.toJS()}
+    Auth: {...state.Auth}
   }),
   { toggleCollapsed }
 )(Topbar);

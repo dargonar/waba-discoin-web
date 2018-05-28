@@ -1,37 +1,53 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Input from '../../components/uielements/input';
-import Checkbox from '../../components/uielements/checkbox';
-import Button from '../../components/uielements/button';
-import authAction from '../../redux/auth/actions';
-import apiAction from '../../redux/api/actions';
-import IntlMessages from '../../components/utility/intlMessages';
+import Input from '../../../components/uielements/input';
+import Checkbox from '../../../components/uielements/checkbox';
+import Button from '../../../components/uielements/button';
+import authAction from '../../../redux/auth/actions';
+import apiAction from '../../../redux/api/actions';
+import IntlMessages from '../../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
-
+import LocalLogin from './components/localLogin';
 import RegisterBox from './components/register';
 import { bindActionCreators } from 'redux';
 
-import { getToken } from '../../helpers/utility';
+import { getToken } from '../../../helpers/utility';
 
-const { login } = authAction;
+const { login, loginFromLocal, cleanStorage } = authAction;
 
 class SignIn extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      redirectToReferrer: false,
-      account: null,
-      register: false,
+      account             : null,
+      register            : false,
+      account             : null,
+      ignoreLocal         : false,
+      is_brainkey         : false,
+      remember            : false,
+      rememberKey         : '',
+      words               : ''
     }
     // this.registerAccount = this.registerAccount.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
+    this.loginLocal = this.loginLocal.bind(this)
+    this.toggle = this.toggle.bind(this)
+    this.cancelLocal = this.cancelLocal.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
-    // if (this.props.isLoggedIn !== nextProps.isLoggedIn && nextProps.isLoggedIn === true) {
-    //   this.setState({ redirectToReferrer: true });
-    // }
+  cancelLocal() {
+    this.props.cleanStorage()
+  }
+
+  toggle(key) {
+    this.setState({
+      [key]: !this.state[key]
+    })
+  }
+
+   loginLocal(password) {
+    this.props.loginFromLocal(password)
   }
   
   componentWillMount() {
@@ -40,28 +56,33 @@ class SignIn extends Component {
     console.log('SIGNED IN???', this.props.isLoggedIn);
     if (this.props.isLoggedIn) {
       console.log(' --- signin::componentWillMount::redirecting to referrer');
-      // this.setState({ redirectToReferrer: true });
-      this.props.history.push('/dashboard');
-    }    
-  } 
+    }
+  }
 
   handleLogin = () => {
-    const { login } = this.props;
-    login({account: this.state.account});
-    console.log(' --- signin::handleLogin::pushing to dashboard');
-    this.props.history.push('/dashboard');
+    this.props.login({
+      account_name        : this.state.account,
+      is_brainkey         : this.state.is_brainkey,
+      remember            : this.state.remember,
+      rememberKey         : this.state.rememberKey,
+      mnemonics           : this.state.words
+    });
   };
 
   render() {
     const from = { pathname: '/dashboard' };
-    const { redirectToReferrer } = this.state;
-
-    if (redirectToReferrer) {
+    if (this.props.isLoggedIn) {
       console.log(' --- signin::render::redirecting to referrer');
       return <Redirect to={from} />;
     }
+
     return (
       <SignInStyleWrapper className="isoSignInPage">
+        <LocalLogin 
+          visible={this.props.inLocal && !this.state.ignoreLocal }
+          submit={this.loginLocal}
+          cancel={this.cancelLocal}
+        />
         <RegisterBox 
           visible={this.state.register}
           cancel={()=>{this.setState({register: false})}}
@@ -83,12 +104,25 @@ class SignIn extends Component {
               </div>
 
               <div className="isoInputWrapper">
-                <Input size="large" type="password" placeholder="Password" />
+                <Input size="large" type="text" placeholder="Password" onChange={(e)=> this.setState({words: e.target.value})} />
               </div>
-
+              {
+                (this.state.remember)? (
+                  <div className="isoInputWrapper">
+                    <Input size="large" type="text" placeholder="Session password" onChange={(e)=> this.setState({rememberKey: e.target.value})} />
+                  </div>
+                ): false
+              }
+              
               <div className="isoInputWrapper isoLeftRightComponent">
-                <Checkbox>
+                <Checkbox
+                  onChange={()=>this.toggle('remember')}>
                   <IntlMessages id="page.signInRememberMe" />
+                </Checkbox>
+                <Checkbox 
+                  defaultChecked={this.state.is_brainkey}
+                  onChange={()=>this.toggle('id_brainkey')}>
+                  <IntlMessages id="page.isBrainKey" />
                 </Checkbox>
                 <Button type="primary" onClick={this.handleLogin}>
                   <IntlMessages id="page.signInButton" />
@@ -109,11 +143,14 @@ class SignIn extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  isLoggedIn: state.Auth.get('idToken') !== null ? true : false
+  isLoggedIn: typeof state.Auth.account === 'string',
+  inLocal: state.Auth.inLocal,
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  login: login,
+  login: bindActionCreators(login, dispatch),
+  loginFromLocal: bindActionCreators(loginFromLocal, dispatch),
+  cleanStorage: bindActionCreators(cleanStorage, dispatch),
   getCategories: bindActionCreators(apiAction.getCategories, dispatch)
 });
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

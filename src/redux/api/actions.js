@@ -29,7 +29,7 @@ const actions = {
         dispatch({
             type: actions.GET_PROFILE,
             payload: {
-                account_id: account_id || getState().Auth.get('businessId')
+                account_id: account_id || getState().Auth.account_id
             }
         })
     },
@@ -44,7 +44,7 @@ const actions = {
         dispatch({
             type: actions.GET_SCHEDULE,
             payload: {
-                account_id: getState().Auth.get('businessId')
+                account_id: getState().Auth.account_id
             }
         })
     },
@@ -54,8 +54,8 @@ const actions = {
             type: actions.UPDATE_SCHEDULE,
             payload: { 
                 schedule: newSchedule,
-                pkey: getState().Auth.get('keys').privKey,
-                account_id: getState().Auth.get('businessId')
+                pkey: getState().Auth.keys.privKey,
+                account_id: getState().Auth.account_id
             }
         })
     },

@@ -1,23 +1,36 @@
-import { Map } from 'immutable';
 import actions from './actions';
 
-const initState = new Map({ 
-  // idToken: null,
-  // account: null,
-  keys: null,
-  accountId: '1.2.38',
-  businessId: '1.2.38',
-  idToken: 'shittoken',
-  account: 'discoin.tuti'
-});
+const initState = { 
+  inLocal: null,
+};
 
 export default function authReducer(state = initState, action) {
   switch (action.type) {
+    case actions.LS_CHECK_FULL:
+      return {
+        ...state,
+        inLocal: true
+      }
+    case actions.LS_CHECK_EMPTY:
+      return {
+        ...state,
+        inLocal: false
+      }
+    case actions.LS_CLEAN_SUCCESS: {
+      return {
+        ...state,
+        inLocal: false
+      }
+    }
     case actions.LOGIN_SUCCESS:
-      return state
-        .set('idToken', action.token)
-        .set('account', action.account)
-        .set('keys', action.keys);
+      return {
+        ...state,
+        keys: action.payload.keys,
+        account: action.payload.account,
+        account_id: action.payload.account_id,
+        secret: action.payload.secret,
+        raw: action.payload.raw
+      }
     case actions.LOGOUT:
       return initState;
     default:

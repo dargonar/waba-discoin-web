@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
-import IntlMessages from '../../../components/utility/intlMessages';
+import IntlMessages from '../../../../components/utility/intlMessages';
 import { Modal } from 'antd';
-import Form from '../../../components/uielements/form';
-import Input from '../../../components/uielements/input';
-import Button from '../../../components/uielements/button';
-import Select, { SelectOption } from '../../../components/uielements/select';
+import Form from '../../../../components/uielements/form';
+import Input from '../../../../components/uielements/input';
+import Button from '../../../../components/uielements/button';
+import Select, { SelectOption } from '../../../../components/uielements/select';
 import { injectIntl } from 'react-intl';
-import Steps from '../../../components/uielements/steps';
-import message from '../../../components/uielements/message';
-import PageLoading from '../../../components/pageLoading'
+import Steps from '../../../../components/uielements/steps';
+import message from '../../../../components/uielements/message';
+import PageLoading from '../../../../components/pageLoading'
 import { ChainValidation } from 'bitsharesjs';
-import { getPath, apiCall } from '../../../httpService';
+import { getPath, apiCall } from '../../../../httpService';
 
 import { connect } from 'react-redux'
 
 import bip39 from 'bip39';
 import { PrivateKey, key } from "bitsharesjs"
 
-import { register } from '../../../httpService';
+import { register } from '../../../../httpService';
 
 import { push } from 'react-router-redux';
 
