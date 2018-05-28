@@ -16,6 +16,11 @@ const actions = {
     SEARCH_CUSTOMERS_SUCCESS: 'SEARCH_CUSTOMERS_SUCCESS',
     SEARCH_CUSTOMERS_FAILD: 'SEARCH_CUSTOMERS_FAILD',
 
+    SEARCH_TRANSACTIONS: 'SEARCH_TRANSACTIONS',
+    SEARCH_ALL_TRANSACTIONS: 'SEARCH_ALL_TRANSACTIONS',
+    SEARCH_TRANSACTIONS_SUCCESS: 'SEARCH_TRANSACTIONS_SUCCESS',
+    SEARCH_TRANSACTIONS_FAILD: 'SEARCH_TRANSACTIONS_FAILD',
+
     GET_SCHEDULE: 'GET_SCHEDULE',
     GET_SCHEDULE_SUCCESS: 'GET_SCHEDULE_SUCCESS',
     GET_SCHEDULE_FAILD: 'GET_SCHEDULE_FAILD',
@@ -69,6 +74,26 @@ const actions = {
         dispatch({
             type: actions.SEARCH_CUSTOMERS,
             payload: customer
+        })
+    },
+
+    searchTransactions: (name) => (dispatch, getState) => {
+        if (typeof name === 'undefined' || name === '' || name === null ) {
+            dispatch({ 
+                type: actions.SEARCH_ALL_TRANSACTIONS,
+                payload: {
+                    name,
+                    account_id: getState().Auth.account_id
+                }
+            })
+            return;
+        }
+        dispatch({
+            type: actions.SEARCH_TRANSACTIONS,
+            payload: {
+                name,
+                account_id: getState().Auth.account_id
+            }
         })
     },
 

@@ -2,7 +2,7 @@ import actions from "./actions";
 
 const initState = {
     business: null,
-    transactions: null,
+    transactions: [],
     configuration: null,
     schedule: null,
     customers: [],
@@ -103,12 +103,19 @@ export default function apiReducer(state = initState, action) {
                 actionLoading: false    
             }
 
+        // SEARCH CUSTOMERS
         case actions.SEARCH_CUSTOMERS_SUCCESS:
             return {
                 ...state,
                 customers: action.payload.res.map(customer => ({name: customer[0], account_id: customer[1]}))
             }
 
+        // SEARCH TRANSACTIONS --> HACK
+        case actions.SEARCH_TRANSACTIONS_SUCCESS:
+        return {
+            ...state,
+            transactions: action.payload.txs
+        }
         case actions.CLEAR_MSG:
             return {
                 ...state,
