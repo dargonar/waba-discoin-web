@@ -11,6 +11,7 @@ import SignInStyleWrapper from './signin.style';
 import LocalLogin from './components/localLogin';
 import RegisterBox from './components/register';
 import { bindActionCreators } from 'redux';
+import message from '../../../components/uielements/message'
 
 import { getToken } from '../../../helpers/utility';
 
@@ -56,6 +57,13 @@ class SignIn extends Component {
     console.log('SIGNED IN???', this.props.isLoggedIn);
     if (this.props.isLoggedIn) {
       console.log(' --- signin::componentWillMount::redirecting to referrer');
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.error === true) {
+      message.error('Login failed wrong user credentials');
+      this.props.clearMsg();
     }
   }
 
@@ -146,12 +154,15 @@ const mapStateToProps = (state) => ({
   isLoggedIn: typeof state.Auth.account === 'string',
   isLoading: state.Auth.loading,
   inLocal: state.Auth.inLocal,
+  error: state.Auth.error,
+  msg: state.Auth.msg
 })
 
 const mapDispatchToProps = (dispatch) => ({
   login: bindActionCreators(login, dispatch),
   loginFromLocal: bindActionCreators(loginFromLocal, dispatch),
   cleanStorage: bindActionCreators(cleanStorage, dispatch),
-  getCategories: bindActionCreators(apiAction.getCategories, dispatch)
+  getCategories: bindActionCreators(apiAction.getCategories, dispatch),
+  clearMsg: bindActionCreators(apiAction.cleanMsg, dispatch)
 });
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

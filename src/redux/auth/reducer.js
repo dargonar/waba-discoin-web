@@ -2,7 +2,9 @@ import actions from './actions';
 
 const initState = { 
   inLocal: null,
-  loading: false
+  loading: false,
+  error: false,
+  msg: null
 };
 
 export default function authReducer(state = initState, action) {
@@ -42,10 +44,17 @@ export default function authReducer(state = initState, action) {
       return {
         ...state,
         loading: false,
-        error: action.payload
+        error: true,
+        msg: action.payload
       }
     case actions.LOGOUT:
       return initState;
+    case actions.CLEAR_MSG:
+      return {
+        ...state,
+        error: false,
+        msg: null
+      }
     default:
       return state;
   }

@@ -15,6 +15,7 @@ const actions = {
   LS_WRITE_FAILD: 'LS/WRITE_FAILD',
   LS_CLEAN: 'LS/CLEAN',
   LS_CLEAN_SUCCESS: 'LS/CLEAN_SUCCESS',
+  CLEAR_MSG: 'CLEAR_MSG',
 
   loadStorage: () => ({ type: actions.LS_CHECK }),
   cleanStorage: () => (dispatch) => dispatch({ type: actions.LS_CLEAN }),
@@ -32,6 +33,9 @@ const actions = {
   },
   logout: () => ({
     type: actions.LOGOUT
+  }),
+  clearMsg: () => (dispatch) => dispatch({
+    type: actions.CLEAR_MSG
   })
 };
 export default actions;
