@@ -548,6 +548,7 @@
   "page.resetPassSave": "Salvar",
   "page.signInTitle": "DISCOIN",
   "page.signInRememberMe": "Recuérdame",
+  "page.isBrainKey": "Es clave de palabaras",
   "page.signInButton": "Registrarse",
   "page.signInPreview":
     "nombre de usuario  demo   contraseña  demodemo   o simplemente haga clic en cualquier botón.",
