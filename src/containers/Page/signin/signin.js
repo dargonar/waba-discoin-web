@@ -17,7 +17,7 @@ import message from '../../../components/uielements/message'
 
 import { getToken } from '../../../helpers/utility';
 
-const { login, loginFromLocal, cleanStorage } = authAction;
+const { login, loginFromLocal, cleanStorage, register } = authAction;
 
 class SignIn extends Component {
   constructor(props) {
@@ -64,7 +64,7 @@ class SignIn extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.error === true) {
-      message.error('Login failed wrong user credentials');
+      message.error(nextProps.msg);
       this.props.clearMsg();
     }
   }
@@ -99,7 +99,7 @@ class SignIn extends Component {
         <RegisterBox 
           visible={this.state.register}
           cancel={()=>{this.setState({register: false})}}
-          submit={this.props.registerAccount}
+          submit={this.props.register}
           loading={this.props.loading}
           error={this.props.error}
         />
@@ -168,6 +168,7 @@ const mapDispatchToProps = (dispatch) => ({
   loginFromLocal: bindActionCreators(loginFromLocal, dispatch),
   cleanStorage: bindActionCreators(cleanStorage, dispatch),
   getCategories: bindActionCreators(apiAction.getCategories, dispatch),
-  clearMsg: bindActionCreators(apiAction.cleanMsg, dispatch)
+  clearMsg: bindActionCreators(apiAction.cleanMsg, dispatch),
+  register: bindActionCreators(register, dispatch)
 });
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

@@ -10,16 +10,12 @@ import Steps from '../../../../components/uielements/steps';
 import message from '../../../../components/uielements/message';
 import PageLoading from '../../../../components/pageLoading'
 import { ChainValidation } from 'bitsharesjs';
-import { getPath, apiCall } from '../../../../httpService';
+import { getPath } from '../../../../httpService';
 
 import { connect } from 'react-redux'
 
 import bip39 from 'bip39';
 import { PrivateKey, key } from "bitsharesjs"
-
-import { register } from '../../../../httpService';
-
-import { push } from 'react-router-redux';
 
 const FormItem = Form.Item;
 const Step = Steps.Step;
@@ -72,33 +68,14 @@ export class Register extends Component {
     }
     
     submit() {
-      if(typeof this.state.form.privKey !== 'undefined') {
-        // this.props.submit(this.state.form);
-        console.log(JSON.stringify(this.state.form));
-        let data = this.state.form;
-        // delete data['privKey'];
-        // delete data['seed'];
-
-        register(data).then((responseJson) => {
-            console.log(' ---- FROM REGISTER FORM - OK!');
-            console.log(JSON.stringify(responseJson));
-            if(typeof responseJson.error !== 'undefined' )
-            {
-              console.log(' ---- FROM REGISTER FORM - ERROR!');
-              alert('Ha ocurrido un error #1:' + responseJson.error);
-            }
-            else{
-              alert('Usuario registrado, se puede logear');
-              push('/')
-            }
-        }, err => {
-          console.log(' ---- FROM REGISTER FORM - ERROR!');
-          console.log(JSON.stringify(err));
-          alert('Ha ocurrido un error #2:' + JSON.stringify(err));
-          
-        });
-      }
-
+        if(typeof this.state.form.privKey !== 'undefined') {
+            // this.props.submit(this.state.form);
+            console.log(JSON.stringify(this.state.form));
+            let data = this.state.form;
+            // delete data['privKey'];
+            // delete data['seed'];
+            this.props.submit(data)
+        }
     }
 
     cancel() {

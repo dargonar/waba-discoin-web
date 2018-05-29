@@ -63,12 +63,14 @@ export function* loginRequest() {
 
 export function* loginSuccess() {
   yield takeEvery(actions.LOGIN_SUCCESS, function*(payload) {
-    
-   });
+
+  });
 }
 
 export function* loginError() {
-  yield takeEvery(actions.LOGIN_ERROR, function*() {});
+  yield takeEvery(actions.LOGIN_ERROR, function*() {
+
+  });
 }
 
 export function* logout() {
@@ -86,6 +88,34 @@ export function* loginFromLocal() {
   })
 }
 
+export function* register() {
+  yield takeEvery(actions.REGISTER, function*(action) {
+    console.log(' -- httpService::register::',JSON.stringify(action));
+    const register_url  = getPath('URL/REGISTER_BUSINESS');
+    const request  = apiCall(register_url, action.payload)
+
+    const { data, err } = yield call(request)
+
+    if(err && typeof data.err !== 'undefined') {
+      console.log(' httpService::register() ===== #1' ,JSON.stringify(err));
+      yield put({type: actions.REGISTER_FAILD, payload: { err, data }})
+    }
+
+    else {
+      yield put({type: actions.REGISTER_SUCCESS, payload: { data }})
+      yield put({type: actions.LOGIN_REQUEST, payload: {
+            account_name: action.payload.account_name,
+            is_brainkey: true,
+            remember: false,
+            rememberKey: '',
+            mnemonics: action.payload.seed
+      }})
+      console.log(' httpService::register() #2 ---- OK!');
+      console.log(JSON.stringify(data));
+    }
+  });
+}
+
 export default function* rootSaga() {
   yield all([
     fork(loginRequest),
@@ -98,6 +128,8 @@ export default function* rootSaga() {
     fork(writeLS),
     fork(cleanLS),
 
-    fork(loginFromLocal)
+    fork(loginFromLocal),
+    fork(register)
   ]);
 }
+

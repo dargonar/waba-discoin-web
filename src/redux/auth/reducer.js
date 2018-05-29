@@ -49,6 +49,23 @@ export default function authReducer(state = initState, action) {
       }
     case actions.LOGOUT:
       return initState;
+    case actions.REGISTER: 
+      return {
+        ...state,
+        loading: true
+      }
+    case action.REGISTER_SUCCESS:
+      return {
+        ...state,
+        loading: false
+      }
+    case actions.REGISTER_FAILD:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        msg: action.payload.err || action.payload.data.error
+      }
     case actions.CLEAR_MSG:
       return {
         ...state,

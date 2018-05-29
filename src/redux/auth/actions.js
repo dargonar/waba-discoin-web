@@ -16,6 +16,9 @@ const actions = {
   LS_CLEAN: 'LS/CLEAN',
   LS_CLEAN_SUCCESS: 'LS/CLEAN_SUCCESS',
   CLEAR_MSG: 'CLEAR_MSG',
+  REGISTER: 'REGISTER',
+  REGISTER_SUCCESS: 'REGISTER_SUCCESS',
+  REGISTER_FAILD: 'REGISTER_FAILD',
 
   loadStorage: () => ({ type: actions.LS_CHECK }),
   cleanStorage: () => (dispatch) => dispatch({ type: actions.LS_CLEAN }),
@@ -36,6 +39,10 @@ const actions = {
   }),
   clearMsg: () => (dispatch) => dispatch({
     type: actions.CLEAR_MSG
+  }),
+  register: (data) => (dispatch) => dispatch({
+    type: actions.REGISTER,
+    payload: data
   })
 };
 export default actions;
