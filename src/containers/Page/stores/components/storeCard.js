@@ -9,9 +9,9 @@ class StoreCard extends Component {
   shortNumber(number) {
     number = number.toString();
     switch(number.length) {
-      case 6: 
+      case 6:
         return number.slice(0,3)+'K'
-      case 7: 
+      case 7:
         return number.slice(0,3)+'M'
       default:
         return number
@@ -30,30 +30,30 @@ class StoreCard extends Component {
           <Col md={5} sm={24} xs={24}>
             <ul>
               <li>{this.props.category.description} > {this.props.subcategory.description}</li>
-              <li>Id > {this.props.account_id}</li>
               <li>{ this.shortNumber(this.props.total_refunded)} REFUNDED</li>
               <li>{ this.shortNumber(this.props.total_discounted)} DISCOUNTED</li>
-            </ul>  
+              <li><i>Id > {this.props.account_id} | {this.props.account}</i></li>
+            </ul>
           </Col>
           <Col md={4} sm={24} xs={24} style={{marginBottom: '10px'}} >
             <BalanceSticker
               coin={'DSC'}
-              amount={this.props.balances.balance} 
-              text={'Balance'} 
+              amount={this.props.balances.balance}
+              text={'Balance'}
               bgColor={'#f5f5f5'} />
           </Col>
           <Col md={4} sm={24} xs={24} style={{marginBottom: '10px'}} >
             <BalanceSticker
               coin={'DSC'}
               amount={this.props.balances.initial_credit}
-              text={'Initial Credit'} 
+              text={'Initial Credit'}
               bgColor={'#f5f5f5'} />
           </Col>
           <Col md={4} sm={24} xs={24} style={{marginBottom: '10px'}} >
             <BalanceSticker
               coin={'DSC'}
               amount={this.props.balances.ready_to_access}
-              text={'Endorsed'} 
+              text={'Endorsed'}
               bgColor={'#f5f5f5'} />
           </Col>
           <Col md={4} sm={24} xs={24} style={{marginBottom: '10px'}}>
