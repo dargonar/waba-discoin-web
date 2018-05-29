@@ -21,7 +21,7 @@ export const signMemo = (memoToKey, memo, account) => {
         nonce: 0,
         message: buf2hex(buffer.buffer)
     }
-
+    // console.log(' -------- signMemo:memo_object', JSON.stringify(memo_object));
     return memo_object;
   }    
   

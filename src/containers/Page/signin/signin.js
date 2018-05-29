@@ -12,6 +12,8 @@ import LocalLogin from './components/localLogin';
 import RegisterBox from './components/register';
 import { bindActionCreators } from 'redux';
 
+//import PageLoading from '../components/pageLoading';
+
 import { getToken } from '../../../helpers/utility';
 
 const { login, loginFromLocal, cleanStorage } = authAction;
@@ -60,6 +62,9 @@ class SignIn extends Component {
   }
 
   handleLogin = () => {
+    
+    // alert(this.state.words);
+
     this.props.login({
       account_name        : this.state.account,
       is_brainkey         : this.state.is_brainkey,

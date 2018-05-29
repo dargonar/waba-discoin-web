@@ -14,27 +14,32 @@ export const adminPubKey  = 'BTS5NQUTrdEgKH4fz5L5DLJZBSkdLWUY4CfnaNZ77yvZAnUZNC8
 
 export const recoverAccountFromSeed = (mnemonics, is_brainkey) => {
 
-    const seed  = bip39.mnemonicToSeedHex(mnemonics, '');
+    // const seed  = bip39.mnemonicToSeedHex(mnemonics, '');
     
-    ChainConfig.setPrefix("BTS");
+    // ChainConfig.setPrefix("BTS");
 
-    let myPrivateKey  = PrivateKey.fromSeed(seed);
+    // let myPrivateKey  = PrivateKey.fromSeed(seed);
     
-    if(is_brainkey)
-      myPrivateKey = PrivateKey.fromSeed( key.normalize_brainKey(seed) );
+    // console.log('recoverAccountFromSeed::is_brainkey:', is_brainkey)
+    // if(is_brainkey)
+    // {
+    //   myPrivateKey = PrivateKey.fromSeed( key.normalize_brainKey(seed) );
+    // }
+
+    let myPrivateKey = PrivateKey.fromSeed( key.normalize_brainKey(mnemonics) );
 
     let myPublicKey   = myPrivateKey.toPublicKey().toString("BTS");
     let wif           = myPrivateKey.toWif();
   
     // HACK - No esta recreando WIF como deberia
-    wif         = adminPrivKey;
-    myPublicKey = adminPubKey;
+    // wif         = adminPrivKey;
+    // myPublicKey = adminPubKey;
 
     const ret = {
-      master:   { wif:wif, pubKey:myPublicKey, privKeyObj: myPrivateKey},
-      owner:    { wif:wif, pubKey:myPublicKey, privKeyObj: myPrivateKey},
-      active:   { wif:wif, pubKey:myPublicKey, privKeyObj: myPrivateKey},
-      memo:     { wif:wif, pubKey:myPublicKey, privKeyObj: myPrivateKey}
+      // master:   { wif:wif, pubKey:myPublicKey},
+      owner:    { wif:wif, pubKey:myPublicKey},
+      active:   { wif:wif, pubKey:myPublicKey},
+      memo:     { wif:wif, pubKey:myPublicKey}
     }
 
     return ret;

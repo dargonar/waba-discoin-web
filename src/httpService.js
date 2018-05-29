@@ -1,6 +1,8 @@
 import pathToRegexp from 'path-to-regexp';
 import { apiConfig } from './config';
 
+// import { recoverAccountFromSeed } from './utils';
+
 const businessX = {  
                     account_name:   'discoin.biz3', 
                     account_id:     '1.2.25',
@@ -61,6 +63,16 @@ export const register = (json_data) => {
   
   console.log(' -- httpService::register::',JSON.stringify(json_data));
 
+  // let recover = recoverAccountFromSeed(json_data.seed);
+
+  // console.log('register genera:', JSON.stringify(json_data));
+  // console.log('RECOVER genera:', JSON.stringify(recover));
+  // json_data.seed
+  // json_data.privKey
+  // json_data.owner
+  // json_data.active
+  // json_data.memo
+
   return new Promise( (resolve, reject) => {
     fetch(register_url, {
         method:   'POST',
@@ -114,6 +126,9 @@ export const applyOverdraft = (business_name, signature) => {
         const push_url = getPath('URL/PUSH_SIGN_TX');
         let tx = responseJson.tx;
 
+        console.log(' applyOverdraft::tx::' , JSON.stringify(tx));
+
+        
         fetch(push_url, {
             method: 'POST',
             headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
@@ -141,11 +156,12 @@ export const applyOverdraft = (business_name, signature) => {
     });
   });
 }
-export const rewardCustomer = (tx) => {
+export const rewardCustomer = (signature, tx) => {
   
   const get_tx_url  = getPath('URL/REFUND_CREATE');
-  tx.from_id = business.account_id;
-  
+  // tx.from_id = business.account_id;
+  // let signature = business.wif;
+
   console.log(' -- rewardCustomer::',JSON.stringify(tx));
 
   return new Promise( (resolve, reject) => {
@@ -165,7 +181,7 @@ export const rewardCustomer = (tx) => {
       
       const push_url    = getPath('URL/PUSH_SIGN_TX');
       let tx2           = responseJson.tx;
-      let packet        = {tx:tx2, pk:business.wif}
+      let packet        = {tx:tx2, pk:signature}
 
       console.log(' ---- A PUNTO DE RECOMPENSAR!!! -> tx2')
       console.log(JSON.stringify(packet))

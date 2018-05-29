@@ -21,6 +21,7 @@ export function* loginRequest() {
     } = action.payload;
 
     const account = recoverAccountFromSeed(mnemonics, is_brainkey);
+
     const url = getPath('URL/BIZ_LOGIN', { account_name });
     const getSecret = apiCall(url)
 
@@ -36,6 +37,7 @@ export function* loginRequest() {
     let { data, ex } = yield call(pushLogin)
 
     if (data && data.login === true) {
+      console.log(JSON.stringify(data));
       yield put({ type: actions.LOGIN_SUCCESS, payload: {
         keys: account,
         account: account_name,

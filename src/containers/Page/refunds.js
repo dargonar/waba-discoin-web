@@ -69,20 +69,25 @@ class Customers extends Component {
   }
 
   submitRefundBox(e) {
+
+    // console.log(' --- refund', JSON.stringify(this.props.account));
+    // return;
     // this.props.setOverdraft(this.state.selectedCustomer, value)
     console.log(' === submitRefundBox::', 'account:', JSON.stringify(this.state.selectedCustomer));
     console.log(e);
 
     let tx = {
-      from_id:      '',
+      from_id:      this.props.account.account_id,
       to_id:        this.state.selectedCustomer.account_id,
       amount:       e.amount,
       bill_amount:  e.bill_amount,
       bill_id:      e.bill_id
     }
 
+    // console.log(JSON.stringify(tx));
+    // return;
     // this.setState({loading:true})
-    rewardCustomer(tx).then( res => {
+    rewardCustomer(this.props.account.keys.active.wif , tx).then( res => {
         console.log('rewardCustomer', '====OK===>', JSON.stringify(res));
         this.removeRefundBox();
       }, err => {
@@ -155,7 +160,8 @@ class Customers extends Component {
 
 const mapStateToProps = (state) =>  ({
   api: state.Api,
-  customers: state.Api.customers
+  customers: state.Api.customers,
+  account: state.Auth
 })
 
 const mapDispatchToProps = (dispatch) => ({

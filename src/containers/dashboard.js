@@ -43,8 +43,11 @@ export class Dashboard extends Component {
   }
 
   doApplyOverdraft(){
+    // console.log(' --- dashboard', this.props.account);
+    // return;
     this.setState({ confirm_overdraft_visible: false })
-    applyOverdraft(business.account_name, business.wif).then( res => {
+    // applyOverdraft(business.account_name, business.wif).then( res => {
+    applyOverdraft(this.props.account.account, this.props.account.keys.active.wif).then( res => { 
         console.log('====OK===>', JSON.stringify(res));
         alert(JSON.stringify(res));
       }, err => {
@@ -191,7 +194,8 @@ export class Dashboard extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  api: state.Api
+  api:      state.Api,
+  account:  state.Auth
 })
 
 const dispatchToProps = (dispatch) => ({

@@ -76,8 +76,8 @@ export class Register extends Component {
         // this.props.submit(this.state.form);
         console.log(JSON.stringify(this.state.form));
         let data = this.state.form;
-        delete data['privKey'];
-        delete data['seed'];
+        // delete data['privKey'];
+        // delete data['seed'];
 
         register(data).then((responseJson) => {
             console.log(' ---- FROM REGISTER FORM - OK!');
