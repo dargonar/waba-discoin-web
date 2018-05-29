@@ -21,40 +21,43 @@ export function* loginRequest() {
     } = action.payload;
 
     const account = recoverAccountFromSeed(mnemonics, is_brainkey);
-
     const url = getPath('URL/BIZ_LOGIN', { account_name });
     const getSecret = apiCall(url)
 
     const secretRes = yield call(getSecret);
     
-    const secret = secretRes.data.secret;
-    const destintation_key = secretRes.data.destintation_key; 
-
-    let memo_obj = signMemo(destintation_key, secret, account);
-    memo_obj['signed_secret'] = memo_obj.message;
-
-    const pushLogin = apiCall(url, 'POST', memo_obj)
-    let { data, ex } = yield call(pushLogin)
-
-    if (data && data.login === true) {
-      console.log(JSON.stringify(data));
-      yield put({ type: actions.LOGIN_SUCCESS, payload: {
-        keys: account,
-        account: account_name,
-        secret: data.decrypted_secret,
-        account_id: data.account.id,
-        raw: data
-      }})
-
-      if (remember === true) {
-        yield put({ type: actions.LS_WRITE, payload: {
-          password: rememberKey,
-          credentials: action.payload
-        }})
-      }
+    if (typeof secretRes.data.error !== 'undefined') {
+      yield put({type: actions.LOGIN_ERROR, payload: secretRes.data.error })
     }
-    else
-      yield put({ type: actions.LOGIN_ERROR })
+    else {
+      const secret = secretRes.data.secret;
+      const destintation_key = secretRes.data.destintation_key; 
+
+      let memo_obj = signMemo(destintation_key, secret, account);
+      memo_obj['signed_secret'] = memo_obj.message;
+
+      const pushLogin = apiCall(url, 'POST', memo_obj)
+      let { data, ex } = yield call(pushLogin)
+
+      if (data && data.login === true) {
+        yield put({ type: actions.LOGIN_SUCCESS, payload: {
+          keys: account,
+          account: account_name,
+          secret: data.decrypted_secret,
+          account_id: data.account.id,
+          raw: data
+        }})
+
+        if (remember === true) {
+          yield put({ type: actions.LS_WRITE, payload: {
+            password: rememberKey,
+            credentials: action.payload
+          }})
+        }
+      }
+      else
+        yield put({ type: actions.LOGIN_ERROR })
+    }
   });
 }
 
