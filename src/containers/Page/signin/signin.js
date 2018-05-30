@@ -134,7 +134,7 @@ class SignIn extends Component {
                 </Checkbox>
                 <Checkbox 
                   defaultChecked={this.state.is_brainkey}
-                  onChange={()=>this.toggle('id_brainkey')}>
+                  onChange={()=>this.toggle('is_brainkey')}>
                   <IntlMessages id="page.isBrainKey" />
                 </Checkbox>
                 <Button type="primary" onClick={this.handleLogin} loading={this.props.isLoading} disabled={this.props.loading}>
