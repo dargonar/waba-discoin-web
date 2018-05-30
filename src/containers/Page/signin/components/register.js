@@ -11,7 +11,7 @@ import message from '../../../../components/uielements/message';
 import PageLoading from '../../../../components/pageLoading'
 import { ChainValidation } from 'bitsharesjs';
 import { getPath } from '../../../../httpService';
-
+import { recoverAccountFromSeed } from '../../../../utils'
 import { connect } from 'react-redux'
 
 import bip39 from 'bip39';
@@ -121,16 +121,14 @@ export class Register extends Component {
 
     setPrivateKey() {
         const seed      = this.state.form.seed;
-        let privKey     = PrivateKey.fromSeed(key.normalize_brainKey(seed))
-        let wif         = privKey.toWif();
-        let pubKey      = privKey.toPublicKey().toString("BTS");
+        const keys      = recoverAccountFromSeed(seed, true);
         this.setState({
             form: {
                 ...this.state.form,
-                privKey : wif, 
-                owner   : pubKey, 
-                active  : pubKey,
-                memo    : pubKey 
+                privKey : keys.master.wif, 
+                owner   : keys.owner.pubKey, 
+                active  : keys.active.pubKey,
+                memo    : keys.memo.pubKey 
             }
         })
     }
