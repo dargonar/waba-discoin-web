@@ -20,14 +20,21 @@ export function* loginRequest() {
       rememberKey
     } = action.payload;
 
-    const account = recoverAccountFromSeed(mnemonics, is_brainkey);
+    let account;
+    try {
+      account = recoverAccountFromSeed(mnemonics, is_brainkey);
+    } catch (err) {
+      yield put({ type: actions.LOGIN_ERROR, payload: { err: 'key_generation_error' }});
+      return;
+    }
+
     const url = getPath('URL/BIZ_LOGIN', { account_name });
     const getSecret = apiCall(url)
 
     const secretRes = yield call(getSecret);
     
     if (typeof secretRes.data.error !== 'undefined') {
-      yield put({type: actions.LOGIN_ERROR, payload: secretRes.data.error })
+      yield put({type: actions.LOGIN_ERROR, payload: secretRes.data })
     }
     else {
       const secret = secretRes.data.secret;
@@ -37,7 +44,7 @@ export function* loginRequest() {
       memo_obj['signed_secret'] = memo_obj.message;
 
       const pushLogin = apiCall(url, 'POST', memo_obj)
-      let { data, ex } = yield call(pushLogin)
+      let { data, err } = yield call(pushLogin)
 
       if (data && data.login === true) {
         yield put({ type: actions.LOGIN_SUCCESS, payload: {
@@ -56,7 +63,7 @@ export function* loginRequest() {
         }
       }
       else
-        yield put({ type: actions.LOGIN_ERROR })
+        yield put({ type: actions.LOGIN_ERROR, payload: {err, data} })
     }
   });
 }
@@ -92,10 +99,10 @@ export function* register() {
   yield takeEvery(actions.REGISTER, function*(action) {
     console.log(' -- httpService::register::',JSON.stringify(action));
     const register_url  = getPath('URL/REGISTER_BUSINESS');
-    const request  = apiCall(register_url, action.payload)
+    const request  = apiCall(register_url, 'POST', action.payload)
 
     const { data, err } = yield call(request)
-
+    console.log(data, err, register_url)
     if(err && typeof data.err !== 'undefined') {
       console.log(' httpService::register() ===== #1' ,JSON.stringify(err));
       yield put({type: actions.REGISTER_FAILD, payload: { err, data }})
