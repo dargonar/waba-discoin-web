@@ -10,7 +10,9 @@ const initState = new Map({
   height: window.innerHeight,
   openDrawer: true,
   openKeys: preKeys,
-  current: preKeys
+  current: preKeys,
+  loading: false,
+  msg: null
 });
 export default function appReducer(state = initState, action) {
   switch (action.type) {
@@ -31,6 +33,14 @@ export default function appReducer(state = initState, action) {
       return state.set('openKeys', action.openKeys);
     case actions.CHANGE_CURRENT:
       return state.set('current', action.current);
+    case actions.GLOBAL_LOADING_START:
+      return state
+        .set('loading', true)
+        .set('msg', action.payload.msg || '');
+    case actions.GLOBAL_LOADING_END:
+      return state
+        .set('loading', false)
+        .set('msg', null);
     default:
       return state;
   }
