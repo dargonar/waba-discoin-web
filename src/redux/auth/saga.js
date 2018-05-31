@@ -80,9 +80,9 @@ export function* loginRequest() {
       const pushLogin = apiCall(url, 'POST', memo_obj)
       let { data, err } = yield call(pushLogin)
 
-      console.log('[redux/auth/saga]-- auth/saga loginRequest OK#2')
-      console.log(JSON.stringify(data))
-      console.log(JSON.stringify(ex))
+      console.log('[redux/auth/saga]-- auth/saga loginRequest OK#2');
+      console.log('[redux/auth/saga]-- auth/saga loginRequest data:', JSON.stringify(data));
+      console.log('[redux/auth/saga]-- auth/saga loginRequest err:',JSON.stringify(err));
       if (data && data.login === true) {
         yield put({ type: actions.LOGIN_SUCCESS, payload: {
           keys: account,
