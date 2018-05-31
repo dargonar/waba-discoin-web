@@ -10,8 +10,6 @@ import basicStyle from '../config/basicStyle';
 import BalanceSticker from '../components/balance-sticker/balance-sticker'
 import RatingSticker from '../components/rating-sticker/rating-sticker'
 
-import { applyOverdraft, business } from '../httpService';
-
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import actions from '../redux/api/actions';
@@ -47,14 +45,15 @@ export class Dashboard extends Component {
     // return;
     this.setState({ confirm_overdraft_visible: false })
     // applyOverdraft(business.account_name, business.wif).then( res => {
-    applyOverdraft(this.props.account.account, this.props.account.keys.active.wif).then( res => {
-        console.log('====OK===>', JSON.stringify(res));
-        alert(JSON.stringify(res));
-      }, err => {
-        console.log('====ERR===>', JSON.stringify(err));
-        alert(JSON.stringify(err));
-    });
+    // applyOverdraft(this.props.account.account, this.props.account.keys.active.wif).then( res => {
+    //     console.log('====OK===>', JSON.stringify(res));
+    //     alert(JSON.stringify(res));
+    //   }, err => {
+    //     console.log('====ERR===>', JSON.stringify(err));
+    //     alert(JSON.stringify(err));
+    // });
 
+    this.props.applyOverdraft();
   }
 
   doCancelOverdraft(){
@@ -203,6 +202,7 @@ const dispatchToProps = (dispatch) => ({
   cleanMsg: bindActionCreators(actions.cleanMsg, dispatch),
   fetchProfile: bindActionCreators(actions.fetchProfile, dispatch),
   fetchConfiguration: bindActionCreators(actions.fetchConfiguration, dispatch),
+  applyOverdraft: bindActionCreators(actions.applyOverdraft, dispatch)
 })
 
 export default connect(mapStateToProps, dispatchToProps)(Dashboard)

@@ -13,19 +13,13 @@ export const adminPubKey  = 'BTS5NQUTrdEgKH4fz5L5DLJZBSkdLWUY4CfnaNZ77yvZAnUZNC8
 // ToDo: cambiar a recoverKeysFromSeed
 export const recoverAccountFromSeed = (mnemonics, is_brainkey) => {
 
-    // const seed  = bip39.mnemonicToSeedHex(mnemonics, '');
-
-    // ChainConfig.setPrefix("BTS");
-
-    // let myPrivateKey  = PrivateKey.fromSeed(seed);
-
-    // console.log('recoverAccountFromSeed::is_brainkey:', is_brainkey)
-    // if(is_brainkey)
-    // {
-    //   myPrivateKey = PrivateKey.fromSeed( key.normalize_brainKey(seed) );
-    // }
-
-    let myPrivateKey = PrivateKey.fromSeed( key.normalize_brainKey(mnemonics) );
+    // Generate private key
+    let myPrivateKey;
+    console.log('recoverAccountFromSeed::is_brainkey:', is_brainkey)
+    if(is_brainkey)
+       myPrivateKey = PrivateKey.fromSeed( key.normalize_brainKey(mnemonics) );
+    else
+      myPrivateKey = PrivateKey.fromWif(mnemonics);
 
     let myPublicKey   = myPrivateKey.toPublicKey().toString("BTS");
     let wif           = myPrivateKey.toWif();
@@ -35,7 +29,7 @@ export const recoverAccountFromSeed = (mnemonics, is_brainkey) => {
     // myPublicKey = adminPubKey;
 
     const keys = {
-      // master:   { wif:wif, pubKey:myPublicKey},
+      //master:   { wif:wif, pubKey:myPublicKey},
       owner:    { wif:wif, pubKey:myPublicKey},
       active:   { wif:wif, pubKey:myPublicKey},
       memo:     { wif:wif, pubKey:myPublicKey}

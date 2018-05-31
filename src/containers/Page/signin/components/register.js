@@ -11,7 +11,7 @@ import message from '../../../../components/uielements/message';
 import PageLoading from '../../../../components/pageLoading'
 import { ChainValidation } from 'bitsharesjs';
 import { getPath } from '../../../../httpService';
-import { recoverAccountFromSeed } from '../../../../utils/recoverAccountFromSeed'
+import { recoverAccountFromSeed } from '../../../../utils'
 import { connect } from 'react-redux'
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import bip39 from 'bip39';

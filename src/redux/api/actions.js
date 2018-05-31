@@ -28,6 +28,10 @@ const actions = {
     UPDATE_SCHEDULE_SUCCESS: 'UPDATE_SCHEDULE_SUCCESS',
     UPDATE_SCHEDULE_FAILD: 'UPDATE_SCHEDULE_FAILD',
 
+    APPLY_OVERDRAFT: 'APPLY_OVERDRAFT',
+    APPLY_OVERDRAFT_SUCCESS: 'APPLY_OVERDRAFT_SUCCESS',
+    APPLY_OVERDRAFT_FAILD: 'APPLY_OVERDRAFT_FAILD',
+
     CLEAR_MSG: 'CLEAR_MSG',
 
     fetchProfile: (account_id) => (dispatch, getState) => {
@@ -101,6 +105,17 @@ const actions = {
         dispatch({
             type: actions.GET_CATEGORIES
         });
+    },
+
+    applyOverdraft: () => (dispatch, getState) => {
+        dispatch({
+            type: actions.APPLY_OVERDRAFT,
+            payload: {
+                signature: getState().Auth.keys.active.wif,
+                bussines_name: getState().Auth.account,
+                account_id: getState().Auth.account_id
+            }
+        })
     },
 
     cleanMsg: () => (dispatch) => 

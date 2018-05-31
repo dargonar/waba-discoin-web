@@ -78,7 +78,7 @@ export function* loginRequest() {
       memo_obj['signed_secret'] = memo_obj.message;
 
       const pushLogin = apiCall(url, 'POST', memo_obj)
-      let { data, ex } = yield call(pushLogin)
+      let { data, err } = yield call(pushLogin)
 
       console.log('[redux/auth/saga]-- auth/saga loginRequest OK#2')
       console.log(JSON.stringify(data))
@@ -103,7 +103,7 @@ export function* loginRequest() {
         }
       }
       else
-        yield put({ type: actions.LOGIN_ERROR })
+        yield put({ type: actions.LOGIN_ERROR, payload: {err, error: data.error } })
     }
   });
 }
@@ -161,7 +161,7 @@ export function* register() {
 
     console.log(' -- [auth/saga/register]::register:: POSTEANDO!!!');
     const { data, err } = yield call(request)
-
+    console.log(data, err, register_url)
     if(err && typeof data.err !== 'undefined') {
       console.log(' [auth/saga/register]::register() ===== #1' ,JSON.stringify(err));
       yield put({type: actions.REGISTER_FAILD, payload: { err, data }})

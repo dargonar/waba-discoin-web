@@ -9,6 +9,7 @@ import { getSchedule } from './sagas/getSchedule'
 import { updateSchedule } from './sagas/updateSchedule'
 import { searchCustomers, searchAllCustomers } from './sagas/searchCustomers'
 import { searchAllTransactions } from './sagas/searchTransactions'
+import { applyOverdraft } from './sagas/applyOverdraft'
 
 export default function* rootSaga() {
     yield all([
@@ -20,6 +21,7 @@ export default function* rootSaga() {
         fork(searchCustomers),
         fork(searchAllCustomers),
         fork(searchAllTransactions),
+        fork(applyOverdraft)
     ]);
   }
   
