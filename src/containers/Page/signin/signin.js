@@ -23,14 +23,13 @@ class SignIn extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      account             : null,
+      account             : '', //'benoit',
       register            : false,
-      account             : null,
       ignoreLocal         : false,
       is_brainkey         : false,
       remember            : false,
-      rememberKey         : '',
-      words               : ''
+      rememberKey         : '', //'1324',
+      words               : '' //'onza redondo ficha polvo lista útil vivero goteo potro mucho dosis aire'
     }
     // this.registerAccount = this.registerAccount.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
@@ -40,6 +39,7 @@ class SignIn extends Component {
   }
 
   cancelLocal() {
+    console.log('[Page/signin/signin.js] ------- cleanStorage()');
     this.props.cleanStorage()
   }
 
@@ -50,16 +50,18 @@ class SignIn extends Component {
   }
 
    loginLocal(password) {
-    this.props.loginFromLocal(password)
+    this.props.loginFromLocal(password);
   }
-  
+
   componentWillMount() {
     this.props.getCategories();
     console.log(' --- signin::componentWillMount::redirecting to referrer ???? ');
     console.log('SIGNED IN???', this.props.isLoggedIn);
     if (this.props.isLoggedIn) {
-      console.log(' --- signin::componentWillMount::redirecting to referrer');
+      console.log(' --- this.props.isLoggedIn ---> signin::componentWillMount::redirecting to referrer');
     }
+    console.log('-----signin::componentWillMount():', JSON.stringify(this.props.inLocal));
+
   }
 
   componentWillReceiveProps(nextProps) {
@@ -70,15 +72,20 @@ class SignIn extends Component {
   }
 
   handleLogin = () => {
-    
-    // alert(this.state.words);
 
+    // alert(this.state.words);
+    if(this.state.remember && this.state.rememberKey=='')
+    {
+      alert('Debe ingresar una clave!');
+      return;
+    }
     this.props.login({
-      account_name        : this.state.account,
-      is_brainkey         : this.state.is_brainkey,
-      remember            : this.state.remember,
-      rememberKey         : this.state.rememberKey,
-      mnemonics           : this.state.words
+      account_name          : this.state.account,
+      is_brainkey           : this.state.is_brainkey,
+      remember              : this.state.remember,
+      rememberKey           : this.state.rememberKey,
+      mnemonics             : this.state.words,
+      just_registered_data  : null
     });
   };
 
@@ -91,12 +98,12 @@ class SignIn extends Component {
 
     return (
       <SignInStyleWrapper className="isoSignInPage">
-        <LocalLogin 
+        <LocalLogin
           visible={this.props.inLocal && !this.state.ignoreLocal }
           submit={this.loginLocal}
           cancel={this.cancelLocal}
         />
-        <RegisterBox 
+        <RegisterBox
           visible={this.state.register}
           cancel={()=>{this.setState({register: false})}}
           submit={this.props.register}
@@ -113,26 +120,26 @@ class SignIn extends Component {
 
             <div className="isoSignInForm">
               <div className="isoInputWrapper">
-                <Input size="large" placeholder="Username" onChange={(e)=> this.setState({account: e.target.value})}/>
+                <Input size="large" placeholder="Username" value={this.state.account} onChange={(e)=> this.setState({account: e.target.value})}/>
               </div>
 
               <div className="isoInputWrapper">
-                <Input size="large" type="text" placeholder="Password" onChange={(e)=> this.setState({words: e.target.value})} />
+                <Input size="large" type="text" placeholder="Password" value={this.state.words} onChange={(e)=> this.setState({words: e.target.value})} />
               </div>
               {
                 (this.state.remember)? (
                   <div className="isoInputWrapper">
-                    <Input size="large" type="text" placeholder="Session password" onChange={(e)=> this.setState({rememberKey: e.target.value})} />
+                    <Input size="large" type="text" placeholder="Session password" value={this.state.rememberKey} onChange={(e)=> this.setState({rememberKey: e.target.value})} />
                   </div>
                 ): false
               }
-              
+
               <div className="isoInputWrapper isoLeftRightComponent">
                 <Checkbox
                   onChange={()=>this.toggle('remember')}>
                   <IntlMessages id="page.signInRememberMe" />
                 </Checkbox>
-                <Checkbox 
+                <Checkbox
                   defaultChecked={this.state.is_brainkey}
                   onChange={()=>this.toggle('id_brainkey')}>
                   <IntlMessages id="page.isBrainKey" />

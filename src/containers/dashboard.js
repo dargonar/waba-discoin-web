@@ -47,7 +47,7 @@ export class Dashboard extends Component {
     // return;
     this.setState({ confirm_overdraft_visible: false })
     // applyOverdraft(business.account_name, business.wif).then( res => {
-    applyOverdraft(this.props.account.account, this.props.account.keys.active.wif).then( res => { 
+    applyOverdraft(this.props.account.account, this.props.account.keys.active.wif).then( res => {
         console.log('====OK===>', JSON.stringify(res));
         alert(JSON.stringify(res));
       }, err => {
@@ -73,7 +73,7 @@ export class Dashboard extends Component {
     console.log(' RATIO::', this.props.api.business.balances.balance, this.props.api.business.balances.initial_credit)
     return this.props.api.business.balances.balance * 100 / this.props.api.business.balances.initial_credit;
   }
-  
+
   renderContent() {
     const { rowStyle, colStyle } = basicStyle;
     let _ratio = this.calcRatio();
@@ -82,15 +82,15 @@ export class Dashboard extends Component {
         return { value: warnings[key].amount, color: warnings[key].color }
       })
     }
-    
-    const hasOverdraft = (this.props.api.business !== null && this.props.api.business.balances.ready_to_access>0);
-     
+
+    const hasOverdraft = (this.props.api.business !== null && this.props.api.business.balances !== null &&  this.props.api.business.balances.ready_to_access>0);
+
     let button = null;
     if (hasOverdraft)
       button =  (
         <Tooltip title="Aceptar crédito disponible"><Button shape="circle" onClick={() => this.showApplyOverdraft()} icon="check"></Button></Tooltip>
-      ) ;    
-    
+      ) ;
+
     if (this.props.api.business !== null && this.props.api.configuration !== null) {
       return (
         <Row style={rowStyle} gutter={0} justify="start">
@@ -187,7 +187,7 @@ export class Dashboard extends Component {
         { (
             this.props.api.loading !== false &&
             typeof this.props.api.configuration === 'null'
-          )? (<PageLoading/>): this.renderContent() }     
+          )? (<PageLoading/>): this.renderContent() }
       </LayoutContentWrapper>
     );
   }

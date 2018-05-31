@@ -11,9 +11,9 @@ import message from '../../../../components/uielements/message';
 import PageLoading from '../../../../components/pageLoading'
 import { ChainValidation } from 'bitsharesjs';
 import { getPath } from '../../../../httpService';
-
+import { recoverAccountFromSeed } from '../../../../utils/recoverAccountFromSeed'
 import { connect } from 'react-redux'
-
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import bip39 from 'bip39';
 import { PrivateKey, key } from "bitsharesjs"
 
@@ -32,10 +32,11 @@ export class Register extends Component {
         this.newSeed = this.newSeed.bind(this)
         this.state = {
             current: 0,
-            form: {}
+            form: {},
+            copied:false
         };
     }
-    
+
     next() {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
@@ -66,7 +67,7 @@ export class Register extends Component {
             }
         });
     }
-    
+
     submit() {
         if(typeof this.state.form.privKey !== 'undefined') {
             // this.props.submit(this.state.form);
@@ -88,7 +89,7 @@ export class Register extends Component {
             return callback();
 
         // Set state
-        let accountName = { 
+        let accountName = {
             value: value,
             valid: ChainValidation.is_account_name(value)
         };
@@ -111,7 +112,7 @@ export class Register extends Component {
             .then( data => {
                 if (data && data.res === 'account_not_found')
                     callback()
-                else 
+                else
                     callback('account_already_exists')
             })
             .catch(e => {
@@ -120,20 +121,35 @@ export class Register extends Component {
     }
 
     setPrivateKey() {
-        const seed      = this.state.form.seed;
-        let privKey     = PrivateKey.fromSeed(key.normalize_brainKey(seed))
-        let wif         = privKey.toWif();
-        let pubKey      = privKey.toPublicKey().toString("BTS");
+        const seed  = this.state.form.seed;
+        let keys    = recoverAccountFromSeed(seed, true);
+
         this.setState({
+            copied: true,
             form: {
                 ...this.state.form,
-                privKey : wif, 
-                owner   : pubKey, 
-                active  : pubKey,
-                memo    : pubKey 
+                ...keys,
+                privKey : keys.active.wif
             }
         })
     }
+
+    // setPrivateKeyOLD() {
+    //     const seed      = this.state.form.seed;
+    //
+    //     let privKey     = PrivateKey.fromSeed(key.normalize_brainKey(seed))
+    //     let wif         = privKey.toWif();
+    //     let pubKey      = privKey.toPublicKey().toString("BTS");
+    //     this.setState({
+    //         form: {
+    //             ...this.state.form,
+    //             privKey : wif,
+    //             owner   : pubKey,
+    //             active  : pubKey,
+    //             memo    : pubKey
+    //         }
+    //     })
+    // }
 
     newSeed(){
         this.setState({
@@ -165,8 +181,10 @@ export class Register extends Component {
             border: '1px solid #ccc',
             padding: '10px',
             background: '#f5f5f5'
-        };    
-      
+        };
+
+
+        // <Button type='primary' onClick={this.setPrivateKey} disabled={typeof this.state.form.privKey !== 'undefined'}>I have saved this brainkey</Button>
         const steps = [
             {
               title: 'Account',
@@ -180,7 +198,7 @@ export class Register extends Component {
                             }],
                         })(<Input name="name" id="name" />)}
                     </FormItem>
-    
+
                     <FormItem {...formItemLayout} label={(<IntlMessages id='register.account_name' />)} hasFeedback>
                         {getFieldDecorator('account_name', {
                             rules: [{
@@ -195,7 +213,7 @@ export class Register extends Component {
                             }],
                         })(<Input name="account_name" id="account_name" />)}
                     </FormItem>
-    
+
                     <FormItem {...formItemLayout} label={(<IntlMessages id='register.email' />)} hasFeedback>
                         {getFieldDecorator('email', {
                             rules: [{
@@ -208,8 +226,8 @@ export class Register extends Component {
                             }],
                         })(<Input name="email" id="email" />)}
                     </FormItem>
-    
-                    
+
+
                     <FormItem {...formItemLayout} label={(<IntlMessages id='register.telephone' />)} hasFeedback>
                         {getFieldDecorator('telephone', {
                             rules: [{
@@ -239,7 +257,7 @@ export class Register extends Component {
                                 this.props.categories
                                     .filter(category => category.parent === '0')
                                     .map((category, index) => (
-                                        <SelectOption 
+                                        <SelectOption
                                             key={category.id}
                                             value={Number(category.id)}>
                                                 {category.title}
@@ -248,7 +266,7 @@ export class Register extends Component {
                             }
                             </Select>): false}
                         </FormItem>
-        
+
                         <FormItem {...formItemLayout} label={(<IntlMessages id='register.subcategory' />)}>
                             {(this.state.current === 1)? getFieldDecorator('subcategory', {
                                 rules: [{
@@ -276,14 +294,19 @@ export class Register extends Component {
                     <code style={codeStyle}>{ this.state.form.seed }</code>
                     <h3>Private Key (Wip)</h3>
                     <code style={codeStyle}>{ this.state.form.privKey }</code>
-                    <Button type='primary' onClick={this.setPrivateKey} disabled={typeof this.state.form.privKey !== 'undefined'}>I save this brainkey</Button>
+                    <CopyToClipboard text={this.state.form.seed}
+                      disabled={typeof this.state.form.privKey !== 'undefined'}
+                      type='primary'
+                      onCopy={this.setPrivateKey}>
+                      <button>I have saved this brainkey</button>
+                    </CopyToClipboard>
                 </div>
               )
             }
           ];
-          
-        
-        
+
+
+
         return (
             <Modal
                 title={<IntlMessages id='register.bussines'/>}
@@ -313,12 +336,12 @@ export class Register extends Component {
                         )}
                     </div>
                 )}
-            >        
+            >
                 <Steps current={current}>
                     {steps.map(item => <Step key={item.title} title={item.title} />)}
                 </Steps>
-                
-                { (!this.props.loading)? 
+
+                { (!this.props.loading)?
                     (<div s="steps-content" style={{margin: '20px 0'}}>{steps[this.state.current].content}</div>):
                     (<div style={{width: '100%', margin: '40px 0', textAlign:'center'}}><PageLoading  /></div>)
                 }

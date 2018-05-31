@@ -2,22 +2,30 @@ import React, { Component } from 'react';
 import { BalanceStickerWidgetWrapper } from './style';
 
 export default class extends Component {
-  
-  getColorScale(scale,amount) {
-    console.log(scale,amount)
-    const color = scale.reduce((prev,curr)=> {
-      if (amount > curr.value) { 
+
+  getScaleInfo(scale,amount, param) {
+    console.log(JSON.stringify(scale),amount)
+    const obj = scale.reduce((prev,curr)=> {
+      if (amount >= curr.raw.from_amount && amount < curr.raw.to_amount) {
         return curr
       } else {
         return prev
       }
-    },{value:0, color:'gray'}).color;
-    return { backgroundColor: color || 'gray'}
+    });
+    if(param=='color')
+      return { backgroundColor: obj.color || 'gray'}
+    if(param=='exrta_percentage')
+      return obj.extra_percentage;
   }
-  
+
   render() {
     const { fontColor, bgColor, width, coin, scale, amount, text, percentage, subtext } = this.props;
 
+    let subtext2 = '';
+    if (scale)
+    {
+      subtext2 = this.getScaleInfo(scale,amount, 'extra_percentage');
+    }
     const textColor = {
       color: fontColor
     };
@@ -25,7 +33,7 @@ export default class extends Component {
       backgroundColor: bgColor,
       width: width
     };
- 
+
     return (
       <BalanceStickerWidgetWrapper className="isoBalanceStickerWidget" style={widgetStyle}>
 
@@ -34,7 +42,7 @@ export default class extends Component {
           <span className="isoCoinLabel" style={textColor}>
             {coin}
             { scale? (
-              <span className="circle" style={this.getColorScale(scale,amount)}></span>
+              <span className="circle" style={this.getScaleInfo(scale,amount,'color')}></span>
             ): null }
           </span>
         </div>
@@ -46,7 +54,7 @@ export default class extends Component {
           </h3>
           <span className="isoLabel" style={textColor}>
             {text}
-            <small><br/>{subtext}</small>
+            <small><br/>{subtext}<br/>{subtext2}</small>
           </span>
         </div>
       </BalanceStickerWidgetWrapper>

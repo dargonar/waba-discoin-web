@@ -10,16 +10,15 @@ import  bip39 from 'bip39';
 export const adminPrivKey = '5Kjz35R9W3m5ZpznZMSpdySz35tZsXZbzsuSdbtV12YC9Zaxzd9';
 export const adminPubKey  = 'BTS5NQUTrdEgKH4fz5L5DLJZBSkdLWUY4CfnaNZ77yvZAnUZNC89d'
 
-// discoin.biz3
-
+// ToDo: cambiar a recoverKeysFromSeed
 export const recoverAccountFromSeed = (mnemonics, is_brainkey) => {
 
     // const seed  = bip39.mnemonicToSeedHex(mnemonics, '');
-    
+
     // ChainConfig.setPrefix("BTS");
 
     // let myPrivateKey  = PrivateKey.fromSeed(seed);
-    
+
     // console.log('recoverAccountFromSeed::is_brainkey:', is_brainkey)
     // if(is_brainkey)
     // {
@@ -30,18 +29,18 @@ export const recoverAccountFromSeed = (mnemonics, is_brainkey) => {
 
     let myPublicKey   = myPrivateKey.toPublicKey().toString("BTS");
     let wif           = myPrivateKey.toWif();
-  
+
     // HACK - No esta recreando WIF como deberia
     // wif         = adminPrivKey;
     // myPublicKey = adminPubKey;
 
-    const ret = {
+    const keys = {
       // master:   { wif:wif, pubKey:myPublicKey},
       owner:    { wif:wif, pubKey:myPublicKey},
       active:   { wif:wif, pubKey:myPublicKey},
       memo:     { wif:wif, pubKey:myPublicKey}
     }
 
-    return ret;
+    return keys;
 
 }

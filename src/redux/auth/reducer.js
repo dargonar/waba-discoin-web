@@ -1,6 +1,6 @@
 import actions from './actions';
 
-const initState = { 
+const initState = {
   inLocal: null,
   loading: false,
   error: false,
@@ -49,7 +49,7 @@ export default function authReducer(state = initState, action) {
       }
     case actions.LOGOUT:
       return initState;
-    case actions.REGISTER: 
+    case actions.REGISTER:
       return {
         ...state,
         loading: true

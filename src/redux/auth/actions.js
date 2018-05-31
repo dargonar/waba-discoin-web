@@ -29,6 +29,7 @@ const actions = {
     })
   },
   loginFromLocal: (password) => (dispatch) => {
+    console.log(' --- actions:loginFromLocal()', password);
     dispatch({
       type: actions.LS_READ,
       payload: { password }
