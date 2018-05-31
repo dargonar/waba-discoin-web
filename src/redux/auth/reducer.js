@@ -45,7 +45,7 @@ export default function authReducer(state = initState, action) {
         ...state,
         loading: false,
         error: true,
-        msg: action.payload.err || action.payload.data.error
+        msg: action.payload.err || action.payload.error
       }
     case actions.LOGOUT:
       return initState;

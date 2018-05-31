@@ -63,7 +63,7 @@ export function* loginRequest() {
         }
       }
       else
-        yield put({ type: actions.LOGIN_ERROR, payload: {err, data} })
+        yield put({ type: actions.LOGIN_ERROR, payload: {err, error: data.error } })
     }
   });
 }
