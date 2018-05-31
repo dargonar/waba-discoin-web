@@ -79,7 +79,7 @@ export class Dashboard extends Component {
     let _ratio = this.calcRatio();
     const getBalanceWarnings = (warnings) => {
       return Object.keys(warnings).map(key => {
-        return { value: warnings[key].amount, color: warnings[key].color }
+        return { value: warnings[key].amount, color: warnings[key].color , raw:warnings[key]}
       })
     }
 
@@ -154,6 +154,7 @@ export class Dashboard extends Component {
           <Col md={6} sm={12} xs={24} style={colStyle}>
             <IsoWidgetsWrapper>
               <RatingSticker
+                rating={this.props.api.business.rating}
                 full={0}
                 stars={0}
                 text={0}

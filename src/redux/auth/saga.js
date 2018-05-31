@@ -31,29 +31,32 @@ export function* loginRequest() {
     let account = {};
     if (from_storage_data!=null)
     {
-      console.log('[redux/auth/saga]---- just_registered_data :', JSON.stringify(just_registered_data));
+      console.log('[redux/auth/saga]---- from_storage_data :', JSON.stringify(from_storage_data));
       // recien se registro
       account_name  = from_storage_data.account;
       account       = from_storage_data.keys;
 
-      console.log('[redux/auth/saga]---- just_registered_data -- account_name:',account_name, ' -- account:', account);
+      console.log('[redux/auth/saga]---- from_storage_data -- account_name:',account_name, ' -- account:', JSON.stringify(account));
     }
-
-    if (just_registered_data!=null){
-      /*
-        ---- just_registered_data : {"seed":"tiempo rumor querer verano higiene hallar sequía sable lado cumbre riñón linterna","name":"comercio01","account_name":"comercio01","email":"comercio01@gmail.com","telephone":"comercio01tel","category":7,"subcategory":9,"owner":{"wif":"5HyQNb4WCNYNMSFjizHVQ5GWtw7bUyJtCHmSnQ9sBr8pxjf7vyn","pubKey":"BTS7VUsXJiEwUFdp4nDHSeo31YA8HXCQDrgsXbJwBRkpRUWmpGeiG"},"active":{"wif":"5HyQNb4WCNYNMSFjizHVQ5GWtw7bUyJtCHmSnQ9sBr8pxjf7vyn","pubKey":"BTS7VUsXJiEwUFdp4nDHSeo31YA8HXCQDrgsXbJwBRkpRUWmpGeiG"},"memo":{"wif":"5HyQNb4WCNYNMSFjizHVQ5GWtw7bUyJtCHmSnQ9sBr8pxjf7vyn","pubKey":"BTS7VUsXJiEwUFdp4nDHSeo31YA8HXCQDrgsXbJwBRkpRUWmpGeiG"},"privKey":"5HyQNb4WCNYNMSFjizHVQ5GWtw7bUyJtCHmSnQ9sBr8pxjf7vyn"}
-      */
-      account_name  = just_registered_data.account_name;
-      account       = {
-        owner   : just_registered_data.owner,
-        active  : just_registered_data.active,
-        memo  : just_registered_data.memo
-      };
-    }
-    else
-    {
-      console.log('[redux/auth/saga]---- NOT just_registered_data');
-      account = recoverAccountFromSeed(mnemonics, is_brainkey);
+    else {
+      if (just_registered_data!=null){
+        /*
+          ---- just_registered_data : {"seed":"tiempo rumor querer verano higiene hallar sequía sable lado cumbre riñón linterna","name":"comercio01","account_name":"comercio01","email":"comercio01@gmail.com","telephone":"comercio01tel","category":7,"subcategory":9,"owner":{"wif":"5HyQNb4WCNYNMSFjizHVQ5GWtw7bUyJtCHmSnQ9sBr8pxjf7vyn","pubKey":"BTS7VUsXJiEwUFdp4nDHSeo31YA8HXCQDrgsXbJwBRkpRUWmpGeiG"},"active":{"wif":"5HyQNb4WCNYNMSFjizHVQ5GWtw7bUyJtCHmSnQ9sBr8pxjf7vyn","pubKey":"BTS7VUsXJiEwUFdp4nDHSeo31YA8HXCQDrgsXbJwBRkpRUWmpGeiG"},"memo":{"wif":"5HyQNb4WCNYNMSFjizHVQ5GWtw7bUyJtCHmSnQ9sBr8pxjf7vyn","pubKey":"BTS7VUsXJiEwUFdp4nDHSeo31YA8HXCQDrgsXbJwBRkpRUWmpGeiG"},"privKey":"5HyQNb4WCNYNMSFjizHVQ5GWtw7bUyJtCHmSnQ9sBr8pxjf7vyn"}
+        */
+        console.log('[redux/auth/saga]---- just_registered_data :', JSON.stringify(just_registered_data));
+        account_name  = just_registered_data.account_name;
+        account       = {
+          owner   : just_registered_data.owner,
+          active  : just_registered_data.active,
+          memo  : just_registered_data.memo
+        };
+        console.log('[redux/auth/saga]---- just_registered_data -- account_name:',account_name, ' -- account:', JSON.stringify(account));
+      }
+      else
+      {
+        console.log('[redux/auth/saga]---- NOT just_registered_data');
+        account = recoverAccountFromSeed(mnemonics, is_brainkey);
+      }
     }
     console.log('[redux/auth/saga]-- auth/saga loginRequest:account: ', JSON.stringify(account));
     console.log('[redux/auth/saga]-- auth/saga loginRequest:account_name: ', account_name);
