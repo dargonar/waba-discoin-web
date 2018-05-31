@@ -25,7 +25,13 @@ const GlobalMessageWrapper = styled.div`
         text-align: center;
       }
     }
-  }`
+  }
+.globalAlert.error {
+    backgroundColor:  ${palette('error', 0)};
+}
+.globalAlert.success {
+    backgroundColor:  ${palette('success', 0)};
+}`;
 
 export const globalMessage = ({visible, type, msg, actions}) => (
     <GlobalMessageWrapper>
