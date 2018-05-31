@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import App from './containers/App/App';
 import asyncComponent from './helpers/AsyncFunc';
 
+import { GlobalLoading } from './components/uielements/globalLoading';
+
 const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
   <Route
     {...rest}
@@ -19,10 +21,11 @@ const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
         />}
   />
 );
-const PublicRoutes = ({ history, isLoggedIn }) => {
+const PublicRoutes = ({ history, isLoggedIn, loading, msg }) => {
   return (
     <ConnectedRouter history={history}>
       <div>
+        { (loading)? (<GlobalLoading msg={msg}/>): false }
         <Route
           exact
           path={'/'}
@@ -45,4 +48,6 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
 
 export default connect(state => ({
   isLoggedIn: typeof state.Auth.account === 'string',
+  loading: state.App.get('loading'),
+  msg: state.App.get('msg'),
 }))(PublicRoutes);
