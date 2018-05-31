@@ -40,6 +40,7 @@ export const applyOverdraft = function* () {
         /* HANDLE SUCCESS RESOPONSE */
         console.log('===========> pushAndSignTX()::res ==> ', JSON.stringify(pushData));
         yield put({ type: actions.APPLY_OVERDRAFT_SUCCESS, payload: pushData.data })
+        // RELOAD PROFILE DATA
         yield put({ type: actions.GET_PROFILE, payload: { account_id: action.payload.account_id }})
 
     });
