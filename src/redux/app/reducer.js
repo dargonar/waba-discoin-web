@@ -5,10 +5,10 @@ import actions, { getView } from './actions';
 const preKeys = getDefaultPath();
 
 const initState = new Map({
-  collapsed: window.innerWidth > 1220 ? false : true,
+  collapsed: false, //window.innerWidth > 1220 ? false : true,
   view: getView(window.innerWidth),
   height: window.innerHeight,
-  openDrawer: false,
+  openDrawer: true,
   openKeys: preKeys,
   current: preKeys
 });

@@ -36,6 +36,13 @@ class SignIn extends Component {
     this.loginLocal = this.loginLocal.bind(this)
     this.toggle = this.toggle.bind(this)
     this.cancelLocal = this.cancelLocal.bind(this)
+    this._handleKeyPress = this._handleKeyPress.bind(this);
+  }
+
+  _handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.handleLogin();
+    }
   }
 
   cancelLocal() {
@@ -124,12 +131,12 @@ class SignIn extends Component {
               </div>
 
               <div className="isoInputWrapper">
-                <Input size="large" type="text" placeholder="Password" value={this.state.words} onChange={(e)=> this.setState({words: e.target.value})} />
+                <Input size="large" type="text" placeholder="Password" value={this.state.words} onKeyPress={this._handleKeyPress} onChange={(e)=> this.setState({words: e.target.value})} />
               </div>
               {
                 (this.state.remember)? (
                   <div className="isoInputWrapper">
-                    <Input size="large" type="text" placeholder="Session password" value={this.state.rememberKey} onChange={(e)=> this.setState({rememberKey: e.target.value})} />
+                    <Input size="large" type="text" placeholder="Session password" value={this.state.rememberKey} onKeyPress={this._handleKeyPress} onChange={(e)=> this.setState({rememberKey: e.target.value})} />
                   </div>
                 ): false
               }

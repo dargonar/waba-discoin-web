@@ -18,9 +18,8 @@ class LocalLogin extends Component {
     if (e.key === 'Enter') {
       this.submit();
     }
-
-    // onChange={e => this.props.searchCustomer(e.target.value)}
   }
+
   submit() {
     this.props.submit(this.state.value)
     this.setState({ value: null })
