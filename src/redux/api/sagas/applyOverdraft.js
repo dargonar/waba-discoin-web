@@ -6,6 +6,9 @@ export const applyOverdraft = function* () {
     
     yield takeEvery(actions.APPLY_OVERDRAFT, function*(action) {
         
+        /* START LOADING */
+        yield put({ type: 'GLOBAL_LOADING_START', payload: { msg: 'Applying endorse'}})
+
         /* SEND REQUEST TO SERVER */
         console.log(' -- httpService::applyOverdraft::', action.payload.business_name);
         const url  = getPath('URL/APPLY_ENDORSE');
@@ -15,7 +18,14 @@ export const applyOverdraft = function* () {
         /* HANDLE ERROR RESOPONSE */
         if(typeof requestEndorse.err !== 'undefined' || typeof requestEndorse.data.error !== 'undefined') {
             console.log(' httpService::applyOverdraft() ===== #1' ,JSON.stringify(requestEndorse));
+
             yield put({ type: actions.APPLY_OVERDRAFT_FAILD, payload: { err: requestEndorse.err, error: requestEndorse.data.error }})
+            //REMOVE LOADING AND DISPLAY ERROR
+            yield put({ type: 'GLOBAL_LOADING_END'})
+            yield put({ type: 'GLOBAL_MSG', payload: {
+                msgType: 'error',
+                msg: requestEndorse.err || requestEndorse.data.error
+            }})
             return;
         }
 
@@ -34,6 +44,12 @@ export const applyOverdraft = function* () {
         if(typeof pushData.data.error !== 'undefined' || typeof pushData.err !== 'undefined') {
             console.log(' ===== #3' ,JSON.stringify(pushData));
             yield put({ type: actions.APPLY_OVERDRAFT_FAILD, payload: { err: pushData.err, error: pushData.data.error }})
+            //REMOVE LOADING AND DISPLAY ERROR
+            yield put({ type: 'GLOBAL_LOADING_END'})
+            yield put({ type: 'GLOBAL_MSG', payload: {
+                msgType: 'error',
+                msg: requestEndorse.err || requestEndorse.data.error
+            }})
             return;
         }
 
@@ -42,6 +58,12 @@ export const applyOverdraft = function* () {
         yield put({ type: actions.APPLY_OVERDRAFT_SUCCESS, payload: pushData.data })
         // RELOAD PROFILE DATA
         yield put({ type: actions.GET_PROFILE, payload: { account_id: action.payload.account_id }})
+        //REMOVE LOADING AND DISPLAY SUCCESS MESSAGE
+        yield put({ type: 'GLOBAL_LOADING_END'})
+        yield put({ type: 'GLOBAL_MSG', payload: {
+            msgType: 'success',
+            msg: 'Overdraft correctly applied.'
+        }})
 
     });
 
