@@ -112,7 +112,7 @@ const actions = {
             type: actions.APPLY_OVERDRAFT,
             payload: {
                 signature: getState().Auth.keys.active.wif,
-                bussines_name: getState().Auth.account,
+                business_name: getState().Auth.account,
                 account_id: getState().Auth.account_id
             }
         })
