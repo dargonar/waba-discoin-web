@@ -15,8 +15,32 @@ function* getBusinesses(action) {
     })
 }
 
+export function* setOverdraftSuccess() {
+  yield takeEvery(actions.BUSINESS_SET_OVERDRAFT_SUCCESS, function*(payload) {
+    yield put({ type: 'GLOBAL_LOADING_END'})
+    yield put({ type: 'GLOBAL_MSG', payload: {
+        msgType: 'success',
+        msg: 'Descubierto asignado satisfactoriamente'
+    }})
+
+  });
+}
+
+export function* setOverdraftError() {
+  yield takeEvery(actions.BUSINESS_SET_OVERDRAFT_FAILD, function*(payload) {
+      yield put({ type: 'GLOBAL_LOADING_END'})
+      yield put({ type: 'GLOBAL_MSG', payload: {
+          msgType: 'error',
+          msg: payload
+      }})
+  });
+}
+
 function* setOverdraft(action) {
     yield takeLatest(actions.BUSINESS_SET_OVERDRAFT, function*(action) {
+        
+        yield put({ type: 'GLOBAL_LOADING_START', payload: { msg: 'Asignando descubierto'}})
+
         const url = getPath('URL/SET_OVERDRAFT');
         const body = {
             business_name: action.payload.business_name,
@@ -37,7 +61,11 @@ function* setOverdraft(action) {
                 }
             });
         else
-            yield put({ type: actions.BUSINESS_SET_OVERDRAFT_FAILD, payload: ex });
+        { 
+          yield put({ type: actions.BUSINESS_SET_OVERDRAFT_FAILD, payload: ex || data.error });
+          
+
+        }
     })
 }
 

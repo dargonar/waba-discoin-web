@@ -63,12 +63,12 @@ class ListStores extends Component {
   submitOverdraftBox(value) {
 
     this.props.setOverdraft(this.state.businessSelected, value)
-    const action = 'URL/SET_OVERDRAFT' ; //getPath();
-    const parameters = {
-        business_name: this.state.businessSelected.account,
-        initial_credit: value
-    };
-    const privKey = this.props.keys.privKey;
+    // const action = 'URL/SET_OVERDRAFT' ; //getPath();
+    // const parameters = {
+    //     business_name: this.state.businessSelected.account,
+    //     initial_credit: value
+    // };
+    // const privKey = this.props.keys.privKey;
 
     // getAndSignTx(action, parameters, privKey).then( res => {
     //     console.log(action, '====OK===>', JSON.stringify(res));
@@ -133,6 +133,7 @@ const mapStateToProps = (state) => ({
   business : state.Business.stores,
   loading : state.Business.loading,
   actionLoading : state.Business.actionLoading,
+  setting_overdraft: state.Business.setting_overdraft,
   error: state.Business.error,
   msg: state.Business.msg,
   keys: state.Auth.keys

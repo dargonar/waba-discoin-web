@@ -26,21 +26,24 @@ export default function authReducer(state = initState, action) {
     case actions.BUSINESS_SET_OVERDRAFT:
       return {
         ...state,
-        actionLoading: true
+        actionLoading: true,
+        setting_overdraft: true
       }
     case actions.BUSINESS_SET_OVERDRAFT_SUCCESS:
       return {
         ...state,
         actionLoading: false,
         error: false,
-        msg: 'Overdraft change successfully applied'
+        msg: 'Overdraft change successfully applied',
+        setting_overdraft: false
       }
     case actions.BUSINESS_SET_OVERDRAFT_FAILD:
       return {
         ...state,
         actionLoading: false,
         error: true,
-        msg: 'Something didn\'t go right.'
+        msg: 'Something didn\'t go right.',
+        setting_overdraft: false
       }
     case actions.BUSINESS_UPDATE_PROFILE:
       return {
