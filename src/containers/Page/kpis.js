@@ -101,6 +101,16 @@ class DiscountsAndRewards extends Component {
       amount: data.quantity
     }));
 
+    // amount={json.main_asset[0].options.max_supply}
+    /*
+      <SingleProgressWidget
+                    label={"Goal " + Number(json.airdrop.max_tx_quantity).toLocaleString() + " TX"}
+                    percent={(json.airdrop.tx_quantity * 100 / json.airdrop.max_tx_quantity)}
+                    barHeight={7}
+                    status="active"
+                    info={false} // Boolean: true, false
+                  />
+    */
     const renderKpis = () => {
       return (
         <div style={{width: '100%'}}>
@@ -110,7 +120,8 @@ class DiscountsAndRewards extends Component {
                   text="Quantity of Dicoins in circulation"
                   coin="DSC"
                   bgColor="#fff"
-                  amount={json.main_asset[0].options.max_supply} />
+                  amount={json.main_asset.supply}
+                  subtext={'Max suppply: DSC ' + json.main_asset.max_supply} />
               </Col>
               <Col md={10} sm={24} xs={24} style={colStyle}>
                 <ReportsWidget label={"Daily Issuing"}>
@@ -120,17 +131,13 @@ class DiscountsAndRewards extends Component {
               <Col md={7} sm={24} xs={24} style={colStyle}>
                 <ReportsWidget label="Airdrop Issuing">
                   <p>
-                    <span style={aidropIssuing}><span style={{color: "#999"}}>DSC</span> {Number(json.airdrop.issued).toLocaleString()} <br/></span>
-                    <span style={{color: "#999"}}> Quantity of Dicoins in airdropped</span>
+                    <span style={aidropIssuing}><span style={{color: "#999"}}>DSC</span> {Number(json.airdrop.total_issued).toLocaleString()} <br/></span>
+                    <span style={{color: "#999"}}> Dicoins airdroped</span>
                   </p>
-                  <span style={aidropIssuing}>{Number(json.airdrop.tx_quantity).toLocaleString()} TXs</span>
-                  <SingleProgressWidget
-                    label={"Goal " + Number(json.airdrop.max_tx_quantity).toLocaleString() + " TX"}
-                    percent={(json.airdrop.tx_quantity * 100 / json.airdrop.max_tx_quantity)}
-                    barHeight={7}
-                    status="active"
-                    info={false} // Boolean: true, false
-                  />
+                  <span style={aidropIssuing}>{Number(json.airdrop.by_referrals).toLocaleString()} por Referidos</span>
+                  <span style={aidropIssuing}>{Number(json.airdrop.by_reimbursment).toLocaleString()} por Reembolso</span>
+                  <span style={aidropIssuing}>{Number(json.airdrop.by_transactions).toLocaleString()} por Billeteras con TX</span>
+                
               </ReportsWidget>
               </Col>
           </Row>

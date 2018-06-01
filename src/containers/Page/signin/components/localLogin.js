@@ -10,7 +10,16 @@ class LocalLogin extends Component {
     }
     this.submit = this.submit.bind(this)
     this.cancel = this.cancel.bind(this)
+    this._handleKeyPress = this._handleKeyPress.bind(this);
   }
+
+  _handleKeyPress(e) {
+
+    if (e.key === 'Enter') {
+      this.submit();
+    }
+  }
+
   submit() {
     this.props.submit(this.state.value)
     this.setState({ value: null })
@@ -29,6 +38,7 @@ class LocalLogin extends Component {
             <Input
                 type="password"
                 placeholder="Local storage password"
+                onKeyPress={this._handleKeyPress}
                 onChange={(e)=> this.setState({value: e.target.value})} /><br/>
         </Modal>
       )

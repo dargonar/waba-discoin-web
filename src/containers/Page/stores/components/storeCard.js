@@ -83,15 +83,17 @@ class StoreCard extends Component {
             <Button shape="circle" icon="delete" onClick={this.props.delete} />
           </Col>
           <Col xs={12} style={{textAlign:'right'}} className={'rightButtons'}>
-            <Tooltip title="Edit account profile">
-              <Button shape="circle" onClick={()=>this.props.edit(this.props.account_id)} icon="info" />
-            </Tooltip>
+            { false ? 
+            <Tooltip title="Edit account profile" >
+              <Button shape="circle" onClick={()=>this.props.edit(this.props.account_id)} icon="info"/>
+            </Tooltip> : null }
             <Tooltip title="Change initial credit">
               <Button shape="circle" onClick={() => this.props.overdraft(this.props)}>$</Button>
             </Tooltip>
-            <Tooltip title="Manage subaccounts">
+            { false ? 
+              <Tooltip title="Manage subaccounts">
               <Button shape="circle" onClick={()=> this.props.accounts(this.props.account_id)} icon="key" />
-            </Tooltip>
+            </Tooltip> : null }
           </Col>
         </Row>
       </StoreCardWrapper>

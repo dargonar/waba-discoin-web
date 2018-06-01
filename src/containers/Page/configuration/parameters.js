@@ -64,6 +64,8 @@ class Parameters extends Component {
         width:'100%'
     };
 
+    console.log(' ---- render kpis', JSON.stringify(data));
+    
     const renderForm = () => {
        return (this.props.configuration.parameters !== null)? (
         <form ref="form">
@@ -73,19 +75,28 @@ class Parameters extends Component {
                         <ContentHolder>
                             <Row gutter={gutter}>
                                 <Col md={24} sm={24} xs={24} style={colStyle}>
-                                <h4>Yellow Light</h4>
+                                <h4>Luz verde</h4>
                                 </Col>
                                 <Col md={12} sm={24} xs={24} style={colStyle}>
-                                    <span style={label}>IC limit </span>
+                                    <span style={label}>Desde </span>
                                     <Input 
                                         onChange={this.onFormChange}
                                         type="number"
                                         addonAfter={'%'} 
-                                        id="data.warnings.first.amount"
-                                        defaultValue={data.warnings.first.amount} />
+                                        id="data.warnings.first.from_amount"
+                                        defaultValue={data.warnings.first.from_amount} />
                                 </Col>
                                 <Col md={12} sm={24} xs={24} style={colStyle}>
-                                    <span style={label}>Extra discount </span>
+                                    <span style={label}>Hasta </span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        addonAfter={'%'} 
+                                        id="data.warnings.first.to_amount"
+                                        defaultValue={data.warnings.first.to_amount} />
+                                </Col>
+                                <Col md={12} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>% extra </span>
                                     <Input 
                                         onChange={this.onFormChange}
                                         type="number"
@@ -94,93 +105,255 @@ class Parameters extends Component {
                                         defaultValue={data.warnings.first.extra_percentage} />
                                 </Col>
                             </Row>
+                            
                             <Row gutter={gutter}>
                                 <Col md={24} sm={24} xs={24} style={colStyle}>
-                                    <h4>Red Light</h4>
+                                <h4>Luz amarilla</h4>
                                 </Col>
                                 <Col md={12} sm={24} xs={24} style={colStyle}>
-                                    <span style={label}>IC limit </span>
+                                    <span style={label}>Desde </span>
                                     <Input 
                                         onChange={this.onFormChange}
                                         type="number"
                                         addonAfter={'%'} 
-                                        id="data.warnings.second.amount"
-                                        defaultValue={data.warnings.second.amount} />
+                                        id="data.warnings.second.from_amount"
+                                        defaultValue={data.warnings.second.from_amount} />
                                 </Col>
                                 <Col md={12} sm={24} xs={24} style={colStyle}>
-                                    <span style={label}>Extra discount </span>
+                                    <span style={label}>Hasta </span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        addonAfter={'%'} 
+                                        id="data.warnings.second.to_amount"
+                                        defaultValue={data.warnings.second.to_amount} />
+                                </Col>
+                                <Col md={12} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>% extra </span>
                                     <Input 
                                         onChange={this.onFormChange}
                                         type="number"
                                         addonAfter={'%'} 
                                         id="data.warnings.second.extra_percentage"
                                         defaultValue={data.warnings.second.extra_percentage} />
-                                    </Col>
+                                </Col>
                             </Row>
+
+                            <Row gutter={gutter}>
+                                <Col md={24} sm={24} xs={24} style={colStyle}>
+                                <h4>Luz roja</h4>
+                                </Col>
+                                <Col md={12} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>Desde </span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        addonAfter={'%'} 
+                                        id="data.warnings.third.from_amount"
+                                        defaultValue={data.warnings.third.from_amount} />
+                                </Col>
+                                <Col md={12} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>Hasta </span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        addonAfter={'%'} 
+                                        id="data.warnings.third.to_amount"
+                                        defaultValue={data.warnings.third.to_amount} />
+                                </Col>
+                                <Col md={12} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>% extra </span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        addonAfter={'%'} 
+                                        id="data.warnings.third.extra_percentage"
+                                        defaultValue={data.warnings.third.extra_percentage} />
+                                </Col>
+                            </Row>
+
                         </ContentHolder>
                     </Box>
                 </Col>
                 <Col md={12} sm={24} xs={24} style={colStyle}>
-                    <Box title="SingUp">
+                    <Box title="Airdrop">
                         <ContentHolder>
                             <Row gutter={gutter}>
                                 <Col md={24} sm={24} xs={24} style={colStyle}>
-                                    <h4>Referral</h4>
+                                    <h4>Sistema de referidos</h4>
                                 </Col>
                                 <Col md={12} sm={24} xs={24} style={colStyle}>
-                                    <span style={label}>Initical Credit</span>
-                                    <Input 
-                                        onChange={this.onFormChange}
-                                        type="number"
-                                        id="data.bootstrap.referral.reward"
-                                        defaultValue={data.bootstrap.referral.reward} />
-                                </Col>
-                                <Col md={12} sm={24} xs={24} style={colStyle}>
-                                    <span style={label}>Max times referred</span>
+                                    <span style={label}>Cuantas veces puede referir un usuario?</span>
                                     <Input 
                                         onChange={this.onFormChange}
                                         type="number"
                                         style={{width:'50%'}}
-                                        id="data.bootstrap.referral.max_referrals"
-                                        defaultValue={data.bootstrap.referral.max_referrals} />
+                                        id="data.airdrop.by_referral.referred_max_quantity"
+                                        defaultValue={data.airdrop.by_referral.referred_max_quantity} />
+                                </Col>
+                                <Col md={12} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>Recompensa al que refiere</span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        id="data.airdrop.by_referral.referrer_amount"
+                                        defaultValue={data.airdrop.by_referral.referrer_amount} />
+                                </Col>
+                                <Col md={12} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>Recompensa al referido</span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        id="data.airdrop.by_referral.referred_amount"
+                                        defaultValue={data.airdrop.by_referral.referred_amount} />
                                 </Col>
                             </Row>
                             <Row gutter={gutter}>
                                 <Col md={24} sm={24} xs={24} style={colStyle}>
-                                    <h4>Rewards</h4>
+                                    <h4>Primeras wallets</h4>
+                                </Col>
+                                <Col md={12} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>Cantidad de descargas con premio</span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        style={{width:'50%'}}
+                                        id="data.airdrop.by_wallet.first_wallet_download"
+                                        defaultValue={data.airdrop.by_wallet.first_wallet_download} />
+                                </Col>
+                                <Col md={12} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>Recompensa por descarga</span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        id="data.airdrop.by_wallet.reward_amount"
+                                        defaultValue={data.airdrop.by_wallet.reward_amount} />
+                                </Col>
+                                <Col md={12} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>Recompensa en primer Tx</span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        id="data.airdrop.by_wallet.first_tx_reward_amount"
+                                        defaultValue={data.airdrop.by_wallet.first_tx_reward_amount} />
+                                </Col>
+                            </Row>
+
+                            <Row gutter={gutter}>
+                                <Col md={24} sm={24} xs={24} style={colStyle}>
+                                    <h4>Reembloso escalonado por transacción</h4>
+                                </Col>
+                                
+                                <Col md={24} sm={24} xs={24} style={colStyle}>
+                                    <h5>Primer escalón</h5>
                                 </Col>
                                 <Col md={9} sm={24} xs={24} style={colStyle}>
-                                    <span style={label}>First</span>
+                                    <span style={label}>Desde transaccion:</span>
                                     <Input 
                                         onChange={this.onFormChange}
                                         type="number"
-                                        id="data.bootstrap.airdrop.max_registered_users"
-                                        defaultValue={data.bootstrap.airdrop.max_registered_users} />
+                                        addonAfter={'TX'} 
+                                        id="data.airdrop.by_reimbursement.first.from_tx"
+                                        defaultValue={data.airdrop.by_reimbursement.first.from_tx} />
                                 </Col>
                                 <Col md={15} sm={24} xs={24} style={colStyle}>
-                                    <span style={label}>wallets will receive </span>
+                                    <span style={label}>Hasta transaccion:</span>
                                     <Input 
                                         onChange={this.onFormChange}
                                         type="number"
-                                        addonAfter={'D'} 
-                                        id="data.bootstrap.airdrop.amount"
-                                        defaultValue={data.bootstrap.airdrop.amount} />
+                                        addonAfter={'TX'} 
+                                        id="data.airdrop.by_reimbursement.first.to_tx"
+                                        defaultValue={data.airdrop.by_reimbursement.first.to_tx} />
+                                </Col>
+                                <Col md={15} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>Reintegro porcentual a comercio y usuario </span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        addonAfter={'%'} 
+                                        id="data.airdrop.by_reimbursement.first.tx_amount_percent_refunded"
+                                        defaultValue={data.airdrop.by_reimbursement.first.tx_amount_percent_refunded} />
+                                </Col>
+
+
+
+                                <Col md={24} sm={24} xs={24} style={colStyle}>
+                                    <h5>Segundo escalón</h5>
+                                </Col>
+                                <Col md={9} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>Desde transaccion:</span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        addonAfter={'TX'} 
+                                        id="data.airdrop.by_reimbursement.second.from_tx"
+                                        defaultValue={data.airdrop.by_reimbursement.second.from_tx} />
+                                </Col>
+                                <Col md={15} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>Hasta transaccion:</span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        addonAfter={'TX'} 
+                                        id="data.airdrop.by_reimbursement.second.to_tx"
+                                        defaultValue={data.airdrop.by_reimbursement.second.to_tx} />
+                                </Col>
+                                <Col md={15} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>Reintegro porcentual a comercio y usuario </span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        addonAfter={'%'} 
+                                        id="data.airdrop.by_reimbursement.second.tx_amount_percent_refunded"
+                                        defaultValue={data.airdrop.by_reimbursement.second.tx_amount_percent_refunded} />
+                                </Col>
+
+
+                                <Col md={24} sm={24} xs={24} style={colStyle}>
+                                    <h5>Tercer escalón</h5>
+                                </Col>
+                                <Col md={9} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>Desde transaccion:</span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        addonAfter={'TX'} 
+                                        id="data.airdrop.by_reimbursement.third.from_tx"
+                                        defaultValue={data.airdrop.by_reimbursement.third.from_tx} />
+                                </Col>
+                                <Col md={15} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>Hasta transaccion:</span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        addonAfter={'TX'} 
+                                        id="data.airdrop.by_reimbursement.third.to_tx"
+                                        defaultValue={data.airdrop.by_reimbursement.third.to_tx} />
+                                </Col>
+                                <Col md={15} sm={24} xs={24} style={colStyle}>
+                                    <span style={label}>Reintegro porcentual a comercio y usuario </span>
+                                    <Input 
+                                        onChange={this.onFormChange}
+                                        type="number"
+                                        addonAfter={'%'} 
+                                        id="data.airdrop.by_reimbursement.third.tx_amount_percent_refunded"
+                                        defaultValue={data.airdrop.by_reimbursement.third.tx_amount_percent_refunded} />
                                 </Col>
                             </Row>
                         </ContentHolder>        
                     </Box>
                 </Col>
                 <Col md={24} sm={24} xs={24} style={colStyle}>
-                        <Box title="Transactions">
+                        <Box title="Fondo de reserva">
                             <ContentHolder style={{width:'100%'}}>
                             <Row gutter={gutter}>
                                 <Col md={12} sm={24} xs={24} style={colStyle}>
-                                <span style={label}>Max refund by transaction</span>
+                                <span style={label}>Porcentaje de cada CI a nuevo negocio</span>
                                 <Input 
                                     onChange={this.onFormChange}
                                     type="number"
-                                    id="data.bootstrap.transactions.max_refund_by_tx"
-                                    defaultValue={data.bootstrap.transactions.max_refund_by_tx} />
+                                    id="data.reserve_fund.new_business_percent"
+                                    defaultValue={data.reserve_fund.new_business_percent} />
                                 </Col>
                             </Row>    
                         </ContentHolder>

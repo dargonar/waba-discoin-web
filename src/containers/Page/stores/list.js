@@ -46,6 +46,14 @@ class ListStores extends Component {
   }
 
   showOverdraft(bussines) {
+    // console.log(JSON.stringify(bussines.balances), ((isNaN(bussines.balances.balance) && parseInt(bussines.balances.balance)>0)||(isNaN(bussines.balances.initial_credit) && parseInt(bussines.balances.initial_credit)>0)));
+    if((!isNaN(bussines.balances.balance) && parseInt(bussines.balances.balance)>0)||(!isNaN(bussines.balances.initial_credit) && parseInt(bussines.balances.initial_credit)>0))
+    {
+
+      alert('Funcion no disponible aun para comercios con credito.')
+      return;
+    }
+    
     this.setState({
       businessSelected: bussines,
       overdraftBox: true
@@ -54,7 +62,6 @@ class ListStores extends Component {
 
   submitOverdraftBox(value) {
 
-    
     this.props.setOverdraft(this.state.businessSelected, value)
     const action = 'URL/SET_OVERDRAFT' ; //getPath();
     const parameters = {

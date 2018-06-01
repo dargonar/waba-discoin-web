@@ -40,6 +40,7 @@ class Topbar extends Component {
           </div>
 
           <ul className="isoRight">
+            <li>{this.props.Auth.account} - {this.props.Auth.account_id}</li>
             <li
               onClick={() => this.setState({ selectedItem: 'user' })}
               className="isoUser"

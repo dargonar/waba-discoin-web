@@ -1,5 +1,5 @@
 const siteConfig = {
-  siteName: 'DISCOIN',
+  siteName: 'DSC.ADMIN',
   siteIcon: 'ion-flash',
   footerText: 'WABA.network ©2018',
   apiUrl: 'https://w5xlvm3vzz.lp.gql.zone/graphql',
