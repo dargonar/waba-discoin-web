@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { palette } from 'styled-theme';
 
-const GlobalMessageWrapper = styled.div`
-.globalAlert {
+const StripMessageWrapper = styled.div`
+.stripMessage {
     position: fixed;
     background: #1890ff;
     bottom: 0px;
@@ -26,16 +26,16 @@ const GlobalMessageWrapper = styled.div`
       }
     }
   }
-.globalAlert.error {
+.stripMessage.error {
     backgroundColor:  ${palette('error', 0)};
 }
-.globalAlert.success {
+.stripMessage.success {
     backgroundColor:  ${palette('success', 0)};
 }`;
 
-export const globalMessage = ({visible, type, msg, actions}) => (
-    <GlobalMessageWrapper>
-        <div className={"globalAlert " + type }>
+export const StripMessage = ({visible, type, msg, actions}) => (
+    <StripMessageWrapper>
+        <div className={"stripMessage " + type }>
             <span>{msg}</span>
             <div class="actions">
                 {
@@ -43,5 +43,5 @@ export const globalMessage = ({visible, type, msg, actions}) => (
                 }
             </div>
         </div>
-    </GlobalMessageWrapper>
+    </StripMessageWrapper>
 );
