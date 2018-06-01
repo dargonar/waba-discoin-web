@@ -53,7 +53,10 @@ export class Dashboard extends Component {
     //     console.log('====ERR===>', JSON.stringify(err));
     //     alert(JSON.stringify(err));
     // });
-
+    // console.log('-- doApplyoverdraft() account:', JSON.stringify(this.props.account));
+    // console.log('-- doApplyoverdraft() account_name:', this.props.account.account);
+    // return;
+    //{business_name: this.props.account.account}
     this.props.applyOverdraft();
   }
 
@@ -91,7 +94,7 @@ export class Dashboard extends Component {
         <StripMessage
           visible={true}
           type={'info'}
-          msg={'Tiene un crédito de DSC '+ Number(this.props.api.business.balances.ready_to_access).toLocaleString() +'. ¿Quiere aceptarlo?'} 
+          msg={'Tiene un crédito de DSC '+ Number(this.props.api.business.balances.ready_to_access).toLocaleString() +'. ¿Quiere aceptarlo?'}
           actions={[
             { msg: 'Aplicar', onClick:()=>this.showApplyOverdraft() },
             { msg: 'Ignorar', onClick:()=>this.setState({ignoreOverdraft: true}) }

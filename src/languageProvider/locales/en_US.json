@@ -533,7 +533,7 @@
   "page.resetPassSave": "Save",
   "page.signInTitle": "DISCOIN Business",
   "page.signInRememberMe": "Remember me",
-  "page.isBrainKey": "Is Brain Key",
+  "page.isBrainKey": "Mnemonics?",
   "page.signInButton": "Sign in",
   "page.signInPreview":
     "username: demo   password: demodemo   or just click on any button.",

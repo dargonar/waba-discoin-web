@@ -3,15 +3,15 @@ import { apiConfig } from './config';
 
 // import { recoverAccountFromSeed } from './utils';
 
-const businessX = {  
-                    account_name:   'discoin.biz3', 
+const businessX = {
+                    account_name:   'discoin.biz3',
                     account_id:     '1.2.25',
                     wif:            '5Kjz35R9W3m5ZpznZMSpdySz35tZsXZbzsuSdbtV12YC9Zaxzd9'
                 }
 
 
-export const business = {  
-                    account_name:   'discoin.tuti', 
+export const business = {
+                    account_name:   'discoin.tuti',
                     account_id:     '1.2.38',
                     wif:            '5KRV1uP8YEFc5S1UwJiC3fQPLrs7ArqWabii5FpYQf19xX3YvKh'
                 }
@@ -60,7 +60,7 @@ export const getPath = (action, parameters) => {
 export const register = (json_data) => {
 
   const register_url  = getPath('URL/REGISTER_BUSINESS');
-  
+
   console.log(' -- httpService::register::',JSON.stringify(json_data));
 
   // let recover = recoverAccountFromSeed(json_data.seed);
@@ -86,7 +86,7 @@ export const register = (json_data) => {
           return;
     })
     .then((responseJson) => {
-      
+
         // QUE HAGO?
         console.log(' httpService::register() #2 ---- OK!');
         console.log(JSON.stringify(responseJson));
@@ -102,7 +102,7 @@ export const register = (json_data) => {
 export const applyOverdraft = (business_name, signature) => {
 
   const url  = getPath('URL/APPLY_ENDORSE');
-  
+
   console.log(' -- httpService::applyOverdraft::', business_name);
 
   return new Promise( (resolve, reject) => {
@@ -118,7 +118,7 @@ export const applyOverdraft = (business_name, signature) => {
           return;
     })
     .then((responseJson) => {
-      
+
         console.log(' httpService::applyOverdraft() #2 ---- responseJson:');
         console.log(JSON.stringify(responseJson));
         console.log(' --------- !');
@@ -128,7 +128,7 @@ export const applyOverdraft = (business_name, signature) => {
 
         console.log(' applyOverdraft::tx::' , JSON.stringify(tx));
 
-        
+
         fetch(push_url, {
             method: 'POST',
             headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
@@ -157,7 +157,7 @@ export const applyOverdraft = (business_name, signature) => {
   });
 }
 export const rewardCustomer = (signature, tx) => {
-  
+
   const get_tx_url  = getPath('URL/REFUND_CREATE');
   // tx.from_id = business.account_id;
   // let signature = business.wif;
@@ -178,14 +178,14 @@ export const rewardCustomer = (signature, tx) => {
     })
     .then((responseJson) => {
       console.log('===========> rewardCustomer()::res #2 ==> ', JSON.stringify(responseJson));
-      
+
       const push_url    = getPath('URL/PUSH_SIGN_TX');
       let tx2           = responseJson.tx;
       let packet        = {tx:tx2, pk:signature}
 
       console.log(' ---- A PUNTO DE RECOMPENSAR!!! -> tx2')
       console.log(JSON.stringify(packet))
-      
+
       fetch(push_url, {
         method:   'POST',
         headers:  {'Accept': 'application/json', 'Content-Type': 'application/json'},
@@ -236,7 +236,7 @@ const callTestAPI = apiCall(testPath)
 //4. Execute!
 callTestAPI() //-> return Promise
 
-// Anothers examples: 
+// Anothers examples:
 
 // POST
 apiCall(testPath, 'POST', {name: 'marcos'})()

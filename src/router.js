@@ -84,9 +84,6 @@ class PublicRoutes extends Component {
   }
 };
 
-
-
-
 export default connect(state => ({
   isLoggedIn: typeof state.Auth.account === 'string',
 }), dispatch => ({

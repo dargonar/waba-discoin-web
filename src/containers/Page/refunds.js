@@ -12,14 +12,15 @@ import actions from '../../redux/api/actions';
 import MessageBox from '../../components/MessageBox';
 
 import CustomersBox from './components/customerBox';
-import RefundBox from './components/refundBox'
+import RefundBox from './components/refundBox';
 
 import { rewardCustomer } from '../../httpService';
+import {  notification } from 'antd';
 
 const InputSearch = Input.Search;
 
 const { rowStyle, colStyle } = basicStyle;
-    
+
 const inputStyle = {
   fontSize:'24px'
 }
@@ -34,7 +35,10 @@ class Customers extends Component {
     this.state = {
       searchValue:      null,
       refundBox:        false,
-      selectedCustomer: null
+      selectedCustomer: null,
+      msg:              '',
+      error:            '',
+      removeMsg:        false
     };
     this.renderContent = this.renderContent.bind(this);
 
@@ -43,6 +47,13 @@ class Customers extends Component {
     this.showRefundBox = this.showRefundBox.bind(this);
     this._handleChange = this._handleChange.bind(this);
     this._handleKeyPress = this._handleKeyPress.bind(this);
+  }
+
+  openNotificationWithIcon(type, title, msg){
+    notification[type]({
+      message: title,
+      description: msg,
+    });
   }
 
   handleOnProfile(){}
@@ -71,12 +82,12 @@ class Customers extends Component {
    }
 
   _handleKeyPress(e) {
-    
+
     if (e.key === 'Enter') {
-      this.props.searchCustomer(this.state.searchValue);  
+      this.props.searchCustomer(this.state.searchValue);
     }
 
-    // onChange={e => this.props.searchCustomer(e.target.value)} 
+    // onChange={e => this.props.searchCustomer(e.target.value)}
   }
 
   submitRefundBox(e) {
@@ -98,15 +109,17 @@ class Customers extends Component {
     // console.log(JSON.stringify(tx));
     // return;
     // this.setState({loading:true})
+
+    this.removeRefundBox();
     rewardCustomer(this.props.account.keys.active.wif , tx).then( res => {
         console.log('rewardCustomer', '====OK===>', JSON.stringify(res));
-        this.removeRefundBox();
+        this.openNotificationWithIcon('success', 'Reintegro exitoso', 'El reintegro fue exitoso. Puede verlo en Transacciones.');
       }, err => {
         console.log('rewardCustomer','====ERR===>', JSON.stringify(err));
-        this.removeRefundBox();
+        this.openNotificationWithIcon('error', 'Ha ocurrido un error', err);
     });
 
-    
+
   }
 
   removeRefundBox() {
@@ -126,11 +139,11 @@ class Customers extends Component {
           ): false }
           { this.props.customers.map(customer => (
           <Col xs={24} md={12} lg={8} style={{marginBottom: '15px'}} key={customer.name +'-'+customer.account_id}>
-            <CustomersBox 
-              name={customer.name} 
-              account_id={customer.account_id} 
-              onElement={(e) => this.handleOnElement(e)} 
-              onProfile={(e) => this.handleOnProfile(e)} 
+            <CustomersBox
+              name={customer.name}
+              account_id={customer.account_id}
+              onElement={(e) => this.handleOnElement(e)}
+              onProfile={(e) => this.handleOnProfile(e)}
               onTransactions={(e) => this.handleOnTransactions(e)} />
           </Col>
           ))}
@@ -138,14 +151,16 @@ class Customers extends Component {
           );
   }
 
+  /*
+  <MessageBox
+    clean={this.props.cleanMsg}
+    msg={this.props.api.msg}
+    error={this.props.api.error !== false} />
+  */
   render() {
     return (
       <LayoutContentWrapper>
-        <MessageBox
-          clean={this.props.cleanMsg}
-          msg={this.props.api.msg}
-          error={this.props.api.error !== false} /> 
-        <RefundBox 
+        <RefundBox
           visible={this.state.refundBox}
           customer={this.state.selectedCustomer}
           cancel = {this.removeRefundBox}
@@ -159,6 +174,7 @@ class Customers extends Component {
             <InputSearch placeholder={'Search customer'} onKeyPress={this._handleKeyPress} onSearch={()=>this.props.searchCustomer(this.state.searchValue)} onChange={this._handleChange}  enterButton/>
           </Col>
         </Row>
+
         { (this.props.isLoading === true)? (<PageLoading/>): this.renderContent() }
       </LayoutContentWrapper>
     );

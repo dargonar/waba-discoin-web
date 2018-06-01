@@ -42,7 +42,7 @@ const actions = {
             }
         })
     },
-    
+
     fetchConfiguration: () => (dispatch) => {
         dispatch({
             type: actions.GET_CONFIGURATION,
@@ -61,7 +61,7 @@ const actions = {
     updateSchedule: (newSchedule) => (dispatch, getState) => {
         dispatch({
             type: actions.UPDATE_SCHEDULE,
-            payload: { 
+            payload: {
                 schedule: newSchedule,
                 pkey: getState().Auth.keys.privKey,
                 account_id: getState().Auth.account_id
@@ -83,7 +83,7 @@ const actions = {
 
     searchTransactions: (name) => (dispatch, getState) => {
         if (typeof name === 'undefined' || name === '' || name === null ) {
-            dispatch({ 
+            dispatch({
                 type: actions.SEARCH_ALL_TRANSACTIONS,
                 payload: {
                     name,
@@ -112,13 +112,13 @@ const actions = {
             type: actions.APPLY_OVERDRAFT,
             payload: {
                 signature: getState().Auth.keys.active.wif,
-                bussines_name: getState().Auth.account,
+                business_name: getState().Auth.account,
                 account_id: getState().Auth.account_id
             }
         })
     },
 
-    cleanMsg: () => (dispatch) => 
+    cleanMsg: () => (dispatch) =>
         dispatch({
             type: actions.CLEAR_MSG
         })

@@ -66,6 +66,7 @@ export function* loginRequest() {
         try {
           account = recoverAccountFromSeed(mnemonics, is_brainkey);
         } catch (e) {
+          console.log(' LOGIN ERROR:' , e)
           yield put({type: actions.LOGIN_ERROR, payload: { error: 'invalid_wif' } });
 
           yield put({ type: 'GLOBAL_LOADING_END'})

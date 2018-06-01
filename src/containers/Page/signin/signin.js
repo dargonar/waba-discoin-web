@@ -26,7 +26,7 @@ class SignIn extends Component {
       account             : '', //'benoit',
       register            : false,
       ignoreLocal         : false,
-      is_brainkey         : false,
+      is_brainkey         : true,
       remember            : false,
       rememberKey         : '', //'1324',
       words               : '' //'onza redondo ficha polvo lista útil vivero goteo potro mucho dosis aire'
