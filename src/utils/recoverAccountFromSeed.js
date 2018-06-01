@@ -10,6 +10,12 @@ import  bip39 from 'bip39';
 export const adminPrivKey = '5Kjz35R9W3m5ZpznZMSpdySz35tZsXZbzsuSdbtV12YC9Zaxzd9';
 export const adminPubKey  = 'BTS5NQUTrdEgKH4fz5L5DLJZBSkdLWUY4CfnaNZ77yvZAnUZNC89d'
 
+export const formatAccountName = (account_name) => {
+  if (!account_name || account_name.startsWith('discoin.'))
+    return account_name;
+  return 'discoin.'+account_name;
+}
+
 // ToDo: cambiar a recoverKeysFromSeed
 export const recoverAccountFromSeed = (mnemonics, is_brainkey) => {
 

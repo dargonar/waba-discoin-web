@@ -27,7 +27,7 @@ class StoreOverdarfBox extends Component {
       return (
           <Modal
             visible={(typeof this.props.business.name !== 'undefined')? true : false }
-            title={this.props.title || (<b>New Overdraft</b>)} 
+            title={this.props.title || (<b>Asignar crédito preacordado</b>)} 
             onOk={this.submit}
             onCancel={this.cancel}>
             <label>{this.props.visible}</label>

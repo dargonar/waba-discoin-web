@@ -33,6 +33,13 @@ class ListStores extends Component {
     this.accounts = this.accounts.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(typeof nextProps.setting_overdraft !== 'undefined' && nextProps.setting_overdraft === false && this.state.overdraftBox ==true &&  this.state.businessSelected) {
+      this.removeOverdraftBox();
+      this.props.fetch();
+    }
+  }
+
   componentWillMount() {
     this.props.fetch();
   }
@@ -121,6 +128,7 @@ class ListStores extends Component {
           business={this.state.businessSelected}
           cancel = {this.removeOverdraftBox}
           submit = {this.submitOverdraftBox}
+
         />
 
         { (this.props.loading || this.props.business === null)? <PageLoading />: this.renderStores() }
@@ -136,7 +144,7 @@ const mapStateToProps = (state) => ({
   setting_overdraft: state.Business.setting_overdraft,
   error: state.Business.error,
   msg: state.Business.msg,
-  keys: state.Auth.keys
+  keys: state.Auth.keys 
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -145,8 +153,5 @@ const mapDispatchToProps = (dispatch) => ({
   removeMsg: bindActionCreators(actions.removeMsg, dispatch),
   goTo: (url)=>dispatch(push(url))
 })
-
-
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListStores);
