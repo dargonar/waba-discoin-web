@@ -119,6 +119,11 @@ class Customers extends Component {
   renderContent() {
     return (
         <Row style={rowStyle} gutter={16} justify="start">
+          { (this.props.customers.length === 0)? (
+            <Col style={{textAlign: 'center', padding: '10px'}} xs={24}>
+              No customers found.
+            </Col>
+          ): false }
           { this.props.customers.map(customer => (
           <Col xs={24} md={12} lg={8} style={{marginBottom: '15px'}} key={customer.name +'-'+customer.account_id}>
             <CustomersBox 
