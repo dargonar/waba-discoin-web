@@ -22,52 +22,73 @@ const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
         />}
   />
 );
-class PublicRoutes extends Component {
 
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.loading === false) {
-      if (typeof nextProps.msg === 'string') {
-        const type = nextProps.msgType || 'info';
-        if(typeof message[type] === 'function') {
-          message[type](nextProps.msg)
-        }
-      }
-    }
-    this.props.clearLoading();
-  }
-
+class ReduxGlobalLoading extends Component {
   render() {
-    const { history, isLoggedIn, loading, msg } = this.props
+    return (this.props.loading)? (<GlobalLoading msg={this.props.loadingMsg}/>): false
+  }
+}
+
+ReduxGlobalLoading = connect(state => ({
+  loading: state.App.get('loading'),
+  loadingMsg: state.App.get('loadingMsg')
+}))(ReduxGlobalLoading);
+
+class ReduxGlobalMessage extends Component {
+  componentWillReceiveProps(nextProps) {
+    if (typeof nextProps.msg === 'string') {
+      const msgType = (typeof message[nextProps.msgType] === 'function')? nextProps.msgType: 'info';
+      message[msgType](nextProps.msg);
+      this.props.clearMsg();
+    }
+  }
+  render() {
+    return false;
+  }
+}
+ReduxGlobalMessage = connect(state => ({
+  msg: state.App.get('msg'),
+  msgType: state.App.get('msgType')
+}), dispatch => ({
+  clearMsg: () => dispatch({ type: 'GLOBAL_MSG_CLEAR' })
+}))(ReduxGlobalMessage);
+
+class PublicRoutes extends Component {
+  render() {
+    const { history, isLoggedIn } = this.props
     return (
-      <ConnectedRouter history={history}>
-        <div>
-          { (loading)? (<GlobalLoading msg={msg}/>): false }
-          <Route
-            exact
-            path={'/'}
-            component={asyncComponent(() => import('./containers/Page/signin/signin'))}
-          />
-          <Route
-            exact
-            path={'/signin'}
-            component={asyncComponent(() => import('./containers/Page/signin/signin'))}
-          />
-          <RestrictedRoute
-            path="/dashboard"
-            component={App}
-            isLoggedIn={isLoggedIn}
-          />
-        </div>
-      </ConnectedRouter>
+      <div>
+        <ConnectedRouter history={history}>
+          <div>
+            <Route
+              exact
+              path={'/'}
+              component={asyncComponent(() => import('./containers/Page/signin/signin'))}
+            />
+            <Route
+              exact
+              path={'/signin'}
+              component={asyncComponent(() => import('./containers/Page/signin/signin'))}
+            />
+            <RestrictedRoute
+              path="/dashboard"
+              component={App}
+              isLoggedIn={isLoggedIn}
+            />
+            <ReduxGlobalLoading />
+            <ReduxGlobalMessage />
+          </div>
+        </ConnectedRouter>
+      </div>
     );
   }
 };
 
+
+
+
 export default connect(state => ({
   isLoggedIn: typeof state.Auth.account === 'string',
-  loading: state.App.get('loading'),
-  msg: state.App.get('msg'),
-  msgType: state.App.get('msgType'),
 }), dispatch => ({
-  clearLoading: () => dispatch({type: 'GLOBAL_LOADING_CLEAR'})
+  clearMsg: () => dispatch({type: 'GLOBAL_MSG_CLEAR'})
 }))(PublicRoutes);

@@ -12,6 +12,7 @@ const initState = new Map({
   openKeys: preKeys,
   current: preKeys,
   loading: false,
+  loadingMsg: null,
   msg: null,
   msgType: null,
 });
@@ -37,17 +38,19 @@ export default function appReducer(state = initState, action) {
     case actions.GLOBAL_LOADING_START:
       return state
         .set('loading', true)
-        .set('msg', action.payload.msg || '');
+        .set('loadingMsg', action.payload.msg || '');
     case actions.GLOBAL_LOADING_END:
       return state
         .set('loading', false)
-        .set('msg', action.payload.msg || null)
-        .set('msgType', action.payload.msgType || null);
-    case actions.GLOBAL_LOADING_CLEAR:
-        return state
-          .set('loading', false)
-          .set('msg', null)
-          .set('msgType', null);
+        .set('loadingMsg', null)
+    case actions.GLOBAL_MSG:
+      return state
+        .set('msg', action.payload.msg)
+        .set('msgType', action.payload.msgType)
+    case actions.GLOBAL_MSG_CLEAR:
+      return state
+        .set('msg', null)
+        .set('msgType', null)
     default:
       return state;
   }

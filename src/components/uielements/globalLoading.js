@@ -5,6 +5,7 @@ import Button from './button';
 
 const GlobalLoadingWrapper = styled.div`
 .globalLoading {
+    top: 0px;
     position: fixed;
     background: rgba(0,0,0,0.7);
     height: calc(100%);
