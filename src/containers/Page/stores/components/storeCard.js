@@ -46,20 +46,20 @@ class StoreCard extends Component {
             <BalanceSticker
               coin={'DSC'}
               amount={this.props.balances.initial_credit}
-              text={'Initial Credit'}
+              text={'Credito inicial'}
               bgColor={'#f5f5f5'} />
           </Col>
           <Col md={4} sm={24} xs={24} style={{marginBottom: '10px'}} >
             <BalanceSticker
               coin={'DSC'}
               amount={this.props.balances.ready_to_access}
-              text={'Endorsed'}
+              text={'Disponible para solicitar credito'}
               bgColor={'#f5f5f5'} />
           </Col>
           <Col md={4} sm={24} xs={24} style={{marginBottom: '10px'}}>
             <BalanceSticker
               amount={(this.props.balances.balance * 100 / this.props.balances.initial_credit) || 0}
-              text="Accepted / Received ratio"
+              text="Descuentos / Recompensas"
               scale={[
                 {value:10, color:"red"},
                 {value:50, color:"yellow"},
@@ -73,7 +73,7 @@ class StoreCard extends Component {
             <BalanceSticker
               amount={this.props.discount}
               percentage={true}
-              text="Reward & Refund"
+              text="% de Descuento"
               fontColor="#1C222C"
               bgColor="#f5f5f5"/>
           </Col>

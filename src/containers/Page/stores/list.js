@@ -46,8 +46,8 @@ class ListStores extends Component {
   }
 
   showOverdraft(bussines) {
-    // console.log(JSON.stringify(bussines.balances), ((isNaN(bussines.balances.balance) && parseInt(bussines.balances.balance)>0)||(isNaN(bussines.balances.initial_credit) && parseInt(bussines.balances.initial_credit)>0)));
-    if((!isNaN(bussines.balances.balance) && parseInt(bussines.balances.balance)>0)||(!isNaN(bussines.balances.initial_credit) && parseInt(bussines.balances.initial_credit)>0))
+    // console.log(JSON.stringify(bussines.balances));
+    if((!isNaN(bussines.balances.ready_to_access) && parseInt(bussines.balances.ready_to_access)>0)||(!isNaN(bussines.balances.balance) && parseInt(bussines.balances.balance)>0)||(!isNaN(bussines.balances.initial_credit) && parseInt(bussines.balances.initial_credit)>0))
     {
 
       alert('Funcion no disponible aun para comercios con credito.')

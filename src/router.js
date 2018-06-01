@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
 import { connect } from 'react-redux';
+import { message } from 'antd';
 
 import App from './containers/App/App';
 import asyncComponent from './helpers/AsyncFunc';
