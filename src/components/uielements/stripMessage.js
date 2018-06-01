@@ -13,7 +13,7 @@ const StripMessageWrapper = styled.div`
     color: #fff;
     font-weight: bold;
     border-top: 2px solid rgba(255,255,255,0.3);
-    z-index: 99999;
+    z-index: 1000;
     .actions {
       float: right;
       a {
