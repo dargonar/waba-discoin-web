@@ -16,6 +16,7 @@ import { connect } from 'react-redux'
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import bip39 from 'bip39';
 import { PrivateKey, key } from "bitsharesjs"
+import {  notification } from 'antd';
 
 const FormItem = Form.Item;
 const Step = Steps.Step;
@@ -35,6 +36,13 @@ export class Register extends Component {
             form: {},
             copied:false
         };
+    }
+
+    openNotificationWithIcon(type){
+      notification[type]({
+        message: 'Palabras Mnemonicas',
+        description: 'Las palabras han sido copiadas al portapapeles. Resguárdelas de manera segura!',
+      });
     }
 
     next() {
@@ -132,6 +140,7 @@ export class Register extends Component {
                 privKey : keys.active.wif
             }
         })
+        this.openNotificationWithIcon('success');
     }
 
     // setPrivateKeyOLD() {

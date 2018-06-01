@@ -7,7 +7,7 @@ import { getPath, apiCall } from '../../httpService';
 
 import { checkLS, writeLS, readLS, cleanLS } from './sagas/secureLocalStorage'
 
-import { signMemo, recoverAccountFromSeed } from '../../utils';
+import { signMemo, recoverAccountFromSeed, formatAccountName } from '../../utils';
 
 export function* loginRequest() {
   yield takeEvery(actions.LOGIN_REQUEST, function*(action) {
@@ -22,9 +22,17 @@ export function* loginRequest() {
       from_storage_data
     } = action.payload;
 
+    yield put({ type: 'GLOBAL_LOADING_START', payload: { msg: 'Iniciando sesión '+account_name}})
+
     if (just_registered_data==null && from_storage_data==null && (!account_name || !mnemonics))
       {
         yield put({ type: actions.LOGIN_ERROR })
+        yield put({ type: 'GLOBAL_LOADING_END'})
+        yield put({ type: 'GLOBAL_MSG', payload: {
+            msgType: 'error',
+            msg: 'Información insuficiente para iniciar sesión'
+        }})
+
         return;
       }
 
@@ -59,11 +67,21 @@ export function* loginRequest() {
           account = recoverAccountFromSeed(mnemonics, is_brainkey);
         } catch (e) {
           yield put({type: actions.LOGIN_ERROR, payload: { error: 'invalid_wif' } });
+
+          yield put({ type: 'GLOBAL_LOADING_END'})
+          yield put({ type: 'GLOBAL_MSG', payload: {
+              msgType: 'error',
+              msg: e.toString()
+          }})
+
           return;
         }
       }
     }
     console.log('[redux/auth/saga]-- auth/saga loginRequest:account: ', JSON.stringify(account));
+    console.log('[redux/auth/saga]-- auth/saga loginRequest:account_name: ', account_name);
+    //METAHACK:
+    account_name = formatAccountName(account_name);
     console.log('[redux/auth/saga]-- auth/saga loginRequest:account_name: ', account_name);
     const url = getPath('URL/BIZ_LOGIN', { account_name });
     const getSecret = apiCall(url)
@@ -73,6 +91,11 @@ export function* loginRequest() {
     if (typeof secretRes.ex !== 'undefined' || typeof secretRes.data.error !== 'undefined') {
       console.log('[redux/auth/saga]-- auth/saga loginRequest ERROR', secretRes)
       yield put({type: actions.LOGIN_ERROR, payload: { err: (typeof secretRes.ex !== 'undefined')? secretRes.ex.message: null, error: secretRes.data }})
+      yield put({ type: 'GLOBAL_LOADING_END'})
+      yield put({ type: 'GLOBAL_MSG', payload: {
+          msgType: 'error',
+          msg: secretRes.ex || secretRes.data.error
+      }})
       return;
     }
     else {
@@ -98,6 +121,12 @@ export function* loginRequest() {
           raw: data
         }})
 
+        yield put({ type: 'GLOBAL_LOADING_END'})
+        yield put({ type: 'GLOBAL_MSG', payload: {
+          msgType: 'success',
+          msg: 'Inicio de sesión exitoso.'
+        }})
+
         if (remember === true) {
           yield put({ type: actions.LS_WRITE, payload: {
             keys: account,
@@ -109,7 +138,14 @@ export function* loginRequest() {
         }
       }
       else
+      {
         yield put({ type: actions.LOGIN_ERROR, payload: {err: (typeof ex !== 'undefined')? ex.message: null, error: data.error } })
+        yield put({ type: 'GLOBAL_LOADING_END'})
+        yield put({ type: 'GLOBAL_MSG', payload: {
+            msgType: 'error',
+            msg: ex || data.error
+        }})
+      }
     }
   });
 }
@@ -154,6 +190,9 @@ export function* loginFromLocal() {
 
 export function* register() {
   yield takeEvery(actions.REGISTER, function*(action) {
+
+    yield put({ type: 'GLOBAL_LOADING_START', payload: { msg: 'Registrando comercio'}})
+
     console.log(' -- [auth/saga/register]::register::',JSON.stringify(action));
     const register_url  = getPath('URL/REGISTER_BUSINESS');
     let my_payload = {... action.payload };
@@ -166,15 +205,24 @@ export function* register() {
     const request  = apiCall(register_url, 'POST', my_payload)
 
     console.log(' -- [auth/saga/register]::register:: POSTEANDO!!!');
+    console.log('register_url:', JSON.stringify(register_url));
+    console.log('my_payload:', JSON.stringify(my_payload));
+
     const { data, err } = yield call(request)
     console.log(data, err, register_url)
-    if(err && typeof data.err !== 'undefined') {
-      console.log(' [auth/saga/register]::register() ===== #1' ,JSON.stringify(err));
+    if(err || typeof data.error !== 'undefined') {
+      console.log(' [auth/saga/register]::register() #1 ---- ERROR ' ,JSON.stringify(err),JSON.stringify(data));
       yield put({type: actions.REGISTER_FAILD, payload: { err, data }})
+      yield put({ type: 'GLOBAL_LOADING_END'})
+      yield put({ type: 'GLOBAL_MSG', payload: {
+          msgType: 'error',
+          msg: err || data.error
+      }})
     }
     else {
       console.log(' [auth/saga/register]::register() #2 ---- OK!', JSON.stringify(data));
       yield put({type: actions.REGISTER_SUCCESS, payload: { data }})
+      yield put({ type: 'GLOBAL_LOADING_END'})
       yield put({type: actions.LOGIN_REQUEST, payload: {
             account_name: action.payload.account_name,
             is_brainkey:  true,
