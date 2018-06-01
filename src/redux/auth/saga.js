@@ -55,7 +55,12 @@ export function* loginRequest() {
       else
       {
         console.log('[redux/auth/saga]---- NOT just_registered_data');
-        account = recoverAccountFromSeed(mnemonics, is_brainkey);
+        try {
+          account = recoverAccountFromSeed(mnemonics, is_brainkey);
+        } catch (e) {
+          yield put({type: actions.LOGIN_ERROR, payload: { error: 'invalid_wif' } });
+          return;
+        }
       }
     }
     console.log('[redux/auth/saga]-- auth/saga loginRequest:account: ', JSON.stringify(account));
@@ -64,10 +69,11 @@ export function* loginRequest() {
     const getSecret = apiCall(url)
 
     const secretRes = yield call(getSecret);
-
-    if (typeof secretRes.data.error !== 'undefined') {
-      console.log('[redux/auth/saga]-- auth/saga loginRequest ERROR', secretRes.data.error)
-      yield put({type: actions.LOGIN_ERROR, payload: secretRes.data.error })
+    console.log(secretRes)
+    if (typeof secretRes.ex !== 'undefined' || typeof secretRes.data.error !== 'undefined') {
+      console.log('[redux/auth/saga]-- auth/saga loginRequest ERROR', secretRes)
+      yield put({type: actions.LOGIN_ERROR, payload: { err: (typeof secretRes.ex !== 'undefined')? secretRes.ex.message: null, error: secretRes.data }})
+      return;
     }
     else {
       console.log('[redux/auth/saga]-- auth/saga loginRequest OK#1')
@@ -78,11 +84,11 @@ export function* loginRequest() {
       memo_obj['signed_secret'] = memo_obj.message;
 
       const pushLogin = apiCall(url, 'POST', memo_obj)
-      let { data, err } = yield call(pushLogin)
+      let { data, ex } = yield call(pushLogin)
 
       console.log('[redux/auth/saga]-- auth/saga loginRequest OK#2');
       console.log('[redux/auth/saga]-- auth/saga loginRequest data:', JSON.stringify(data));
-      console.log('[redux/auth/saga]-- auth/saga loginRequest err:',JSON.stringify(err));
+      console.log('[redux/auth/saga]-- auth/saga loginRequest err:',JSON.stringify(ex));
       if (data && data.login === true) {
         yield put({ type: actions.LOGIN_SUCCESS, payload: {
           keys: account,
@@ -103,7 +109,7 @@ export function* loginRequest() {
         }
       }
       else
-        yield put({ type: actions.LOGIN_ERROR, payload: {err, error: data.error } })
+        yield put({ type: actions.LOGIN_ERROR, payload: {err: (typeof ex !== 'undefined')? ex.message: null, error: data.error } })
     }
   });
 }
