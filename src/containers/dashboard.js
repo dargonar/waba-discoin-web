@@ -6,7 +6,7 @@ import IsoWidgetsWrapper from '../components/utility/widgets-wrapper';
 import PageLoading from '../components/pageLoading';
 import { Modal, Col, Row, Tooltip } from 'antd';
 import basicStyle from '../config/basicStyle';
-
+import { StripMessage } from '../components/uielements/stripMessage';
 import BalanceSticker from '../components/balance-sticker/balance-sticker'
 import RatingSticker from '../components/rating-sticker/rating-sticker'
 
@@ -21,7 +21,8 @@ export class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      confirm_overdraft_visible:false
+      confirm_overdraft_visible:false,
+      ignoreOverdraft: false
     }
     this.renderContent      = this.renderContent.bind(this);
     this.showApplyOverdraft = this.showApplyOverdraft.bind(this);
@@ -85,9 +86,17 @@ export class Dashboard extends Component {
     const hasOverdraft = (this.props.api.business !== null && this.props.api.business.balances !== null &&  this.props.api.business.balances.ready_to_access>0);
 
     let button = null;
-    if (hasOverdraft)
+    if (hasOverdraft && !this.state.ignoreOverdraft)
       button =  (
-        <Tooltip title="Aceptar crédito disponible"><Button shape="circle" onClick={() => this.showApplyOverdraft()} icon="check"></Button></Tooltip>
+        <StripMessage
+          visible={true}
+          type={'info'}
+          msg={'Tiene un crédito de DSC '+ Number(this.props.api.business.balances.ready_to_access).toLocaleString() +'. ¿Quiere aceptarlo?'} 
+          actions={[
+            { msg: 'Aplicar', onClick:()=>this.showApplyOverdraft() },
+            { msg: 'Ignorar', onClick:()=>this.setState({ignoreOverdraft: true}) }
+          ]}
+        />
       ) ;
 
     if (this.props.api.business !== null && this.props.api.configuration !== null) {

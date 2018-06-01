@@ -7,11 +7,12 @@ const StripMessageWrapper = styled.div`
     position: fixed;
     background: #1890ff;
     bottom: 0px;
+    left:0px;
     width: 100%;
     padding: 20px;
     color: #fff;
     font-weight: bold;
-    border-top: 1px solid #fff;
+    border-top: 2px solid rgba(255,255,255,0.3);
     z-index: 99999;
     .actions {
       float: right;
@@ -20,7 +21,9 @@ const StripMessageWrapper = styled.div`
         color: #fff;
         border: 1px solid #fff;
         font-weight: normal;
-        padding 5px;
+        padding: 5px;
+        margin-top: -6px;
+        margin-left: 10px;
         border-radius: 3px;
         text-align: center;
       }
@@ -29,8 +32,8 @@ const StripMessageWrapper = styled.div`
 .stripMessage.error {
     backgroundColor:  ${palette('error', 0)};
 }
-.stripMessage.success {
-    backgroundColor:  ${palette('success', 0)};
+.stripMessage.info {
+    backgroundColor:  ${palette('info', 0)};
 }`;
 
 export const StripMessage = ({visible, type, msg, actions}) => (
