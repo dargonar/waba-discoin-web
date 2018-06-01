@@ -104,11 +104,30 @@ export default function apiReducer(state = initState, action) {
             }
 
         // SEARCH CUSTOMERS
+        case actions.SEARCH_ALL_CUSTOMERS:
+            return {
+                ...state,
+                actionLoading: true
+            }
+        case actions.SEARCH_CUSTOMERS:
+            return {
+                ...state,
+                actionLoading: true
+            }
         case actions.SEARCH_CUSTOMERS_SUCCESS:
             return {
                 ...state,
+                actionLoading: false,
                 customers: action.payload.res.map(customer => ({name: customer[0], account_id: customer[1]}))
             }
+        case actions.SEARCH_CUSTOMERS_FAILD:
+            return {
+                ...state,
+                actionLoading: false,
+                error: true,
+                msg: action.payload.err || action.payload.error
+            }
+
 
         // SEARCH TRANSACTIONS --> HACK
         case actions.SEARCH_TRANSACTIONS_SUCCESS:
