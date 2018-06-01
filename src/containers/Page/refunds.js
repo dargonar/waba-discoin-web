@@ -3,9 +3,8 @@ import LayoutContentWrapper from '../../components/utility/layoutWrapper';
 import LayoutContent from '../../components/utility/layoutContent';
 import PageHeader from '../../components/utility/pageHeader';
 import PageLoading from '../../components/pageLoading';
-import { Row, Col } from 'antd';
+import { Row, Col, Input } from 'antd';
 import basicStyle from '../../config/basicStyle';
-import { InputSearch } from '../../components/uielements/input';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -16,6 +15,8 @@ import CustomersBox from './components/customerBox';
 import RefundBox from './components/refundBox'
 
 import { rewardCustomer } from '../../httpService';
+
+const InputSearch = Input.Search;
 
 class Customers extends Component {
   constructor(props) {
@@ -120,7 +121,7 @@ class Customers extends Component {
     return (
         <Row style={rowStyle} gutter={16} justify="start">
           <Col xs={24} style={{marginBottom: '15px'}}>
-            <InputSearch placeholder={'Search customer'} onKeyPress={this._handleKeyPress} onChange={this._handleChange} />
+            <InputSearch placeholder={'Search customer'} onKeyPress={this._handleKeyPress} onSearch={()=>this.props.searchCustomer(this.state.searchValue)} onChange={this._handleChange}  enterButton/>
           </Col>
           { this.props.customers.map(customer => (
           <Col xs={24} md={12} lg={8} style={{marginBottom: '15px'}} key={customer.name +'-'+customer.account_id}>
