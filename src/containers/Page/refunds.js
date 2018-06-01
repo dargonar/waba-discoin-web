@@ -3,9 +3,8 @@ import LayoutContentWrapper from '../../components/utility/layoutWrapper';
 import LayoutContent from '../../components/utility/layoutContent';
 import PageHeader from '../../components/utility/pageHeader';
 import PageLoading from '../../components/pageLoading';
-import { Row, Col } from 'antd';
+import { Row, Col, Input } from 'antd';
 import basicStyle from '../../config/basicStyle';
-import { InputSearch } from '../../components/uielements/input';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -16,6 +15,18 @@ import CustomersBox from './components/customerBox';
 import RefundBox from './components/refundBox'
 
 import { rewardCustomer } from '../../httpService';
+
+const InputSearch = Input.Search;
+
+const { rowStyle, colStyle } = basicStyle;
+    
+const inputStyle = {
+  fontSize:'24px'
+}
+const avgStyle = {
+  display: 'block',
+  paddingTop: '15px'
+}
 
 class Customers extends Component {
   constructor(props) {
@@ -106,22 +117,13 @@ class Customers extends Component {
   }
 
   renderContent() {
-
-    const { rowStyle, colStyle } = basicStyle;
-    
-    const inputStyle = {
-      fontSize:'24px'
-    }
-    const avgStyle = {
-      display: 'block',
-      paddingTop: '15px'
-    }
-
     return (
         <Row style={rowStyle} gutter={16} justify="start">
-          <Col xs={24} style={{marginBottom: '15px'}}>
-            <InputSearch placeholder={'Search customer'} onKeyPress={this._handleKeyPress} onChange={this._handleChange} />
-          </Col>
+          { (this.props.customers.length === 0)? (
+            <Col style={{textAlign: 'center', padding: '10px'}} xs={24}>
+              No customers found.
+            </Col>
+          ): false }
           { this.props.customers.map(customer => (
           <Col xs={24} md={12} lg={8} style={{marginBottom: '15px'}} key={customer.name +'-'+customer.account_id}>
             <CustomersBox 
@@ -152,7 +154,12 @@ class Customers extends Component {
         <PageHeader>
           Customers
         </PageHeader>
-        {this.renderContent()}
+        <Row style={rowStyle} gutter={16} justify="start">
+          <Col xs={24} style={{marginBottom: '15px'}}>
+            <InputSearch placeholder={'Search customer'} onKeyPress={this._handleKeyPress} onSearch={()=>this.props.searchCustomer(this.state.searchValue)} onChange={this._handleChange}  enterButton/>
+          </Col>
+        </Row>
+        { (this.props.isLoading === true)? (<PageLoading/>): this.renderContent() }
       </LayoutContentWrapper>
     );
   }
@@ -161,7 +168,10 @@ class Customers extends Component {
 const mapStateToProps = (state) =>  ({
   api: state.Api,
   customers: state.Api.customers,
-  account: state.Auth
+  account: state.Auth,
+  isLoading: state.Api.actionLoading,
+  error: state.Api.error,
+  msg: state.Api.msg
 })
 
 const mapDispatchToProps = (dispatch) => ({
