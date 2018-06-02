@@ -21,13 +21,13 @@ class SignIn extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      account             : 'discoin.admin',
+      account             : '', //'discoin.admin',
       register            : false,
       ignoreLocal         : false,
       is_brainkey         : false,
       remember            : false,
       rememberKey         : '', //'1324',
-      words               : '5JQGCnJCDyraociQmhDRDxzNFCd8WdcJ4BAj8q1YDZtVpk5NDw9'
+      words               : ''  //'5JQGCnJCDyraociQmhDRDxzNFCd8WdcJ4BAj8q1YDZtVpk5NDw9'
     }
     
     this.handleLogin = this.handleLogin.bind(this);
