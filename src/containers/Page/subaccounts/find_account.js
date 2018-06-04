@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
-import LayoutContentWrapper from '../../components/utility/layoutWrapper';
-import LayoutContent from '../../components/utility/layoutContent';
-import PageHeader from '../../components/utility/pageHeader';
-import PageLoading from '../../components/pageLoading';
+import LayoutContentWrapper from '../../../components/utility/layoutWrapper';
+import LayoutContent from '../../../components/utility/layoutContent';
+import PageHeader from '../../../components/utility/pageHeader';
+import PageLoading from '../../../components/pageLoading';
 import { Row, Col, Input } from 'antd';
-import basicStyle from '../../config/basicStyle';
+import basicStyle from '../../../config/basicStyle';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import actions from '../../redux/api/actions';
-import MessageBox from '../../components/MessageBox';
+import actions from '../../../redux/api/actions';
+import MessageBox from '../../../components/MessageBox';
 
-import CustomersBox from './components/customerBox';
-import RefundBox from './components/refundBox';
+import CustomersBox from '../components/customerBox';
+import RefundBox from '../components/refundBox';
 
-import { rewardCustomer } from '../../httpService';
 import {  notification } from 'antd';
 
 const InputSearch = Input.Search;
@@ -29,7 +28,7 @@ const avgStyle = {
   paddingTop: '15px'
 }
 
-class Customers extends Component {
+class FindAccounts extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,6 +46,8 @@ class Customers extends Component {
     this.showRefundBox = this.showRefundBox.bind(this);
     this._handleChange = this._handleChange.bind(this);
     this._handleKeyPress = this._handleKeyPress.bind(this);
+
+    console.log(' --- FindAccounts - created()');
   }
 
   openNotificationWithIcon(type, title, msg){
@@ -58,6 +59,7 @@ class Customers extends Component {
 
   handleOnProfile(){}
   handleOnTransactions(){}
+
   handleOnElement(account){
     console.log(' --> handleOnElement.');
     console.log(account);
@@ -65,9 +67,9 @@ class Customers extends Component {
   }
 
   componentDidMount(){
-    console.log(' --- Customers::componentDidMount PRE');
+    console.log(' --- FindAccounts::componentDidMount PRE');
     this.props.searchAccount('');
-    console.log(' --- Customers::componentDidMount DONE');
+    console.log(' --- FindAccounts::componentDidMount DONE');
   }
 
   showRefundBox(customer) {
@@ -81,27 +83,26 @@ class Customers extends Component {
       this.setState({ searchValue: e.target.value });
    }
 
-   _handleKeyPress(e) {
+  _handleKeyPress(e) {
 
-     let searchValue = this.state.searchValue;
-     console.log(' -- _handleKeyPress:', searchValue)
-     if (e.key === 'Enter') {
-       if(searchValue === 'undefined' || searchValue==null || searchValue.trim()=='')
-       {
-         this.openNotificationWithIcon('warning', 'Búsqueda', 'Ingrese al menos un caracter.');
-         return;
-       }
+    let searchValue = this.state.searchValue;
+    console.log(' -- _handleKeyPress:', searchValue)
+    if (e.key === 'Enter') {
+      if(searchValue === 'undefined' || searchValue==null || searchValue.trim()=='')
+      {
+        this.openNotificationWithIcon('warning', 'Búsqueda', 'Ingrese al menos un caracter.');
+        return;
+      }
 
-       if(this.props.isLoading)
-       {
-         this.openNotificationWithIcon('warning', 'Búsqueda', 'Búsqueda en progreso.');
-         return;
-       }
-       this.props.searchAccount(searchValue);
-     }
+      if(this.props.isLoading)
+      {
+        this.openNotificationWithIcon('warning', 'Búsqueda', 'Búsqueda en progreso.');
+        return;
+      }
+      this.props.searchAccount(searchValue);
+    }
 
-   }
-
+  }
 
   submitRefundBox(e) {
 
@@ -119,18 +120,15 @@ class Customers extends Component {
       bill_id:      e.bill_id
     }
 
-    // console.log(JSON.stringify(tx));
-    // return;
-    // this.setState({loading:true})
 
-    this.removeRefundBox();
-    rewardCustomer(this.props.account.keys.active.wif , tx).then( res => {
-        console.log('rewardCustomer', '====OK===>', JSON.stringify(res));
-        this.openNotificationWithIcon('success', 'Reintegro exitoso', 'El reintegro fue exitoso. Puede verlo en Transacciones.');
-      }, err => {
-        console.log('rewardCustomer','====ERR===>', JSON.stringify(err));
-        this.openNotificationWithIcon('error', 'Ha ocurrido un error', err);
-    });
+    // this.removeRefundBox();
+    // rewardCustomer(this.props.account.keys.active.wif , tx).then( res => {
+    //     console.log('rewardCustomer', '====OK===>', JSON.stringify(res));
+    //     this.openNotificationWithIcon('success', 'Reintegro exitoso', 'El reintegro fue exitoso. Puede verlo en Transacciones.');
+    //   }, err => {
+    //     console.log('rewardCustomer','====ERR===>', JSON.stringify(err));
+    //     this.openNotificationWithIcon('error', 'Ha ocurrido un error', err);
+    // });
 
 
   }
@@ -147,7 +145,7 @@ class Customers extends Component {
         <Row style={rowStyle} gutter={16} justify="start">
           { (this.props.customers.length === 0)? (
             <Col style={{textAlign: 'center', padding: '10px'}} xs={24}>
-              No customers found.
+              No se encontraron usuarios con su búsqueda.
             </Col>
           ): false }
           { this.props.customers.map(customer => (
@@ -164,12 +162,7 @@ class Customers extends Component {
           );
   }
 
-  /*
-  <MessageBox
-    clean={this.props.cleanMsg}
-    msg={this.props.api.msg}
-    error={this.props.api.error !== false} />
-  */
+/// onSearch={()=>this.props.searchAccount(this.state.searchValue)}
   render() {
     return (
       <LayoutContentWrapper>
@@ -180,11 +173,11 @@ class Customers extends Component {
           submit = {this.submitRefundBox}
         />
         <PageHeader>
-          Customers
+          Usuarios
         </PageHeader>
         <Row style={rowStyle} gutter={16} justify="start">
           <Col xs={24} style={{marginBottom: '15px'}}>
-            <InputSearch placeholder={'Search customer'} onKeyPress={this._handleKeyPress} onSearch={()=>this.props.searchAccount(this.state.searchValue)} onChange={this._handleChange}  enterButton/>
+            <InputSearch placeholder={'Buscar usuarios'} onChange={this._handleChange} onSearch={()=>this.props.searchAccount(this.state.searchValue)} onKeyPress={this._handleKeyPress}  enterButton/>
           </Col>
         </Row>
 
@@ -208,4 +201,4 @@ const mapDispatchToProps = (dispatch) => ({
   cleanMsg: bindActionCreators(actions.cleanMsg, dispatch),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Customers);
+export default connect(mapStateToProps, mapDispatchToProps)(FindAccounts);
