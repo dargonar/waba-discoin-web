@@ -6,7 +6,7 @@ import {decrypt, encrypt, a2hex, hex2a} from '../../../utils/buf2hex';
 // Check local storage
 export const checkLS = function*() {
     yield takeEvery(actions.LS_CHECK, function*(){
-        let account = localStorage.getItem('account')
+        let account = localStorage.getItem('business_account')
         console.log('[secureLocalStorage::checkLS] account', JSON.stringify(account));
         if (account)
             yield put({ type: actions.LS_CHECK_FULL, payload: JSON.parse(account) })
@@ -37,7 +37,7 @@ export const readLS = function*() {
         console.log('----------------secureLocalStorage::readLS()', password);
 
         try {
-          let account = JSON.parse(localStorage.getItem('account'));
+          let account = JSON.parse(localStorage.getItem('business_account'));
 
           console.log('----------------secureLocalStorage::readLS():: account ENCRYPTED:', JSON.stringify(account));
 
@@ -64,32 +64,6 @@ export const readLS = function*() {
     })
 }
 
-// Decrypt local storage
-export const readLS_xxxxx = function*() {
-    yield takeEvery(actions.LS_READ, function*(action) {
-        const { password } = action.payload
-
-        try {
-            const decryptTool = Aes.fromSeed(password)
-
-            const secureString = localStorage.getItem('secure')
-
-            const secureBuffer = Buffer.from(
-                  Uint8Array.from(
-                  JSON.parse(secureString).data
-                )
-            )
-
-            const jsonData = decryptTool.decrypt(secureBuffer)
-            const credentials = JSON.parse(jsonData.toString())
-            yield put({ type: actions.LS_READ_SUCCESS, payload: credentials })
-        }
-        catch(e) {
-            yield put({ type: actions.LS_READ_FAILD })
-        }
-    })
-}
-
 // Encrypt and write local storage
 export const writeLS = function*() {
     yield takeEvery(actions.LS_WRITE, function*(action) {
@@ -112,25 +86,8 @@ export const writeLS = function*() {
 
         try {
             const jsonData = JSON.stringify(obj);
-            localStorage.setItem('account', jsonData)
+            localStorage.setItem('business_account', jsonData)
             yield put({ type: actions.LS_WRITE_SUCCESS, payload: { plain: jsonData } })
-        }
-        catch (err) {
-            yield put({ type: actions.LS_WRITE_FAILD, payload: err })
-        }
-    })
-}
-
-// Encrypt and write local storage
-export const writeLS_XXXXX = function*() {
-    yield takeEvery(actions.LS_WRITE, function*(action) {
-        const { password, credentials } = action.payload
-        const decryptTool = Aes.fromSeed(password)
-        try {
-            const jsonData = JSON.stringify(credentials)
-            const secure = JSON.stringify(decryptTool.encrypt(jsonData))
-            localStorage.setItem('secure', secure)
-            yield put({ type: actions.LS_WRITE_SUCCESS, payload: { plain: secure } })
         }
         catch (err) {
             yield put({ type: actions.LS_WRITE_FAILD, payload: err })
@@ -141,7 +98,7 @@ export const writeLS_XXXXX = function*() {
 // Clean Local storage
 export const cleanLS = function*() {
     yield takeEvery(actions.LS_CLEAN, function*(){
-        localStorage.removeItem('account')
+        localStorage.removeItem('business_account')
         yield put({ type: actions.LS_CLEAN_SUCCESS })
     })
 }

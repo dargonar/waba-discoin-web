@@ -124,15 +124,6 @@ class Sidebar extends Component {
                   </span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="discountRewards">
-                <Link to={`${url}/discount-and-rewards`}>
-                  <span className="isoMenuHolder" style={submenuColor}>
-                    <span className="nav-text">
-                      <IntlMessages id="sidebar.discountRewards" />
-                    </span>
-                  </span>
-                </Link>
-              </Menu.Item>
               <Menu.Item key="refunds">
                 <Link to={`${url}/refunds`}>
                   <span className="isoMenuHolder" style={submenuColor}>
@@ -151,11 +142,29 @@ class Sidebar extends Component {
                   </span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="subAccounts" style={hidden}>
-                <Link to={`${url}/sub-accounts`}>
+              <Menu.Item key="subAccounts">
+                <Link to={`${url}/sub_accounts`}>
                   <span className="isoMenuHolder" style={submenuColor}>
                     <span className="nav-text">
                       <IntlMessages id="sidebar.subAccounts" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="findAccount">
+                <Link to={`${url}/find_account`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.findAccount" />
+                    </span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="discountRewards">
+                <Link to={`${url}/discount-and-rewards`}>
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.discountRewards" />
                     </span>
                   </span>
                 </Link>

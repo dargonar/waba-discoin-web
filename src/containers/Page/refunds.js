@@ -66,7 +66,7 @@ class Customers extends Component {
 
   componentDidMount(){
     console.log(' --- Customers::componentDidMount PRE');
-    this.props.searchCustomer();
+    this.props.searchAccount('');
     console.log(' --- Customers::componentDidMount DONE');
   }
 
@@ -84,10 +84,10 @@ class Customers extends Component {
   _handleKeyPress(e) {
 
     if (e.key === 'Enter') {
-      this.props.searchCustomer(this.state.searchValue);
+      this.props.searchAccount(this.state.searchValue);
     }
 
-    // onChange={e => this.props.searchCustomer(e.target.value)}
+
   }
 
   submitRefundBox(e) {
@@ -171,7 +171,7 @@ class Customers extends Component {
         </PageHeader>
         <Row style={rowStyle} gutter={16} justify="start">
           <Col xs={24} style={{marginBottom: '15px'}}>
-            <InputSearch placeholder={'Search customer'} onKeyPress={this._handleKeyPress} onSearch={()=>this.props.searchCustomer(this.state.searchValue)} onChange={this._handleChange}  enterButton/>
+            <InputSearch placeholder={'Search customer'} onKeyPress={this._handleKeyPress} onSearch={()=>this.props.searchAccount(this.state.searchValue)} onChange={this._handleChange}  enterButton/>
           </Col>
         </Row>
 
@@ -191,7 +191,7 @@ const mapStateToProps = (state) =>  ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  searchCustomer: bindActionCreators(actions.searchCustomer, dispatch),
+  searchAccount: bindActionCreators(actions.searchAccount, dispatch),
   cleanMsg: bindActionCreators(actions.cleanMsg, dispatch),
 })
 

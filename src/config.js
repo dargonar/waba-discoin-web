@@ -26,7 +26,7 @@ const apiConfig = {
     { action: 'URL/GET_CONFIGURATION', path: '/dashboard/configuration' },
     { action: 'URL/GET_CATEGORIES',    path: '/dashboard/categories' },
     { action: 'URL/UPDATE_SCHEDULE',   path: '/dashboard/business/schedule/:id/update' },
-    { action: 'URL/SEARCH_CUSTOMERS',  path: '/account/search?search=:name&seach_filter=:filter' },
+    { action: 'URL/SEARCH_CUSTOMERS',  path: '/account/search?search=:name&search_filter=:filter' },
     { action: 'URL/ALL_CUSTOMERS',     path: '/account/search' },
     { action: 'URL/ALL_TRANSACTIONS',  path: '/business/:id/transactions/list' },
     { action: 'URL/ACCOUNT_BY_NAME',   path: '/account/by_name/:name' },
@@ -35,7 +35,8 @@ const apiConfig = {
     { action: 'URL/BIZ_LOGIN',         path: '/business/login/:account_name' },
     { action: 'URL/REFUND_CREATE',     path: '/refund/create' },
     { action: 'URL/REGISTER_BUSINESS', path: '/business/register' },
-    { action: 'URL/APPLY_ENDORSE',     path: '/business/endorse/apply' }
+    { action: 'URL/APPLY_ENDORSE',     path: '/business/endorse/apply' },
+    { action: 'URL/GET_SUBACCOUNTS',   path: '/business/:id/subaccount/list/:start'},
   ]
 }
 

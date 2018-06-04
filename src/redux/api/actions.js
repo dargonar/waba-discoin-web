@@ -11,10 +11,9 @@ const actions = {
     GET_CATEGORIES_SUCCESS: 'GET_CATEGORIES_SUCCESS',
     GET_CATEGORIES_FAILD: 'GET_CATEGORIES_FAILD',
 
-    SEARCH_CUSTOMERS: 'SEARCH_CUSTOMERS',
-    SEARCH_ALL_CUSTOMERS: 'SEARCH_ALL_CUSTOMERS',
-    SEARCH_CUSTOMERS_SUCCESS: 'SEARCH_CUSTOMERS_SUCCESS',
-    SEARCH_CUSTOMERS_FAILD: 'SEARCH_CUSTOMERS_FAILD',
+    SEARCH_ACCOUNT: 'SEARCH_ACCOUNT',
+    SEARCH_ACCOUNT_SUCCESS: 'SEARCH_ACCOUNT_SUCCESS',
+    SEARCH_ACCOUNT_FAILD: 'SEARCH_ACCOUNT_FAILD',
 
     SEARCH_TRANSACTIONS: 'SEARCH_TRANSACTIONS',
     SEARCH_ALL_TRANSACTIONS: 'SEARCH_ALL_TRANSACTIONS',
@@ -69,15 +68,30 @@ const actions = {
         })
     },
 
-    searchCustomer: (customer) => (dispatch) => {
-        console.log(customer)
-        if (typeof customer === 'undefined' || customer === '' || customer === null ) {
-            dispatch({ type: actions.SEARCH_ALL_CUSTOMERS })
-            return;
-        }
+    // #   0 = ALL
+    // #   1 = NO_CREDIT && NO_BLACK
+    // #   2 = HAS_CREDIT
+    searchAccount: (account_name) => (dispatch) => {
+        console.log(' -- actions::searchAccount:' + account_name)
         dispatch({
-            type: actions.SEARCH_CUSTOMERS,
-            payload: customer
+            type: actions.SEARCH_ACCOUNT,
+            payload: {account_name:account_name, filter:1}
+        })
+    },
+
+    searchStore: (account_name) => (dispatch) => {
+        console.log(' -- actions::searchStore:' + account_name)
+        dispatch({
+            type: actions.SEARCH_ACCOUNT,
+            payload: {account_name:account_name, filter:2}
+        })
+    },
+
+    searchAll: (account_name) => (dispatch) => {
+        console.log(' -- actions::searchStore:' + account_name)
+        dispatch({
+            type: actions.SEARCH_ACCOUNT,
+            payload: {account_name:account_name, filter:0}
         })
     },
 

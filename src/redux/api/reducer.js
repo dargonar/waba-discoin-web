@@ -94,33 +94,27 @@ export default function apiReducer(state = initState, action) {
                     discount_schedule: action.payload.discount_schedule
                 }
             }
-        
-        case actions.UPDATE_SCHEDULE_FAILD: 
+
+        case actions.UPDATE_SCHEDULE_FAILD:
             return {
                 ...state,
                 error: action.payload,
                 msg: 'Error updating the schedule',
-                actionLoading: false    
+                actionLoading: false
             }
 
-        // SEARCH CUSTOMERS
-        case actions.SEARCH_ALL_CUSTOMERS:
+        case actions.SEARCH_ACCOUNT:
             return {
                 ...state,
                 actionLoading: true
             }
-        case actions.SEARCH_CUSTOMERS:
-            return {
-                ...state,
-                actionLoading: true
-            }
-        case actions.SEARCH_CUSTOMERS_SUCCESS:
+        case actions.SEARCH_ACCOUNT_SUCCESS:
             return {
                 ...state,
                 actionLoading: false,
                 customers: action.payload.res.map(customer => ({name: customer[0], account_id: customer[1]}))
             }
-        case actions.SEARCH_CUSTOMERS_FAILD:
+        case actions.SEARCH_ACCOUNT_FAILD:
             return {
                 ...state,
                 actionLoading: false,

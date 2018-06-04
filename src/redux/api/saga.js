@@ -7,7 +7,7 @@ import { getConfiguration } from './sagas/getConfiguration'
 import { getCategories } from './sagas/getCategories'
 import { getSchedule } from './sagas/getSchedule'
 import { updateSchedule } from './sagas/updateSchedule'
-import { searchCustomers, searchAllCustomers } from './sagas/searchCustomers'
+import { searchAccount} from './sagas/searchCustomers'
 import { searchAllTransactions } from './sagas/searchTransactions'
 import { applyOverdraft } from './sagas/applyOverdraft'
 
@@ -18,10 +18,8 @@ export default function* rootSaga() {
         fork(getCategories),
         fork(getSchedule),
         fork(updateSchedule),
-        fork(searchCustomers),
-        fork(searchAllCustomers),
+        fork(searchAccount),
         fork(searchAllTransactions),
         fork(applyOverdraft)
     ]);
   }
-  
