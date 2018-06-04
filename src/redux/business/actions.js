@@ -30,7 +30,7 @@ const actions = {
     fetchSubaccounts: (payload) => (dispatch, state) => {
         if (payload.id === null && payload.id === undefined) {
             dispatch({
-                type: actions.SAVE_BUSINESS_FAIL,
+                type: actions.GET_SUBACCOUNTS_FAIL,
                 payload: {
                     msg: 'No account id'
                 }

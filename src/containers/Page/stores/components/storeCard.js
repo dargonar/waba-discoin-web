@@ -23,6 +23,7 @@ class StoreCard extends Component {
       borderTop: '1px solid rgb(201, 205, 212)',
       padding: '10px 0'
     }
+    const testing = true;
     return (
       <StoreCardWrapper>
         <h3>{this.props.description}</h3>
@@ -59,7 +60,7 @@ class StoreCard extends Component {
           <Col md={4} sm={24} xs={24} style={{marginBottom: '10px'}}>
             <BalanceSticker
               amount={(this.props.balances.balance * 100 / this.props.balances.initial_credit) || 0}
-              text="Descuentos / Recompensas"
+              text="Descuentos & Recompensas"
               scale={[
                 {value:10, color:"red"},
                 {value:50, color:"yellow"},
@@ -83,14 +84,14 @@ class StoreCard extends Component {
             <Button shape="circle" icon="delete" onClick={this.props.delete} />
           </Col>
           <Col xs={12} style={{textAlign:'right'}} className={'rightButtons'}>
-            { false ? 
+            { testing ? 
             <Tooltip title="Edit account profile" >
               <Button shape="circle" onClick={()=>this.props.edit(this.props.account_id)} icon="info"/>
             </Tooltip> : null }
             <Tooltip title="Change initial credit">
               <Button shape="circle" onClick={() => this.props.overdraft(this.props)}>$</Button>
             </Tooltip>
-            { false ? 
+            { testing ? 
               <Tooltip title="Manage subaccounts">
               <Button shape="circle" onClick={()=> this.props.accounts(this.props.account_id)} icon="key" />
             </Tooltip> : null }

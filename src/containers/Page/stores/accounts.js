@@ -47,7 +47,7 @@ class AccountsStores extends Component {
   }
 
   componentWillMount() {
-  
+
     if (typeof this.props.match.params.id !== 'undefined') {
       this.setState({
         account_id: this.props.match.params.id
@@ -76,7 +76,7 @@ class AccountsStores extends Component {
           (<Alert message="Ups!" type="warning" description="This store does not have subaccounts" style={{margin:'10px'}}/> ):
           subaccounts.map(account => (
             <Col lg={8} md={12} sd={24} key={account.id+'-'+account.since}>
-              <AccountBox 
+              <AccountBox
                 name={account.name}
                 dailyPermission={account.amount}
                 changeAmount={()=>this.changeAmount(account)}
