@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import actions from '../../../redux/business/actions';
+import appActions from '../../../redux/app/actions';
 import { Col, Row } from 'antd';
+import {  notification } from 'antd';
 import PageLoading from '../../../components/pageLoading'
 import Alert from '../../../components/feedback/alert'
 import Button from '../../../components/uielements/button';
@@ -14,6 +16,8 @@ import MessageBox from '../../../components/MessageBox'
 import AccountBox from './components/accountBox';
 import AccountDailyBox from './components/storeOvercraftBox'
 import { push } from 'react-router-redux';
+
+import { subaccountAddOrUpdate } from '../../../httpService';
 
 class SubAccounts extends Component {
 
@@ -27,7 +31,8 @@ class SubAccounts extends Component {
     this.removeDailyBox = this.removeDailyBox.bind(this);
     this.showDaily = this.showDaily.bind(this);
     this.changeAmount = this.changeAmount.bind(this);
-    this.newSubAccount = this.newSubAccount.bind(this)
+    this.newSubAccount = this.newSubAccount.bind(this);
+    this.updateSubaccount = this.updateSubaccount.bind(this);
   }
 
   newSubAccount(){
@@ -42,8 +47,67 @@ class SubAccounts extends Component {
   }
 
   submitDailyBox(value) {
-    this.props.updateSubaccount(this.state.accountSelected, value)
+    console.log('value', value)
+    if(typeof value !== 'undefined')
+      this.updateSubaccount(this.state.accountSelected, value)
+    else
+      this.removeDailyBox()
+  }
+
+  updateSubaccount(account, value){
+    const accountData = {
+      ...account,
+      amount: value
+    }
+    console.log(' -- updateSubaccount() #1  --- ', JSON.stringify(accountData));
+    this.props.showLoading('Actualizando subcuenta. Por favor aguarde.');
+    console.log(' -- updateSubaccount() #2');
     this.removeDailyBox()
+    console.log(' -- updateSubaccount() #3');
+
+    let _from   = new Date(accountData.since).getTime();
+    let _to     = new Date(accountData.expiration).getTime();
+    let period  = 86400;
+    let periods = Math.floor((_to - _from )/86400/1000);
+
+    let tx = {
+      business_id     : this.props.account.account_id,
+      subaccount_id   : accountData.id,
+      limit           : accountData.amount,
+      from            : _from,
+      period          : period,
+      periods         : periods
+    }
+    console.log(' -- updateSubaccount() #4', JSON.stringify(tx));
+
+    subaccountAddOrUpdate(this.props.account.keys.active.wif , tx).then( res => {
+        console.log('subaccountAddOrUpdate', '====OK===>', JSON.stringify(res));
+        this.props.endLoading();
+        if(typeof res.error!== 'undefined')
+        {
+          this.openNotificationWithIcon('error', 'Ha ocurrido un error', res.error);
+        }
+        else{
+          this.openNotificationWithIcon('success', 'Autorizar subcuenta', 'El límite diario de subcuenta fue autorizado satisfactoriamente.');
+          if (typeof this.props.match.params.id !== 'undefined') {
+            this.props.fetch(this.props.match.params.id)
+            return
+          };
+          this.props.fetch();
+        }
+
+      }, err => {
+        console.log('subaccountAddOrUpdate','====ERR===>', JSON.stringify(err));
+        this.openNotificationWithIcon('error', 'Ha ocurrido un error', err);
+        this.props.endLoading();
+    });
+  }
+
+  openNotificationWithIcon(type, title, msg){
+    notification[type]({
+      message: title,
+      description: msg,
+    });
   }
 
   removeDailyBox() {
@@ -56,9 +120,10 @@ class SubAccounts extends Component {
   componentWillMount() {
 
     if (typeof this.props.match.params.id !== 'undefined') {
-      this.props.fetch()
+      this.props.fetch(this.props.match.params.id)
       return
     };
+    this.props.fetch();
     // this.setState({ error: 'No account id'})
   }
 
@@ -71,7 +136,7 @@ class SubAccounts extends Component {
   }
 
   renderAccounts() {
-    const {subaccounts } = this.props.subaccounts(this.state.account_id)
+    const {subaccounts } = this.props.subaccounts(this.props.account.account_id)
     return (
       <Row style={{width:'100%'}}>
         {(subaccounts.length === 0)?
@@ -149,11 +214,13 @@ const mapStateToProps = (state) => ({
   msg: state.Api.msg
 });
 
-const mapDispatchToProps = (dispatch,state) => ({
-  fetch: bindActionCreators(actions.fetchSubaccounts, dispatch, state),
+const mapDispatchToProps = (dispatch) => ({
+  fetch: bindActionCreators(actions.fetchSubaccounts, dispatch),
   updateSubaccount: bindActionCreators(actions.updateSubaccount, dispatch),
   removeMsg: bindActionCreators(actions.removeMsg, dispatch),
-  goTo: (url)=>dispatch(push(url))
+  goTo: (url)=>dispatch(push(url)),
+  showLoading: bindActionCreators(appActions.showLoading, dispatch),
+  endLoading: bindActionCreators(appActions.endLoading, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SubAccounts);

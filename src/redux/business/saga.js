@@ -106,7 +106,7 @@ function* saveBusiness(action) {
 }
 
 
-function* getSubaccounts(action) {
+function* getSubaccounts() {
     yield takeEvery(actions.FETCH_CONFIGURATION_SUBACCOUNTS, function*(action) {
         const url = getPath('URL/GET_SUBACCOUNTS', {
             id: action.payload.account.account_id,

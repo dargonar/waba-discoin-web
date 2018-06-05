@@ -24,8 +24,7 @@ const AccountBox = ({name, type, dailyPermission, changeAmount, changePassword})
     <Card 
         style={style.box}
         actions={[
-            (<BtnInfo text='Change amount' icon='edit' action={changeAmount} />),
-            (<BtnInfo text='Change password' icon='unlock' action={changePassword} />)
+            (<BtnInfo text='Change amount' icon='edit' action={changeAmount} />)
         ]}>
         <Card.Meta
         avatar={<HashImage text={name} size={50} />}
