@@ -4,6 +4,9 @@ import { apiCall, getPath } from '../../../httpService';
 
 export const updateSchedule = function* () {
     yield takeEvery(actions.UPDATE_SCHEDULE, function*(action) {
+
+        yield put({ type: 'GLOBAL_LOADING_START', payload: { msg: 'Actualizando esquema de descuentos'}})
+
         const url = getPath('URL/UPDATE_SCHEDULE', { id: action.payload.account_id});
         const fetchData = apiCall(url, 'POST', {
             discount_schedule: action.payload.schedule,
@@ -16,6 +19,7 @@ export const updateSchedule = function* () {
         {
           console.log(' -- updateSchedule() ok:', JSON.stringify(data));
           yield put({ type: actions.UPDATE_SCHEDULE_SUCCESS, payload: data.ok })
+          yield put({ type: 'GLOBAL_LOADING_END'})
         }
         else
         {
@@ -23,6 +27,7 @@ export const updateSchedule = function* () {
           if('error_list' in data)
             _err = data.error_list[0].error;
           yield put({ type: actions.UPDATE_SCHEDULE_FAILD, payload: _err })
+          yield put({ type: 'GLOBAL_LOADING_END'})
         }
     });
 };

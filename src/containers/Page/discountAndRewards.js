@@ -27,6 +27,7 @@ class DiscountsAndRewards extends Component {
 
   componentWillMount() {
     if (this.props.api.schedule === null) {
+      console.log(' -- DiscountsAndRewards:componentWillMount() -- ');
       this.props.getSchedule();
     }
   }
@@ -39,8 +40,7 @@ class DiscountsAndRewards extends Component {
   }
 
   submit() {
-    console.log(' -- schedule:', JSON.stringify(this.state.discounts));
-    // return;
+    console.log(' -- submit():schedule:', JSON.stringify(this.state.discounts));
     if (typeof this.state.discounts !== 'undefined') {
       this.props.updateSchedule(this.state.discounts)
     }
