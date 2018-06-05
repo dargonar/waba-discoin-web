@@ -99,7 +99,7 @@ export default function apiReducer(state = initState, action) {
             return {
                 ...state,
                 error: action.payload,
-                msg: 'Error updating the schedule',
+                msg: 'Error:' + action.payload,
                 actionLoading: false
             }
 

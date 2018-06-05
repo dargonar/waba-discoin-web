@@ -39,14 +39,16 @@ class DiscountsAndRewards extends Component {
   }
 
   submit() {
+    console.log(' -- schedule:', JSON.stringify(this.state.discounts));
+    // return;
     if (typeof this.state.discounts !== 'undefined') {
-      this.props.updateSchedule(this.state.discounts)  
+      this.props.updateSchedule(this.state.discounts)
     }
   }
 
   renderContent() {
     const { rowStyle, colStyle } = basicStyle;
-    
+
     const inputStyle = {
       fontSize:'24px'
     }
@@ -72,7 +74,7 @@ class DiscountsAndRewards extends Component {
             </Col>)
           )}
         </Row>
-        <Button 
+        <Button
           type="primary"
           style={{marginLeft: 'auto', marginRight: '16px'}}
           onClick={this.submit}
@@ -92,14 +94,14 @@ class DiscountsAndRewards extends Component {
         <MessageBox
           clean={this.props.cleanMsg}
           msg={this.props.api.msg}
-          error={this.props.api.error !== false} /> 
+          error={this.props.api.error !== false} />
         <PageHeader>
           Discounts and Rewards
         </PageHeader>
         { (
             this.props.api.loading !== false &&
             this.props.api.schedule === null
-          )? (<PageLoading/>): this.renderContent() }     
+          )? (<PageLoading/>): this.renderContent() }
       </LayoutContentWrapper>
     );
   }

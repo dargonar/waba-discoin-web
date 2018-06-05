@@ -62,7 +62,6 @@ class SignIn extends Component {
 
   componentWillMount() {
     this.props.getCategories();
-    console.log(' --- signin::componentWillMount::redirecting to referrer ???? ');
     console.log('SIGNED IN???', this.props.isLoggedIn);
     if (this.props.isLoggedIn) {
       console.log(' --- this.props.isLoggedIn ---> signin::componentWillMount::redirecting to referrer');
