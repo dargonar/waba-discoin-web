@@ -12,7 +12,11 @@ class StoreOverdarfBox extends Component {
     this.cancel = this.cancel.bind(this)
   }
   submit() {
-    this.props.submit(this.state.value)
+    if(this.props.value === this.state.value)
+      this.props.submit()
+    else
+      this.props.submit(this.state.value)
+
     this.setState({ value: null })
   }
   cancel() {
@@ -22,7 +26,7 @@ class StoreOverdarfBox extends Component {
   render() {
     if (this.props.visible === true) {
       if(this.state.value === null) {
-        this.setState({value: this.props.business.initial_credit || 0})
+        this.setState({value: this.props.value || 0})
       }
       return (
           <Modal

@@ -47,7 +47,11 @@ class SubAccounts extends Component {
   }
 
   submitDailyBox(value) {
-    this.updateSubaccount(this.state.accountSelected, value)
+    console.log('value', value)
+    if(typeof value !== 'undefined')
+      this.updateSubaccount(this.state.accountSelected, value)
+    else
+      this.removeDailyBox()
   }
 
   updateSubaccount(account, value){
