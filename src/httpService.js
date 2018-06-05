@@ -3,18 +3,18 @@ import { apiConfig } from './config';
 
 // import { recoverAccountFromSeed } from './utils';
 
-const businessX = {
-                    account_name:   'discoin.biz3',
-                    account_id:     '1.2.25',
-                    wif:            '5Kjz35R9W3m5ZpznZMSpdySz35tZsXZbzsuSdbtV12YC9Zaxzd9'
-                }
-
-
-export const business = {
-                    account_name:   'discoin.tuti',
-                    account_id:     '1.2.38',
-                    wif:            '5KRV1uP8YEFc5S1UwJiC3fQPLrs7ArqWabii5FpYQf19xX3YvKh'
-                }
+// const businessX = {
+//                     account_name:   'discoin.biz3',
+//                     account_id:     '1.2.25',
+//                     wif:            '5Kjz35R9W3m5ZpznZMSpdySz35tZsXZbzsuSdbtV12YC9Zaxzd9'
+//                 }
+//
+//
+// export const business = {
+//                     account_name:   'discoin.tuti',
+//                     account_id:     '1.2.38',
+//                     wif:            '5KRV1uP8YEFc5S1UwJiC3fQPLrs7ArqWabii5FpYQf19xX3YvKh'
+//                 }
 
 
 export const apiCall = (path, method, data, cb) => {
@@ -156,6 +156,8 @@ export const applyOverdraft = (business_name, signature) => {
     });
   });
 }
+
+
 export const rewardCustomer = (signature, tx) => {
 
   const get_tx_url  = getPath('URL/REFUND_CREATE');
@@ -204,6 +206,75 @@ export const rewardCustomer = (signature, tx) => {
         return;
       }, err => {
         console.log(' rewardCustomer() ===== #5' ,JSON.stringify(err));
+        reject(err);
+        return;
+      });
+
+    }, err => {
+      console.log(' rewardCustomer() ===== #6' ,JSON.stringify(err));
+      reject(err);
+      return;
+    });
+  });
+}
+
+
+export const subaccountAddOrUpdate = (signature, tx) => {
+
+  const get_tx_url  = getPath('URL/NEW_SUBACCOUNT');
+  // tx.from_id = business.account_id;
+  // let signature = business.wif;
+
+  console.log(' -- subaccountAddOrUpdate::',JSON.stringify(tx));
+
+  return new Promise( (resolve, reject) => {
+    fetch(get_tx_url, {
+        method:   'POST',
+        headers:  {'Accept': 'application/json', 'Content-Type': 'application/json'},
+        body:      JSON.stringify(tx)
+      })
+    .then((response) => response.json()
+        , err => {
+          console.log(' subaccountAddOrUpdate() ===== #1' ,JSON.stringify(err));
+          reject(err);
+          return;
+    })
+    .then((responseJson) => {
+      console.log('===========> subaccountAddOrUpdate()::res #2 ==> ', JSON.stringify(responseJson));
+
+      if (typeof responseJson.error !== 'undefined')
+      {
+        console.log(' subaccountAddOrUpdate() ===== #1.5' ,JSON.stringify(responseJson.error));
+        reject(responseJson.error);
+        return;
+      }
+
+
+      const push_url    = getPath('URL/PUSH_SIGN_TX');
+      let tx2           = responseJson.tx;
+      let packet        = {tx:tx2, pk:signature}
+
+      console.log(' ---- A PUNTO DE ADD SUBACCOUNT!!! -> tx2')
+      console.log(JSON.stringify(packet))
+
+      fetch(push_url, {
+        method:   'POST',
+        headers:  {'Accept': 'application/json', 'Content-Type': 'application/json'},
+        body:     JSON.stringify( packet )
+        })
+      .then((response) => response.json()
+        , err => {
+          console.log(' subaccountAddOrUpdate() ===== #3' ,JSON.stringify(err));
+          reject(err);
+          return;
+      })
+      .then((responseJson2) => {
+        console.log('===========> subaccountAddOrUpdate()::res #4 ==> ', JSON.stringify(responseJson2));
+        console.log(' == subaccountAddOrUpdate() :: resolving!!!!!!!!');
+        resolve(responseJson2);
+        return;
+      }, err => {
+        console.log(' subaccountAddOrUpdate() ===== #5' ,JSON.stringify(err));
         reject(err);
         return;
       });

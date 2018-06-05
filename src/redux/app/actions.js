@@ -41,6 +41,14 @@ const actions = {
   changeCurrent: current => ({
     type: actions.CHANGE_CURRENT,
     current
+  }),
+  showLoading: msg => ({
+      type: 'GLOBAL_LOADING_START',
+      payload: { msg: msg}
+  }),
+  endLoading: () => ({
+     type: 'GLOBAL_LOADING_END'
   })
+
 };
 export default actions;

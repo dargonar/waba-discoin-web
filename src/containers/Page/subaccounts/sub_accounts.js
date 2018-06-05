@@ -31,8 +31,7 @@ class SubAccounts extends Component {
   }
 
   newSubAccount(){
-    console.log(' -- sub_accounts -> push -> find_accounts')
-    this.props.goTo('/dashboard/find_accounts')
+    this.props.goTo('/dashboard/find_account')
   }
 
   showDaily(bussines) {
@@ -76,7 +75,7 @@ class SubAccounts extends Component {
     return (
       <Row style={{width:'100%'}}>
         {(subaccounts.length === 0)?
-          (<Alert message="Ups!" type="warning" description="This store does not have subaccounts" style={{margin:'10px'}}/> ):
+          (<Alert message="Ups!" type="warning" description="No subaccounts configured yet" style={{margin:'10px'}}/> ):
           subaccounts.map(account => (
             <Col lg={8} md={12} sd={24} key={account.id+'-'+account.since}>
               <AccountBox
@@ -113,7 +112,7 @@ class SubAccounts extends Component {
             error={this.props.error}
             clean={this.props.removeMsg} />
         <PageHeader>
-          <IntlMessages id="sidebar.accounts" />: {this.props.account.account}
+          <IntlMessages id="sidebar.subaccounts_title" />
         </PageHeader>
         { (this.props.loading || subaccounts === null)? <PageLoading />: this.renderAccounts() }
         <Button type="primary" style={{margin: '20px 0' }} onClick={this.newSubAccount} >Nueva Subcuenta</Button>

@@ -15,7 +15,7 @@ import CustomersBox from './components/customerBox';
 import RefundBox from './components/refundBox';
 
 import { rewardCustomer } from '../../httpService';
-import {  notification } from 'antd';
+import { notification } from 'antd';
 
 const InputSearch = Input.Search;
 

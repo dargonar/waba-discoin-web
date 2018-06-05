@@ -37,6 +37,7 @@ const apiConfig = {
     { action: 'URL/REGISTER_BUSINESS', path: '/business/register' },
     { action: 'URL/APPLY_ENDORSE',     path: '/business/endorse/apply' },
     { action: 'URL/GET_SUBACCOUNTS',   path: '/business/:id/subaccount/list/:start'},
+    { action: 'URL/NEW_SUBACCOUNT',    path: '/business/subaccount/add_or_update/create'},
   ]
 }
 

@@ -3,7 +3,7 @@ import LayoutContentWrapper from '../../../components/utility/layoutWrapper';
 import LayoutContent from '../../../components/utility/layoutContent';
 import PageHeader from '../../../components/utility/pageHeader';
 import PageLoading from '../../../components/pageLoading';
-import { Row, Col, Input } from 'antd';
+import { Row, Col, Input, Modal } from 'antd';
 import basicStyle from '../../../config/basicStyle';
 
 import { connect } from 'react-redux';
@@ -12,9 +12,12 @@ import actions from '../../../redux/api/actions';
 import MessageBox from '../../../components/MessageBox';
 
 import CustomersBox from '../components/customerBox';
-import RefundBox from '../components/refundBox';
+import SubAccountBox from '../components/subaccountBox';
+import { subaccountAddOrUpdate } from '../../../httpService';
 
 import {  notification } from 'antd';
+
+import appActions from '../../../redux/app/actions';
 
 const InputSearch = Input.Search;
 
@@ -33,17 +36,20 @@ class FindAccounts extends Component {
     super(props);
     this.state = {
       searchValue:      null,
-      refundBox:        false,
+      subaccountBox:    false,
       selectedCustomer: null,
       msg:              '',
       error:            '',
-      removeMsg:        false
+      removeMsg:        false,
+      confirm_visible:  false,
+      subaccount_auth:  null
+
     };
     this.renderContent = this.renderContent.bind(this);
 
-    this.submitRefundBox = this.submitRefundBox.bind(this);
-    this.removeRefundBox = this.removeRefundBox.bind(this);
-    this.showRefundBox = this.showRefundBox.bind(this);
+    this.submitSubAccountBox = this.submitSubAccountBox.bind(this);
+    this.removeSubAccountBox = this.removeSubAccountBox.bind(this);
+    this.showSubAccountBox = this.showSubAccountBox.bind(this);
     this._handleChange = this._handleChange.bind(this);
     this._handleKeyPress = this._handleKeyPress.bind(this);
 
@@ -57,13 +63,37 @@ class FindAccounts extends Component {
     });
   }
 
-  handleOnProfile(){}
-  handleOnTransactions(){}
+ showConfirmModal = () => {
+   this.setState({
+     confirm_visible: true
+   });
+ }
+
+  confirm_handleOk = (e) => {
+
+    this.addSubAccount();
+
+ }
+ confirm_handleCancel = (e) => {
+   console.log(e);
+   this.setState({
+     confirm_visible: false,
+   });
+ }
+
+  handleOnProfile(account){
+    console.log('---findAccount::handleOnProfile')
+    console.log(JSON.stringify(account));
+    this.showSubAccountBox(account);
+
+    // this.showProfileBox(account);
+  }
+  handleOnTransactions(){
+    console.log('---findAccount::handleOnTransactions')
+  }
 
   handleOnElement(account){
-    console.log(' --> handleOnElement.');
-    console.log(account);
-    this.showRefundBox(account);
+    console.log('---findAccount::handleOnElement')
   }
 
   componentDidMount(){
@@ -72,12 +102,20 @@ class FindAccounts extends Component {
     console.log(' --- FindAccounts::componentDidMount DONE');
   }
 
-  showRefundBox(customer) {
+  showSubAccountBox(customer) {
     this.setState({
       selectedCustomer: customer,
-      refundBox: true
+      subaccountBox: true
     })
   }
+
+  // showProfileBox(customer){
+  //   this.setState({
+  //     selectedCustomer: customer,
+  //     customerBox: true,
+  //     refundBox: false
+  //   })
+  // }
 
   _handleChange(e) {
       this.setState({ searchValue: e.target.value });
@@ -104,39 +142,78 @@ class FindAccounts extends Component {
 
   }
 
-  submitRefundBox(e) {
-
-    // console.log(' --- refund', JSON.stringify(this.props.account));
-    // return;
-    // this.props.setOverdraft(this.state.selectedCustomer, value)
-    console.log(' === submitRefundBox::', 'account:', JSON.stringify(this.state.selectedCustomer));
-    console.log(e);
-
-    let tx = {
-      from_id:      this.props.account.account_id,
-      to_id:        this.state.selectedCustomer.account_id,
-      amount:       e.amount,
-      bill_amount:  e.bill_amount,
-      bill_id:      e.bill_id
-    }
-
-
-    // this.removeRefundBox();
-    // rewardCustomer(this.props.account.keys.active.wif , tx).then( res => {
-    //     console.log('rewardCustomer', '====OK===>', JSON.stringify(res));
-    //     this.openNotificationWithIcon('success', 'Reintegro exitoso', 'El reintegro fue exitoso. Puede verlo en Transacciones.');
-    //   }, err => {
-    //     console.log('rewardCustomer','====ERR===>', JSON.stringify(err));
-    //     this.openNotificationWithIcon('error', 'Ha ocurrido un error', err);
-    // });
-
-
+  submitSubAccountBox(e) {
+    let x = {
+      subaccount_auth: {
+        amount:   e.amount,
+        from:     e.from,
+        to:       e.to
+      }
+    };
+    console.log(' submitSubAccountBox(e)::', JSON.stringify(x));
+    this.setState(x)
+    this.showConfirmModal();
   }
 
-  removeRefundBox() {
+  addSubAccount(){
+
+
+    console.log(' -- addSubAccount() #1');
+    this.props.showLoading('Autorizando subcuenta. Por favor aguarde.');
+    console.log(' -- addSubAccount() #2');
+    this.removeSubAccountBox();
+    console.log(' -- addSubAccount() #3');
     this.setState({
-      refundBox: false,
-      selectedCustomer: null
+      confirm_visible: false
+    });
+
+
+    // this.state.subaccount_auth
+    // amount
+    // from.date_utc
+    // to.date_utc
+
+    let _now    = Math.floor(Date.now() / 1000); //new Date().getTime();
+    let _from   = this.state.subaccount_auth.from.date_utc; //.date.utc().valueOf();
+    let _to     = this.state.subaccount_auth.to.date_utc; //.date.utc().valueOf()
+    let period  = 86400;
+    let periods = Math.floor((_to - _from)/86400/1000);
+
+    let tx = {
+      business_id     : this.props.account.account_id,
+      subaccount_id   : this.state.selectedCustomer.account_id,
+      limit           : this.state.subaccount_auth.amount,
+      from            : _from,
+      period          : period, // seconds
+      periods         : periods  //
+    }
+
+    subaccountAddOrUpdate(this.props.account.keys.active.wif , tx).then( res => {
+        console.log('subaccountAddOrUpdate', '====OK===>', JSON.stringify(res));
+        this.props.endLoading();
+        if(typeof res.error!== 'undefined')
+        {
+          this.openNotificationWithIcon('error', 'Ha ocurrido un error', res.error);
+        }
+        else{
+          this.openNotificationWithIcon('success', 'Autorizar subcuenta', 'El límite diario de subcuenta fue autorizado satisfactoriamente.');
+          this.goBack();
+        }
+
+      }, err => {
+        console.log('subaccountAddOrUpdate','====ERR===>', JSON.stringify(err));
+        this.openNotificationWithIcon('error', 'Ha ocurrido un error', err);
+        this.props.endLoading();
+    });
+  }
+
+  goBack(){
+    setTimeout(function() { this.props.history.goBack(); }.bind(this), 1500);
+  }
+
+  removeSubAccountBox() {
+    this.setState({
+      subaccountBox: false
     })
   }
 
@@ -155,7 +232,8 @@ class FindAccounts extends Component {
               account_id={customer.account_id}
               onElement={(e) => this.handleOnElement(e)}
               onProfile={(e) => this.handleOnProfile(e)}
-              onTransactions={(e) => this.handleOnTransactions(e)} />
+              onTransactions={(e) => this.handleOnTransactions(e)}
+              iconUser = {'pay-circle-o'} />
           </Col>
           ))}
         </Row>
@@ -166,14 +244,24 @@ class FindAccounts extends Component {
   render() {
     return (
       <LayoutContentWrapper>
-        <RefundBox
-          visible={this.state.refundBox}
+        <SubAccountBox
+          visible={this.state.subaccountBox}
           customer={this.state.selectedCustomer}
-          cancel = {this.removeRefundBox}
-          submit = {this.submitRefundBox}
+          cancel = {this.removeSubAccountBox}
+          submit = {this.submitSubAccountBox}
         />
+
+        { (this.state.confirm_visible && this.state.subaccount_auth!=null)? (
+        <Modal
+          title="Confirmar autorización de subcuenta"
+          visible={this.state.confirm_visible}
+          onOk={this.confirm_handleOk}
+          onCancel={this.confirm_handleCancel}
+        >
+         <p>Va a autorizar a {this.state.selectedCustomer.name} a retirar diariamente {this.state.subaccount_auth.amount} desde el {this.state.subaccount_auth.from.dateString} hasta {this.state.subaccount_auth.to.dateString}</p>
+       </Modal> ) : false }
         <PageHeader>
-          Usuarios
+          Agregar subcuenta
         </PageHeader>
         <Row style={rowStyle} gutter={16} justify="start">
           <Col xs={24} style={{marginBottom: '15px'}}>
@@ -199,6 +287,9 @@ const mapStateToProps = (state) =>  ({
 const mapDispatchToProps = (dispatch) => ({
   searchAccount: bindActionCreators(actions.searchAccount, dispatch),
   cleanMsg: bindActionCreators(actions.cleanMsg, dispatch),
+  showLoading: bindActionCreators(appActions.showLoading, dispatch),
+  endLoading: bindActionCreators(appActions.endLoading, dispatch)
+
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(FindAccounts);

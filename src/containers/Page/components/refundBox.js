@@ -17,19 +17,19 @@ export class RefundBox extends Component {
             bill_id: '',
             bill_amount: 0
         }
-        this.updateBillAmount  = this.updateBillAmount.bind(this)
-        this.updateAmount      = this.updateAmount.bind(this)
-        this.updatePercentage  = this.updatePercentage.bind(this)
-        this.updateBill     = this.updateBill.bind(this)
-        this.onOk           = this.onOk.bind(this)
-    }   
+        this.updateBillAmount   = this.updateBillAmount.bind(this)
+        this.updateAmount       = this.updateAmount.bind(this)
+        this.updatePercentage   = this.updatePercentage.bind(this)
+        this.updateBill         = this.updateBill.bind(this)
+        this.onOk               = this.onOk.bind(this)
+    }
 
     onOk() {
         this.props.submit(this.state)
         // this.setState(this.default_state)
 
     }
-    
+
     updatePercentage(e) {
         let percentage = e.target.value
         this.setState({
@@ -64,7 +64,7 @@ export class RefundBox extends Component {
 
     render() {
         const colStyle = { marginBottom: '15px' }
-    
+
         let name;
         try {
             name = this.props.customer.name
@@ -73,7 +73,7 @@ export class RefundBox extends Component {
         }
 
             return (
-                <Modal 
+                <Modal
                     title={'Recompensar a '+ name}
                     visible={this.props.visible}
                     onCancel={this.props.cancel}
