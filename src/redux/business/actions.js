@@ -27,20 +27,14 @@ const actions = {
     UPDATE_SUBACCOUNT_FAIL: 'UPDATE_SUBACCOUNT_FAIL',
     UPDATE_SUBACCOUNT_SUCCESS: 'UPDATE_SUBACCOUNT_SUCCESS',
 
-    fetchSubaccounts: (payload) => (dispatch, state) => {
-        if (payload.id === null && payload.id === undefined) {
-            dispatch({
-                type: actions.GET_SUBACCOUNTS_FAIL,
-                payload: {
-                    msg: 'No account id'
-                }
-            })
-            return
-        }
-
+    fetchSubaccounts: (id) => (dispatch, getState) => {
         dispatch({
             type: actions.FETCH_CONFIGURATION_SUBACCOUNTS,
-            payload
+            payload: {
+                account: {
+                    account_id: id || getState().Auth.account_id
+                }
+            }
         })
     },
 
