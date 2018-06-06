@@ -34,7 +34,7 @@ class Transactions extends Component {
         this.setState({ searchValue: e.target.value });
     }
 
-    _handleKeyPress(e) {    
+    _handleKeyPress(e) {
         if (e.key === 'Enter')
             this.props.searchTransactions(this.state.searchValue);
     }
@@ -45,14 +45,19 @@ class Transactions extends Component {
         const inputStyle = {
             fontSize:'24px'
         }
-    
+
         return (
             <Row style={rowStyle} gutter={16} justify="start">
                 <Col xs={24} style={{marginBottom: '15px'}}>
                     <InputSearch placeholder={'Filter'} onKeyPress={this._handleKeyPress} onChange={this._handleChange} />
                 </Col>
                 <Col xs={24}>
-                    { this.props.transactions.map(transaction => ( 
+                    { (this.props.transactions.length === 0)? (
+                      <Col style={{textAlign: 'center', padding: '10px'}} xs={24}>
+                        No se encontraron transacciones.
+                      </Col>
+                    ): false }
+                    { this.props.transactions.map(transaction => (
                         <TransactionBox
                             transaction={transaction}
                             key={transaction.date}

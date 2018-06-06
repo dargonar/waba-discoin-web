@@ -120,8 +120,10 @@ class Customers extends Component {
     // console.log(' --- refund', JSON.stringify(this.props.account));
     // return;
     // this.props.setOverdraft(this.state.selectedCustomer, value)
-    console.log(' === submitRefundBox::', 'account:', JSON.stringify(this.state.selectedCustomer));
-    console.log(e);
+    // console.log(' === submitRefundBox::', 'account:', JSON.stringify(this.state.selectedCustomer));
+    // console.log(e);
+
+    this.props.showLoading('Realizando reintegro. Por favor aguarde.');
 
     let tx = {
       from_id:      this.props.account.account_id,
@@ -138,10 +140,19 @@ class Customers extends Component {
     this.removeRefundBox();
     rewardCustomer(this.props.account.keys.active.wif , tx).then( res => {
         console.log('rewardCustomer', '====OK===>', JSON.stringify(res));
-        this.openNotificationWithIcon('success', 'Reintegro exitoso', 'El reintegro fue exitoso. Puede verlo en Transacciones.');
+
+        this.props.endLoading();
+        if(typeof res.error!== 'undefined')
+        {
+          this.openNotificationWithIcon('error', 'Ha ocurrido un error', res.error);
+        }
+        else{
+          this.openNotificationWithIcon('success', 'Reintegro exitoso', 'El reintegro fue exitoso. Puede verlo en Transacciones.');
+        }
       }, err => {
         console.log('rewardCustomer','====ERR===>', JSON.stringify(err));
         this.openNotificationWithIcon('error', 'Ha ocurrido un error', err);
+        this.props.endLoading();
     });
 
 
