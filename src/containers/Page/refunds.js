@@ -9,6 +9,7 @@ import basicStyle from '../../config/basicStyle';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import actions from '../../redux/api/actions';
+import appActions from '../../redux/app/actions';
 import MessageBox from '../../components/MessageBox';
 
 import CustomersBox from './components/customerBox';
@@ -246,7 +247,10 @@ const mapStateToProps = (state) =>  ({
 const mapDispatchToProps = (dispatch) => ({
   searchAccount: bindActionCreators(actions.searchAccount, dispatch),
   cleanMsg: bindActionCreators(actions.cleanMsg, dispatch),
-  getSchedule: bindActionCreators(actions.getSchedule, dispatch)
+  getSchedule: bindActionCreators(actions.getSchedule, dispatch),
+  showLoading: bindActionCreators(appActions.showLoading, dispatch),
+  endLoading: bindActionCreators(appActions.endLoading, dispatch)
+
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Customers);

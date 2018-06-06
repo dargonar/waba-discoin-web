@@ -9,6 +9,7 @@ import basicStyle from '../../../config/basicStyle';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import actions from '../../../redux/api/actions';
+import appActions from '../../../redux/app/actions';
 import MessageBox from '../../../components/MessageBox';
 
 import CustomersBox from '../components/customerBox';
@@ -17,7 +18,7 @@ import { subaccountAddOrUpdate } from '../../../httpService';
 
 import {  notification } from 'antd';
 
-import appActions from '../../../redux/app/actions';
+
 
 const InputSearch = Input.Search;
 

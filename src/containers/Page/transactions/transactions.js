@@ -10,6 +10,7 @@ import { InputSearch } from '../../../components/uielements/input';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import actions from '../../../redux/api/actions';
+import appActions from '../../../redux/app/actions';
 
 import TransactionBox from './components/transactionBox';
 
@@ -86,8 +87,8 @@ const mapStateToProps = (state) =>  ({
 
 const mapDispatchToProps = (dispatch) => ({
   searchTransactions: bindActionCreators(actions.searchTransactions, dispatch),
-  showLoading: bindActionCreators(actions.showLoading, dispatch),
-  endLoading: bindActionCreators(actions.endLoading, dispatch)
+  showLoading: bindActionCreators(appActions.showLoading, dispatch),
+  endLoading: bindActionCreators(appActions.endLoading, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Transactions);
