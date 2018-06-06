@@ -86,6 +86,8 @@ const mapStateToProps = (state) =>  ({
 
 const mapDispatchToProps = (dispatch) => ({
   searchTransactions: bindActionCreators(actions.searchTransactions, dispatch),
+  showLoading: bindActionCreators(actions.showLoading, dispatch),
+  endLoading: bindActionCreators(actions.endLoading, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Transactions);

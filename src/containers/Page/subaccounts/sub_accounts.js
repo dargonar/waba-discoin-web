@@ -83,7 +83,7 @@ class SubAccounts extends Component {
     subaccountAddOrUpdate(this.props.account.keys.active.wif , tx).then( res => {
         console.log('subaccountAddOrUpdate', '====OK===>', JSON.stringify(res));
         this.props.endLoading();
-        if(typeof res.error!== 'undefined')
+        if('error' in res)
         {
           this.openNotificationWithIcon('error', 'Ha ocurrido un error', res.error);
         }
@@ -91,7 +91,7 @@ class SubAccounts extends Component {
           this.openNotificationWithIcon('success', 'Autorizar subcuenta', 'El límite diario de subcuenta fue autorizado satisfactoriamente.');
           if (typeof this.props.match.params.id !== 'undefined') {
             this.props.fetch(this.props.match.params.id)
-            return
+            return;
           };
           this.props.fetch();
         }
