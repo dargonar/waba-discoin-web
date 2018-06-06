@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
 import { Modal, Row, Col } from 'antd';
 import Input from '../../../components/uielements/input';
+import { notification } from 'antd';
+import PropTypes from 'prop-types'; // ES6
 
 export class RefundBox extends Component {
     constructor(props) {
         super(props)
         this.state = {
             amount: 0,
-            percentage: 30,
+            percentage: this.props.percentage,
             bill_id: '',
             bill_amount: 0
         }
         this.default_state = {
             amount: 0,
-            percentage: 30,
+            percentage: this.props.percentage,
             bill_id: '',
             bill_amount: 0
         }
@@ -30,11 +32,22 @@ export class RefundBox extends Component {
 
     }
 
+    openNotificationWithIcon(type, title, msg){
+      notification[type]({
+        message: title,
+        description: msg,
+      });
+    }
+
     updatePercentage(e) {
         let percentage = e.target.value
+        if(percentage<this.default_state.percentage)
+        {
+          this.openNotificationWithIcon('error', 'Descuento inválido', 'El descuento debe ser de al menos ' + this.default_state.percentage + '%')
+        }
         this.setState({
             percentage: percentage,
-            dsc: Math.round(percentage * this.state.amount / 100)
+            amount: Math.round(percentage * this.state.bill_amount / 100)
         })
     }
 
@@ -101,5 +114,7 @@ export class RefundBox extends Component {
             );
     }
 }
-
+RefundBox.protoTypes = {
+    percentage: PropTypes.string,
+}
 export default RefundBox;

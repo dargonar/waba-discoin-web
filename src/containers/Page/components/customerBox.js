@@ -14,14 +14,16 @@ export class CustomerBox extends Component {
         this.props.onElement({name:this.props.name, account_id:this.props.account_id});
     }
 
-    handleProfileClick() {
+    // handleProfileClick() {
+    handleButton1Click() {
         // console.log('The link was clicked.');
-        this.props.onProfile({name:this.props.name, account_id:this.props.account_id});
+        this.props.onIcon1({name:this.props.name, account_id:this.props.account_id});
     }
 
-    handleScheduleClick() {
+    //handleScheduleClick() {
+    handleButton2Click() {
         // console.log('The link was clicked.');
-        this.props.onTransactions({name:this.props.name, account_id:this.props.account_id});
+        this.props.onIcon2({name:this.props.name, account_id:this.props.account_id});
     }
 
     // { (
@@ -32,12 +34,13 @@ export class CustomerBox extends Component {
 
     render() {
 
-        const icon1 = (<Icon type={this.props.iconUser || 'user'} onClick={(e) => this.handleProfileClick(e)}/>)
+        const icon1 = (<Icon type={this.props.icon1 || 'user'} onClick={(e) => this.handleButton1Click(e)}/>)
+        const icon2 = this.props.icon2!='hidden'?(<Icon type={this.props.icon2 || 'schedule'} onClick={(e) => this.handleButton2Click(e)}/>):false;
         return (
             <Card
                 actions={[
                     icon1,
-                    (<Icon type='schedule' onClick={(e) => this.handleScheduleClick(e)}/>),
+                    icon2
                 ]}>
                 <HashImage text={this.props.account_id} size={50} onClick={(e) => this.handleClick(e)} />
                 <span style={{ padding: '0 10px', fontSize: '120%' }} onClick={(e) => this.handleClick(e)} >{this.props.name}</span>
@@ -49,9 +52,10 @@ export class CustomerBox extends Component {
 CustomerBox.protoTypes = {
     name: PropTypes.string,
     account_id: PropTypes.string,
-    iconUser: PropTypes.string,
-    onPerfil: PropTypes.func,
-    onTransactions: PropTypes.func,
+    icon1: PropTypes.string,
+    icon2: PropTypes.string,
+    onIcon1: PropTypes.func,
+    onIcon2: PropTypes.func,
     onElement: PropTypes.func,
 }
 

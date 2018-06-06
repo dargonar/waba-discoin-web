@@ -49,6 +49,12 @@ class Customers extends Component {
     this._handleKeyPress = this._handleKeyPress.bind(this);
   }
 
+  getDay(){
+    const now = new Date();
+    const days = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+    return days[ now.getDay() ];
+  }
+
   openNotificationWithIcon(type, title, msg){
     notification[type]({
       message: title,
@@ -56,14 +62,20 @@ class Customers extends Component {
     });
   }
 
-  handleOnProfile(){}
-  handleOnTransactions(){}
+  handleOnRefund(account){
+    this.showRefundBox(account);
+  }
+  handleOnIcon2(){}
   handleOnElement(account){
-    console.log(' --> handleOnElement.');
-    console.log(account);
     this.showRefundBox(account);
   }
 
+  componentWillMount() {
+    if (this.props.api.schedule === null) {
+      console.log(' -- Refund:componentWillMount() -- ');
+      this.props.getSchedule();
+    }
+  }
   componentDidMount(){
     console.log(' --- Customers::componentDidMount PRE');
     this.props.searchAccount('');
@@ -142,6 +154,20 @@ class Customers extends Component {
     })
   }
 
+  getTodayRate(){
+    const today = this.getDay();
+    if (this.props.api.schedule === null) {
+      console.log(' -- Refund:componentWillMount() -- ');
+      this.props.getSchedule();
+      return;
+    }
+    let discount = this.props.api.schedule.find(function(dis) {
+      return dis.date == today;
+    });
+    return discount.discount;
+
+  }
+
   renderContent() {
     return (
         <Row style={rowStyle} gutter={16} justify="start">
@@ -156,8 +182,10 @@ class Customers extends Component {
               name={customer.name}
               account_id={customer.account_id}
               onElement={(e) => this.handleOnElement(e)}
-              onProfile={(e) => this.handleOnProfile(e)}
-              onTransactions={(e) => this.handleOnTransactions(e)} />
+              onIcon1={(e) => this.handleOnRefund(e)}
+              onIcon2={(e) => this.handleOnIcon2(e)}
+              icon1 = {'rollback'}
+              icon2 = {'hidden'} />
           </Col>
           ))}
         </Row>
@@ -178,6 +206,7 @@ class Customers extends Component {
           customer={this.state.selectedCustomer}
           cancel = {this.removeRefundBox}
           submit = {this.submitRefundBox}
+          percentage={this.getTodayRate()}
         />
         <PageHeader>
           Customers
@@ -206,6 +235,7 @@ const mapStateToProps = (state) =>  ({
 const mapDispatchToProps = (dispatch) => ({
   searchAccount: bindActionCreators(actions.searchAccount, dispatch),
   cleanMsg: bindActionCreators(actions.cleanMsg, dispatch),
+  getSchedule: bindActionCreators(actions.getSchedule, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Customers);

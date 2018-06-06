@@ -81,14 +81,14 @@ class FindAccounts extends Component {
    });
  }
 
-  handleOnProfile(account){
+  handleOnIcon1(account){
     console.log('---findAccount::handleOnProfile')
     console.log(JSON.stringify(account));
     this.showSubAccountBox(account);
 
     // this.showProfileBox(account);
   }
-  handleOnTransactions(){
+  handleOnIcon2(){
     console.log('---findAccount::handleOnTransactions')
   }
 
@@ -231,9 +231,10 @@ class FindAccounts extends Component {
               name={customer.name}
               account_id={customer.account_id}
               onElement={(e) => this.handleOnElement(e)}
-              onProfile={(e) => this.handleOnProfile(e)}
-              onTransactions={(e) => this.handleOnTransactions(e)}
-              iconUser = {'pay-circle-o'} />
+              onIcon1={(e) => this.handleOnIcon1(e)}
+              onIcon2={(e) => this.handleOnIcon2(e)}
+              icon1 = {'pay-circle-o'}
+              icon2 = {'hidden'} />
           </Col>
           ))}
         </Row>
