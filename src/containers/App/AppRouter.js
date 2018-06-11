@@ -43,6 +43,11 @@ class AppRouter extends React.Component {
             import("../Page/transactions/transactions")
           )}
         />
+        <Route
+          exact
+          path={`${url}/profile`}
+          component={asyncComponent(() => import("../Page/editBusiness"))}
+        />
       </Switch>
     );
   }
