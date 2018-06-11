@@ -13,8 +13,6 @@ import Logo from "../../components/utility/logo";
 import { getCurrentTheme } from "../ThemeSwitcher/config";
 import { themeConfig } from "../../config";
 
-const SubMenu = Menu.SubMenu;
-
 const { Sider } = Layout;
 const {
   toggleOpenDrawer,
@@ -88,10 +86,7 @@ class Sidebar extends Component {
     const submenuColor = {
       color: customizedTheme.textColor
     };
-    const submenuStyle = {
-      backgroundColor: "rgba(0,0,0,0.3)",
-      color: customizedTheme.textColor
-    };
+
     return (
       <SidebarWrapper>
         <Sider
@@ -178,7 +173,7 @@ class Sidebar extends Component {
                   </span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="profile" style={hidden}>
+              <Menu.Item key="profile">
                 <Link to={`${url}/profile`}>
                   <span className="isoMenuHolder" style={submenuColor}>
                     <span className="nav-text">
