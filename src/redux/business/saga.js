@@ -4,9 +4,11 @@ import {
   call,
   all,
   fork,
-  takeEvery
+  takeEvery,
+  select
 } from "redux-saga/effects";
 import actions from "./actions";
+import actionsApi from "../api/actions";
 import { getPath, apiCall } from "../../httpService";
 import { signTx } from "./sagas/signTx";
 
@@ -96,27 +98,53 @@ function* reloadBusiness(action) {
   });
 }
 
-const makeSignature = data => {
-  return "lafirmaqueteparezca";
-};
-
 function* saveBusiness(action) {
   console.log(" saveBusiness ========= #1");
   yield takeEvery(actions.SAVE_BUSINESS, function*(action) {
+    yield put({
+      type: "GLOBAL_LOADING_START",
+      payload: { msg: "Guardando comercio" }
+    });
+
     const url = getPath("URL/UPDATE_BUSINESS", { ...action.payload });
     console.log(" saveBusiness ========= #2");
-    const signature = makeSignature(action.payload);
+    const signature = yield select(state => state.Auth.keys.active.wif);
 
     console.log(" ===> about to POST");
     const fetchData = apiCall(url, "POST", {
       business: action.payload,
       secret: signature
     });
+
     const { data, ex } = yield call(fetchData);
     console.log("=====> saveBusiness");
     console.log(JSON.stringify(data));
-    if (data) yield put({ type: actions.SAVE_BUSINESS_SUCCESS, payload: data });
-    else yield put({ type: actions.SAVE_BUSINESS_FAIL, payload: ex });
+
+    yield put({
+      type: "GLOBAL_LOADING_END"
+    });
+
+    if (data && typeof data.error === "undefined") {
+      yield put({ type: actions.SAVE_BUSINESS_SUCCESS, payload: data });
+      // Update profile store
+      yield put({
+        type: actionsApi.GET_PROFILE_SUCCESS,
+        payload: { business: action.payload }
+      });
+      yield put({
+        type: "GLOBAL_MSG",
+        payload: { msg: "Comercio guardado correctamente", msgType: "success" }
+      });
+    } else {
+      yield put({
+        type: actions.SAVE_BUSINESS_FAIL,
+        payload: { ex: ex, error: data }
+      });
+      yield put({
+        type: "GLOBAL_MSG",
+        payload: { msg: "Error al guardar el comercio", msgType: "error" }
+      });
+    }
   });
 }
 
