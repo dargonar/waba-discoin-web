@@ -1,26 +1,24 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import clone from 'clone';
-import { Link } from 'react-router-dom';
-import { Layout } from 'antd';
-import Scrollbars from '../../components/utility/customScrollBar.js';
-import Menu from '../../components/uielements/menu';
-import IntlMessages from '../../components/utility/intlMessages';
-import SidebarWrapper from './sidebar.style';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import clone from "clone";
+import { Link } from "react-router-dom";
+import { Layout } from "antd";
+import Scrollbars from "../../components/utility/customScrollBar.js";
+import Menu from "../../components/uielements/menu";
+import IntlMessages from "../../components/utility/intlMessages";
+import SidebarWrapper from "./sidebar.style";
 
-import appActions from '../../redux/app/actions';
-import Logo from '../../components/utility/logo';
-import { getCurrentTheme } from '../ThemeSwitcher/config';
-import { themeConfig } from '../../config';
-
-const SubMenu = Menu.SubMenu;
+import appActions from "../../redux/app/actions";
+import Logo from "../../components/utility/logo";
+import { getCurrentTheme } from "../ThemeSwitcher/config";
+import { themeConfig } from "../../config";
 
 const { Sider } = Layout;
 const {
   toggleOpenDrawer,
   changeOpenKeys,
   changeCurrent,
-  toggleCollapsed,
+  toggleCollapsed
 } = appActions;
 
 class Sidebar extends Component {
@@ -31,7 +29,7 @@ class Sidebar extends Component {
   }
   handleClick(e) {
     this.props.changeCurrent([e.key]);
-    if (this.props.app.view === 'MobileView') {
+    if (this.props.app.view === "MobileView") {
       setTimeout(() => {
         this.props.toggleCollapsed();
         this.props.toggleOpenDrawer();
@@ -57,18 +55,18 @@ class Sidebar extends Component {
   }
   getAncestorKeys = key => {
     const map = {
-      sub3: ['sub2'],
+      sub3: ["sub2"]
     };
     return map[key] || [];
   };
 
   render() {
     const { url, app, toggleOpenDrawer } = this.props;
-    const customizedTheme = getCurrentTheme('sidebarTheme', themeConfig.theme);
+    const customizedTheme = getCurrentTheme("sidebarTheme", themeConfig.theme);
     const collapsed = clone(app.collapsed) && !clone(app.openDrawer);
     const { openDrawer } = app;
-    const mode = collapsed === true ? 'vertical' : 'inline';
-    const hidden = { display: 'none' }
+    const mode = collapsed === true ? "vertical" : "inline";
+    const hidden = { display: "none" };
     const onMouseEnter = event => {
       if (openDrawer === false) {
         toggleOpenDrawer();
@@ -83,15 +81,12 @@ class Sidebar extends Component {
     };
     const scrollheight = app.height || window.innerHeight;
     const styling = {
-      backgroundColor: customizedTheme.backgroundColor,
+      backgroundColor: customizedTheme.backgroundColor
     };
     const submenuColor = {
-      color: customizedTheme.textColor,
+      color: customizedTheme.textColor
     };
-    const submenuStyle = {
-      backgroundColor: 'rgba(0,0,0,0.3)',
-      color: customizedTheme.textColor,
-    };
+
     return (
       <SidebarWrapper>
         <Sider
@@ -178,7 +173,7 @@ class Sidebar extends Component {
                   </span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="profile" style={hidden}>
+              <Menu.Item key="profile">
                 <Link to={`${url}/profile`}>
                   <span className="isoMenuHolder" style={submenuColor}>
                     <span className="nav-text">
@@ -197,7 +192,7 @@ class Sidebar extends Component {
 
 export default connect(
   state => ({
-    app: state.App.toJS(),
+    app: state.App.toJS()
   }),
   { toggleOpenDrawer, changeOpenKeys, changeCurrent, toggleCollapsed }
 )(Sidebar);
