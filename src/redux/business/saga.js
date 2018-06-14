@@ -113,12 +113,19 @@ function* getSubaccounts() {
             start: action.payload.start || '0',
         })
 
+        yield put({ type: 'GLOBAL_LOADING_START', payload: { msg: 'Cargando subcuenta(s)'}})
         const fetchData = apiCall(url)
         const { data, ex } = yield call(fetchData);
         if (data && typeof data !== 'undefined')
-            yield put({ type: actions.GET_SUBACCOUNTS_SUCCESS, payload: { account_id: action.payload.account.account_id, subaccounts: data }});
+        {
+          yield put({ type: actions.GET_SUBACCOUNTS_SUCCESS, payload: { account_id: action.payload.account.account_id, subaccounts: data }});
+          yield put({ type: 'GLOBAL_LOADING_END'})
+        }
         else
-            yield put({ type: actions.GET_SUBACCOUNTS_FAIL, payload: ex });
+        {
+          yield put({ type: actions.GET_SUBACCOUNTS_FAIL, payload: ex });
+          yield put({ type: 'GLOBAL_LOADING_END'})
+        }
     })
 }
 

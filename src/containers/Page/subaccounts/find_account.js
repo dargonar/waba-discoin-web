@@ -174,7 +174,7 @@ class FindAccounts extends Component {
     // from.date_utc
     // to.date_utc
 
-    let _now    = Math.floor(Date.now() / 1000); //new Date().getTime();
+    // let _now    = Math.floor(Date.now() / 1000); //new Date().getTime();
     let _from   = this.state.subaccount_auth.from.date_utc; //.date.utc().valueOf();
     let _to     = this.state.subaccount_auth.to.date_utc; //.date.utc().valueOf()
     let period  = 86400;
@@ -190,9 +190,9 @@ class FindAccounts extends Component {
     }
 
     subaccountAddOrUpdate(this.props.account.keys.active.wif , tx).then( res => {
-        console.log('subaccountAddOrUpdate', '====OK===>', JSON.stringify(res));
+        console.log('find_account::subaccountAddOrUpdate', '====OK===>', JSON.stringify(res));
         this.props.endLoading();
-        if(typeof res.error!== 'undefined')
+        if('error' in res)
         {
           this.openNotificationWithIcon('error', 'Ha ocurrido un error', res.error);
         }

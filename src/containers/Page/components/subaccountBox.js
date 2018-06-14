@@ -19,10 +19,14 @@ export class SubAccountBox extends Component {
         this.onOk         = this.onOk.bind(this)
     }
 
-    openNotificationWithIcon(type, title, msg){
+    openNotificationWithIcon(type, title, msg, duration){
+      let my_duration = 4.5;
+      if(typeof duration !== 'undefined')
+        my_duration = duration;
       notification[type]({
         message: title,
         description: msg,
+        duration: my_duration
       });
     }
 
@@ -52,9 +56,9 @@ export class SubAccountBox extends Component {
       console.log(' -- this.null_or_empty(this.state.from):', this.null_or_empty(_from))
       console.log(' -- this.null_or_empty(this.state.to):', this.null_or_empty(_to))
       console.log(' -- (_now>=_from>=_to)', (_now>=_from>=_to));
-      if(this.null_or_zero(this.state.amount) || this.null_or_empty(_from) || this.null_or_empty(_to) || (_now>=_from>=_to) || periods<1)
+      if(this.null_or_zero(this.state.amount) || this.null_or_empty(_from) || this.null_or_empty(_to) || (_from>=_now>=_to) || periods<1)
       {
-        this.openNotificationWithIcon('error', 'Verifique valores ingresados', 'El monto debe ser mayor a cero, la fecha de inicio debe ser mayor al dia de hoy, mayor a la fecha de cierre y mayor a un día.')
+        this.openNotificationWithIcon('error', 'Verifique valores ingresados', 'El monto debe ser mayor a cero, la fecha de inicio debe ser mayor al dia de hoy y mayor a la fecha de cierre.', 0)
         return;
       }
 
@@ -113,11 +117,12 @@ export class SubAccountBox extends Component {
                         </Col>
                         <Col style={colStyle} xs={24} md={12}>
                             Habilitado desde
-                            <DatePicker onChange={this.updateFrom} />
+                            <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" onChange={this.updateFrom} size="large"/>
+                            +10 min. de la hora actual
                         </Col>
                         <Col style={colStyle} xs={24} md={12}>
                             hasta
-                            <DatePicker onChange={this.updateTo} />
+                            <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" onChange={this.updateTo} size="large" />
                         </Col>
                     </Row>
                 </Modal>
