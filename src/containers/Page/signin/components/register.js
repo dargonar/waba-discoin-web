@@ -37,6 +37,11 @@ export class Register extends Component {
     };
   }
 
+  cancel() {
+    this.props.form.resetFields();
+    this.props.cancel();
+  }
+
   openNotificationWithIcon(type) {
     notification[type]({
       message: "Palabras Mnemonicas",
@@ -85,10 +90,6 @@ export class Register extends Component {
       // delete data['seed'];
       this.props.submit(data);
     }
-  }
-
-  cancel() {
-    this.props.cancel();
   }
 
   checkAccontName(rule, value, callback) {
@@ -374,6 +375,7 @@ export class Register extends Component {
 
     return (
       <Modal
+        destroyOnClose={true}
         title={<IntlMessages id="register.bussines" />}
         visible={this.props.visible}
         onOk={this.submit}
