@@ -307,8 +307,8 @@ export function* register() {
         " [auth/saga/register]::register() #2 ---- OK!",
         JSON.stringify(data)
       );
-      yield put({ type: actions.REGISTER_SUCCESS, payload: { data } });
       yield put({ type: "GLOBAL_LOADING_END" });
+      yield put({ type: actions.REGISTER_SUCCESS, payload: { data } });
       yield put({
         type: actions.LOGIN_REQUEST,
         payload: {
