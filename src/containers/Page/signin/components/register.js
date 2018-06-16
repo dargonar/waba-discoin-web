@@ -366,7 +366,7 @@ export class Register extends Component {
               type="primary"
               onCopy={this.setPrivateKey}
             >
-              <button>I have saved this brainkey</button>
+              <Button>I have saved this brainkey</Button>
             </CopyToClipboard>
           </div>
         )
