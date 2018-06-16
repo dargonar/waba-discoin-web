@@ -299,16 +299,14 @@ export class Register extends Component {
                       style={{ width: "100%" }}
                       placeholder={<IntlMessages id="register.please_select" />}
                     >
-                      {this.props.categories
-                        .filter(category => category.parent === "0")
-                        .map((category, index) => (
-                          <SelectOption
-                            key={category.id}
-                            value={Number(category.id)}
-                          >
-                            {category.title}
-                          </SelectOption>
-                        ))}
+                      {this.props.categories.map((category, index) => (
+                        <SelectOption
+                          key={category.id}
+                          value={Number(category.id)}
+                        >
+                          {category.name}
+                        </SelectOption>
+                      ))}
                     </Select>
                   )
                 : false}
@@ -333,10 +331,10 @@ export class Register extends Component {
                       style={{ width: "100%" }}
                       placeholder={<IntlMessages id="register.please_select" />}
                     >
-                      {this.props.categories
+                      {this.props.subcategories
                         .filter(
                           category =>
-                            Number(category.parent) ===
+                            Number(category.parent_id) ===
                             Number(this.props.form.getFieldValue("category"))
                         )
                         .map((category, index) => (
@@ -344,7 +342,7 @@ export class Register extends Component {
                             key={category.id}
                             value={Number(category.id)}
                           >
-                            {category.title}
+                            {category.name}
                           </SelectOption>
                         ))}
                     </Select>
@@ -431,9 +429,9 @@ export class Register extends Component {
 //Inject form manager
 let RegisterForm = Form.create()(injectIntl(Register));
 
-//Inject categories and subcategories
+//Inject categories
 const mapToProps = state => ({
-  categories: state.Api.categories,
-  subcategories: state.Api.subcategories
+  categories: state.Api.categoriesList.filter(x => x.parent_id === 0),
+  subcategories: state.Api.categoriesList.filter(x => x.parent_id !== 0)
 });
 export default connect(mapToProps)(RegisterForm);
