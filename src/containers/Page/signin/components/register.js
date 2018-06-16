@@ -30,15 +30,17 @@ export class Register extends Component {
     this.checkAccontNameAvailable = this.checkAccontNameAvailable.bind(this);
     this.setPrivateKey = this.setPrivateKey.bind(this);
     this.newSeed = this.newSeed.bind(this);
-    this.state = {
+    this.initState = {
       current: 0,
       form: {},
       copied: false
     };
+    this.state = this.initState;
   }
 
   cancel() {
     this.props.form.resetFields();
+    this.setState(this.initState);
     this.props.cancel();
   }
 
