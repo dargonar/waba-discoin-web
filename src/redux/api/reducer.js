@@ -11,6 +11,7 @@ const initState = {
     actionLoading: false,
     msg: null,
     categories: [],
+    categoriesList: []
 }
 
 export default function apiReducer(state = initState, action) {
@@ -58,6 +59,20 @@ export default function apiReducer(state = initState, action) {
                 msg: action.payload
             }
 
+        case actions.GET_CATEGORIES_LIST_SUCCESS:
+            return {
+              ...state,
+              categoriesList: action.payload.categories
+            };
+
+        case actions.GET_CATEGORIES_LIST_FAILD:
+            return {
+              ...state,
+              loading: false,
+              error: true,
+              msg: action.payload
+            };
+                
         // GET SCHEDULE REDUCERS
         case actions.GET_SCHEDULE:
             return {

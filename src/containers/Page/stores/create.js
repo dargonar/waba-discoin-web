@@ -15,6 +15,7 @@ import Async from '../../../helpers/asyncComponent';
 import Dropzone from '../../../components/uielements/dropzone.js';
 import DropzoneWrapper from './components/dropzone.style';
 import actions from '../../../redux/business/actions';
+import apiActions from '../../../redux/api/actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -79,6 +80,7 @@ class CreateStore extends Component {
   }
 
   componentWillMount() {
+    this.props.getCategories();
     if (typeof this.props.match.params.id !== 'undefined') {
       this.setState({
         loading:true,
@@ -209,7 +211,7 @@ class CreateStore extends Component {
       form: {
         ...this.state.form,
         category_id: id,
-        sub_category: null
+        subcategory_id: null
       }
     })
   }
@@ -218,7 +220,7 @@ class CreateStore extends Component {
     this.setState({
       form: {
         ...this.state.form,
-        sub_subcategory: id
+        subcategory_id: id
       }
     })
   }
@@ -279,12 +281,12 @@ class CreateStore extends Component {
                   <Select
                       style={{ width: '100%' }}
                       placeholder="Please select"
-                      defaultValue={Number(this.state.form.category_id)}
+                      defaultValue={this.state.form.category_id}
                       onChange={this.categoryChange}>
                     {
                       this.props.categories
-                        .filter(category => category.parent === '0')
-                        .map((category, index) => (<SelectOption key={category.id} value={Number(category.id)} selected={ !this.state.form.category_id ? index==0 : this.state.form.category_id.toString() === category.id.toString() }>{category.title}</SelectOption>))
+                        .filter(category => category.parent_id === 0)
+                        .map((category, index) => (<SelectOption key={category.id} value={Number(category.id)} selected={ !this.state.form.category_id ? index==0 : this.state.form.category_id.toString() === category.id.toString() }>{category.name}</SelectOption>))
                     }
                   </Select>
                 </FormItem>
@@ -293,12 +295,12 @@ class CreateStore extends Component {
                   <Select
                       style={{ width: '100%' }}
                       placeholder="Please select"
-                      defaultValue={Number(this.state.form.category_id)}
+                      defaultValue={this.state.form.subcategory_id}
                       onChange={this.subcategoryChange}>
                     {
                       this.props.categories
-                        .filter(category => Number(category.parent) === Number(this.state.form.category_id))
-                        .map((category, index) => (<SelectOption key={category.id} value={Number(category.id)} selected={ !this.state.form.subcategory_id ? index==0 : this.state.form.subcategory_id.toString() === category.id.toString() }>{category.title}</SelectOption>))
+                        .filter(category => category.parent_id === this.state.form.category_id)
+                        .map((category, index) => (<SelectOption key={category.id} value={category.id}>{category.name}</SelectOption>))
                     }
                   </Select>
                 </FormItem>
@@ -374,11 +376,12 @@ class CreateStore extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  categories : state.Business.categories,
+  categories : state.Api.categoriesList,
   businesses : state.Business.stores,
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  getCategories: bindActionCreators(apiActions.getCategoriesList, dispatch),
   fetchBusiness: bindActionCreators(actions.fetchBusiness, dispatch),
   saveBusiness: bindActionCreators(actions.saveBusiness, dispatch)
 })

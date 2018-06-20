@@ -10,6 +10,11 @@ const actions = {
     GET_CATEGORIES: 'GET_CATEGORIES',
     GET_CATEGORIES_SUCCESS: 'GET_CATEGORIES_SUCCESS',
     GET_CATEGORIES_FAILD: 'GET_CATEGORIES_FAILD',
+    
+    GET_CATEGORIES_LIST: "GET_CATEGORIES_LIST",
+    GET_CATEGORIES_LIST_SUCCESS: "GET_CATEGORIES_LIST_SUCCESS",
+    GET_CATEGORIES_LIST_FAILD: "GET_CATEGORIES_LIST_FAILD",
+    
 
     SEARCH_CUSTOMERS: 'SEARCH_CUSTOMERS',
     SEARCH_ALL_CUSTOMERS: 'SEARCH_ALL_CUSTOMERS',
@@ -104,6 +109,12 @@ const actions = {
     getCategories: () => (dispatch) => {
         dispatch({
             type: actions.GET_CATEGORIES
+        });
+    },
+
+    getCategoriesList: () => dispatch => {
+        dispatch({
+            type: actions.GET_CATEGORIES_LIST
         });
     },
 

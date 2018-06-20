@@ -26,6 +26,7 @@ const apiConfig = {
     { action: 'URL/GET_KPIS',          path: '/dashboard/kpis' },
     { action: 'URL/GET_PARAMETERS',    path: '/dashboard/configuration' },
     { action: 'URL/GET_CATEGORIES',    path: '/dashboard/categories' },
+    { action: "URL/GET_CATEGORIES_LIST", path: "/business/category/list" }, 
     { action: 'URL/GET_BUSINESSES',    path: '/dashboard/business/list/:from/:limit' },
     { action: 'URL/GET_BUSINESS',      path: '/dashboard/business/profile/:id/load' },
     { action: 'URL/SET_OVERDRAFT',     path: '/business/endorse/create' },
