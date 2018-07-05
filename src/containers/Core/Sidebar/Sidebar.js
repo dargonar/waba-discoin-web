@@ -86,7 +86,7 @@ class Sidebar extends Component {
     const submenuColor = {
       color: customizedTheme.textColor
     };
-    console.log(this.props.router.location.pathname);
+
     return (
       <SidebarWrapper>
         <Sider
