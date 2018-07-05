@@ -97,7 +97,7 @@ class SignIn extends Component {
   };
 
   render() {
-    const from = { pathname: `/dashboard/${this.props.userType}` };
+    const from = { pathname: `/dashboard/${this.props.userType}/` };
     if (this.props.isLoggedIn) {
       console.log(" --- signin::render::redirecting to referrer");
       return <Redirect to={from} />;

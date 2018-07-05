@@ -86,7 +86,7 @@ class Sidebar extends Component {
     const submenuColor = {
       color: customizedTheme.textColor
     };
-
+    console.log(this.props.router.location.pathname);
     return (
       <SidebarWrapper>
         <Sider
@@ -106,12 +106,12 @@ class Sidebar extends Component {
               theme="dark"
               mode={mode}
               openKeys={collapsed ? [] : app.openKeys}
-              selectedKeys={app.current}
+              selectedKeys={this.props.router.location.pathname}
               onOpenChange={this.onOpenChange}
               className="isoDashboardMenu"
             >
               {this.props.app.menuItems.map(item => (
-                <Menu.Item key={item.name}>
+                <Menu.Item key={`${url}/${item.url}`}>
                   <Link to={`${url}/${item.url}`}>
                     <span className="isoMenuHolder" style={submenuColor}>
                       <span className="nav-text">
@@ -131,7 +131,8 @@ class Sidebar extends Component {
 
 export default connect(
   state => ({
-    app: state.App.toJS()
+    app: state.App.toJS(),
+    router: state.router
   }),
   { toggleOpenDrawer, changeOpenKeys, changeCurrent, toggleCollapsed }
 )(Sidebar);

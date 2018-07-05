@@ -1,7 +1,7 @@
 export default [
   {
     name: "home",
-    url: "business/",
+    url: "business/home",
     intlMessage: "sidebar.home"
   },
   {
