@@ -93,7 +93,7 @@ class Sidebar extends Component {
           trigger={null}
           collapsible={true}
           collapsed={collapsed}
-          width="240"
+          width={240}
           className="isomorphicSidebar"
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
@@ -114,6 +114,7 @@ class Sidebar extends Component {
                 <Menu.Item key={`${url}/${item.url}`}>
                   <Link to={`${url}/${item.url}`}>
                     <span className="isoMenuHolder" style={submenuColor}>
+                      <i className={item.icon || ""} />
                       <span className="nav-text">
                         <IntlMessages id={item.intlMessage} />
                       </span>
