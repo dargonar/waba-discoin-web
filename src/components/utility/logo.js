@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { siteConfig } from '../../config.js';
+import React from "react";
+import { Link } from "react-router-dom";
+import { siteConfig } from "../../config.js";
 
 export default ({ collapsed }) => {
   return (
@@ -8,14 +8,14 @@ export default ({ collapsed }) => {
       {collapsed ? (
         <div>
           <h3>
-            <Link to="/dashboard">
+            <Link to="./">
               <i className={siteConfig.siteIcon} />
             </Link>
           </h3>
         </div>
       ) : (
         <h3>
-          <Link to="/dashboard">{siteConfig.siteName}</Link>
+          <Link to="./">{siteConfig.siteName}</Link>
         </h3>
       )}
     </div>
