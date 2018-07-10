@@ -35,6 +35,7 @@ const formatSchedules = formData => {
     return formated;
   });
 
+  console.log(formData);
   return formData;
 };
 
@@ -351,7 +352,7 @@ class CreateStore extends Component {
                               textTransform: "capitalize"
                             }}
                           >
-                            {discount.date.substr(0, 3)}
+                            {discount ? discount.date.substr(0, 3) : ""}
                           </Col>
                           <Col>
                             {getFieldDecorator(
@@ -378,7 +379,9 @@ class CreateStore extends Component {
                             {getFieldDecorator(
                               "discount_schedule[" + key + "].discount",
                               {
-                                initialValue: Number(discount.discount)
+                                initialValue: Number(
+                                  discount ? discount.discount : 0
+                                )
                               }
                             )(
                               <InputNumber
