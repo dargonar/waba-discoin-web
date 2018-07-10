@@ -197,12 +197,13 @@ class Customers extends Component {
     let discount = this.props.api.schedule.find(function(dis) {
       return dis.date == today;
     });
-    return discount.discount;
+    //Check id discount is set
+    return discount ? discount.discount : 0;
   }
 
   renderContent() {
     return (
-      <div>
+      <div style={{ width: "100%" }}>
         <RefundBox
           visible={this.state.refundBox}
           customer={this.state.selectedCustomer}

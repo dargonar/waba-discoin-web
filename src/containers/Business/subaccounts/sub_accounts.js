@@ -35,7 +35,7 @@ class SubAccounts extends Component {
   }
 
   newSubAccount() {
-    this.props.goTo("/dashboard/find_account");
+    this.props.goTo("/dashboard/business/sub_accounts/find_account");
   }
 
   showDaily(bussines) {
