@@ -28,14 +28,14 @@ const filters = {
   category: (arg, business) => business.category_id === arg,
   subcategory: (arg, business) => business.subcategory_id === arg,
   subcategory: (arg, business) => business.subcategory_id === arg,
-  overdraft: (arg, business) => {
+  value: (arg, business) => {
     switch (arg.action) {
       case "minor":
-        return Number(business.balances.initial_credit) < arg.amount;
+        return Number(resolve(arg.path, business)) < arg.amount;
       case "equal":
-        return Number(business.balances.initial_credit) === arg.amount;
+        return Number(resolve(arg.path, business)) === arg.amount;
       case "greater":
-        return Number(business.balances.initial_credit) > arg.amount;
+        return Number(resolve(arg.path, business)) > arg.amount;
       default:
         return false;
     }
