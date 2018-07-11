@@ -251,7 +251,7 @@ export function* loginFromLocal() {
     yield put({
       type: actions.LOGIN_REQUEST,
       payload: {
-        account_name: null,
+        account_name: action.payload.account,
         mnemonics: null,
         is_brainkey: null,
         remember: null,
