@@ -23,6 +23,17 @@ class StoreCard extends Component {
       padding: "10px 0"
     };
     const testing = true;
+
+    const getBalanceWarnings = warnings => {
+      return Object.keys(warnings).map(key => {
+        return {
+          value: warnings[key].amount,
+          color: warnings[key].color,
+          raw: warnings[key]
+        };
+      });
+    };
+
     return (
       <StoreCardWrapper>
         <h3>{this.props.description}</h3>
@@ -75,11 +86,7 @@ class StoreCard extends Component {
                   this.props.balances.initial_credit || 0
               }
               text="Descuentos & Recompensas"
-              scale={[
-                { value: 10, color: "red" },
-                { value: 50, color: "yellow" },
-                { value: 100, color: "green" }
-              ]}
+              scale={getBalanceWarnings(this.props.warnings)}
               percentage={true}
               fontColor="#1C222C"
               bgColor="#f5f5f5"

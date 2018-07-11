@@ -44,6 +44,7 @@ class ListStores extends Component {
 
   componentWillMount() {
     this.props.fetch();
+    this.props.fetchWarnings();
   }
 
   edit(businessId) {
@@ -92,6 +93,10 @@ class ListStores extends Component {
     // });
   }
 
+  applyFilters(business) {
+    return business;
+  }
+
   removeOverdraftBox() {
     this.setState({
       overdraftBox: false,
@@ -102,13 +107,14 @@ class ListStores extends Component {
   renderStores() {
     return (
       <div style={{ width: "100%" }}>
-        {this.props.business.map(store => (
+        {this.applyFilters(this.props.business).map(store => (
           <StoreCard
             {...store}
             key={store.id}
             overdraft={this.showOverdraft}
             accounts={this.accounts}
             edit={this.edit}
+            warnings={this.props.warnings}
           />
         ))}
       </div>
@@ -146,6 +152,7 @@ class ListStores extends Component {
 }
 
 const mapStateToProps = state => ({
+  warnings: state.Owner.parameters ? state.Owner.parameters.warnings || {} : {},
   business: state.Owner.stores,
   loading: state.Owner.loading,
   actionLoading: state.Owner.actionLoading,
@@ -157,6 +164,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetch: bindActionCreators(actions.fetchBusinesses, dispatch),
+  fetchWarnings: bindActionCreators(actions.fetchParameteres, dispatch),
   setOverdraft: bindActionCreators(actions.overdraft, dispatch),
   removeMsg: bindActionCreators(actions.removeMsg, dispatch),
   goTo: url => dispatch(push(url))
