@@ -15,12 +15,56 @@ import StoreOverdarfBox from "./components/storeOvercraftBox";
 
 import { push } from "react-router-redux";
 
+function resolve(path, obj) {
+  return path.split(".").reduce(function(prev, curr) {
+    return prev ? prev[curr] : undefined;
+  }, obj);
+}
+
+const filters = {
+  search: (arg, business) =>
+    business.account.indexOf(arg) !== -1 ||
+    business.description.indexOf(arg) !== -1,
+  category: (arg, business) => business.category_id === arg,
+  subcategory: (arg, business) => business.subcategory_id === arg,
+  subcategory: (arg, business) => business.subcategory_id === arg,
+  overdraft: (arg, business) => {
+    switch (arg.action) {
+      case "minor":
+        return Number(business.balances.initial_credit) < arg.amount;
+      case "equal":
+        return Number(business.balances.initial_credit) === arg.amount;
+      case "greater":
+        return Number(business.balances.initial_credit) > arg.amount;
+      default:
+        return false;
+    }
+  }
+};
+
+const order = (path, businesses, direction) => {
+  const mult = direction === "ASC" ? 1 : -1;
+  return businesses.sort(
+    (a, b) =>
+      resolve(path, a)
+        .toString()
+        .toLowerCase() <
+      resolve(path, b)
+        .toString()
+        .toLowerCase()
+        ? -1 * mult
+        : 1 * mult
+  );
+};
+
 class ListStores extends Component {
   constructor(props) {
     super(props);
     this.state = {
       overdraftBox: false,
-      businessSelected: null
+      businessSelected: null,
+      filters: [],
+      orders: []
     };
     this.renderStores = this.renderStores.bind(this);
     this.submitOverdraftBox = this.submitOverdraftBox.bind(this);
@@ -28,6 +72,28 @@ class ListStores extends Component {
     this.showOverdraft = this.showOverdraft.bind(this);
     this.edit = this.edit.bind(this);
     this.accounts = this.accounts.bind(this);
+  }
+
+  applyFilters(businesses) {
+    if (this.state.filters.length === 0) {
+      return businesses;
+    }
+    return businesses.filter(
+      business =>
+        this.state.filters
+          .map(item => order[item.filter](item.arg, business)) // Check filters
+          .reduce((prev, curr) => (!prev ? false : curr), true) // Check if one is false
+    );
+  }
+
+  applyOrder(businesses) {
+    if (this.state.orders.length === 0) {
+      return businesses;
+    }
+    return this.state.orders.reduce(
+      (prev, act) => order(act.path, prev, act.type),
+      businesses
+    );
   }
 
   componentWillReceiveProps(nextProps) {
@@ -93,10 +159,6 @@ class ListStores extends Component {
     // });
   }
 
-  applyFilters(business) {
-    return business;
-  }
-
   removeOverdraftBox() {
     this.setState({
       overdraftBox: false,
@@ -107,7 +169,7 @@ class ListStores extends Component {
   renderStores() {
     return (
       <div style={{ width: "100%" }}>
-        {this.applyFilters(this.props.business).map(store => (
+        {this.applyOrder(this.applyFilters(this.props.business)).map(store => (
           <StoreCard
             {...store}
             key={store.id}
