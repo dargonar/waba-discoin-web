@@ -37,22 +37,13 @@ class CreateStore extends Component {
     this.state = {
       form: {
         discount_schedule: [
-          { discount: "0", date: "monday" },
-          { discount: "0", date: "tuesday" },
-          { discount: "0", date: "wednesday" },
-          { discount: "0", date: "thursday" },
-          { discount: "0", date: "friday" },
-          { discount: "0", date: "saturday" },
-          { discount: "0", date: "sunday" }
-        ],
-        refound_schedule: [
-          { refound: "0", date: "monday" },
-          { refound: "0", date: "tuesday" },
-          { refound: "0", date: "wednesday" },
-          { refound: "0", date: "thursday" },
-          { refound: "0", date: "friday" },
-          { refound: "0", date: "saturday" },
-          { refound: "0", date: "sunday" }
+          { discount: "0", reward: "0", date: "monday" },
+          { discount: "0", reward: "0", date: "tuesday" },
+          { discount: "0", reward: "0", date: "wednesday" },
+          { discount: "0", reward: "0", date: "thursday" },
+          { discount: "0", reward: "0", date: "friday" },
+          { discount: "0", reward: "0", date: "saturday" },
+          { discount: "0", reward: "0", date: "sunday" }
         ],
         location: {}
       }
@@ -107,14 +98,18 @@ class CreateStore extends Component {
   }
 
   changeSchedule(type, key, value) {
-    let schedule = this.state.form[type + "_schedule"];
+    if(isNaN(value))
+      return;  
+    // let schedule = this.state.form[type + "_schedule"];
+    let schedule = this.state.form["discount_schedule"];
     schedule[key][type] = Number(value);
     this.setState({
       form: {
         ...this.state.form,
-        [type + "_schedule"]: schedule
+        ['discount_schedule']: schedule
       }
     });
+    // [type + "_schedule"]: schedule
   }
 
   componentWillReceiveProps(nextProps) {
@@ -315,7 +310,7 @@ class CreateStore extends Component {
                                 category.id.toString()
                           }
                         >
-                          {category.name}
+                          {category.name} (descuento mínimo: {category.discount})
                         </SelectOption>
                       ))}
                   </Select>
@@ -367,7 +362,7 @@ class CreateStore extends Component {
                     <Col sm={3}>
                       <Row style={{ width: "100%", textAlign: "center" }}>
                         <Col>Type</Col>
-                        <Col>Refound</Col>
+                        <Col>Reward</Col>
                         <Col>Discount</Col>
                       </Row>
                     </Col>
@@ -386,11 +381,11 @@ class CreateStore extends Component {
                             <Input
                               type="number"
                               defaultValue={
-                                this.state.form.refound_schedule[key].refound
+                                this.state.form.discount_schedule[key].reward
                               }
                               onChange={e =>
                                 this.changeSchedule(
-                                  "refound",
+                                  "reward",
                                   key,
                                   e.target.value
                                 )

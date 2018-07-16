@@ -3,6 +3,7 @@ import { Route, Redirect } from "react-router-dom";
 import { ConnectedRouter } from "react-router-redux";
 import { connect } from "react-redux";
 import { message } from "antd";
+import { notification } from 'antd';
 
 import App from "./containers/App/App";
 import asyncComponent from "./helpers/AsyncFunc";
@@ -49,7 +50,11 @@ class ReduxGlobalMessage extends Component {
         typeof message[nextProps.msgType] === "function"
           ? nextProps.msgType
           : "info";
-      message[msgType](nextProps.msg);
+      // message[msgType](nextProps.msg);
+      notification[msgType]({
+        message: nextProps.msg.split('|')[0],
+        description: nextProps.msg.split('|')[1],
+      });
       this.props.clearMsg();
     }
   }

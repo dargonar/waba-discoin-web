@@ -141,9 +141,10 @@ function* saveBusiness(action) {
         type: actions.SAVE_BUSINESS_FAIL,
         payload: { ex: ex, error: data }
       });
+      console.log(JSON.stringify(data))
       yield put({
         type: actionsUI.GLOBAL_MSG,
-        payload: { msg: "Error al guardar el comercio", msgType: "error" }
+        payload: { msgType: "error" , msg: "Error al guardar el comercio", data:data }
       });
     }
   });

@@ -19,7 +19,7 @@ const mapboxConfig = {
 };
 
 const apiConfig = {
-  base: "http://35.163.59.126:8089/api/",
+  base: "http://35.163.59.126:8088/api/",
   version: "v3",
   urls: [
     {

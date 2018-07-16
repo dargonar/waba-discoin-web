@@ -43,8 +43,15 @@ export default function appReducer(state = initState, action) {
     case actions.GLOBAL_LOADING_END:
       return state.set("loading", false).set("loadingMsg", null);
     case actions.GLOBAL_MSG:
+      //HACK
+      let body = '';
+      if(action.payload.data)
+      {
+        if(action.payload.data.error_list)
+          body = action.payload.data.error_list.reduce(function(ret, item){ return ret + item.error + '\r\n';}, '')
+      }
       return state
-        .set("msg", action.payload.msg)
+        .set("msg", action.payload.msg + '|' + body)
         .set("msgType", action.payload.msgType);
     case actions.GLOBAL_MSG_CLEAR:
       return state.set("msg", null).set("msgType", null);

@@ -23,12 +23,12 @@ export default [
     icon: "ion-android-people",
     intlMessage: "sidebar.subAccounts"
   },
-  {
-    name: "discountRewards",
-    ulr: "business/discount-and-rewards",
-    icon: "ion-settings",
-    intlMessage: "sidebar.discountRewards"
-  },
+  // {
+  //   name: "discountRewards",
+  //   url: "business/discount-and-rewards",
+  //   icon: "ion-settings",
+  //   intlMessage: "sidebar.discountRewards"
+  // },
   {
     name: "profile",
     url: "business/profile",
