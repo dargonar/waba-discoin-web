@@ -72,7 +72,7 @@ class CreateStore extends Component {
 
   componentWillMount() {
     this.props.getCategories();
-    
+
     // if (typeof this.props.match.params.id !== "undefined") {
     //   this.setState({
     //     loading: true,
@@ -82,7 +82,11 @@ class CreateStore extends Component {
     //   this.props.fetchBusiness(this.props.match.params.id);
     // }
 
-    console.log(' ** componentWillMount', '---------this.props.business', this.props.business)
+    console.log(
+      " ** componentWillMount",
+      "---------this.props.business",
+      this.props.business
+    );
     if (
       typeof this.props.business !== "undefined" &&
       this.props.business !== null
@@ -115,15 +119,14 @@ class CreateStore extends Component {
   }
 
   changeSchedule(type, key, value) {
-    if(isNaN(value))
-      return;  
+    if (isNaN(value)) return;
     // let schedule = this.state.form[type + "_schedule"];
     let schedule = this.state.form["discount_schedule"];
     schedule[key][type] = Number(value);
     this.setState({
       form: {
         ...this.state.form,
-        ['discount_schedule']: schedule
+        ["discount_schedule"]: schedule
       }
     });
     // [type + "_schedule"]: schedule
@@ -134,14 +137,17 @@ class CreateStore extends Component {
       if (business) {
         // const business = businesses.filter(x => x.account_id === this.state.id);
         // if (business.length !== 0) {
-          this.initForm(business);
+        this.initForm(business);
         // }
       }
     };
 
-    console.log(' ** componentWillReceiveProps', '---------this.props.business', nextProps.business)
+    console.log(
+      " ** componentWillReceiveProps",
+      "---------this.props.business",
+      nextProps.business
+    );
     if (this.state.loading === true) {
-
       checkLoading(nextProps.business);
     }
   }
@@ -159,9 +165,9 @@ class CreateStore extends Component {
   }
 
   imageUpload(file) {
-    console.log('------ file.dataURL', file.dataURL);
-    console.log('------ file.data', file['dataURL']);
-    console.log('------ file', file);
+    console.log("------ file.dataURL", file.dataURL);
+    console.log("------ file.data", file["dataURL"]);
+    console.log("------ file", file);
     this.setState({
       form: {
         ...this.state.form,
@@ -253,7 +259,7 @@ class CreateStore extends Component {
           }
         });
       },
-      addedfile: file => this.imageUpload(file)
+      addedfile: data => setTimeout(() => this.imageUpload(data), 1000)
     };
 
     const renderForm = () => {
