@@ -62,7 +62,11 @@ class CreateStore extends Component {
       dictCancelUploadConfirmation: "Are you sure to cancel upload?",
       postUrl: "no-url"
     };
-    this.djsConfig = { autoProcessQueue: false };
+    this.djsConfig = {
+      autoProcessQueue: false,
+      thumbnailHeight: 300,
+      thumbnailWidth: 300
+    };
     this.imageUpload = this.imageUpload.bind(this);
     this.changeSchedule = this.changeSchedule.bind(this);
     this.initForm = this.initForm.bind(this);
@@ -165,16 +169,13 @@ class CreateStore extends Component {
   }
 
   imageUpload(file) {
-    console.log("------ file.dataURL", file.dataURL);
-    console.log("------ file.data", file["dataURL"]);
-    console.log("------ file", file);
     this.setState({
       form: {
         ...this.state.form,
-        image: file.dataURL
+        image: file
       }
     });
-    this.dropzone.emit("complete", file);
+    //this.dropzone.emit("complete", file);
   }
 
   locationChange(e) {
@@ -259,7 +260,8 @@ class CreateStore extends Component {
           }
         });
       },
-      addedfile: data => setTimeout(() => this.imageUpload(data), 1000)
+      thumbnail: (fullimage, data) =>
+        setTimeout(() => this.imageUpload(data), 1000)
     };
 
     const renderForm = () => {
