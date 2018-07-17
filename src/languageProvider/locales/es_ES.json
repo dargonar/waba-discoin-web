@@ -579,5 +579,12 @@
   "register.category": "Categoría",
   "register.subcategory": "Subcategoría",
   "register.email.invalid": "Dirección de email invialida",
-  "register.email.empty": "La dirección de email es requerida"
+  "register.email.empty": "La dirección de email es requerida",
+  "Name": "Nombre",
+  "Description": "Description",
+  "Parent Category": "Categoría superior",
+  "Discount": "Descuento",
+  "Add Category": "Agregar Categoría",
+  "Edit Category": "Editar Categoría",
+  "None": "Ninguna"
 }
