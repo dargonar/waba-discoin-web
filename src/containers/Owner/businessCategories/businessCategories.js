@@ -29,7 +29,8 @@ class Categories extends Component {
   toggleModal() {
     this.setState({
       modal: {
-        ...this.state.modal,
+        edit: false,
+        form: {},
         visible: !this.state.modal.visible
       }
     });
