@@ -10,9 +10,9 @@ export default class CategoryModal extends Component {
     this.state = {
       showDiscount: true,
       form: {
-        name: undefined,
-        description: undefined,
-        discount: undefined,
+        name: "",
+        description: "",
+        discount: 0,
         parent_id: 0
       }
     };
@@ -21,11 +21,7 @@ export default class CategoryModal extends Component {
   }
 
   submit() {
-    let formValue = this.state.form;
-    if (formValue.parent_id !== 0) {
-      delete formValue.discount;
-    }
-    this.props.onOk(formValue);
+    this.props.onOk(this.state.form);
   }
 
   componentWillMount() {
