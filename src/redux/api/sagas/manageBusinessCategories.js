@@ -20,7 +20,7 @@ export const manageBusinessCategories = function*() {
     yield put({ type: actionsUI.GLOBAL_LOADING_END });
 
     //Prepare response
-    if (data && !data.error) {
+    if (data.ok === "ok") {
       yield put({
         type: actions.ADD_OR_UPDATE_CATEGORY_SUCCESS,
         payload: data
@@ -39,18 +39,19 @@ export const manageBusinessCategories = function*() {
       });
     }
     // Show error message
-    else
+    else {
       yield put({
         type: actions.ADD_OR_UPDATE_CATEGORY_FAILD,
         payload: { err, error: data.error }
       });
-    yield put({
-      type: actionsUI.GLOBAL_MSG,
-      payload: {
-        msgType: "error",
-        msg: "Error saving category"
-      }
-    });
+      yield put({
+        type: actionsUI.GLOBAL_MSG,
+        payload: {
+          msgType: "error",
+          msg: "Error saving category"
+        }
+      });
+    }
   });
 
   yield takeEvery(actions.DELETE_CATEGORY, function*(action) {
@@ -87,17 +88,18 @@ export const manageBusinessCategories = function*() {
       });
     }
     // Show error message
-    else
+    else {
       yield put({
         type: actions.DELETE_CATEGORY_FAILD,
         payload: { err, error: data.error }
       });
-    yield put({
-      type: actionsUI.GLOBAL_MSG,
-      payload: {
-        msgType: "error",
-        msg: "Error deleting category"
-      }
-    });
+      yield put({
+        type: actionsUI.GLOBAL_MSG,
+        payload: {
+          msgType: "error",
+          msg: "Error deleting category"
+        }
+      });
+    }
   });
 };
