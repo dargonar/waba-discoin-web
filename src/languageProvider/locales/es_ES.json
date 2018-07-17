@@ -586,5 +586,8 @@
   "Discount": "Descuento",
   "Add Category": "Agregar Categoría",
   "Edit Category": "Editar Categoría",
-  "None": "Ninguna"
+  "None": "Ninguna",
+  "Yes": "Si",
+  "No": "No",
+  "Are you sure you want to remove this category?": "¿Está seguro de eliminar esta categoría?"
 }

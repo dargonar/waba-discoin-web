@@ -593,5 +593,8 @@
   "Discount": "Discount",
   "Add Category": "Add Category",
   "Edit Category": "Edit Category",
-  "None": "None"
+  "None": "None",
+  "Yes": "Yes",
+  "No": "No",
+  "Are you sure you want to remove this category?": "Are you sure you want to remove this category?"
 }

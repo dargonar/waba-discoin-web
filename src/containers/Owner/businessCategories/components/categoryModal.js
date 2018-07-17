@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import IntlMessages from "../../../../components/utility/intlMessages";
-import { Modal, Form } from "antd";
+import { Modal, Form, Button, Popconfirm } from "antd";
 import Input from "../../../../components/uielements/input";
 import Select, { SelectOption } from "../../../../components/uielements/select";
 
@@ -26,7 +26,10 @@ export default class CategoryModal extends Component {
 
   componentWillMount() {
     this.setState({
-      form: this.props.form
+      form: {
+        ...this.state.form,
+        ...this.props.form
+      }
     });
   }
 
@@ -49,6 +52,30 @@ export default class CategoryModal extends Component {
         visible={this.props.visible}
         onCancel={this.props.onCancel}
         onOk={this.submit}
+        footer={
+          <div>
+            {this.props.form.id ? (
+              <Popconfirm
+                title={
+                  <IntlMessages id="Are you sure you want to remove this category?" />
+                }
+                okText={<IntlMessages id="Yes" />}
+                cancelText={<IntlMessages id="No" />}
+                onConfirm={() => this.props.onDelete(this.props.form.id)}
+              >
+                <Button type="danger">Delete</Button>
+              </Popconfirm>
+            ) : (
+              false
+            )}
+            <Button type="" onClick={this.props.onCancel}>
+              Cancel
+            </Button>
+            <Button type="primary" onClick={this.onOk}>
+              Save
+            </Button>
+          </div>
+        }
       >
         <Form>
           <label>
