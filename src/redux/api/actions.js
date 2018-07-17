@@ -143,7 +143,9 @@ const actions = {
   addOrUpdateCategory: data => dispatch => {
     dispatch({
       type: actions.ADD_OR_UPDATE_CATEGORY,
-      payload: data
+      payload: {
+        category: data
+      }
     });
   },
 
