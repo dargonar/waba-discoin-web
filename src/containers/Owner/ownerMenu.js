@@ -12,6 +12,11 @@ export default [
     intlMessage: "sidebar.parameters"
   },
   {
+    name: "businessCategories",
+    url: "owner/business-categories",
+    intlMessage: "sidebar.businessCategories"
+  },
+  {
     name: "categories",
     url: "owner/categories",
     icon: "ion-filing",
