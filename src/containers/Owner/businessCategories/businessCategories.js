@@ -20,7 +20,18 @@ class Categories extends Component {
 
   renderPage() {
     return (
-      <ul>{this.props.categories.map(category => <li>{category.name}</li>)}</ul>
+      <ul>
+        {this.props.categories.map(category => (
+          <li>
+            {category.name}
+            <ul>
+              {this.props.subcategories
+                .filter(subcategory => subcategory.parent_id === category.id)
+                .map(subcategory => <li>{subcategory.name}</li>)}
+            </ul>
+          </li>
+        ))}
+      </ul>
     );
   }
 
@@ -42,7 +53,8 @@ class Categories extends Component {
 }
 
 const mapStateToProps = state => ({
-  categories: state.Api.categoriesList || [],
+  categories: state.Api.categoriesList.filter(x => x.parent_id === 0) || [],
+  subcategories: state.Api.categoriesList.filter(x => x.parent_id !== 0) || [],
   loading: state.Api.actionLoading,
   error: state.Api.error,
   msg: state.Api.msg
