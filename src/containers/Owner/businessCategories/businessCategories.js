@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import LayoutContentWrapper from "../../../components/utility/layoutWrapper";
+import CategoryTableWrapper from "./businessCategories.style";
 import PageHeader from "../../../components/utility/pageHeader";
 import PageLoading from "../../../components/pageLoading";
 import IntlMessages from "../../../components/utility/intlMessages";
@@ -19,6 +20,7 @@ class Categories extends Component {
     };
     this.toggleModal = this.toggleModal.bind(this);
     this.submitCategory = this.submitCategory.bind(this);
+    this.deleteCategory = this.deleteCategory.bind(this);
   }
 
   componentWillMount() {
@@ -39,6 +41,11 @@ class Categories extends Component {
     this.toggleModal();
   }
 
+  deleteCategory(id) {
+    this.props.deleteCategory(id);
+    this.toggleModal();
+  }
+
   renderPage() {
     const printCategoryItem = data => (
       <span key={data.id} onClick={() => this.showEdit(data)}>
@@ -54,25 +61,30 @@ class Categories extends Component {
             {...this.state.modal}
             onCancel={this.toggleModal}
             onOk={this.submitCategory}
+            onDelete={this.deleteCategory}
             categories={this.props.categories}
           />
         ) : (
           false
         )}
-        <ul>
-          {this.props.categories.map(category => (
-            <li key={category.id}>
-              {printCategoryItem(category)}
-              <ul>
-                {this.props.subcategories
-                  .filter(subcategory => subcategory.parent_id === category.id)
-                  .map(subcategory => (
-                    <li>{printCategoryItem(subcategory)}</li>
-                  ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
+        <CategoryTableWrapper>
+          <ul>
+            {this.props.categories.map(category => (
+              <li key={category.id}>
+                {printCategoryItem(category)}
+                <ul>
+                  {this.props.subcategories
+                    .filter(
+                      subcategory => subcategory.parent_id === category.id
+                    )
+                    .map(subcategory => (
+                      <li>{printCategoryItem(subcategory)}</li>
+                    ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </CategoryTableWrapper>
       </div>
     );
   }
@@ -112,6 +124,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchCategories: bindActionCreators(apiActions.getCategoriesList, dispatch),
   saveCategory: bindActionCreators(apiActions.addOrUpdateCategory, dispatch),
+  deleteCategory: bindActionCreators(apiActions.deleteCategory, dispatch),
   removeMsg: bindActionCreators(apiActions.cleanMsg, dispatch)
 });
 
