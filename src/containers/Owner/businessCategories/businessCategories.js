@@ -14,7 +14,6 @@ class Categories extends Component {
     this.state = {
       modal: {
         visible: false,
-        edit: false,
         form: {}
       }
     };
@@ -29,7 +28,6 @@ class Categories extends Component {
   toggleModal() {
     this.setState({
       modal: {
-        edit: false,
         form: {},
         visible: !this.state.modal.visible
       }
