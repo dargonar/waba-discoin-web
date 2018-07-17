@@ -15,6 +15,14 @@ const actions = {
   GET_CATEGORIES_LIST_SUCCESS: "[Api] Get categories list success",
   GET_CATEGORIES_LIST_FAILD: "[Api] Get categories list faild",
 
+  ADD_OR_UPDATE_CATEGORY: "[Api] Add or update category",
+  ADD_OR_UPDATE_CATEGORY_SUCCESS: "[Api] Add or update category success",
+  ADD_OR_UPDATE_CATEGORY_FAILD: "[Api] Add or update category faild",
+
+  DELETE_CATEGORY: "[Api] Delete category",
+  DELETE_CATEGORY_SUCCESS: "[Api] Delete category success",
+  DELETE_CATEGORY_FAILD: "[Api] Delete category faild",
+
   SEARCH_ACCOUNT: "[Api] Search account",
   SEARCH_ACCOUNT_SUCCESS: "[Api] Search account success",
   SEARCH_ACCOUNT_FAILD: "[Api] Search account faild",
@@ -129,6 +137,20 @@ const actions = {
   getCategoriesList: () => dispatch => {
     dispatch({
       type: actions.GET_CATEGORIES_LIST
+    });
+  },
+
+  addOrUpdateCategory: data => dispatch => {
+    dispatch({
+      type: actions.ADD_OR_UPDATE_CATEGORY,
+      payload: data
+    });
+  },
+
+  deleteCategory: id => dispatch => {
+    dispatch({
+      type: actions.ADD_OR_UPDATE_CATEGORY,
+      payload: { id }
     });
   },
 

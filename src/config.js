@@ -32,6 +32,11 @@ const apiConfig = {
     { action: "URL/GET_CATEGORIES", path: "/dashboard/categories" },
     { action: "URL/GET_CATEGORIES_LIST", path: "/business/category/list" },
     {
+      action: "URL/ADD_OR_UPDATE_CATEGORY",
+      path: "/business/category/add_or_update"
+    },
+    { action: "URL/DELETE_CATEGORY", path: "/business/category/delete" },
+    {
       action: "URL/UPDATE_SCHEDULE",
       path: "/dashboard/business/schedule/:id/update"
     },
