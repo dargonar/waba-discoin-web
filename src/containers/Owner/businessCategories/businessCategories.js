@@ -35,7 +35,7 @@ class Categories extends Component {
   }
 
   submitCategory(data) {
-    console.log("CREATE OR UPDATE CATEGORY", data);
+    this.props.saveCategory(data);
     this.toggleModal();
   }
 
@@ -111,6 +111,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchCategories: bindActionCreators(apiActions.getCategoriesList, dispatch),
+  saveCategory: bindActionCreators(apiActions.addOrUpdateCategory, dispatch),
   removeMsg: bindActionCreators(apiActions.cleanMsg, dispatch)
 });
 
