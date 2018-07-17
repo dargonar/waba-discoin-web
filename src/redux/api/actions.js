@@ -151,7 +151,7 @@ const actions = {
 
   deleteCategory: id => dispatch => {
     dispatch({
-      type: actions.ADD_OR_UPDATE_CATEGORY,
+      type: actions.DELETE_CATEGORY,
       payload: { id }
     });
   },
