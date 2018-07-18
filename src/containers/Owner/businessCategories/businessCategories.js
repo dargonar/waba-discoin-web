@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import apiActions from "../../../redux/api/actions";
 import CategoryModal from "./components/categoryModal";
+import Button from "../../../components/uielements/button";
 
 class Categories extends Component {
   constructor(props) {
@@ -47,15 +48,14 @@ class Categories extends Component {
   }
 
   renderPage() {
-    const printCategoryItem = data => (
+    const printCategoryItem = (data, parent) => (
       <span key={data.id} onClick={() => this.showEdit(data)}>
-        {data.name}
+        {data.name} {parent ? `(%${data.discount})` : false}
       </span>
     );
 
     return (
-      <div>
-        <button onClick={this.toggleModal}>Add new</button>
+      <CategoryTableWrapper>
         {this.state.modal.visible ? (
           <CategoryModal
             {...this.state.modal}
@@ -67,25 +67,28 @@ class Categories extends Component {
         ) : (
           false
         )}
-        <CategoryTableWrapper>
-          <ul>
-            {this.props.categories.map(category => (
-              <li key={category.id}>
-                {printCategoryItem(category)}
-                <ul>
-                  {this.props.subcategories
-                    .filter(
-                      subcategory => subcategory.parent_id === category.id
-                    )
-                    .map(subcategory => (
-                      <li>{printCategoryItem(subcategory)}</li>
-                    ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        </CategoryTableWrapper>
-      </div>
+        <ul>
+          {this.props.categories.map(category => (
+            <li key={category.id} className="category">
+              {printCategoryItem(category, true)}
+              <ul>
+                {this.props.subcategories
+                  .filter(subcategory => subcategory.parent_id === category.id)
+                  .map(subcategory => (
+                    <li>{printCategoryItem(subcategory)}</li>
+                  ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+        <Button
+          type="primary"
+          onClick={this.toggleModal}
+          className="pull-right"
+        >
+          Add new
+        </Button>
+      </CategoryTableWrapper>
     );
   }
 
