@@ -14,6 +14,7 @@ export default [
   {
     name: "businessCategories",
     url: "owner/business-categories",
+    icon: "ion-grid",
     intlMessage: "sidebar.businessCategories"
   },
   {
