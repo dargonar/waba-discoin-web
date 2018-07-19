@@ -2,14 +2,14 @@ import React, { Component } from "react";
 import { BalanceStickerWidgetWrapper } from "./style";
 
 export default class extends Component {
-  getScaleInfo(scale,amount, param) {
-    console.log(' ------------------------ ')
-    console.log(JSON.stringify(scale),amount);
-    const obj = scale.reduce((prev,curr)=> {
-      console.log(' ----- ' , JSON.stringify(curr));
+  getScaleInfo(scale, amount, param) {
+    //console.log(' ------------------------ ')
+    //console.log(JSON.stringify(scale),amount);
+    const obj = scale.reduce((prev, curr) => {
+      //console.log(' ----- ' , JSON.stringify(curr));
       // if (amount >= curr.raw.from_amount && amount < curr.raw.to_amount) {
       if (amount >= curr.value && amount < curr.value) {
-        return curr
+        return curr;
       } else {
         return prev;
       }
