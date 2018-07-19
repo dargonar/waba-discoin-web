@@ -13,6 +13,8 @@ import MessageBox from "../../../components/MessageBox";
 import StoreCard from "./components/storeCard";
 import StoreOverdarfBox from "./components/storeOvercraftBox";
 
+import Pagination from "../../../components/uielements/pagination";
+
 import { push } from "react-router-redux";
 
 function resolve(path, obj) {
@@ -57,10 +59,17 @@ const order = (path, businesses, direction) => {
   );
 };
 
+const range = (businesses, page, size) => {
+  const to = page * size;
+  const from = to - size;
+  return businesses.filter((business, key) => key > from && key <= to);
+};
+
 class ListStores extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      page: 1,
       overdraftBox: false,
       businessSelected: null,
       filters: [],
@@ -72,6 +81,7 @@ class ListStores extends Component {
     this.showOverdraft = this.showOverdraft.bind(this);
     this.edit = this.edit.bind(this);
     this.accounts = this.accounts.bind(this);
+    this.changePage = this.changePage.bind(this);
   }
 
   applyFilters(businesses) {
@@ -166,10 +176,30 @@ class ListStores extends Component {
     });
   }
 
+  changePage(page) {
+    this.setState({ page });
+    //Try to scroll up
+    try {
+      //STORES LIST > ISO LAYOUT > ANT LAYOUT > MAIN LAYOUT
+      this.mainScroll.parentElement.parentElement.parentElement.scrollTo(0, 0);
+    } catch (e) {
+      console.log("Parent element not found - list.js");
+    }
+  }
+
   renderStores() {
     return (
-      <div style={{ width: "100%" }}>
-        {this.applyOrder(this.applyFilters(this.props.business)).map(store => (
+      <div
+        style={{ width: "100%" }}
+        ref={el => {
+          this.mainScroll = el;
+        }}
+      >
+        {range(
+          this.applyOrder(this.applyFilters(this.props.business)),
+          this.state.page,
+          10
+        ).map(store => (
           <StoreCard
             {...store}
             key={store.id}
@@ -179,6 +209,11 @@ class ListStores extends Component {
             warnings={this.props.warnings}
           />
         ))}
+        <Pagination
+          defaultCurrent={this.state.page}
+          total={this.props.business.length}
+          onChange={this.changePage}
+        />
       </div>
     );
   }
