@@ -596,5 +596,9 @@
   "None": "None",
   "Yes": "Yes",
   "No": "No",
-  "Are you sure you want to remove this category?": "Are you sure you want to remove this category?"
+  "Are you sure you want to remove this category?": "Are you sure you want to remove this category?",
+  "filter.storeName": "Store name",
+  "filter.category": "Category",
+  "filter.subcategory": "Subcategory",
+  "filter.overdraft": "Overdraft only"
 }

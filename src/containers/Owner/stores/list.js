@@ -17,6 +17,9 @@ import Pagination from "../../../components/uielements/pagination";
 
 import { push } from "react-router-redux";
 
+import Filters from "./components/filters";
+import { void_result } from "bitsharesjs/dist/serializer/src/operations";
+
 function resolve(path, obj) {
   return path.split(".").reduce(function(prev, curr) {
     return prev ? prev[curr] : undefined;
@@ -24,12 +27,27 @@ function resolve(path, obj) {
 }
 
 const filters = {
-  search: (arg, business) =>
-    business.account.indexOf(arg) !== -1 ||
-    business.description.indexOf(arg) !== -1,
+  search: (arg, business) => {
+    return (
+      business.account.toLowerCase().indexOf(arg.toLowerCase()) > -1 ||
+      business.description.toLowerCase().indexOf(arg.toLowerCase()) > -1
+    );
+  },
   category: (arg, business) => business.category_id === arg,
   subcategory: (arg, business) => business.subcategory_id === arg,
-  subcategory: (arg, business) => business.subcategory_id === arg,
+  overdraft: (arg, business) => {
+    if (arg === false) {
+      return true;
+    }
+    return (!isNaN(business.balances.ready_to_access) &&
+      parseInt(business.balances.ready_to_access) > 0) ||
+      (!isNaN(business.balances.balance) &&
+        parseInt(business.balances.balance) > 0) ||
+      (!isNaN(business.balances.initial_credit) &&
+        parseInt(business.balances.initial_credit) > 0)
+      ? true
+      : false;
+  },
   value: (arg, business) => {
     switch (arg.action) {
       case "minor":
@@ -60,8 +78,8 @@ const order = (path, businesses, direction) => {
 };
 
 const range = (businesses, page, size) => {
-  const to = page * size;
-  const from = to - size;
+  const to = page * size - 1;
+  const from = to - size - 1;
   return businesses.filter((business, key) => key > from && key <= to);
 };
 
@@ -88,12 +106,14 @@ class ListStores extends Component {
     if (this.state.filters.length === 0) {
       return businesses;
     }
-    return businesses.filter(
+    let result = businesses.filter(
       business =>
         this.state.filters
-          .map(item => order[item.filter](item.arg, business)) // Check filters
+          .map(item => filters[item.filter](item.arg, business)) // Check filters
           .reduce((prev, curr) => (!prev ? false : curr), true) // Check if one is false
     );
+    console.log(result);
+    return result;
   }
 
   applyOrder(businesses) {
@@ -195,6 +215,9 @@ class ListStores extends Component {
           this.mainScroll = el;
         }}
       >
+        <Filters
+          onChange={data => this.setState({ filters: data.filters, page: 1 })}
+        />
         {range(
           this.applyOrder(this.applyFilters(this.props.business)),
           this.state.page,
@@ -211,7 +234,7 @@ class ListStores extends Component {
         ))}
         <Pagination
           defaultCurrent={this.state.page}
-          total={this.props.business.length}
+          total={this.applyFilters(this.props.business).length}
           onChange={this.changePage}
         />
       </div>

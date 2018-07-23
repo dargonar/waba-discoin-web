@@ -589,5 +589,9 @@
   "None": "Ninguna",
   "Yes": "Si",
   "No": "No",
-  "Are you sure you want to remove this category?": "¿Está seguro de eliminar esta categoría?"
+  "Are you sure you want to remove this category?": "¿Está seguro de eliminar esta categoría?",
+  "filter.storeName": "Nombre de tienda",
+  "filter.category": "Categoría",
+  "filter.subcategory": "Subcategoría",
+  "filter.overdraft": "Tiene descubierto"
 }
