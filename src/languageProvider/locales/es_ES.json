@@ -560,7 +560,7 @@
   "sidebar.blockchain": "Blockchain",
   "sidebar.balance": "Balances",
   "sidebar.accounts": "Cuentas",
-  "sidebar.businessCategories": "Categorías de Empresas",
+  "sidebar.businessCategories": "Categorías de tiendas",
   "topbar.help": "Ayuda",
   "topbar.logout": "Cerrar sesión",
   "topbar.viewAll": "Ver todo",
@@ -593,5 +593,6 @@
   "filter.storeName": "Nombre de tienda",
   "filter.category": "Categoría",
   "filter.subcategory": "Subcategoría",
-  "filter.overdraft": "Tiene descubierto"
+  "filter.overdraft": "Tiene descubierto",
+  "stores.notFound": "No se encontraron tiendas en el sistema"
 }

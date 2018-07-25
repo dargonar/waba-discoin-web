@@ -600,5 +600,6 @@
   "filter.storeName": "Store name",
   "filter.category": "Category",
   "filter.subcategory": "Subcategory",
-  "filter.overdraft": "Overdraft only"
+  "filter.overdraft": "Overdraft only",
+  "stores.notFound": "No business found"
 }

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import actions from "../../../redux/owner/actions";
 
+import Alert from "../../../components/feedback/alert";
 import PageLoading from "../../../components/pageLoading";
 import LayoutContentWrapper from "../../../components/utility/layoutWrapper";
 import PageHeader from "../../../components/utility/pageHeader";
@@ -91,7 +92,7 @@ class ListStores extends Component {
       overdraftBox: false,
       businessSelected: null,
       filters: [],
-      orders: []
+      order: []
     };
     this.renderStores = this.renderStores.bind(this);
     this.submitOverdraftBox = this.submitOverdraftBox.bind(this);
@@ -100,6 +101,7 @@ class ListStores extends Component {
     this.edit = this.edit.bind(this);
     this.accounts = this.accounts.bind(this);
     this.changePage = this.changePage.bind(this);
+    this.fetchData = this.fetchData.bind(this);
   }
 
   applyFilters(businesses) {
@@ -117,13 +119,17 @@ class ListStores extends Component {
   }
 
   applyOrder(businesses) {
-    if (this.state.orders.length === 0) {
+    if (this.state.order.length === 0) {
       return businesses;
     }
-    return this.state.orders.reduce(
+    return this.state.order.reduce(
       (prev, act) => order(act.path, prev, act.type),
       businesses
     );
+  }
+
+  fetchData(data) {
+    this.props.fetch(data);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -134,12 +140,20 @@ class ListStores extends Component {
       this.state.businessSelected
     ) {
       this.removeOverdraftBox();
-      this.props.fetch();
+      this.fetchData({
+        page: this.state.page,
+        filters: this.state.filters,
+        order: this.state.order
+      });
     }
   }
 
   componentWillMount() {
-    this.props.fetch();
+    this.fetchData({
+      page: this.state.page,
+      filters: this.state.filters,
+      order: this.state.order
+    });
     this.props.fetchWarnings();
   }
 
@@ -198,6 +212,11 @@ class ListStores extends Component {
 
   changePage(page) {
     this.setState({ page });
+    this.fetchData({
+      filters: this.state.filters,
+      order: this.state.order,
+      page: page
+    });
     //Try to scroll up
     try {
       //STORES LIST > ISO LAYOUT > ANT LAYOUT > MAIN LAYOUT
@@ -215,14 +234,7 @@ class ListStores extends Component {
           this.mainScroll = el;
         }}
       >
-        <Filters
-          onChange={data => this.setState({ filters: data.filters, page: 1 })}
-        />
-        {range(
-          this.applyOrder(this.applyFilters(this.props.business)),
-          this.state.page,
-          10
-        ).map(store => (
+        {this.props.businesses.map(store => (
           <StoreCard
             {...store}
             key={store.id}
@@ -232,9 +244,19 @@ class ListStores extends Component {
             warnings={this.props.warnings}
           />
         ))}
+        {this.props.businesses.length === 0 ? (
+          <Alert
+            message="Ups!"
+            type="warning"
+            description={<IntlMessages id={"stores.notFound"} />}
+            style={{ margin: "20px 0" }}
+          />
+        ) : (
+          false
+        )}
         <Pagination
           defaultCurrent={this.state.page}
-          total={this.applyFilters(this.props.business).length}
+          total={this.props.totalBusiness}
           onChange={this.changePage}
         />
       </div>
@@ -253,7 +275,12 @@ class ListStores extends Component {
           error={this.props.error}
           clean={this.props.removeMsg}
         />
-
+        <Filters
+          onChange={data => {
+            this.setState({ filters: data.filters, page: 1 });
+            this.fetchData({ ...data, page: 1 });
+          }}
+        />
         <StoreOverdarfBox
           visible={this.state.overdraftBox}
           business={this.state.businessSelected}
@@ -261,7 +288,7 @@ class ListStores extends Component {
           submit={this.submitOverdraftBox}
         />
 
-        {this.props.loading || this.props.business === null ? (
+        {this.props.loading || this.props.businesses === null ? (
           <PageLoading />
         ) : (
           this.renderStores()
@@ -273,7 +300,8 @@ class ListStores extends Component {
 
 const mapStateToProps = state => ({
   warnings: state.Owner.parameters ? state.Owner.parameters.warnings || {} : {},
-  business: state.Owner.stores,
+  businesses: state.Owner.stores,
+  totalBusiness: state.Owner.totalStores,
   loading: state.Owner.loading,
   actionLoading: state.Owner.actionLoading,
   setting_overdraft: state.Owner.setting_overdraft,
