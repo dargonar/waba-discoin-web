@@ -31,7 +31,7 @@ export class Filters extends Component {
     }
 
     //OVERDRAFT
-    if (typeof formValue.overdraft !== "undefined") {
+    if (formValue.overdraft === true) {
       result.filters = result.filters.concat({
         filter: "overdraft",
         arg: formValue.overdraft
@@ -54,14 +54,13 @@ export class Filters extends Component {
       });
     }
 
-    console.log(result);
     this.props.onChange(result);
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form onChange={this.formChange}>
+      <Form onChange={this.formChange} style={{ width: "100%" }}>
         <Row gutter={12}>
           <Col md={6}>
             <Form.Item

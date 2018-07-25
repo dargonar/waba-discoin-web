@@ -615,6 +615,6 @@
   "refund.amount": "Amount",
   "refund.percentage": "Percentage",
   "refund.invoice": "Invoice",
-  "profile.minimumDiscount": "(Minimum Discount: {discount})"
-
+  "profile.minimumDiscount": "(Minimum Discount: {discount})",
+  "stores.notFound": "No business found"
 }

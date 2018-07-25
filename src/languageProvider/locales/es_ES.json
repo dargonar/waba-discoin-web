@@ -556,7 +556,7 @@
   "sidebar.blockchain": "Blockchain",
   "sidebar.balance": "Balances",
   "sidebar.accounts": "Cuentas",
-  "sidebar.businessCategories": "Categorías de Empresas",
+  "sidebar.businessCategories": "Categorías de tiendas",
   "topbar.help": "Ayuda",
   "topbar.logout": "Cerrar sesión",
   "topbar.viewAll": "Ver todo",
@@ -769,5 +769,6 @@
   "stores.editProfile": "Editar cuenta",
   "stores.changeInitialCredit": "Cambiar crédito inicial",
   "stores.manageSubaccounts": "Manejar subcuentas",
-  "stores.allocateCredit": "Asignar crédito preacordado"
+  "stores.allocateCredit": "Asignar crédito preacordado",
+  "stores.notFound": "No se encontraron tiendas en el sistema"
 }
