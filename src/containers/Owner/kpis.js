@@ -136,6 +136,25 @@ class DiscountsAndRewards extends Component {
           <Row style={rowStyle} gutter={16} justify="start">
             <Col md={7} sm={24} xs={24} style={colStyle}>
               <BalanceSticker
+                text="Balance de admin"
+                coin="DSC"
+                bgColor="#fff"
+                amount={json.balances.balance}
+                subtext={" Fondo de reserva"}
+              />
+            </Col>
+            <Col md={10} sm={24} xs={24} style={colStyle}>
+              
+            </Col>
+            <Col md={7} sm={24} xs={24} style={colStyle}>
+              
+            </Col>
+          </Row>
+
+
+          <Row style={rowStyle} gutter={16} justify="start">
+            <Col md={7} sm={24} xs={24} style={colStyle}>
+              <BalanceSticker
                 text="Quantity of Dicoins in circulation"
                 coin="DSC"
                 bgColor="#fff"
