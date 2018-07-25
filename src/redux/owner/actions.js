@@ -60,9 +60,10 @@ const actions = {
     dispatch({
       type: actions.FETCH_CONFIGURATION_BUSINESSES,
       payload: {
-        balance: payload.balance || 0,
-        from: payload.from || 0,
-        limit: payload.limit || 50
+        page: payload.page || 1,
+        limit: payload.limit || 10,
+        filters: payload.filters || [],
+        order: payload.order || []
       }
     });
   },

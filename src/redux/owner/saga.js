@@ -16,8 +16,8 @@ import { getKeys } from "../utils/getKeys";
 
 function* getBusinesses(action) {
   yield takeLatest(actions.FETCH_CONFIGURATION_BUSINESSES, function*(action) {
-    const url = getPath("URL/GET_BUSINESSES", { ...action.payload });
-    const fetchData = apiCall(url);
+    const url = getPath("URL/GET_BUSINESSES");
+    const fetchData = apiCall(url, "POST", action.payload);
     const { data, ex } = yield call(fetchData);
     if (data)
       yield put({

@@ -74,7 +74,7 @@ const apiConfig = {
     { action: "URL/GET_CATEGORIES_LIST", path: "/business/category/list" },
     {
       action: "URL/GET_BUSINESSES",
-      path: "/dashboard/business/list/:from/:limit"
+      path: "/dashboard/business/search"
     },
     {
       action: "URL/GET_BUSINESS",
