@@ -4,6 +4,7 @@ import Input from "../../../components/uielements/input";
 import { DatePicker } from "antd";
 import { notification } from "antd";
 import moment from "moment";
+import { Checkbox } from 'antd';
 
 const minutesOffset = 1;
 
@@ -11,7 +12,8 @@ const checkActualDate = stringDate => {
   let date = moment(stringDate);
   // We need at least 1 minutes to get confirmation
   if (date.isBefore(moment().add(minutesOffset, "m"))) {
-    date.add(minutesOffset, "m");
+    // date.add(minutesOffset, "m");
+    date = moment().add(minutesOffset, "m");
   }
   return date.utc().valueOf();
 };
@@ -22,13 +24,16 @@ export class SubAccountBox extends Component {
     this.state = {
       amount: 0,
       from: "",
-      to: ""
+      to: "",
+      checked_now: true
     };
 
     this.updateAmount = this.updateAmount.bind(this);
-    this.updateFrom = this.updateFrom.bind(this);
-    this.updateTo = this.updateTo.bind(this);
-    this.onOk = this.onOk.bind(this);
+    this.updateFrom   = this.updateFrom.bind(this);
+    this.updateTo     = this.updateTo.bind(this);
+    this.onOk         = this.onOk.bind(this);
+    this.onChangeNow  = this.onChangeNow.bind(this);
+    
   }
 
   openNotificationWithIcon(type, title, msg, duration) {
@@ -42,39 +47,30 @@ export class SubAccountBox extends Component {
   }
 
   null_or_zero(value) {
-    return value == null || parseInt(value) < 0;
+    return value == null || parseInt< 0;
   }
   null_or_empty(value) {
     return !value || value == null || value == "";
   }
+
   onOk() {
+    
     // console.log(' normal: ', this.state.from.date.valueOf());
     // console.log(' utc: ', this.state.from.date.utc().valueOf());
     // validar fechas from > now > to
-    let _now = Math.floor(Date.now() / 1000); //new Date().getTime();
-    let _from = checkActualDate(this.state.from.date_utc); //.date.utc().valueOf();
+    
+    let _now = Date.now(); 
+    
+    let _from = _now;
+    console.log('this.state.checked_now:', this.state.checked_now)
+    if(!this.state.checked_now)
+      // _from = checkActualDate(this.state.from.date_utc);
+      _from = this.state.from.date_utc;
     let _to = this.state.to.date_utc; //.date.utc().valueOf()
 
     let period = 86400;
     let periods = Math.floor((_to - _from) / 86400 / 1000);
-    console.log("period:", period, "periods:", periods);
-
-    console.log(" now:", _now);
-    console.log(" from:", _from);
-    console.log(" to:", _to);
-    console.log(
-      " -- this.null_or_zero(this.state.amount):",
-      this.null_or_zero(this.state.amount)
-    );
-    console.log(
-      " -- this.null_or_empty(this.state.from):",
-      this.null_or_empty(_from)
-    );
-    console.log(
-      " -- this.null_or_empty(this.state.to):",
-      this.null_or_empty(_to)
-    );
-    console.log(" -- (_now>=_from>=_to)", _now >= _from >= _to);
+    
     if (
       this.null_or_zero(this.state.amount) ||
       this.null_or_empty(_from) ||
@@ -91,7 +87,13 @@ export class SubAccountBox extends Component {
       return;
     }
 
-    this.props.submit(this.state);
+    var my_state = Object.assign({}, this.state);
+    // my_state.from     = _from;
+    // my_state.to       = _to;
+    my_state.period   = period;
+    my_state.periods  = periods;
+
+    this.props.submit(my_state);
     // this.setState(this.default_state)
   }
 
@@ -112,16 +114,16 @@ export class SubAccountBox extends Component {
       return;
     }
 
-    console.log("updateFrom:: ", date, dateString, moment);
+    // console.log("updateFrom:: ", date, dateString, moment);
 
     //Check time offset
-    date = moment(checkActualDate(date.utc().valueOf()));
+    // date = moment(checkActualDate(date.utc().valueOf()));
 
     //Update state
     this.setState({
       from: {
         date_utc: date.utc().valueOf(),
-        dateString: date.toString()
+        dateString: dateString
       }
     });
   }
@@ -132,9 +134,15 @@ export class SubAccountBox extends Component {
       return;
     }
 
-    console.log("updateTo:: ", date, dateString);
+    // console.log("updateTo:: ", date, dateString);
     this.setState({
       to: { date_utc: date.utc().valueOf(), dateString: dateString }
+    });
+  }
+
+  onChangeNow = (e) => {
+    this.setState({
+      checked_now: e.target.checked,
     });
   }
 
@@ -171,7 +179,14 @@ export class SubAccountBox extends Component {
               format="YYYY-MM-DD HH:mm:ss"
               onChange={this.updateFrom}
               size="large"
+              disabled={this.state.checked_now}
             />
+            
+            <Checkbox
+              checked={this.state.checked_now}
+              onChange={this.onChangeNow}
+            >Desde ahora</Checkbox>
+
           </Col>
           <Col style={colStyle} xs={24} md={12}>
             hasta

@@ -18,6 +18,8 @@ import { subaccountAddOrUpdate } from "../../../httpService";
 
 import { notification } from "antd";
 
+import moment from "moment";
+
 const InputSearch = Input.Search;
 
 const { rowStyle, colStyle } = basicStyle;
@@ -28,6 +30,18 @@ const inputStyle = {
 const avgStyle = {
   display: "block",
   paddingTop: "15px"
+};
+
+const minutesOffset = 2;
+
+const checkActualDate = stringDate => {
+  let date = moment(stringDate);
+  // We need at least 1 minutes to get confirmation
+  if (date.isBefore(moment().add(minutesOffset, "m"))) {
+    // date.add(minutesOffset, "m");
+    date = moment().add(minutesOffset, "m");
+  }
+  return date.utc().valueOf();
 };
 
 class FindAccounts extends Component {
@@ -149,9 +163,12 @@ class FindAccounts extends Component {
   submitSubAccountBox(e) {
     let x = {
       subaccount_auth: {
-        amount: e.amount,
-        from: e.from,
-        to: e.to
+        amount:       e.amount,
+        from:         e.from,
+        to:           e.to,
+        period:       e.period,
+        periods:      e.periods,
+        checked_now:  e.checked_now
       }
     };
     console.log(" submitSubAccountBox(e)::", JSON.stringify(x));
@@ -169,26 +186,48 @@ class FindAccounts extends Component {
       confirm_visible: false
     });
 
-    // this.state.subaccount_auth
-    // amount
-    // from.date_utc
-    // to.date_utc
+    let _now = Date.now(); 
+    
+    let _from = _now;
+    if(!this.state.subaccount_auth.checked_now)
+      _from = this.state.subaccount_auth.from.date_utc;
 
-    // let _now    = Math.floor(Date.now() / 1000); //new Date().getTime();
-    let _from = this.state.subaccount_auth.from.date_utc; //.date.utc().valueOf();
+    _from   = checkActualDate(_from);
     let _to = this.state.subaccount_auth.to.date_utc; //.date.utc().valueOf()
+
     let period = 86400;
     let periods = Math.floor((_to - _from) / 86400 / 1000);
+    
+    if (
+      _from >= _now >= _to ||
+      periods < 1
+    ) {
+      this.openNotificationWithIcon(
+        "error",
+        "Verifique valores ingresados",
+        "El monto debe ser mayor a cero, la fecha de inicio debe ser mayor al dia de hoy y mayor a la fecha de cierre.",
+        0
+      );
+      return;
+    }
+
+    // let _from = this.state.subaccount_auth.from.date_utc; //.date.utc().valueOf();
+    // let _to = this.state.subaccount_auth.to.date_utc; //.date.utc().valueOf()
+    // let period = 86400;
+    // let periods = Math.floor((_to - _from) / 86400 / 1000);
 
     let tx = {
       business_id: this.props.account.account_id,
       subaccount_id: this.state.selectedCustomer.account_id,
       limit: this.state.subaccount_auth.amount,
-      from: _from,
+      from: Math.floor(_from/1000),
       period: period, // seconds
       periods: periods //
     };
 
+    console.log(" -- addSubAccount() #4");
+    console.log(JSON.stringify(tx));
+    // return;
     subaccountAddOrUpdate(this.props.account.keys.active.wif, tx).then(
       res => {
         console.log(
@@ -292,8 +331,8 @@ class FindAccounts extends Component {
           >
             <p>
               Va a autorizar a {this.state.selectedCustomer.name} a retirar
-              diariamente {this.state.subaccount_auth.amount} desde el{" "}
-              {this.state.subaccount_auth.from.dateString} hasta{" "}
+              diariamente {this.state.subaccount_auth.amount} desde{" "}
+              {(this.state.subaccount_auth.checked_now)?"ahora":(this.state.subaccount_auth.from.dateString)} hasta{" "}
               {this.state.subaccount_auth.to.dateString}
             </p>
           </Modal>

@@ -163,6 +163,7 @@ class SubAccounts extends Component {
               <AccountBox
                 name={account.name}
                 dailyPermission={account.amount}
+                account={account}
                 changeAmount={() => this.changeAmount(account)}
                 changePassword={() => this.changePassword(account)}
               />

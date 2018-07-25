@@ -22,6 +22,7 @@ const AccountBox = ({
   name,
   type,
   dailyPermission,
+  account,
   changeAmount,
   changePassword
 }) => (
@@ -36,10 +37,18 @@ const AccountBox = ({
       title={name}
       description={
         <p>
-          <b>Type:</b> {type}
+          Tipo de cuenta: <b>{type}</b>
           <br />
-          <b>Daily Permission:</b> DSC{" "}
-          {Number(dailyPermission).toLocaleString()}
+          Monto diario: <b>DSC{" "}
+          {Number(dailyPermission).toLocaleString()}0</b>
+          <br/>
+          Desde: <b>{account.since}</b>
+          <br />
+          Hasta: <b>{account.expiration}</b>
+          <br />
+          Rerirado este período: <b>DSC{" "} {Number(account.claimed_this_period).toLocaleString()}0</b>
+          <br />
+          
         </p>
       }
     />
