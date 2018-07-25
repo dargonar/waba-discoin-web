@@ -21,7 +21,7 @@ function* getBusinesses(action) {
     if (data)
       yield put({
         type: actions.FETCH_CONFIGURATION_BUSINESSES_SUCCESS,
-        payload: data.businesses
+        payload: data
       });
     else yield put({ type: actions.FETCH_CONFIGURATION_BUSINESSES_FAILD, ex });
   });
@@ -141,10 +141,14 @@ function* saveBusiness(action) {
         type: actions.SAVE_BUSINESS_FAIL,
         payload: { ex: ex, error: data }
       });
-      console.log(JSON.stringify(data))
+      console.log(JSON.stringify(data));
       yield put({
         type: actionsUI.GLOBAL_MSG,
-        payload: { msgType: "error" , msg: "Error al guardar el comercio", data:data }
+        payload: {
+          msgType: "error",
+          msg: "Error al guardar el comercio",
+          data: data
+        }
       });
     }
   });
