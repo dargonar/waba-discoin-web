@@ -22,7 +22,7 @@ function* getBusinesses(action) {
     if (data)
       yield put({
         type: actions.FETCH_CONFIGURATION_BUSINESSES_SUCCESS,
-        payload: data.businesses
+        payload: data
       });
     else yield put({ type: actions.FETCH_CONFIGURATION_BUSINESSES_FAILD, ex });
   });

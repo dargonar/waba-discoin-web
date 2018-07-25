@@ -6,6 +6,7 @@ const initState = {
   error: false,
   msg: null,
   stores: [],
+  totalBusiness: 0,
   subaccounts: [],
   parameters: null,
   categories: null
@@ -95,7 +96,8 @@ export default function authReducer(state = initState, action) {
     case actions.FETCH_CONFIGURATION_BUSINESSES_SUCCESS:
       return {
         ...state,
-        stores: [].concat(action.payload),
+        stores: [].concat(action.payload).businesses,
+        totalBusiness: action.payload.total || action.payload.businesses.length,
         loading: false
       };
     case actions.BUSINESS_SET_OVERDRAFT:
