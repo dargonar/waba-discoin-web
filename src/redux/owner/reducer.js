@@ -6,7 +6,7 @@ const initState = {
   error: false,
   msg: null,
   stores: [],
-  totalBusiness: 0,
+  totalStores: 0,
   subaccounts: [],
   parameters: null,
   categories: null
@@ -35,19 +35,19 @@ export default function authReducer(state = initState, action) {
     case actions.FETCH_CONFIGURATION_PARAMETERS:
       return {
         ...state,
-        loading: true
+        actionLoading: true
       };
     case actions.FETCH_CONFIGURATION_PARAMETERS_FAILD:
       return {
         ...state,
-        loading: false,
+        actionLoading: false,
         error: true,
         msg: "Error loading categories, please try leater."
       };
     case actions.FETCH_CONFIGURATION_PARAMETERS_SUCCESS:
       return {
         ...state,
-        loading: false,
+        actionLoading: false,
         parameters: action.payload.configuration
       };
 
@@ -96,8 +96,8 @@ export default function authReducer(state = initState, action) {
     case actions.FETCH_CONFIGURATION_BUSINESSES_SUCCESS:
       return {
         ...state,
-        stores: [].concat(action.payload).businesses,
-        totalBusiness: action.payload.total || action.payload.businesses.length,
+        stores: [].concat(action.payload.businesses),
+        totalStores: action.payload.total || action.payload.businesses.length,
         loading: false
       };
     case actions.BUSINESS_SET_OVERDRAFT:
