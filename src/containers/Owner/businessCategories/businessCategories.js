@@ -38,6 +38,7 @@ class Categories extends Component {
   }
 
   submitCategory(data) {
+    console.log(' **** submitCategory(data)', JSON.stringify(data));
     this.props.saveCategory(data);
     this.toggleModal();
   }

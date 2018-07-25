@@ -57,7 +57,7 @@ export default class CategoryModal extends Component {
             {this.props.form.id ? (
               <Popconfirm
                 title={
-                  <IntlMessages id="Are you sure you want to remove this category?" />
+                  <IntlMessages id={"Are you sure you want to remove this category?"} />
                 }
                 okText={<IntlMessages id="Yes" />}
                 cancelText={<IntlMessages id="No" />}
@@ -71,7 +71,7 @@ export default class CategoryModal extends Component {
             <Button type="" onClick={this.props.onCancel}>
               Cancel
             </Button>
-            <Button type="primary" onClick={this.onOk}>
+            <Button type="primary" onClick={this.submit}>
               Save
             </Button>
           </div>
