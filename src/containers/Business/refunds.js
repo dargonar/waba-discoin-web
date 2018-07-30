@@ -1,16 +1,14 @@
 import React, { Component } from "react";
 import LayoutContentWrapper from "../../components/utility/layoutWrapper";
-import LayoutContent from "../../components/utility/layoutContent";
 import PageHeader from "../../components/utility/pageHeader";
 import PageLoading from "../../components/pageLoading";
 import { Row, Col, Input } from "antd";
 import basicStyle from "../../config/basicStyle";
-
+import IntlMessages from "../../components/utility/intlMessages";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import actions from "../../redux/api/actions";
 import appActions from "../../redux/app/actions";
-import MessageBox from "../../components/MessageBox";
 
 import CustomersBox from "./components/customerBox";
 import RefundBox from "./components/refundBox";
@@ -74,9 +72,8 @@ class Customers extends Component {
   handleOnRefund(account) {
     this.showRefundBox(account);
   }
-  handleOnIcon2() {}
-  handleOnElement(account) {
-    this.showRefundBox(account);
+  handleOnDiscount(account) {
+    console.log("TODO: IMPLEMENT THIS - refound.js line 76", account);
   }
 
   componentWillMount() {
@@ -232,9 +229,11 @@ class Customers extends Component {
                 account_id={customer.account_id}
                 onElement={e => this.handleOnElement(e)}
                 onIcon1={e => this.handleOnRefund(e)}
-                onIcon2={e => this.handleOnIcon2(e)}
+                onIcon2={e => this.handleOnDiscount(e)}
                 icon1={"rollback"}
-                icon2={"hidden"}
+                title1={<IntlMessages id={"Refound"} />}
+                icon2={"check"}
+                title2={<IntlMessages id={"Accept discount"} />}
               />
             </Col>
           ))}
@@ -260,7 +259,7 @@ class Customers extends Component {
               onKeyPress={this._handleKeyPress}
               onSearch={() => this.props.searchAccount(this.state.searchValue)}
               onChange={this._handleChange}
-              enterButton
+              enterButton={<IntlMessages id="Force search" />}
             />
           </Col>
         </Row>
