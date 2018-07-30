@@ -45,11 +45,11 @@ const actions = {
     current
   }),
   showLoading: msg => ({
-    type: "GLOBAL_LOADING_START",
+    type: actions.GLOBAL_LOADING_START,
     payload: { msg: msg }
   }),
   endLoading: () => ({
-    type: "GLOBAL_LOADING_END"
+    type: actions.GLOBAL_LOADING_END
   })
 };
 export default actions;
