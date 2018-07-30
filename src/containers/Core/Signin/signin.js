@@ -73,13 +73,6 @@ class SignIn extends Component {
     );
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.error === true) {
-      message.error(nextProps.msg);
-      this.props.clearMsg();
-    }
-  }
-
   handleLogin = () => {
     // alert(this.state.words);
     if (this.state.remember && this.state.rememberKey == "") {

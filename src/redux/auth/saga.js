@@ -158,70 +158,80 @@ export function* loginRequest() {
       const secret = secretRes.data.secret;
       const destintation_key = secretRes.data.destintation_key;
 
-      let memo_obj = signMemo(destintation_key, secret, account);
-      memo_obj["signed_secret"] = memo_obj.message;
+      try {
+        let memo_obj = signMemo(destintation_key, secret, account);
+        memo_obj["signed_secret"] = memo_obj.message;
 
-      const pushLogin = apiCall(url, "POST", memo_obj);
-      let { data, ex } = yield call(pushLogin);
+        const pushLogin = apiCall(url, "POST", memo_obj);
+        let { data, ex } = yield call(pushLogin);
 
-      console.log("[redux/auth/saga]-- auth/saga loginRequest OK#2");
-      console.log(
-        "[redux/auth/saga]-- auth/saga loginRequest data:",
-        JSON.stringify(data)
-      );
-      console.log(
-        "[redux/auth/saga]-- auth/saga loginRequest err:",
-        JSON.stringify(ex)
-      );
-      if (data && data.login === true) {
-        yield put({
-          type: actions.LOGIN_SUCCESS,
-          payload: {
-            keys: account,
-            account: account_name,
-            secret: data.decrypted_secret,
-            account_id: data.account.id,
-            raw: data
-          }
-        });
-
-        yield put({ type: actionsUI.GLOBAL_LOADING_END });
-        yield put({
-          type: actionsUI.GLOBAL_MSG,
-          payload: {
-            msgType: "success",
-            msg: "Inicio de sesión exitoso."
-          }
-        });
-
-        if (remember === true) {
+        console.log("[redux/auth/saga]-- auth/saga loginRequest OK#2");
+        console.log(
+          "[redux/auth/saga]-- auth/saga loginRequest data:",
+          JSON.stringify(data)
+        );
+        console.log(
+          "[redux/auth/saga]-- auth/saga loginRequest err:",
+          JSON.stringify(ex)
+        );
+        if (data && data.login === true) {
           yield put({
-            type: actions.LS_WRITE,
+            type: actions.LOGIN_SUCCESS,
             payload: {
               keys: account,
               account: account_name,
+              secret: data.decrypted_secret,
               account_id: data.account.id,
-              password: rememberKey,
-              credentials: action.payload
+              raw: data
+            }
+          });
+
+          yield put({ type: actionsUI.GLOBAL_LOADING_END });
+          yield put({
+            type: actionsUI.GLOBAL_MSG,
+            payload: {
+              msgType: "success",
+              msg: "Inicio de sesión exitoso."
+            }
+          });
+
+          if (remember === true) {
+            yield put({
+              type: actions.LS_WRITE,
+              payload: {
+                keys: account,
+                account: account_name,
+                account_id: data.account.id,
+                password: rememberKey,
+                credentials: action.payload
+              }
+            });
+          }
+        } else {
+          yield put({
+            type: actions.LOGIN_ERROR,
+            payload: {
+              err: typeof ex !== "undefined" ? ex.message : null,
+              error: data.error
+            }
+          });
+          yield put({ type: actionsUI.GLOBAL_LOADING_END });
+          yield put({
+            type: actionsUI.GLOBAL_MSG,
+            payload: {
+              msgType: "error",
+              msg: ex || data.error
             }
           });
         }
-      } else {
+      } catch (e) {
         yield put({
           type: actions.LOGIN_ERROR,
           payload: {
-            err: typeof ex !== "undefined" ? ex.message : null,
-            error: data.error
+            error: "Wrong username or password"
           }
         });
         yield put({ type: actionsUI.GLOBAL_LOADING_END });
-        yield put({
-          type: actionsUI.GLOBAL_MSG,
-          payload: {
-            msgType: "error",
-            msg: ex || data.error
-          }
-        });
       }
     }
   });
@@ -232,7 +242,15 @@ export function* loginSuccess() {
 }
 
 export function* loginError() {
-  yield takeEvery(actions.LOGIN_ERROR, function*() {});
+  yield takeEvery(actions.LOGIN_ERROR, function*(action) {
+    yield put({
+      type: actionsUI.GLOBAL_MSG,
+      payload: {
+        msgType: "error",
+        msg: action.payload.err || action.payload.error
+      }
+    });
+  });
 }
 
 export function* logout() {
