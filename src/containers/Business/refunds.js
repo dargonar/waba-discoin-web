@@ -12,6 +12,7 @@ import appActions from "../../redux/app/actions";
 
 import CustomersBox from "./components/customerBox";
 import RefundBox from "./components/refundBox";
+import moment from "moment";
 
 import { rewardCustomer } from "../../httpService";
 import { notification } from "antd";
@@ -207,6 +208,7 @@ class Customers extends Component {
           cancel={this.removeRefundBox}
           submit={this.submitRefundBox}
           percentage={this.getTodayRate()}
+          scheduleReward={this.props.scheduleReward}
         />
         <Row style={rowStyle} gutter={16} justify="start">
           {this.props.customers.length === 0 ? (
@@ -270,13 +272,35 @@ class Customers extends Component {
   }
 }
 
+const getDiscount = discounts => {
+  console.log(
+    moment()
+      .format("dddd")
+      .toLowerCase(),
+    discounts,
+    getDiscount
+  );
+  return discounts
+    .filter(
+      discount =>
+        discount.date ===
+        moment()
+          .format("dddd")
+          .toLowerCase()
+    )
+    .reduce((prev, act) => Number(act.discount), 0);
+};
+
 const mapStateToProps = state => ({
   api: state.Api,
   customers: state.Api.customers,
   account: state.Auth,
   isLoading: state.Api.actionLoading,
   error: state.Api.error,
-  msg: state.Api.msg
+  msg: state.Api.msg,
+  scheduleReward: getDiscount(
+    state.Api.business ? state.Api.business.discount_schedule : []
+  )
 });
 
 const mapDispatchToProps = dispatch => ({
