@@ -46,6 +46,8 @@ const actions = {
 
   CLEAR_MSG: "[Api] Clear messages",
 
+  ASK_PASSWORD: "[UI] Ask for local storage password",
+
   fetchProfile: account_id => (dispatch, getState) => {
     dispatch({
       type: actions.GET_PROFILE,
@@ -53,6 +55,17 @@ const actions = {
         account_id: account_id || getState().Auth.account_id
       }
     });
+  },
+
+  getKeys: (dispatch, getState, postaction) => {
+    if (getState().Auth.encrypted === true) {
+      dispatch({
+        type: ASK_PASSWORD,
+        payload: postaction
+      });
+    } else {
+      postaction(dispatch, getState);
+    }
   },
 
   fetchConfiguration: () => dispatch => {
