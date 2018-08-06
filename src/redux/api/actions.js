@@ -60,11 +60,11 @@ const actions = {
   getKeys: (dispatch, getState, postaction) => {
     if (getState().Auth.encrypted === true) {
       dispatch({
-        type: ASK_PASSWORD,
+        type: actions.ASK_PASSWORD,
         payload: postaction
       });
     } else {
-      postaction(dispatch, getState);
+      postaction();
     }
   },
 
