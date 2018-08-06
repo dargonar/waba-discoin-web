@@ -39,16 +39,15 @@ const AccountBox = ({
         <p>
           Tipo de cuenta: <b>{type}</b>
           <br />
-          Monto diario: <b>DSC{" "}
-          {Number(dailyPermission).toLocaleString()}0</b>
-          <br/>
+          Monto diario: <b>DSC {Number(dailyPermission).toLocaleString()}0</b>
+          <br />
           Desde: <b>{account.since}</b>
           <br />
           Hasta: <b>{account.expiration}</b>
           <br />
-          Rerirado este período: <b>DSC{" "} {Number(account.claimed_this_period).toLocaleString()}0</b>
+          Rerirado este período:{" "}
+          <b>DSC {Number(account.claimed_this_period || 0).toLocaleString()}</b>
           <br />
-          
         </p>
       }
     />
