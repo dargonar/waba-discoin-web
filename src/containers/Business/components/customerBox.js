@@ -41,21 +41,23 @@ export class CustomerBox extends Component {
 
   render() {
     const icon1 = (
-      <Tooltip title={this.props.title1}>
+      <span>
         <Icon
           type={this.props.icon1 || "user"}
           onClick={e => this.handleButton1Click(e)}
-        />
-      </Tooltip>
+        />{" "}
+        {this.props.title1}
+      </span>
     );
     const icon2 =
       this.props.icon2 != "hidden" ? (
-        <Tooltip title={this.props.title2}>
+        <span>
           <Icon
             type={this.props.icon2 || "schedule"}
             onClick={e => this.handleButton2Click(e)}
-          />
-        </Tooltip>
+          />{" "}
+          {this.props.title2}
+        </span>
       ) : (
         false
       );
