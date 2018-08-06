@@ -359,9 +359,22 @@ class FindAccounts extends Component {
   }
 }
 
+// Filtering of already assigned sub-accounts
+const filterCustomers = state => {
+  const subaccounts =
+    state.Owner.subaccounts && state.Owner.subaccounts[0].subaccounts
+      ? state.Owner.subaccounts[0].subaccounts.permissions
+      : [];
+  const customers = state.Api.customers ? state.Api.customers : [];
+  const subaccountsIds = subaccounts.map(
+    subaccount => subaccount.authorized_account
+  );
+  return customers.filter(x => subaccountsIds.indexOf(x.account_id) === -1);
+};
+
 const mapStateToProps = state => ({
   api: state.Api,
-  customers: state.Api.customers,
+  customers: filterCustomers(state),
   account: state.Auth,
   isLoading: state.Api.actionLoading,
   error: state.Api.error,
