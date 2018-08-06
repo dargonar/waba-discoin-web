@@ -5,6 +5,7 @@ import PageHeader from "../../../components/utility/pageHeader";
 import PageLoading from "../../../components/pageLoading";
 import { Row, Col, Input, Modal } from "antd";
 import basicStyle from "../../../config/basicStyle";
+import IntlMessages from "../../../components/utility/intlMessages";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -163,12 +164,12 @@ class FindAccounts extends Component {
   submitSubAccountBox(e) {
     let x = {
       subaccount_auth: {
-        amount:       e.amount,
-        from:         e.from,
-        to:           e.to,
-        period:       e.period,
-        periods:      e.periods,
-        checked_now:  e.checked_now
+        amount: e.amount,
+        from: e.from,
+        to: e.to,
+        period: e.period,
+        periods: e.periods,
+        checked_now: e.checked_now
       }
     };
     console.log(" submitSubAccountBox(e)::", JSON.stringify(x));
@@ -186,22 +187,19 @@ class FindAccounts extends Component {
       confirm_visible: false
     });
 
-    let _now = Date.now(); 
-    
+    let _now = Date.now();
+
     let _from = _now;
-    if(!this.state.subaccount_auth.checked_now)
+    if (!this.state.subaccount_auth.checked_now)
       _from = this.state.subaccount_auth.from.date_utc;
 
-    _from   = checkActualDate(_from);
+    _from = checkActualDate(_from);
     let _to = this.state.subaccount_auth.to.date_utc; //.date.utc().valueOf()
 
     let period = 86400;
     let periods = Math.floor((_to - _from) / 86400 / 1000);
-    
-    if (
-      _from >= _now >= _to ||
-      periods < 1
-    ) {
+
+    if (_from >= _now >= _to || periods < 1) {
       this.openNotificationWithIcon(
         "error",
         "Verifique valores ingresados",
@@ -220,7 +218,7 @@ class FindAccounts extends Component {
       business_id: this.props.account.account_id,
       subaccount_id: this.state.selectedCustomer.account_id,
       limit: this.state.subaccount_auth.amount,
-      from: Math.floor(_from/1000),
+      from: Math.floor(_from / 1000),
       period: period, // seconds
       periods: periods //
     };
@@ -302,7 +300,8 @@ class FindAccounts extends Component {
               onElement={e => this.handleOnElement(e)}
               onIcon1={e => this.handleOnIcon1(e)}
               onIcon2={e => this.handleOnIcon2(e)}
-              icon1={"pay-circle-o"}
+              icon1={"plus-circle-o"}
+              title1={<IntlMessages id="Add" />}
               icon2={"hidden"}
             />
           </Col>
@@ -332,8 +331,10 @@ class FindAccounts extends Component {
             <p>
               Va a autorizar a {this.state.selectedCustomer.name} a retirar
               diariamente {this.state.subaccount_auth.amount} desde{" "}
-              {(this.state.subaccount_auth.checked_now)?"ahora":(this.state.subaccount_auth.from.dateString)} hasta{" "}
-              {this.state.subaccount_auth.to.dateString}
+              {this.state.subaccount_auth.checked_now
+                ? "ahora"
+                : this.state.subaccount_auth.from.dateString}{" "}
+              hasta {this.state.subaccount_auth.to.dateString}
             </p>
           </Modal>
         ) : (
