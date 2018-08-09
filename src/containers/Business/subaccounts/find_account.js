@@ -225,6 +225,9 @@ class FindAccounts extends Component {
 
     console.log(" -- addSubAccount() #4");
     console.log(JSON.stringify(tx));
+    
+    console.log(JSON.stringify(this.props.account));
+
     // return;
     subaccountAddOrUpdate(this.props.account.keys.active.wif, tx).then(
       res => {

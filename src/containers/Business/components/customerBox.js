@@ -6,6 +6,9 @@ import { Card, Icon, Tooltip } from "antd";
 export class CustomerBox extends Component {
   constructor(props) {
     super(props);
+    this.handleButton1Click = this.handleButton1Click.bind(this);
+    this.handleButton2Click = this.handleButton2Click.bind(this);
+    this.handleClick        = this.handleClick.bind(this);
   }
 
   handleClick() {
@@ -41,26 +44,25 @@ export class CustomerBox extends Component {
 
   render() {
     const icon1 = (
-      <span>
+      <Tooltip title={this.props.title1}>
         <Icon
           type={this.props.icon1 || "user"}
           onClick={e => this.handleButton1Click(e)}
-        />{" "}
-        {this.props.title1}
-      </span>
+        />
+      </Tooltip>
     );
     const icon2 =
       this.props.icon2 != "hidden" ? (
-        <span>
+        <Tooltip title={this.props.title2}> 
           <Icon
             type={this.props.icon2 || "schedule"}
             onClick={e => this.handleButton2Click(e)}
-          />{" "}
-          {this.props.title2}
-        </span>
+          />
+        </Tooltip>
       ) : (
         false
       );
+    
     return (
       <Card actions={[icon1, icon2]}>
         <HashImage

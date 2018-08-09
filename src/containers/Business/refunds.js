@@ -71,10 +71,11 @@ class Customers extends Component {
   }
 
   handleOnRefund(account) {
+    console.log(' ============================= handleOnRefund:', JSON.stringify(account));
     this.showRefundBox(account);
   }
   handleOnDiscount(account) {
-    console.log("TODO: IMPLEMENT THIS - refound.js line 76", account);
+    console.log(" ============================= TODO: IMPLEMENT THIS - refound.js line 76", account);
   }
 
   componentWillMount() {
