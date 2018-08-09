@@ -42,6 +42,12 @@ class Topbar extends Component {
           <ul className="isoRight">
             <li>
               {this.props.Auth.account} - {this.props.Auth.account_id}
+              {" - "}
+              <span style={{ fontWeight: "bold", color: "#555" }}>
+                {"("}
+                {"DSC " + Number(this.props.balance).toLocaleString()}
+                {")"}
+              </span>
             </li>
             <li
               onClick={() => this.setState({ selectedItem: "user" })}
@@ -59,7 +65,11 @@ class Topbar extends Component {
 export default connect(
   state => ({
     App: { ...state.App.toJS() },
-    Auth: { ...state.Auth }
+    Auth: { ...state.Auth },
+    balance:
+      state.Api.business && state.Api.business.balances
+        ? state.Api.business.balances.balance
+        : 0
   }),
   { toggleCollapsed }
 )(Topbar);
