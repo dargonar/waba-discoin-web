@@ -26,6 +26,7 @@ class LanguageSwitcher extends Component {
             return (
               <Button
                 type={type}
+                style={{ marginRight: "10px" }}
                 key={languageId}
                 onClick={() => {
                   switchActivation();
