@@ -601,5 +601,14 @@
   "filter.category": "Category",
   "filter.subcategory": "Subcategory",
   "filter.overdraft": "Overdraft only",
-  "intlselector": "Change language"
+  "intlselector": "Change language",
+  "discoin.dashboard": "Dashboard",
+  "discoin.balance": "Discoin Balance",
+  "discoin.initialCredit": "Inicil Cretid",
+  "discoin.endorsed": "Endorsed",
+  "discoin.acceptedRatio": "Accepted / Received ratio",
+  "discoin.rewardAndRefund": "Reward & Refund",
+  "discoint.overdraftAvailable": "Credit available",
+  "discoin.acceptAvailableOverdraft": "Do you wish to accept the available overdraft?"
+
 }

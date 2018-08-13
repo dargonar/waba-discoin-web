@@ -9,7 +9,7 @@ import basicStyle from "../../config/basicStyle";
 import { StripMessage } from "../../components/uielements/stripMessage";
 import BalanceSticker from "../../components/balance-sticker/balance-sticker";
 import RatingSticker from "../../components/rating-sticker/rating-sticker";
-
+import IntlMessage from "../../components/utility/intlMessages";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import actions from "../../redux/api/actions";
@@ -116,16 +116,23 @@ export class Dashboard extends Component {
           visible={true}
           type={"info"}
           msg={
-            "Tiene un crédito de DSC " +
-            Number(
-              this.props.api.business.balances.ready_to_access
-            ).toLocaleString() +
-            ". ¿Quiere aceptarlo?"
+            <IntlMessage
+              id={"discoin.overdraftQuestion"}
+              defaultMessage={`You have a DSC{value} credit available. You want to take it?`}
+              values={{
+                value: Number(
+                  this.props.api.business.balances.ready_to_access
+                ).toLocaleString()
+              }}
+            />
           }
           actions={[
-            { msg: "Aplicar", onClick: () => this.showApplyOverdraft() },
             {
-              msg: "Ignorar",
+              msg: <IntlMessage id="apply" defaultMessage="Apply" />,
+              onClick: () => this.showApplyOverdraft()
+            },
+            {
+              msg: <IntlMessage id="ignore" defaultMessage="Ignore" />,
               onClick: () => this.setState({ ignoreOverdraft: true })
             }
           ]}
@@ -142,7 +149,12 @@ export class Dashboard extends Component {
             <IsoWidgetsWrapper>
               <BalanceSticker
                 amount={this.props.api.business.balances.balance}
-                text="Discoin Balance"
+                text={
+                  <IntlMessage
+                    id="discoin.balance"
+                    defaultMessage={"Discoin Balance"}
+                  />
+                }
                 coin="DSC"
                 fontColor="#1C222C"
                 bgColor="#fff"
@@ -154,7 +166,12 @@ export class Dashboard extends Component {
             <IsoWidgetsWrapper>
               <BalanceSticker
                 amount={this.props.api.business.balances.initial_credit}
-                text="Initial Credit"
+                text={
+                  <IntlMessage
+                    defaultMessage="Initial Credit"
+                    id="discoin.initialCredit"
+                  />
+                }
                 coin={"DSC"}
                 fontColor="#1C222C"
                 bgColor="#fff"
@@ -166,7 +183,12 @@ export class Dashboard extends Component {
             <IsoWidgetsWrapper>
               <BalanceSticker
                 amount={this.props.api.business.balances.ready_to_access}
-                text="Endorsed"
+                text={
+                  <IntlMessage
+                    defaultMessage="Endorsed"
+                    id="discoin.endorsed"
+                  />
+                }
                 coin={"DSC"}
                 fontColor="#1C222C"
                 bgColor="#fff"
@@ -179,7 +201,12 @@ export class Dashboard extends Component {
             <IsoWidgetsWrapper>
               <BalanceSticker
                 amount={_ratio}
-                text="Accepted / Received ratio"
+                text={
+                  <IntlMessage
+                    defaultMessage="Accepted / Received ratio"
+                    id="discoin.acceptedRatio"
+                  />
+                }
                 scale={getBalanceWarnings(
                   this.props.api.configuration.warnings
                 )}
@@ -195,7 +222,12 @@ export class Dashboard extends Component {
               <BalanceSticker
                 amount={this.props.api.business.discount}
                 percentage={true}
-                text="Reward & Refund"
+                text={
+                  <IntlMessage
+                    defaultMessage="Reward & Refund"
+                    id="discoin.rewardAndRefund"
+                  />
+                }
                 fontColor="#1C222C"
                 bgColor="#fff"
               />
@@ -225,19 +257,32 @@ export class Dashboard extends Component {
   render() {
     return (
       <LayoutContentWrapper>
-        <PageHeader>Dashboard</PageHeader>
+        <PageHeader>
+          <IntlMessage id="discoin.dashboard" defaultMessage="Dashboard" />
+        </PageHeader>
 
         <Modal
           visible={this.state.confirm_overdraft_visible}
-          title="Credito disponible"
+          title={
+            <IntlMessage
+              defaultMessage="Credit available"
+              id="discoint.overdraftAvailable"
+            />
+          }
           onOk={this.doApplyOverdraft}
           onCancel={this.doCancelOverdraft}
         >
-          <label>Desea aceptar el credito disponible?</label>
+          <label>
+            <IntlMessage
+              id="discoin.acceptAvailableOverdraft"
+              defaultMessage="Do you wish to accept the available overdraft?"
+            />
+          </label>
         </Modal>
 
-        {this.props.api.loading !== false &&
-        typeof this.props.api.configuration === "null" ? (
+        {this.props.api.loading !== false ||
+        this.props.api.business === null ||
+        this.props.api.configuration === null ? (
           <PageLoading />
         ) : (
           this.renderContent()

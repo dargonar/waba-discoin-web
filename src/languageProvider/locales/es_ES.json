@@ -594,5 +594,18 @@
   "filter.category": "Categoría",
   "filter.subcategory": "Subcategoría",
   "filter.overdraft": "Tiene descubierto",
-  "intlselector": "Cambiar idioma"
+  "intlselector": "Cambiar idioma",
+  "discoin.overdraftQuestion": "Tienes un crédito de DSC{value}. ¿Quieres aceptarlo?",
+  "apply": "Aplicar",
+  "ignore": "Ignorar",
+  "discoin.dashboard": "Panel de Control",
+  "discoin.balance": "Balance de Discoin",
+  "discoin.initialCredit": "Credito Inicial",
+  "discoin.endorsed": "Aprobado",
+  "discoin.acceptedRatio": "Relación aceptado/recibido",
+  "discoin.rewardAndRefund": "Recompensa y reembolso",
+  "discoint.overdraftAvailable": "Crédito disponible",
+  "discoin.acceptAvailableOverdraft": "¿Desea aceptar el crédito disponible?"
+
+
 }

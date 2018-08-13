@@ -1,4 +1,4 @@
-import antdSA from "antd/lib/locale-provider/ca_ES";
+import antdSA from "antd/lib/locale-provider/es_ES";
 import appLocaleData from "react-intl/locale-data/es";
 import saMessages from "../locales/es_ES.json";
 
