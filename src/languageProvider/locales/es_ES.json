@@ -593,5 +593,6 @@
   "filter.storeName": "Nombre de tienda",
   "filter.category": "Categoría",
   "filter.subcategory": "Subcategoría",
-  "filter.overdraft": "Tiene descubierto"
+  "filter.overdraft": "Tiene descubierto",
+  "intlselector": "Cambiar idioma"
 }

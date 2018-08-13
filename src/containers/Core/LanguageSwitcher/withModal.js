@@ -2,59 +2,49 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Modal from "../../../components/feedback/modal";
 import Button from "../../../components/uielements/button";
-import actions from "../../../redux/languageSwitcher/actions";
+import actions from "../../../redux/app/actions";
 import config from "./config";
 
-const { switchActivation, changeLanguage } = actions;
+const { changeLanguage } = actions;
 
 class LanguageSwitcher extends Component {
   render() {
-    const {
-      isActivated,
-      language,
-      switchActivation,
-      changeLanguage
-    } = this.props;
+    const { language, changeLanguage, switchActivation } = this.props;
     return (
-      <div className="isoButtonWrapper">
-        <Button type="primary" className="" onClick={switchActivation}>
-          Switch Language
-        </Button>
-
-        <Modal
-          title={"Select Language"}
-          visible={isActivated}
-          onCancel={switchActivation}
-          cancelText="Cancel"
-          footer={[]}
-        >
-          <div>
-            {config.options.map(option => {
-              const { languageId, text } = option;
-              const type =
-                languageId === language.languageId ? "primary" : "success";
-              return (
-                <Button
-                  type={type}
-                  key={languageId}
-                  onClick={() => {
-                    changeLanguage(languageId);
-                  }}
-                >
-                  {text}
-                </Button>
-              );
-            })}
-          </div>
-        </Modal>
-      </div>
+      <Modal
+        title={"Select Language"}
+        visible={true}
+        onCancel={switchActivation}
+        cancelText="Cancel"
+        footer={[]}
+      >
+        <div>
+          {config.options.map(option => {
+            const { languageId, text } = option;
+            const type =
+              languageId === language.languageId ? "primary" : "success";
+            return (
+              <Button
+                type={type}
+                key={languageId}
+                onClick={() => {
+                  switchActivation();
+                  changeLanguage(languageId);
+                }}
+              >
+                {text}
+              </Button>
+            );
+          })}
+        </div>
+      </Modal>
     );
   }
 }
 
 export default connect(
   state => ({
-    ...state.LanguageSwitcher.toJS()
+    ...state.App.toJS()
   }),
-  { switchActivation, changeLanguage }
+  { changeLanguage }
 )(LanguageSwitcher);

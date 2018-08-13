@@ -1,3 +1,5 @@
+import { getCurrentLanguage } from "../../containers/Core/LanguageSwitcher/config";
+
 export function getView(width) {
   let newView = "MobileView";
   if (width > 1220) {
@@ -19,6 +21,15 @@ const actions = {
   GLOBAL_MSG: "[UI] Global message",
   GLOBAL_MSG_CLEAR: "[UI] Global message clear",
   SET_MENU_ITEMS: "[UI] Set menu items",
+  CHANGE_LANGUAGE: "CHANGE_LANGUAGE",
+  ACTIVATE_LANG_MODAL: "ACTIVATE_LANG_MODAL",
+
+  changeLanguage: language => {
+    return {
+      type: actions.CHANGE_LANGUAGE,
+      language: getCurrentLanguage(language)
+    };
+  },
 
   toggleCollapsed: () => ({
     type: actions.COLLPSE_CHANGE
