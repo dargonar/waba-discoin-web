@@ -609,6 +609,15 @@
   "discoin.acceptedRatio": "Accepted / Received ratio",
   "discoin.rewardAndRefund": "Reward & Refund",
   "discoint.overdraftAvailable": "Credit available",
-  "discoin.acceptAvailableOverdraft": "Do you wish to accept the available overdraft?"
+  "discoin.acceptAvailableOverdraft": "Do you wish to accept the available overdraft?",
+  "refund.forceSearch": "Force Search",
+  "refund.searchCustomer": "Search customer",
+  "refund.refound": "Refound",
+  "refund.acceptDiscount": "Accept Discount",
+  "refund.customers": "Customers",
+  "refund.refoundTo": "Refound To {name}",
+  "refund.amount": "Amount",
+  "refund.percentage": "Percentage",
+  "refund.invoice": "Invoice"
 
 }

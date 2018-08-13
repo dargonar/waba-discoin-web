@@ -4,7 +4,7 @@ import PageHeader from "../../components/utility/pageHeader";
 import PageLoading from "../../components/pageLoading";
 import { Row, Col, Input } from "antd";
 import basicStyle from "../../config/basicStyle";
-import IntlMessages from "../../components/utility/intlMessages";
+import IntlMessage from "../../components/utility/intlMessages";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import actions from "../../redux/api/actions";
@@ -13,6 +13,7 @@ import appActions from "../../redux/app/actions";
 import CustomersBox from "./components/customerBox";
 import RefundBox from "./components/refundBox";
 import moment from "moment";
+import { injectIntl } from "react-intl";
 
 import { rewardCustomer } from "../../httpService";
 import { notification } from "antd";
@@ -71,11 +72,17 @@ class Customers extends Component {
   }
 
   handleOnRefund(account) {
-    console.log(' ============================= handleOnRefund:', JSON.stringify(account));
+    console.log(
+      " ============================= handleOnRefund:",
+      JSON.stringify(account)
+    );
     this.showRefundBox(account);
   }
   handleOnDiscount(account) {
-    console.log(" ============================= TODO: IMPLEMENT THIS - refound.js line 76", account);
+    console.log(
+      " ============================= TODO: IMPLEMENT THIS - refound.js line 76",
+      account
+    );
   }
 
   componentWillMount() {
@@ -103,13 +110,9 @@ class Customers extends Component {
 
   _handleKeyPress(e) {
     let searchValue = this.state.searchValue;
-    console.log(" -- _handleKeyPress:", searchValue);
+    console.log(" -- _handleKeyPress:", { value: searchValue });
     if (e.key === "Enter") {
-      if (
-        searchValue === "undefined" ||
-        searchValue == null ||
-        searchValue.trim() == ""
-      ) {
+      if (this.state.searchValue === null || this.state.searchValue === "") {
         this.openNotificationWithIcon(
           "warning",
           "Búsqueda",
@@ -234,9 +237,19 @@ class Customers extends Component {
                 onIcon1={e => this.handleOnRefund(e)}
                 onIcon2={e => this.handleOnDiscount(e)}
                 icon1={"rollback"}
-                title1={<IntlMessages id={"Refound"} />}
+                title1={
+                  <IntlMessage
+                    defaultMessage={"Refound"}
+                    id={"refund.refound"}
+                  />
+                }
                 icon2={"check"}
-                title2={<IntlMessages id={"Accept discount"} />}
+                title2={
+                  <IntlMessage
+                    defaultMessage={"Accept Discount"}
+                    id={"refund.acceptDiscount"}
+                  />
+                }
               />
             </Col>
           ))}
@@ -254,15 +267,25 @@ class Customers extends Component {
   render() {
     return (
       <LayoutContentWrapper>
-        <PageHeader>Customers</PageHeader>
+        <PageHeader>
+          <IntlMessage id="refund.customers" defaultMessage={"Customers"} />
+        </PageHeader>
         <Row style={rowStyle} gutter={16} justify="start">
           <Col xs={24} style={{ marginBottom: "15px" }}>
             <InputSearch
-              placeholder={"Search customer"}
+              placeholder={
+                this.props.intl.messages["refund.searchCustomer"] ||
+                "Search Customer"
+              }
               onKeyPress={this._handleKeyPress}
               onSearch={() => this.props.searchAccount(this.state.searchValue)}
               onChange={this._handleChange}
-              enterButton={<IntlMessages id="Force search" />}
+              enterButton={
+                <IntlMessage
+                  defaultMessage="Force Search"
+                  id="refund.forceSearch"
+                />
+              }
             />
           </Col>
         </Row>
@@ -312,7 +335,9 @@ const mapDispatchToProps = dispatch => ({
   endLoading: bindActionCreators(appActions.endLoading, dispatch)
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Customers);
+export default injectIntl(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Customers)
+);

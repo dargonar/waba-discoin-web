@@ -3,6 +3,7 @@ import { Modal, Row, Col } from "antd";
 import Input from "../../../components/uielements/input";
 import { notification } from "antd";
 import PropTypes from "prop-types"; // ES6
+import IntlMessage from "../../../components/utility/intlMessages";
 
 export class RefundBox extends Component {
   constructor(props) {
@@ -117,7 +118,13 @@ export class RefundBox extends Component {
 
     return (
       <Modal
-        title={"Recompensar a " + name}
+        title={
+          <IntlMessage
+            id="refund.refoundTo"
+            values={{ name }}
+            defaultMessage={`Refound to {name}`}
+          />
+        }
         visible={this.props.visible}
         onCancel={this.onCancel}
         onOk={this.onOk}
@@ -125,7 +132,7 @@ export class RefundBox extends Component {
       >
         <Row gutter={16}>
           <Col style={colStyle} xs={24}>
-            Amount
+            <IntlMessage id={"refund.amount"} defaultMessage={"Amount"} />
             <Input
               addonBefore={"$"}
               value={this.state.bill_amount}
@@ -141,7 +148,10 @@ export class RefundBox extends Component {
             />
           </Col>
           <Col style={colStyle} xs={24} md={12}>
-            Porcentaje
+            <IntlMessage
+              id={"refund.percentage"}
+              defaultMessage={"Percentaje"}
+            />
             <Input
               addonAfter={"%"}
               value={this.state.percentage}
@@ -149,7 +159,7 @@ export class RefundBox extends Component {
             />
           </Col>
           <Col style={colStyle} xs={24}>
-            Factura
+            <IntlMessage id={"refund.invoice"} defaultMessage={"Invoice"} />
             <Input onChange={this.updateBill} />
           </Col>
         </Row>
