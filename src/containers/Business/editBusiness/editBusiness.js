@@ -273,56 +273,92 @@ class CreateStore extends Component {
           <Box>
             <Row style={{ width: "100%" }} gutter={16}>
               <Col lg={12} md={24} sm={24}>
-                <FormItem label="Name">
+                <FormItem
+                  label={
+                    <IntlMessages id="profile.name" defaultMessage="Name" />
+                  }
+                >
                   <Input
                     type="text"
-                    defaultValue={this.state.form.name}
+                    defaultMessage={this.state.form.name}
                     id="form.name"
                     onChange={this.inputChange}
                   />
                 </FormItem>
 
-                <FormItem label="Email">
+                <FormItem
+                  label={
+                    <IntlMessages id="profile.email" defaultMessage="Email" />
+                  }
+                >
                   <Input
                     type="email"
-                    defaultValue={this.state.form.email}
+                    defaultMessage={this.state.form.email}
                     id="form.email"
                     onChange={this.inputChange}
                   />
                 </FormItem>
 
-                <FormItem label="Telephone">
+                <FormItem
+                  label={
+                    <IntlMessages
+                      id="profile.telephone"
+                      defaultMessage="Telephone"
+                    />
+                  }
+                >
                   <Input
                     type="tel"
-                    defaultValue={this.state.form.telephone}
+                    defaultMessage={this.state.form.telephone}
                     id="form.telephone"
                     onChange={this.inputChange}
                   />
                 </FormItem>
 
-                <FormItem label="Address">
+                <FormItem
+                  label={
+                    <IntlMessages
+                      id="profile.address"
+                      defaultMessage="Address"
+                    />
+                  }
+                >
                   <Input
                     type="text"
-                    defaultValue={this.state.form.address}
+                    defaultMessage={this.state.form.address}
                     id="form.address"
                     onChange={this.inputChange}
                   />
                 </FormItem>
 
-                <FormItem label="Description">
+                <FormItem
+                  label={
+                    <IntlMessages
+                      id="profile.description"
+                      defaultMessage="Description"
+                    />
+                  }
+                >
                   <textarea
                     id="form.description"
-                    defaultValue={this.state.form.description}
+                    defaultMessage={this.state.form.description}
                     onChange={this.inputChange}
                     style={textAreaStyle}
                   />
                 </FormItem>
 
-                <FormItem label="Category">
+                <FormItem
+                  label={
+                    <IntlMessages
+                      id="profile.category"
+                      defaultMessage="Category"
+                    />
+                  }
+                >
                   <Select
                     style={{ width: "100%" }}
                     placeholder="Please select"
-                    defaultValue={this.state.form.category_id}
+                    defaultMessage={this.state.form.category_id}
                     onChange={this.categoryChange}
                   >
                     {this.props.categories
@@ -338,17 +374,25 @@ class CreateStore extends Component {
                                 category.id.toString()
                           }
                         >
-                          {category.name} (descuento mínimo: {category.discount})
+                          {category.name} (descuento mínimo: {category.discount}
+                          )
                         </SelectOption>
                       ))}
                   </Select>
                 </FormItem>
 
-                <FormItem label="Subcategory">
+                <FormItem
+                  label={
+                    <IntlMessages
+                      id="profile.subcategory"
+                      defaultMessage="Subcategory"
+                    />
+                  }
+                >
                   <Select
                     style={{ width: "100%" }}
                     placeholder="Please select"
-                    defaultValue={this.state.form.subcategory_id}
+                    defaultMessage={this.state.form.subcategory_id}
                     onChange={this.subcategoryChange}
                   >
                     {this.props.categories
@@ -365,7 +409,14 @@ class CreateStore extends Component {
                 </FormItem>
               </Col>
               <Col md={12} sm={24}>
-                <FormItem label="Location">
+                <FormItem
+                  label={
+                    <IntlMessages
+                      id="profile.location"
+                      defaultMessage="Location"
+                    />
+                  }
+                >
                   <BasicLeafletMapWithMarker
                     onChange={this.locationChange}
                     marker={{
@@ -375,7 +426,11 @@ class CreateStore extends Component {
                   />
                 </FormItem>
 
-                <FormItem label="Image">
+                <FormItem
+                  label={
+                    <IntlMessages id="profile.image" defaultMessage="Image" />
+                  }
+                >
                   <DropzoneWrapper>
                     <Dropzone
                       config={this.componentConfig}
@@ -385,13 +440,32 @@ class CreateStore extends Component {
                   </DropzoneWrapper>
                 </FormItem>
 
-                <FormItem label="Rates">
+                <FormItem
+                  label={
+                    <IntlMessages id="profile.rates" defaultMessage="Rates" />
+                  }
+                >
                   <Row style={{ width: "100%" }}>
                     <Col sm={3}>
                       <Row style={{ width: "100%", textAlign: "center" }}>
-                        <Col>Type</Col>
-                        <Col>Reward</Col>
-                        <Col>Discount</Col>
+                        <Col>
+                          <IntlMessages
+                            defaultMessage="Type"
+                            id="profile.type"
+                          />
+                        </Col>
+                        <Col>
+                          <IntlMessages
+                            defaultMessage="Reward"
+                            id="profile.reward"
+                          />
+                        </Col>
+                        <Col>
+                          <IntlMessages
+                            defaultMessage="Discount"
+                            id="profile.discount"
+                          />
+                        </Col>
                       </Row>
                     </Col>
                     {this.state.form.discount_schedule.map((discount, key) => (
@@ -403,12 +477,15 @@ class CreateStore extends Component {
                               textTransform: "capitalize"
                             }}
                           >
-                            {discount.date.substr(0, 3)}
+                            <IntlMessages
+                              defaultMessage={discount.date.substr(0, 3)}
+                              id={"profile.day-" + discount.date.substr(0, 3)}
+                            />
                           </Col>
                           <Col>
                             <Input
                               type="number"
-                              defaultValue={
+                              defaultMessage={
                                 this.state.form.discount_schedule[key].reward
                               }
                               onChange={e =>
@@ -424,7 +501,7 @@ class CreateStore extends Component {
                           <Col>
                             <Input
                               type="number"
-                              defaultValue={discount.discount}
+                              defaultMessage={discount.discount}
                               onChange={e =>
                                 this.changeSchedule(
                                   "discount",
@@ -447,7 +524,10 @@ class CreateStore extends Component {
               style={{ margin: "20px 0" }}
               onClick={this.submit}
             >
-              Save store
+              <IntlMessages
+                id="profile.saveStore"
+                defaultMessage="Save store"
+              />
             </Button>
           </Box>
         </Form>
@@ -458,9 +538,12 @@ class CreateStore extends Component {
       <LayoutContentWrapper>
         <PageHeader>
           {this.state.mode !== "edit" ? (
-            <IntlMessages id="sidebar.createStore" />
+            <IntlMessages
+              id="sidebar.createStore"
+              defaultMessage="Create store"
+            />
           ) : (
-            <IntlMessages id="store.edit" />
+            <IntlMessages id="profile.edit" defaultMessage="Edit store" />
           )}
         </PageHeader>
         {this.state.loading ? <PageLoading /> : renderForm()}
