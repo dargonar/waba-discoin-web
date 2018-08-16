@@ -4,13 +4,11 @@ import PageHeader from "../../../components/utility/pageHeader";
 import IntlMessages from "../../../components/utility/intlMessages";
 
 import Box from "../../../components/utility/box";
-import Form from "../../../components/uielements/form";
 import PageLoading from "../../../components/pageLoading";
 
 import { Col, Row } from "antd";
-import Input from "../../../components/uielements/input";
+
 import Button from "../../../components/uielements/button";
-import Select, { SelectOption } from "../../../components/uielements/select";
 import Async from "../../../helpers/asyncComponent";
 import Dropzone from "../../../components/uielements/dropzone.js";
 import DropzoneWrapper from "../components/dropzone.style";
@@ -21,7 +19,10 @@ import { bindActionCreators } from "redux";
 
 import { generateAccount } from "../../../httpService";
 
+import Form from "../../../components/uielements/form";
+import { message, Input, Select, InputNumber } from "antd";
 const FormItem = Form.Item;
+const SelectOption = Select.Option;
 
 const BasicLeafletMapWithMarker = props => (
   <Async
@@ -51,7 +52,6 @@ class CreateStore extends Component {
     this.inputChange = this.inputChange.bind(this);
     this.locationChange = this.locationChange.bind(this);
     this.categoryChange = this.categoryChange.bind(this);
-    this.subcategoryChange = this.subcategoryChange.bind(this);
     this.componentConfig = {
       iconFiletypes: [".jpg", ".png", ".gif"],
       showFiletypeIcon: true,
@@ -68,7 +68,6 @@ class CreateStore extends Component {
       thumbnailWidth: 300
     };
     this.imageUpload = this.imageUpload.bind(this);
-    this.changeSchedule = this.changeSchedule.bind(this);
     this.initForm = this.initForm.bind(this);
     this.dropzone = null;
     this.submit = this.submit.bind(this);
@@ -107,19 +106,22 @@ class CreateStore extends Component {
   submit() {
     // TODO: Validation!
     console.log("*****> submit");
+    let result = this.props.form.getFieldsValue();
+    // result = formatSchedules(result);
+    this.props.form.validateFields((err, val) => {
+      if (err === null) {
+        console.log(
+          "----------------------- saving business:",
+          JSON.stringify(result)
+        );
+        message.success("Perfil editado");
+        this.props.saveBusiness(result);
+      } else {
+        message.error("Por favor corrija los errores e intente nuevamente");
+      }
+    });
 
-    console.log(JSON.stringify(this.state.form));
-    this.props.saveBusiness(this.state.form);
-
-    // if (typeof this.props.match.params.id !== "undefined") {
-    //   console.log(JSON.stringify(this.state.form));
-    //   this.props.saveBusiness(this.state.form);
-    // } else {
-    //   console.log(this.state.form.name);
-    //   generateAccount(this.state.form.name);
-    // }
-
-    // updateBusinessProfile()
+    //this.props.saveBusiness(this.state.form);
   }
 
   changeSchedule(type, key, value) {
@@ -169,22 +171,13 @@ class CreateStore extends Component {
   }
 
   imageUpload(file) {
-    this.setState({
-      form: {
-        ...this.state.form,
-        image: file
-      }
-    });
-    //this.dropzone.emit("complete", file);
+    this.props.form.setFieldsValue({ image: file });
   }
 
   locationChange(e) {
-    this.setState({
-      form: {
-        ...this.state.form,
-        latitude: e.latlng.lat,
-        longitude: e.latlng.lng
-      }
+    this.props.form.setFieldsValue({
+      latitude: e.latlng.lat.toString(),
+      longitude: e.latlng.lng.toString()
     });
     console.log(" **********> locationChange");
     console.log(e);
@@ -224,22 +217,25 @@ class CreateStore extends Component {
   }
 
   categoryChange(id) {
-    this.setState({
-      form: {
-        ...this.state.form,
-        category_id: id,
-        subcategory_id: null
-      }
-    });
-  }
+    const subcategory =
+      this.props.form.getFieldsValue().category_id !== id
+        ? { subcategory_id: this.state.subcategory_id }
+        : {};
+    this.props.form.setFieldsValue(subcategory);
+    const minimumDiscount = this.props.categories
+      .filter(category => category.id === id)
+      .reduce((prev, act) => act.discount, 0);
 
-  subcategoryChange(id) {
-    this.setState({
-      form: {
-        ...this.state.form,
-        subcategory_id: id
-      }
-    });
+    const discount_schedule = this.props.form
+      .getFieldsValue()
+      .discount_schedule.map(day => {
+        day.reward =
+          day.reward < minimumDiscount ? minimumDiscount : day.reward;
+        day.discount =
+          day.discount < minimumDiscount ? minimumDiscount : day.discount;
+        return day;
+      });
+    this.props.form.setFieldsValue({ discount_schedule });
   }
 
   render() {
@@ -267,23 +263,46 @@ class CreateStore extends Component {
     const renderForm = () => {
       // console.log( " ===> render");
       // console.log( JSON.stringify(this.state.form));
+      const { getFieldDecorator } = this.props.form;
 
+      const getMinimunDiscount = (categories, id) =>
+        categories
+          .filter(category => category.id === id)
+          .reduce((prev, act) => act.discount, 0);
+
+      const minimumDiscount = getMinimunDiscount(
+        this.props.categories,
+        this.props.form.getFieldValue("category_id")
+      );
+
+      console.log(this.props.form, this.props.form.getFieldsValue());
       return (
-        <Form style={{ width: "100%" }}>
+        <Form style={{ width: "100%" }} onSubmit={this.submit}>
           <Box>
             <Row style={{ width: "100%" }} gutter={16}>
               <Col lg={12} md={24} sm={24}>
+                {getFieldDecorator("account_id", {
+                  initialValue: this.state.form.account_id
+                })(<Input type="hidden" name="acccount_id" />)}
                 <FormItem
                   label={
                     <IntlMessages id="profile.name" defaultMessage="Name" />
                   }
                 >
-                  <Input
-                    type="text"
-                    defaultMessage={this.state.form.name}
-                    id="form.name"
-                    onChange={this.inputChange}
-                  />
+                  {getFieldDecorator("name", {
+                    initialValue: this.state.form.name,
+                    rules: [
+                      {
+                        required: true,
+                        message: (
+                          <IntlMessages
+                            id="register.name.empty"
+                            defaultMessage="Business Name is required"
+                          />
+                        )
+                      }
+                    ]
+                  })(<Input id="form.name" />)}
                 </FormItem>
 
                 <FormItem
@@ -291,12 +310,21 @@ class CreateStore extends Component {
                     <IntlMessages id="profile.email" defaultMessage="Email" />
                   }
                 >
-                  <Input
-                    type="email"
-                    defaultMessage={this.state.form.email}
-                    id="form.email"
-                    onChange={this.inputChange}
-                  />
+                  {getFieldDecorator("email", {
+                    initialValue: this.state.form.email,
+                    rules: [
+                      {
+                        required: true,
+                        type: "email",
+                        message: (
+                          <IntlMessages
+                            id="register.email.empy"
+                            defaultMessage="Email is required"
+                          />
+                        )
+                      }
+                    ]
+                  })(<Input type="text" name="email" />)}
                 </FormItem>
 
                 <FormItem
@@ -307,12 +335,20 @@ class CreateStore extends Component {
                     />
                   }
                 >
-                  <Input
-                    type="tel"
-                    defaultMessage={this.state.form.telephone}
-                    id="form.telephone"
-                    onChange={this.inputChange}
-                  />
+                  {getFieldDecorator("telephone", {
+                    initialValue: this.state.form.telephone,
+                    rules: [
+                      {
+                        required: true,
+                        message: (
+                          <IntlMessages
+                            id="register.telephone.empty"
+                            defaultMessage="Telephone is required"
+                          />
+                        )
+                      }
+                    ]
+                  })(<Input type="tel" name="telephone" />)}
                 </FormItem>
 
                 <FormItem
@@ -323,12 +359,20 @@ class CreateStore extends Component {
                     />
                   }
                 >
-                  <Input
-                    type="text"
-                    defaultMessage={this.state.form.address}
-                    id="form.address"
-                    onChange={this.inputChange}
-                  />
+                  {getFieldDecorator("address", {
+                    initialValue: this.state.form.address,
+                    rules: [
+                      {
+                        required: true,
+                        message: (
+                          <IntlMessages
+                            id="register.address"
+                            default="Address is required"
+                          />
+                        )
+                      }
+                    ]
+                  })(<Input type="text" name="address" />)}
                 </FormItem>
 
                 <FormItem
@@ -339,12 +383,20 @@ class CreateStore extends Component {
                     />
                   }
                 >
-                  <textarea
-                    id="form.description"
-                    defaultMessage={this.state.form.description}
-                    onChange={this.inputChange}
-                    style={textAreaStyle}
-                  />
+                  {getFieldDecorator("description", {
+                    initialValue: this.state.form.description,
+                    rules: [
+                      {
+                        required: true,
+                        message: (
+                          <IntlMessages
+                            id="register.description"
+                            defaultMessage="Description is required"
+                          />
+                        )
+                      }
+                    ]
+                  })(<textarea style={textAreaStyle} name="description" />)}
                 </FormItem>
 
                 <FormItem
@@ -355,30 +407,54 @@ class CreateStore extends Component {
                     />
                   }
                 >
-                  <Select
-                    style={{ width: "100%" }}
-                    placeholder="Please select"
-                    defaultMessage={this.state.form.category_id}
-                    onChange={this.categoryChange}
-                  >
-                    {this.props.categories
-                      .filter(category => category.parent_id === 0)
-                      .map((category, index) => (
-                        <SelectOption
-                          key={category.id}
-                          value={Number(category.id)}
-                          selected={
-                            !this.state.form.category_id
-                              ? index == 0
-                              : this.state.form.category_id.toString() ===
-                                category.id.toString()
-                          }
-                        >
-                          {category.name} (descuento mínimo: {category.discount}
-                          )
-                        </SelectOption>
-                      ))}
-                  </Select>
+                  {getFieldDecorator("category_id", {
+                    initialValue: this.state.form.category_id,
+                    rules: [
+                      {
+                        required: true,
+                        message: (
+                          <IntlMessages
+                            id="register.category"
+                            defaultMessage="Category is required"
+                          />
+                        )
+                      }
+                    ]
+                  })(
+                    <Select
+                      name="category_id"
+                      style={{
+                        width: "100%"
+                      }}
+                      placeholder="Please select"
+                      onChange={this.categoryChange}
+                    >
+                      {this.props.categories
+                        .filter(category => category.parent_id === 0)
+                        .map((category, index) => (
+                          <SelectOption
+                            key={category.id}
+                            value={Number(category.id)}
+                            selected={
+                              !this.props.form.getFieldsValue().category_id
+                                ? index === 0
+                                : this.props.form
+                                    .getFieldValue("category_id")
+                                    .toString() === category.id.toString()
+                            }
+                          >
+                            <span>
+                              {category.name}{" "}
+                              <IntlMessages
+                                id="profile.minimumDiscount"
+                                defaultMessage={`(Minimum discount: {discount})`}
+                                values={{ discount: category.discount }}
+                              />
+                            </span>
+                          </SelectOption>
+                        ))}
+                    </Select>
+                  )}
                 </FormItem>
 
                 <FormItem
@@ -389,25 +465,54 @@ class CreateStore extends Component {
                     />
                   }
                 >
-                  <Select
-                    style={{ width: "100%" }}
-                    placeholder="Please select"
-                    defaultMessage={this.state.form.subcategory_id}
-                    onChange={this.subcategoryChange}
-                  >
-                    {this.props.categories
-                      .filter(
-                        category =>
-                          category.parent_id === this.state.form.category_id
-                      )
-                      .map((category, index) => (
-                        <SelectOption key={category.id} value={category.id}>
-                          {category.name}
-                        </SelectOption>
-                      ))}
-                  </Select>
+                  {getFieldDecorator("subcategory_id", {
+                    initialValue: this.state.form.subcategory_id,
+                    rules: [
+                      {
+                        required: true,
+                        message: (
+                          <IntlMessages
+                            id="register.subcategory.empty"
+                            defaultMessage="Subcategory id required"
+                          />
+                        )
+                      }
+                    ]
+                  })(
+                    <Select
+                      name="subcategory_id"
+                      style={{
+                        width: "100%"
+                      }}
+                      placeholder="Please select"
+                    >
+                      {this.props.categories
+                        .filter(
+                          category =>
+                            Number(category.parent_id) ===
+                            Number(this.props.form.getFieldsValue().category_id)
+                        )
+                        .map((category, index) => (
+                          <SelectOption
+                            key={category.id}
+                            value={Number(category.id)}
+                            selected={
+                              !this.props.form.getFieldsValue().subcategory_id
+                                ? index === 0
+                                : this.props.form
+                                    .getFieldsValue()
+                                    .subcategory_id.toString() ===
+                                  category.id.toString()
+                            }
+                          >
+                            {category.name}
+                          </SelectOption>
+                        ))}
+                    </Select>
+                  )}
                 </FormItem>
               </Col>
+
               <Col md={12} sm={24}>
                 <FormItem
                   label={
@@ -417,6 +522,16 @@ class CreateStore extends Component {
                     />
                   }
                 >
+                  {getFieldDecorator("location", {
+                    initialValue: this.state.form.location
+                  })(<Input type="hidden" name="latitude" />)}
+                  {getFieldDecorator("latitude", {
+                    initialValue: this.state.form.latitude
+                  })(<Input type="hidden" name="latitude" />)}
+                  {getFieldDecorator("longitude", {
+                    initialValue: this.state.form.longitude
+                  })(<Input type="hidden" name="longitude" />)}
+
                   <BasicLeafletMapWithMarker
                     onChange={this.locationChange}
                     marker={{
@@ -431,6 +546,9 @@ class CreateStore extends Component {
                     <IntlMessages id="profile.image" defaultMessage="Image" />
                   }
                 >
+                  {getFieldDecorator("image", {
+                    initialValue: this.state.form.image
+                  })(<Input type="hidden" name="image" />)}
                   <DropzoneWrapper>
                     <Dropzone
                       config={this.componentConfig}
@@ -483,34 +601,79 @@ class CreateStore extends Component {
                             />
                           </Col>
                           <Col>
-                            <Input
-                              type="number"
-                              defaultMessage={
-                                this.state.form.discount_schedule[key].reward
+                            {getFieldDecorator(
+                              "discount_schedule[" + key + "].date",
+                              {
+                                initialValue: this.state.form.discount_schedule[
+                                  key
+                                ].date
                               }
-                              onChange={e =>
-                                this.changeSchedule(
-                                  "reward",
-                                  key,
-                                  e.target.value
-                                )
-                              }
-                              style={{ width: "100%" }}
-                            />
+                            )(
+                              <Input
+                                type="hidden"
+                                name={"discount_schedule[" + key + "].date"}
+                              />
+                            )}
+                            <FormItem style={{ marginBottom: "3px" }}>
+                              {getFieldDecorator(
+                                "discount_schedule[" + key + "].reward",
+                                {
+                                  initialValue: Number(
+                                    discount.reward ? discount.reward : 0
+                                  ),
+                                  rules: [
+                                    {
+                                      message: "",
+                                      validator: (field, value, cb) => {
+                                        value >= minimumDiscount
+                                          ? cb()
+                                          : cb(true);
+                                      }
+                                    }
+                                  ]
+                                }
+                              )(
+                                <InputNumber
+                                  name={"discount_schedule[" + key + "].reward"}
+                                  max={100}
+                                  style={{
+                                    width: "100%"
+                                  }}
+                                />
+                              )}
+                            </FormItem>
                           </Col>
                           <Col>
-                            <Input
-                              type="number"
-                              defaultMessage={discount.discount}
-                              onChange={e =>
-                                this.changeSchedule(
-                                  "discount",
-                                  key,
-                                  e.target.value
-                                )
-                              }
-                              style={{ width: "100%" }}
-                            />
+                            <FormItem style={{ marginBottom: "3px" }}>
+                              {getFieldDecorator(
+                                "discount_schedule[" + key + "].discount",
+                                {
+                                  initialValue: Number(
+                                    discount ? discount.discount : 0
+                                  ),
+                                  rules: [
+                                    {
+                                      message: "",
+                                      validator: (field, value, cb) => {
+                                        value >= minimumDiscount
+                                          ? cb()
+                                          : cb(true);
+                                      }
+                                    }
+                                  ]
+                                }
+                              )(
+                                <InputNumber
+                                  name={
+                                    "discount_schedule[" + key + "].discount"
+                                  }
+                                  max={100}
+                                  style={{
+                                    width: "100%"
+                                  }}
+                                />
+                              )}
+                            </FormItem>
                           </Col>
                         </Row>
                       </Col>
@@ -563,7 +726,10 @@ const mapDispatchToProps = dispatch => ({
   saveBusiness: bindActionCreators(actions.saveBusiness, dispatch)
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CreateStore);
+//inject this.props.form, inject redux state and actions
+export default Form.create()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(CreateStore)
+);
