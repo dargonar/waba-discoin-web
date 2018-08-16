@@ -69,7 +69,7 @@ ReduxGlobalMessage = connect(
     msgType: state.App.get("msgType")
   }),
   dispatch => ({
-    clearMsg: () => dispatch({ type: "GLOBAL_MSG_CLEAR" })
+    clearMsg: () => dispatch({ type: actionsUI.GLOBAL_MSG_CLEAR })
   })
 )(ReduxGlobalMessage);
 
