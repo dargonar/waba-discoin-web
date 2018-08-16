@@ -14,6 +14,7 @@ import Dropzone from "../../../components/uielements/dropzone.js";
 import DropzoneWrapper from "../components/dropzone.style";
 import actions from "../../../redux/owner/actions";
 import apiActions from "../../../redux/api/actions";
+import appActions from "../../../redux/app/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
@@ -114,10 +115,12 @@ class CreateStore extends Component {
           "----------------------- saving business:",
           JSON.stringify(result)
         );
-        message.success("Perfil editado");
         this.props.saveBusiness(result);
       } else {
-        message.error("Por favor corrija los errores e intente nuevamente");
+        this.props.showMessage({
+          msg: "Por favor corrija los errores e intente nuevamente",
+          msgType: "error"
+        });
       }
     });
 
@@ -721,6 +724,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  showMessage: bindActionCreators(appActions.showMessage, dispatch),
   getCategories: bindActionCreators(apiActions.getCategoriesList, dispatch),
   fetchBusiness: bindActionCreators(actions.fetchBusiness, dispatch),
   saveBusiness: bindActionCreators(actions.saveBusiness, dispatch)

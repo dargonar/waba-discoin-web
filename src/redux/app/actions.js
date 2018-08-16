@@ -55,6 +55,10 @@ const actions = {
     type: actions.CHANGE_CURRENT,
     current
   }),
+  showMessage: payload => ({
+    type: actions.GLOBAL_MSG,
+    payload: { msg: payload.msg, msgType: payload.msgType }
+  }),
   showLoading: msg => ({
     type: actions.GLOBAL_LOADING_START,
     payload: { msg: msg }
