@@ -129,8 +129,8 @@ function* saveBusiness(action) {
       yield put({ type: actions.SAVE_BUSINESS_SUCCESS, payload: data });
       // Update profile store
       yield put({
-        type: actionsApi.GET_PROFILE_SUCCESS,
-        payload: { business: action.payload }
+        type: actionsApi.GET_PROFILE,
+        payload: { account_id: action.payload.account_id }
       });
       yield put({
         type: actionsUI.GLOBAL_MSG,
@@ -141,10 +141,14 @@ function* saveBusiness(action) {
         type: actions.SAVE_BUSINESS_FAIL,
         payload: { ex: ex, error: data }
       });
-      console.log(JSON.stringify(data))
+      console.log(JSON.stringify(data));
       yield put({
         type: actionsUI.GLOBAL_MSG,
-        payload: { msgType: "error" , msg: "Error al guardar el comercio", data:data }
+        payload: {
+          msgType: "error",
+          msg: "Error al guardar el comercio",
+          data: data
+        }
       });
     }
   });
