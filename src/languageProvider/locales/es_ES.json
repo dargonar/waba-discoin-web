@@ -637,5 +637,6 @@
   "profile.day-fri": "Vie",
   "profile.day-sat": "Sab",
   "profile.day-sun": "Dom",
-  "profile.edit": "Editar tienda"
+  "profile.edit": "Editar tienda",
+  "profile.minimumDiscount": "(Descuento mínimo: {discount})"
 }
