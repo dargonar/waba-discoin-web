@@ -11,7 +11,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import actions from "../../../redux/api/actions";
 import appActions from "../../../redux/app/actions";
-
+import IntlMessages from "../../../components/utility/intlMessages";
+import { injectIntl } from "react-intl";
 import TransactionBox from "./components/transactionBox";
 
 class Transactions extends Component {
@@ -27,7 +28,9 @@ class Transactions extends Component {
 
   componentDidMount() {
     console.log(" --- Transactions::componentDidMount PRE");
-    this.props.showLoading("Loading transactions");
+    this.props.showLoading(
+      this.props.intl.messages["transactions.loading"] || "Loading transactions"
+    );
     this.props.searchTransactions();
     console.log(" --- Transactions::componentDidMount DONE");
   }
@@ -60,7 +63,9 @@ class Transactions extends Component {
       <Row style={rowStyle} gutter={16} justify="start">
         <Col xs={24} style={{ marginBottom: "15px" }}>
           <InputSearch
-            placeholder={"Filter"}
+            placeholder={
+              this.props.intl.messages["transactions.filter"] || "Filter"
+            }
             onKeyPress={this._handleKeyPress}
             onChange={this._handleChange}
           />
@@ -68,7 +73,10 @@ class Transactions extends Component {
         <Col xs={24}>
           {this.props.transactions.length === 0 ? (
             <Col style={{ textAlign: "center", padding: "10px" }} xs={24}>
-              No se encontraron transacciones.
+              <IntlMessages
+                id="transactions.notFound"
+                defaultMessage="No transactions were found"
+              />
             </Col>
           ) : (
             false
@@ -84,7 +92,12 @@ class Transactions extends Component {
   render() {
     return (
       <LayoutContentWrapper>
-        <PageHeader>Transactions</PageHeader>
+        <PageHeader>
+          <IntlMessages
+            id="sidebar.transactions"
+            defaultMessage="Transactions"
+          />
+        </PageHeader>
         {this.renderContent()}
       </LayoutContentWrapper>
     );
@@ -101,7 +114,9 @@ const mapDispatchToProps = dispatch => ({
   endLoading: bindActionCreators(appActions.endLoading, dispatch)
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Transactions);
+export default injectIntl(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Transactions)
+);

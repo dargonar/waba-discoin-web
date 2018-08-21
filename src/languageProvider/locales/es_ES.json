@@ -662,6 +662,15 @@
   "add": "Agregar",
   "subaccounts.changeAmount": "Cambiar límite diario",
   "subaccounts.withdrawn": "Retirado en este período",
-  "subaccounts.allocateCredit": "Allocate pre-arranged credit"
-
+  "subaccounts.allocateCredit": "Allocate pre-arranged credit",
+  "transactions.loading": "Cargando transacciones",
+  "transactions.notFound": "No se encontraron transacciones.",
+  "transactions.filter": "Filtrar",
+  "transactions.from": "De",
+  "transactions.to": "A",
+  "transactions.refund": "Reintegro",
+  "transactions.amountInvoiced": "Monto facturado",
+  "transactions.invoice": "Factura",
+  "transactions.date": "Fecha",
+  "transactions.review": "Reseña"
 }
