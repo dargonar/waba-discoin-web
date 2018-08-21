@@ -21,6 +21,7 @@ import { notification } from "antd";
 
 import moment from "moment";
 
+import { injectIntl } from "react-intl";
 const InputSearch = Input.Search;
 
 const { rowStyle, colStyle } = basicStyle;
@@ -143,8 +144,9 @@ class FindAccounts extends Component {
       ) {
         this.openNotificationWithIcon(
           "warning",
-          "Búsqueda",
-          "Ingrese al menos un caracter."
+          this.props.intl.messages["subaccounts.search"] || "Search",
+          this.props.intl.messages["subaccounts.minumumChar"] ||
+            "Enter at least one character."
         );
         return;
       }
@@ -152,8 +154,9 @@ class FindAccounts extends Component {
       if (this.props.isLoading) {
         this.openNotificationWithIcon(
           "warning",
-          "Búsqueda",
-          "Búsqueda en progreso."
+          this.props.intl.messages["subaccounts.search"] || "Search",
+          this.props.intl.messages["subaccounts.searchInProgress"] ||
+            "Search in Progress"
         );
         return;
       }
@@ -202,8 +205,10 @@ class FindAccounts extends Component {
     if (_from >= _now >= _to || periods < 1) {
       this.openNotificationWithIcon(
         "error",
-        "Verifique valores ingresados",
-        "El monto debe ser mayor a cero, la fecha de inicio debe ser mayor al dia de hoy y mayor a la fecha de cierre.",
+        this.props.intl.messages["subaccounts.validationErrorTitle"] ||
+          "Verify entered values",
+        this.props.intl.messages["subaccounts.validationErrorContent"] ||
+          "The amount must be greater than zero, the start date must be greater than today's date and greater than the closing date.",
         0
       );
       return;
@@ -225,7 +230,7 @@ class FindAccounts extends Component {
 
     console.log(" -- addSubAccount() #4");
     console.log(JSON.stringify(tx));
-    
+
     console.log(JSON.stringify(this.props.account));
 
     // return;
@@ -240,14 +245,18 @@ class FindAccounts extends Component {
         if ("error" in res) {
           this.openNotificationWithIcon(
             "error",
-            "Ha ocurrido un error",
+            this.props.intl.messages["subaccounts.genericError"] ||
+              "An error has occurred",
             res.error
           );
         } else {
           this.openNotificationWithIcon(
             "success",
-            "Autorizar subcuenta",
-            "El límite diario de subcuenta fue autorizado satisfactoriamente."
+            this.props.intl.messages[
+              "subaccounts.authorizeSubaccountSuccess"
+            ] || "Add subaccount",
+            this.props.intl.messages["subaccounts.succesLimit"] ||
+              "The daily sub-account limit was successfully authorized"
           );
           this.goBack();
         }
@@ -258,7 +267,12 @@ class FindAccounts extends Component {
           "====ERR===>",
           JSON.stringify(err)
         );
-        this.openNotificationWithIcon("error", "Ha ocurrido un error", err);
+        this.openNotificationWithIcon(
+          "error",
+          this.props.intl.messages["subaccounts.genericError"] ||
+            "An error has occurred",
+          err
+        );
         this.props.endLoading();
       }
     );
@@ -284,7 +298,10 @@ class FindAccounts extends Component {
       <Row style={rowStyle} gutter={16} justify="start">
         {this.props.customers.length === 0 ? (
           <Col style={{ textAlign: "center", padding: "10px" }} xs={24}>
-            No se encontraron usuarios con su búsqueda.
+            <IntlMessages
+              id="subaccounts.emptySearch"
+              defaultMessage="No users were found with your search."
+            />
           </Col>
         ) : (
           false
@@ -304,7 +321,7 @@ class FindAccounts extends Component {
               onIcon1={e => this.handleOnIcon1(e)}
               onIcon2={e => this.handleOnIcon2(e)}
               icon1={"plus-circle-o"}
-              title1={<IntlMessages id="Add" />}
+              title1={<IntlMessages id="add" defaultMessage="Add" />}
               icon2={"hidden"}
             />
           </Col>
@@ -326,28 +343,55 @@ class FindAccounts extends Component {
 
         {this.state.confirm_visible && this.state.subaccount_auth != null ? (
           <Modal
-            title="Confirmar autorización de subcuenta"
+            title={
+              <IntlMessages
+                id="subaccounts.addConfirm"
+                defaultMessage="Confirm subaccount authorization"
+              />
+            }
             visible={this.state.confirm_visible}
             onOk={this.confirm_handleOk}
             onCancel={this.confirm_handleCancel}
           >
             <p>
-              Va a autorizar a {this.state.selectedCustomer.name} a retirar
+              <IntlMessages
+                id="subaccounts.authResume"
+                defaultMessage={
+                  "You are going to authorize {name} to withdraw daily DSC {amount} from {since} to {until}."
+                }
+                values={{
+                  name: this.state.selectedCustomer.name,
+                  amount: this.state.subaccount_auth.amount.toLocaleString(),
+                  since: this.state.subaccount_auth.checked_now
+                    ? this.props.intl.messages["subaccounts.now"] || "now"
+                    : this.state.subaccount_auth.from.dateString,
+                  until: this.state.subaccount_auth.to.dateString
+                }}
+              />
+              {/* Va a autorizar a {this.state.selectedCustomer.name} a retirar
               diariamente {this.state.subaccount_auth.amount} desde{" "}
               {this.state.subaccount_auth.checked_now
                 ? "ahora"
                 : this.state.subaccount_auth.from.dateString}{" "}
-              hasta {this.state.subaccount_auth.to.dateString}
+              hasta {this.state.subaccount_auth.to.dateString}*/}
             </p>
           </Modal>
         ) : (
           false
         )}
-        <PageHeader>Agregar subcuenta</PageHeader>
+        <PageHeader>
+          <IntlMessages
+            id="subaccounts.addSubaccount"
+            defaultMessage="Add subaccount"
+          />
+        </PageHeader>
         <Row style={rowStyle} gutter={16} justify="start">
           <Col xs={24} style={{ marginBottom: "15px" }}>
             <InputSearch
-              placeholder={"Buscar usuarios"}
+              placeholder={
+                this.props.intl.messages["subaccounts.searchUser"] ||
+                "Search users"
+              }
               onChange={this._handleChange}
               onSearch={() => this.props.searchAccount(this.state.searchValue)}
               onKeyPress={this._handleKeyPress}
@@ -391,7 +435,9 @@ const mapDispatchToProps = dispatch => ({
   endLoading: bindActionCreators(appActions.endLoading, dispatch)
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FindAccounts);
+export default injectIntl(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(FindAccounts)
+);

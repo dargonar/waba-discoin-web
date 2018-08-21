@@ -154,7 +154,12 @@ class SubAccounts extends Component {
           <Alert
             message="Ups!"
             type="warning"
-            description="No subaccounts configured yet"
+            description={
+              <IntlMessages
+                defaultMessage="No subaccounts configured yet"
+                id="subaccounts.empty"
+              />
+            }
             style={{ margin: "10px" }}
           />
         ) : (
@@ -182,7 +187,15 @@ class SubAccounts extends Component {
       <LayoutContentWrapper>
         {this.state.dailyBox ? (
           <AccountDailyBox
-            title={"Daily limit - " + this.state.accountSelected.name}
+            title={
+              <span>
+                <IntlMessages
+                  id="subaccounts.dailyLimit"
+                  defaultMessage="Daily limit"
+                />
+                {" - " + this.state.accountSelected.name}{" "}
+              </span>
+            }
             visible={this.state.dailyBox}
             business={this.state.accountSelected}
             value={
@@ -200,7 +213,7 @@ class SubAccounts extends Component {
           clean={this.props.removeMsg}
         />
         <PageHeader>
-          <IntlMessages id="sidebar.subaccounts_title" />
+          <IntlMessages id="sidebar.subAccounts" />
         </PageHeader>
         {this.props.loading || subaccounts === null ? (
           <PageLoading />
@@ -212,7 +225,10 @@ class SubAccounts extends Component {
           style={{ margin: "20px 0" }}
           onClick={this.newSubAccount}
         >
-          Nueva Subcuenta
+          <IntlMessages
+            id="subaccounts.addSubaccount"
+            defaultMessage="New Subaccount"
+          />
         </Button>
       </LayoutContentWrapper>
     );

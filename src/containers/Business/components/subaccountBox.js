@@ -4,8 +4,9 @@ import Input from "../../../components/uielements/input";
 import { DatePicker } from "antd";
 import { notification } from "antd";
 import moment from "moment";
-import { Checkbox } from 'antd';
-
+import { Checkbox } from "antd";
+import { injectIntl } from "react-intl";
+import IntlMessages from "../../../components/utility/intlMessages";
 const minutesOffset = 1;
 
 const checkActualDate = stringDate => {
@@ -29,11 +30,10 @@ export class SubAccountBox extends Component {
     };
 
     this.updateAmount = this.updateAmount.bind(this);
-    this.updateFrom   = this.updateFrom.bind(this);
-    this.updateTo     = this.updateTo.bind(this);
-    this.onOk         = this.onOk.bind(this);
-    this.onChangeNow  = this.onChangeNow.bind(this);
-    
+    this.updateFrom = this.updateFrom.bind(this);
+    this.updateTo = this.updateTo.bind(this);
+    this.onOk = this.onOk.bind(this);
+    this.onChangeNow = this.onChangeNow.bind(this);
   }
 
   openNotificationWithIcon(type, title, msg, duration) {
@@ -47,30 +47,29 @@ export class SubAccountBox extends Component {
   }
 
   null_or_zero(value) {
-    return value == null || parseInt< 0;
+    return value == null || parseInt < 0;
   }
   null_or_empty(value) {
     return !value || value == null || value == "";
   }
 
   onOk() {
-    
     // console.log(' normal: ', this.state.from.date.valueOf());
     // console.log(' utc: ', this.state.from.date.utc().valueOf());
     // validar fechas from > now > to
-    
-    let _now = Date.now(); 
-    
+
+    let _now = Date.now();
+
     let _from = _now;
-    console.log('this.state.checked_now:', this.state.checked_now)
-    if(!this.state.checked_now)
+    console.log("this.state.checked_now:", this.state.checked_now);
+    if (!this.state.checked_now)
       // _from = checkActualDate(this.state.from.date_utc);
       _from = this.state.from.date_utc;
     let _to = this.state.to.date_utc; //.date.utc().valueOf()
 
     let period = 86400;
     let periods = Math.floor((_to - _from) / 86400 / 1000);
-    
+
     if (
       this.null_or_zero(this.state.amount) ||
       this.null_or_empty(_from) ||
@@ -80,8 +79,10 @@ export class SubAccountBox extends Component {
     ) {
       this.openNotificationWithIcon(
         "error",
-        "Verifique valores ingresados",
-        "El monto debe ser mayor a cero, la fecha de inicio debe ser mayor al dia de hoy y mayor a la fecha de cierre.",
+        this.props.intl.messages["subaccounts.validationErrorTitle"] ||
+          "Verify entered values",
+        this.props.intl.messages["subaccounts.validationErrorContent"] ||
+          "The amount must be greater than zero, the start date must be greater than today's date and greater than the closing date.",
         0
       );
       return;
@@ -90,8 +91,8 @@ export class SubAccountBox extends Component {
     var my_state = Object.assign({}, this.state);
     // my_state.from     = _from;
     // my_state.to       = _to;
-    my_state.period   = period;
-    my_state.periods  = periods;
+    my_state.period = period;
+    my_state.periods = periods;
 
     this.props.submit(my_state);
     // this.setState(this.default_state)
@@ -140,11 +141,11 @@ export class SubAccountBox extends Component {
     });
   }
 
-  onChangeNow = (e) => {
+  onChangeNow = e => {
     this.setState({
-      checked_now: e.target.checked,
+      checked_now: e.target.checked
     });
-  }
+  };
 
   render() {
     const colStyle = { marginBottom: "15px" };
@@ -158,14 +159,23 @@ export class SubAccountBox extends Component {
 
     return (
       <Modal
-        title={"Autorizar subcuenta: " + name}
+        title={
+          <IntlMessages
+            id="subaccounts.authorizeSubaccount"
+            defaultMessage="Authorize sub-account: {name}"
+            values={{ name }}
+          />
+        }
         visible={this.props.visible}
         onCancel={this.props.cancel}
         onOk={this.onOk}
       >
         <Row gutter={16}>
           <Col style={colStyle} xs={24}>
-            Límite diario
+            <IntlMessages
+              defaultMessage="Daily Limit"
+              id="subaccounts.dailyLimit"
+            />
             <Input
               addonBefore={"D$C"}
               defaultValue={this.state.amount}
@@ -173,7 +183,10 @@ export class SubAccountBox extends Component {
             />
           </Col>
           <Col style={colStyle} xs={24} md={12}>
-            Habilitado desde
+            <IntlMessages
+              defaultMessage="Enabled since"
+              id="subaccounts.enabledSince"
+            />
             <DatePicker
               showTime
               format="YYYY-MM-DD HH:mm:ss"
@@ -181,15 +194,18 @@ export class SubAccountBox extends Component {
               size="large"
               disabled={this.state.checked_now}
             />
-            
             <Checkbox
               checked={this.state.checked_now}
               onChange={this.onChangeNow}
-            >Desde ahora</Checkbox>
-
+            >
+              <IntlMessages
+                defaultMessage="From now"
+                id="subaccounts.fromNow"
+              />
+            </Checkbox>
           </Col>
           <Col style={colStyle} xs={24} md={12}>
-            hasta
+            <IntlMessages defaultMessage="Until" id="subaccounts.until" />
             <DatePicker
               showTime
               format="YYYY-MM-DD HH:mm:ss"
@@ -203,4 +219,4 @@ export class SubAccountBox extends Component {
   }
 }
 
-export default SubAccountBox;
+export default injectIntl(SubAccountBox);

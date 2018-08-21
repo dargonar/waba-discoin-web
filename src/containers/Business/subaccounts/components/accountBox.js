@@ -2,6 +2,7 @@ import React from "react";
 import Card from "../../../../components/uielements/card";
 import HashImage from "../../../../components/hashImage";
 import { Icon, Tooltip } from "antd";
+import IntlMessages from "../../../../components/utility/intlMessages";
 
 const style = {
   box: {
@@ -29,7 +30,16 @@ const AccountBox = ({
   <Card
     style={style.box}
     actions={[
-      <BtnInfo text="Change amount" icon="edit" action={changeAmount} />
+      <BtnInfo
+        text={
+          <IntlMessages
+            id="subaccounts.changeAmount"
+            defaultMessage="Change Amount"
+          />
+        }
+        icon="edit"
+        action={changeAmount}
+      />
     ]}
   >
     <Card.Meta
@@ -37,15 +47,36 @@ const AccountBox = ({
       title={name}
       description={
         <p>
-          Tipo de cuenta: <b>{type}</b>
+          <IntlMessages
+            id="subaccounts.accountType"
+            defaultMessage="Account type"
+          />
+          {": "}
+          <b>{type}</b>
           <br />
-          Monto diario: <b>DSC {Number(dailyPermission).toLocaleString()}0</b>
+          <IntlMessages
+            id="subaccounts.dailyLimit"
+            defaultMessage="Daily amount"
+          />
+          {": "}
+          <b>DSC {Number(dailyPermission).toLocaleString()}0</b>
           <br />
-          Desde: <b>{account.since}</b>
+          <IntlMessages
+            id="subaccounts.enabledSince"
+            defaultMessage="Enabled Since"
+          />
+          {": "}
+          <b>{account.since}</b>
           <br />
-          Hasta: <b>{account.expiration}</b>
+          <IntlMessages id="subaccounts.until" defaultMessage="Until" />
+          {": "}
+          <b>{account.expiration}</b>
           <br />
-          Rerirado este período:{" "}
+          <IntlMessages
+            id="subaccounts.withdrawn"
+            defaultMessage="Withdrawn in this period"
+          />
+          {": "}
           <b>DSC {Number(account.claimed_this_period || 0).toLocaleString()}</b>
           <br />
         </p>
