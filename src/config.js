@@ -9,7 +9,7 @@ const themeConfig = {
   layout: "themedefault",
   theme: "themedefault"
 };
-const language = "english";
+const language = "spanish";
 
 const mapboxConfig = {
   tileLayer: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
