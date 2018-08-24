@@ -586,7 +586,7 @@
   "register.email.empty": "Email is required",
   "register.name": "Business Name",
   "register.name.empty": "Business Name is required",
-  "register.please_select": "Choose a category",
+  "register.pleaseSelect": "Choose a category",
   "Name": "Name",
   "Description": "Description",
   "Parent Category": "Parent Category",

@@ -25,6 +25,7 @@ export class Register extends Component {
     this.cancel = this.cancel.bind(this);
     this.checkAccontName = this.checkAccontName.bind(this);
     this.checkAccontNameAvailable = this.checkAccontNameAvailable.bind(this);
+    this.openNotificationWithIcon = this.openNotificationWithIcon.bind(this);
     this.setPrivateKey = this.setPrivateKey.bind(this);
     this.newSeed = this.newSeed.bind(this);
     this.initState = {
@@ -43,9 +44,10 @@ export class Register extends Component {
 
   openNotificationWithIcon(type) {
     notification[type]({
-      message: "Palabras Mnemonicas",
+      message: this.props.intl.messages["register.brainKey"] || "Brain Key",
       description:
-        "Las palabras han sido copiadas al portapapeles. Resguárdelas de manera segura!"
+        this.props.intl.messages["register.brainKeyMessage"] ||
+        "The words have been copied to the clipboard. Keep them safe!"
     });
   }
 
@@ -153,6 +155,7 @@ export class Register extends Component {
   }
 
   render() {
+    console.log(this.openNotificationWithIcon);
     const { getFieldDecorator } = this.props.form;
     const { current } = this.state;
 
@@ -177,12 +180,15 @@ export class Register extends Component {
 
     const steps = [
       {
-        title: "Account",
+        id: "account",
+        title: (
+          <IntlMessages id="register.accountTitle" defaultMessage="Account" />
+        ),
         content: (
           <Form onSubmit={console.log}>
             <FormItem
               {...formItemLayout}
-              label={<IntlMessages id="register.name" />}
+              label={<IntlMessages id="register.name" defaultMessage="Name" />}
             >
               {getFieldDecorator("name", {
                 rules: [
@@ -196,7 +202,12 @@ export class Register extends Component {
 
             <FormItem
               {...formItemLayout}
-              label={<IntlMessages id="register.account_name" />}
+              label={
+                <IntlMessages
+                  id="register.account_name"
+                  defaultMessage="Account name"
+                />
+              }
               hasFeedback
             >
               {getFieldDecorator("account_name", {
@@ -219,7 +230,9 @@ export class Register extends Component {
 
             <FormItem
               {...formItemLayout}
-              label={<IntlMessages id="register.email" />}
+              label={
+                <IntlMessages id="register.email" defaultMessage="Email" />
+              }
               hasFeedback
             >
               {getFieldDecorator("email", {
@@ -238,7 +251,12 @@ export class Register extends Component {
 
             <FormItem
               {...formItemLayout}
-              label={<IntlMessages id="register.telephone" />}
+              label={
+                <IntlMessages
+                  id="register.telephone"
+                  defaultMessage="Telephone"
+                />
+              }
               hasFeedback
             >
               {getFieldDecorator("telephone", {
@@ -256,12 +274,23 @@ export class Register extends Component {
         )
       },
       {
-        title: "Categories",
+        id: "caregories",
+        title: (
+          <IntlMessages
+            id="register.categoriesTitle"
+            defaultMessage="Categories"
+          />
+        ),
         content: (
           <Form onSubmit={console.log}>
             <FormItem
               {...formItemLayout}
-              label={<IntlMessages id="register.category" />}
+              label={
+                <IntlMessages
+                  id="register.category"
+                  defaultMessage="Category"
+                />
+              }
             >
               {this.state.current === 1
                 ? getFieldDecorator("category", {
@@ -276,7 +305,12 @@ export class Register extends Component {
                   })(
                     <Select
                       style={{ width: "100%" }}
-                      placeholder={<IntlMessages id="register.please_select" />}
+                      placeholder={
+                        <IntlMessages
+                          id="register.pleaseSelect"
+                          defaultMessage="Please select one"
+                        />
+                      }
                     >
                       {this.props.categories.map((category, index) => (
                         <SelectOption
@@ -293,7 +327,12 @@ export class Register extends Component {
 
             <FormItem
               {...formItemLayout}
-              label={<IntlMessages id="register.subcategory" />}
+              label={
+                <IntlMessages
+                  id="register.subcategory"
+                  defaultMessage="Subcategory"
+                />
+              }
             >
               {this.state.current === 1
                 ? getFieldDecorator("subcategory", {
@@ -308,7 +347,12 @@ export class Register extends Component {
                   })(
                     <Select
                       style={{ width: "100%" }}
-                      placeholder={<IntlMessages id="register.please_select" />}
+                      placeholder={
+                        <IntlMessages
+                          id="register.pleaseSelect"
+                          defaultMessage="Please select one"
+                        />
+                      }
                     >
                       {this.props.subcategories
                         .filter(
@@ -332,12 +376,25 @@ export class Register extends Component {
         )
       },
       {
-        title: "Credentials",
+        id: "credentials",
+        title: (
+          <IntlMessages
+            id="register.credentialsTitle"
+            defaultMessage="Credentials"
+          />
+        ),
         content: (
           <div>
-            <h3>Brain Key</h3>
+            <h3>
+              <IntlMessages defaultMessage="Brain Key" id="register.brainKey" />
+            </h3>
             <code style={codeStyle}>{this.state.form.seed}</code>
-            <h3>Private Key (Wip)</h3>
+            <h3>
+              <IntlMessages
+                defaultMessage="Private Key (Wip)"
+                id="register.wip"
+              />
+            </h3>
             <code style={codeStyle}>{this.state.form.privKey}</code>
             <CopyToClipboard
               text={this.state.form.seed}
@@ -345,7 +402,12 @@ export class Register extends Component {
               type="primary"
               onCopy={this.setPrivateKey}
             >
-              <Button>I have saved this brainkey</Button>
+              <Button>
+                <IntlMessages
+                  defaultMessage="I have saved this brainkey"
+                  id="register.brainKeyCopy"
+                />
+              </Button>
             </CopyToClipboard>
           </div>
         )
@@ -366,7 +428,7 @@ export class Register extends Component {
             <div className="steps-action">
               {this.state.current < steps.length - 1 && (
                 <Button type="primary" onClick={() => this.next()}>
-                  Next
+                  <IntlMessages defaultMessage="Next" id="register.next" />
                 </Button>
               )}
               {this.state.current === steps.length - 1 && (
@@ -375,12 +437,15 @@ export class Register extends Component {
                   onClick={this.submit}
                   disabled={typeof this.state.form.privKey === "undefined"}
                 >
-                  Done
+                  <IntlMessages defaultMessage="Done" id="register.done" />
                 </Button>
               )}
               {this.state.current > 0 && (
                 <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
-                  Previous
+                  <IntlMessages
+                    defaultMessage="Previous"
+                    id="register.previous"
+                  />
                 </Button>
               )}
             </div>
@@ -388,7 +453,9 @@ export class Register extends Component {
         }
       >
         <Steps current={current}>
-          {steps.map(item => <Step key={item.title} title={item.title} />)}
+          {steps.map(item => (
+            <Step key={item.id} title={item.title} />
+          ))}
         </Steps>
 
         {!this.props.loading ? (
