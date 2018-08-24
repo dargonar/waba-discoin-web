@@ -672,5 +672,9 @@
   "transactions.amountInvoiced": "Monto facturado",
   "transactions.invoice": "Factura",
   "transactions.date": "Fecha",
-  "transactions.review": "Reseña"
+  "transactions.review": "Reseña",
+  "core.username": "Usuario",
+  "core.password": "Contraseña",
+  "core.sessionPassword": "Contraseña de sesión",
+  "core.sessionPasswordWarning": "Debe ingresar una contraseña de sesión"
 }

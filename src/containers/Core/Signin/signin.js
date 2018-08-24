@@ -12,6 +12,7 @@ import LocalLogin from "./components/localLogin";
 import RegisterBox from "./components/register";
 import { bindActionCreators } from "redux";
 import message from "../../../components/uielements/message";
+import { injectIntl } from "react-intl";
 
 const { login, loginFromLocal, cleanStorage, register } = authAction;
 
@@ -42,7 +43,7 @@ class SignIn extends Component {
   }
 
   cancelLocal() {
-    console.log("[Page/signin/signin.js] ------- cleanStorage()");
+    console.log("[Page/signin/sinin.js] ------- cleanStorage()");
     this.props.cleanStorage();
   }
 
@@ -76,7 +77,10 @@ class SignIn extends Component {
   handleLogin = () => {
     // alert(this.state.words);
     if (this.state.remember && this.state.rememberKey == "") {
-      alert("Debe ingresar una clave!");
+      message.warning(
+        this.props.intl.messages["core.sessionPasswordWarning"] ||
+          "You must enter a session password"
+      );
       return;
     }
     this.props.login({
@@ -116,7 +120,7 @@ class SignIn extends Component {
           <div className="isoLoginContent">
             <div className="isoLogoWrapper">
               <Link to="/dashboard">
-                <IntlMessages id="page.signInTitle" />
+                <IntlMessages id="page.signInTitle" defaultMessage="DISCOIN" />
               </Link>
             </div>
 
@@ -124,7 +128,9 @@ class SignIn extends Component {
               <div className="isoInputWrapper">
                 <Input
                   size="large"
-                  placeholder="Username"
+                  placeholder={
+                    this.props.intl.messages["core.username"] || "Username"
+                  }
                   value={this.state.account}
                   onChange={e => this.setState({ account: e.target.value })}
                 />
@@ -134,7 +140,9 @@ class SignIn extends Component {
                 <Input
                   size="large"
                   type="text"
-                  placeholder="Password"
+                  placeholder={
+                    this.props.intl.messages["core.password"] || "Password"
+                  }
                   value={this.state.words}
                   onKeyPress={this._handleKeyPress}
                   onChange={e => this.setState({ words: e.target.value })}
@@ -145,7 +153,10 @@ class SignIn extends Component {
                   <Input
                     size="large"
                     type="text"
-                    placeholder="Session password"
+                    placeholder={
+                      this.props.intl.messages["core.sessionPassword"] ||
+                      "Session password"
+                    }
                     value={this.state.rememberKey}
                     onKeyPress={this._handleKeyPress}
                     onChange={e =>
@@ -159,13 +170,19 @@ class SignIn extends Component {
 
               <div className="isoInputWrapper isoLeftRightComponent">
                 <Checkbox onChange={() => this.toggle("remember")}>
-                  <IntlMessages id="page.signInRememberMe" />
+                  <IntlMessages
+                    id="page.signInRememberMe"
+                    defaultMessage="Remember me"
+                  />
                 </Checkbox>
                 <Checkbox
                   defaultChecked={this.state.is_brainkey}
                   onChange={() => this.toggle("is_brainkey")}
                 >
-                  <IntlMessages id="page.isBrainKey" />
+                  <IntlMessages
+                    id="page.isBrainKey"
+                    defaultMessage="Is brain key"
+                  />
                 </Checkbox>
                 <Button
                   type="primary"
@@ -173,7 +190,10 @@ class SignIn extends Component {
                   loading={this.props.isLoading}
                   disabled={this.props.loading}
                 >
-                  <IntlMessages id="page.signInButton" />
+                  <IntlMessages
+                    id="page.signInButton"
+                    defaultMessage="Sign In"
+                  />
                 </Button>
               </div>
 
@@ -184,7 +204,10 @@ class SignIn extends Component {
                     this.setState({ register: true });
                   }}
                 >
-                  <IntlMessages id="page.signUpButton" />
+                  <IntlMessages
+                    id="page.signUpButton"
+                    defaultMessage="Sign Up"
+                  />
                 </Button>
               </div>
             </div>
@@ -215,4 +238,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SignIn);
+)(injectIntl(SignIn));
