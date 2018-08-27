@@ -706,5 +706,6 @@
   "kpis.dailyTransactions": "Transaciones diarias",
   "kpis.last30Days": "Últimos 30 días",
   "kpis.newUsers": "Usuarios nuevos",
-  "kpis.newBusinesses": "Comercios nuevos"
+  "kpis.newBusinesses": "Comercios nuevos",
+  "kpis.maxSupply": "Máxima emisión: {symbol}{amount}"
 }

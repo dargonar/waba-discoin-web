@@ -171,10 +171,14 @@ class DiscountsAndRewards extends Component {
                 bgColor="#fff"
                 amount={json.main_asset.supply}
                 subtext={
-                  "Max suppply: " +
-                  currency.symbol +
-                  " " +
-                  json.main_asset.max_supply
+                  <IntlMessages
+                    id="kpis.maxSupply"
+                    values={{
+                      symbol: currency.symbol,
+                      amount: json.main_asset.max_supply
+                    }}
+                    defaultMessage="Max suppply: {symbol}{amount}"
+                  />
                 }
               />
             </Col>
@@ -233,7 +237,7 @@ class DiscountsAndRewards extends Component {
                         json.airdrop.by_reimbursment
                       ).toLocaleString()
                     }}
-                    defaultMessage={"{amount} por Reembolso"}
+                    defaultMessage="{amount} por Reembolso"
                     id="kpis.amountRefund"
                   />
                 </span>
