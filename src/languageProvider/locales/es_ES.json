@@ -693,5 +693,22 @@
   "core.username": "Usuario",
   "core.password": "Contraseña",
   "core.sessionPassword": "Contraseña de sesión",
-  "core.sessionPasswordWarning": "Debe ingresar una contraseña de sesión"
+  "core.sessionPasswordWarning": "Debe ingresar una contraseña de sesión",
+  "kpis.adminBalance": "Balance del admin",
+  "kpis.reservedFounds": " Fondos de reserva",
+  "kpis.circulation": "Cantidad de Discoun en circulación",
+  "kpis.dailyIssuing": "Uso diario",
+  "kpis.airdrop": "Airdop utilizado",
+  "kpis.airdroped": "Discoins en airdrop",
+  "kpis.amountRefered": "{amount} por Referidos",
+  "kpis.amountRefund": "{amount} por Reembolsos",
+  "kpis.amountWalletTx": "{amount} por Billeteras con TX",
+  "kpis.amountBusinesses": "Cantidad de comercios en la red",
+  "kpis.businessesBalance": "Estado de los balances de los comercios",
+  "kpis.businessesCi": "Comercios segun Crédito Inicial",
+  "kpis.numberTransactions": "Cantidad de transacciones",
+  "kpis.dailyTransactions": "Transaciones diarias",
+  "kpis.last30Days": "Últimos 30 días",
+  "kpis.newUsers": "Usuarios nuevos",
+  "kpis.newBusinesses": "Comercios nuevos"
 }

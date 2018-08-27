@@ -136,26 +136,36 @@ class DiscountsAndRewards extends Component {
           <Row style={rowStyle} gutter={16} justify="start">
             <Col md={7} sm={24} xs={24} style={colStyle}>
               <BalanceSticker
-                text="Balance de admin"
+                text={
+                  <IntlMessages
+                    defaultMessage="Admin balance"
+                    id="kpis.adminBalance"
+                  />
+                }
                 coin="DSC"
                 bgColor="#fff"
                 amount={json.balances.balance}
-                subtext={" Fondo de reserva"}
+                subtext={
+                  <IntlMessages
+                    defaultMessage="Reserved founds"
+                    id="kpis.reservedFounds"
+                  />
+                }
               />
             </Col>
-            <Col md={10} sm={24} xs={24} style={colStyle}>
-              
-            </Col>
-            <Col md={7} sm={24} xs={24} style={colStyle}>
-              
-            </Col>
+            <Col md={10} sm={24} xs={24} style={colStyle} />
+            <Col md={7} sm={24} xs={24} style={colStyle} />
           </Row>
-
 
           <Row style={rowStyle} gutter={16} justify="start">
             <Col md={7} sm={24} xs={24} style={colStyle}>
               <BalanceSticker
-                text="Quantity of Dicoins in circulation"
+                text={
+                  <IntlMessages
+                    defaultMessage="Quantity of Dicoins in circulation"
+                    id="kpis.circulation"
+                  />
+                }
                 coin="DSC"
                 bgColor="#fff"
                 amount={json.main_asset.supply}
@@ -163,32 +173,71 @@ class DiscountsAndRewards extends Component {
               />
             </Col>
             <Col md={10} sm={24} xs={24} style={colStyle}>
-              <ReportsWidget label={"Daily Issuing"}>
+              <ReportsWidget
+                label={
+                  <IntlMessages
+                    defaultMessage="Daily Issuing"
+                    id="kṕis.dailyIssuing"
+                  />
+                }
+              >
                 <SimpleLineChart
                   deltas={getDeltas(json.businesses.transactions.daily)}
                 />
               </ReportsWidget>
             </Col>
             <Col md={7} sm={24} xs={24} style={colStyle}>
-              <ReportsWidget label="Airdrop Issuing">
+              <ReportsWidget
+                label={
+                  <IntlMessages
+                    defaultMessage="Airdrop Issuing"
+                    id="kpis.airdrop"
+                  />
+                }
+              >
                 <p>
                   <span style={aidropIssuing}>
                     <span style={{ color: "#999" }}>DSC</span>{" "}
                     {Number(json.airdrop.total_issued).toLocaleString()} <br />
                   </span>
-                  <span style={{ color: "#999" }}> Dicoins airdroped</span>
+                  <span style={{ color: "#999" }}>
+                    {" "}
+                    <IntlMessages
+                      defaultMessage="Dicoins airdroped"
+                      id="kpis.airdroped"
+                    />
+                  </span>
                 </p>
                 <span style={aidropIssuing}>
-                  {Number(json.airdrop.by_referrals).toLocaleString()} por
-                  Referidos
+                  <IntlMessages
+                    values={{
+                      amount: Number(json.airdrop.by_referrals).toLocaleString()
+                    }}
+                    defaultMessage="{amount} por Referidos"
+                    id="kpis.amountRefered"
+                  />
                 </span>
                 <span style={aidropIssuing}>
-                  {Number(json.airdrop.by_reimbursment).toLocaleString()} por
-                  Reembolso
+                  <IntlMessages
+                    values={{
+                      amount: Number(
+                        json.airdrop.by_reimbursment
+                      ).toLocaleString()
+                    }}
+                    defaultMessage={"{amount} por Reembolso"}
+                    id="kpis.amountRefund"
+                  />
                 </span>
                 <span style={aidropIssuing}>
-                  {Number(json.airdrop.by_transactions).toLocaleString()} por
-                  Billeteras con TX
+                  <IntlMessages
+                    values={{
+                      amount: Number(
+                        json.airdrop.by_transactions
+                      ).toLocaleString()
+                    }}
+                    defaultMessage="{amount} por Billeteras con TX"
+                    id="kpis.amountWalletTx"
+                  />
                 </span>
               </ReportsWidget>
             </Col>
@@ -197,20 +246,39 @@ class DiscountsAndRewards extends Component {
           <Row style={rowStyle} gutter={16} justify="start">
             <Col md={7} sm={24} xs={24} style={colStyle}>
               <BalanceSticker
-                text="Number of businesses in the network"
+                text={
+                  <IntlMessages
+                    defaultMessage="Number of businesses in the network"
+                    Id="kpis.amountBusinesses"
+                  />
+                }
                 bgColor="#fff"
                 amount={getBusinessTotal(json.businesses.quantity.by_status)}
               />
             </Col>
             <Col md={8} sm={24} xs={24} style={colStyle}>
-              <ReportsWidget label={"Businesses balance status"}>
+              <ReportsWidget
+                label={
+                  <IntlMessages
+                    defaultMessage="Businesses balance status"
+                    id="kpis.businessesBalance"
+                  />
+                }
+              >
                 <SimplePieChart
                   data={getPieData(json.businesses.quantity.by_status)}
                 />
               </ReportsWidget>
             </Col>
             <Col md={9} sm={24} xs={24} style={colStyle}>
-              <ReportsWidget label="Businesses by CI">
+              <ReportsWidget
+                label={
+                  <IntlMessages
+                    defaultMessage="Businesses by CI"
+                    id="kpis.businessesCi"
+                  />
+                }
+              >
                 <SimpleBarChart
                   data={getBarData(json.businesses.quantity.by_initial_credit)}
                   color={"#42A5F8"}
@@ -222,7 +290,12 @@ class DiscountsAndRewards extends Component {
           <Row style={rowStyle} gutter={16} justify="start">
             <Col md={7} sm={24} xs={24} style={colStyle}>
               <BalanceSticker
-                text="Number of transactions"
+                text={
+                  <IntlMessages
+                    defaultMessage="Number of transactions"
+                    id="kpis.numberTransactions"
+                  />
+                }
                 bgColor="#fff"
                 amount={json.businesses.transactions.total_quantity}
               />
@@ -231,8 +304,18 @@ class DiscountsAndRewards extends Component {
               <Row style={rowStyle} gutter={8}>
                 <Col md={8} sm={24} xs={24}>
                   <ReportsWidget
-                    label="Daily transactions"
-                    details={"Last 30 days"}
+                    label={
+                      <IntlMessages
+                        defaultMessage="Daily transactions"
+                        id="kpis.dailyTransactions"
+                      />
+                    }
+                    details={
+                      <IntlMessages
+                        defaultMessage="Last 30 days"
+                        id="kpis.last30Days"
+                      />
+                    }
                   >
                     <SimpleLineChart
                       deltas={getDeltas(json.businesses.transactions.daily)}
@@ -240,7 +323,20 @@ class DiscountsAndRewards extends Component {
                   </ReportsWidget>
                 </Col>
                 <Col md={8} sm={24} xs={24}>
-                  <ReportsWidget label="New Users" details={"Last 30 days"}>
+                  <ReportsWidget
+                    label={
+                      <IntlMessages
+                        defaultMessage="New Users"
+                        id="kpis.newUsers"
+                      />
+                    }
+                    details={
+                      <IntlMessages
+                        defaultMessage="Last 30 days"
+                        id="kpis.last30Days"
+                      />
+                    }
+                  >
                     <SimpleLineChart
                       deltas={getDeltas(json.businesses.users.new_users)}
                     />
@@ -248,8 +344,18 @@ class DiscountsAndRewards extends Component {
                 </Col>
                 <Col md={8} sm={24} xs={24}>
                   <ReportsWidget
-                    label="New Businesses"
-                    details={"Last 30 days"}
+                    label={
+                      <IntlMessages
+                        defaultMessage="New Businesses"
+                        id="kpis.newBusinesses"
+                      />
+                    }
+                    details={
+                      <IntlMessages
+                        defaultMessage="Last 30 days"
+                        id="kpis.last30Days"
+                      />
+                    }
                   >
                     <SimpleLineChart
                       deltas={getDeltas(
