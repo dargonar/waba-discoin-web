@@ -11,6 +11,12 @@ const themeConfig = {
 };
 const language = "spanish";
 
+const currency = {
+  name: "DISCOIN",
+  symbol: "DSC",
+  plural: "Discoins"
+};
+
 const mapboxConfig = {
   tileLayer: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   maxZoom: 22,
@@ -89,4 +95,4 @@ const apiConfig = {
   ]
 };
 
-export { siteConfig, language, themeConfig, mapboxConfig, apiConfig };
+export { siteConfig, language, themeConfig, mapboxConfig, apiConfig, currency };
