@@ -15,6 +15,7 @@ import { bindActionCreators } from "redux";
 import actions from "../../redux/api/actions";
 
 import Button from "../../components/uielements/button";
+import { currency } from "../../config";
 
 export class Dashboard extends Component {
   constructor(props) {
@@ -117,9 +118,10 @@ export class Dashboard extends Component {
           type={"info"}
           msg={
             <IntlMessage
-              id={"discoin.overdraftQuestion"}
-              defaultMessage={`You have a DSC{value} credit available. You want to take it?`}
+              id={"dashboard.overdraftQuestion"}
+              defaultMessage={`You have a {symbol}{value} credit available. You want to take it?`}
               values={{
+                symbol: currency.symbol,
                 value: Number(
                   this.props.api.business.balances.ready_to_access
                 ).toLocaleString()
@@ -151,11 +153,14 @@ export class Dashboard extends Component {
                 amount={this.props.api.business.balances.balance}
                 text={
                   <IntlMessage
-                    id="discoin.balance"
-                    defaultMessage={"Discoin Balance"}
+                    id="dashboard.balance"
+                    values={{
+                      currency: currency.name
+                    }}
+                    defaultMessage={"{currency} Balance"}
                   />
                 }
-                coin="DSC"
+                coin={currency.symbol}
                 fontColor="#1C222C"
                 bgColor="#fff"
               />
@@ -169,10 +174,10 @@ export class Dashboard extends Component {
                 text={
                   <IntlMessage
                     defaultMessage="Initial Credit"
-                    id="discoin.initialCredit"
+                    id="dashboard.initialCredit"
                   />
                 }
-                coin={"DSC"}
+                coin={currency.symbol}
                 fontColor="#1C222C"
                 bgColor="#fff"
               />
@@ -186,10 +191,10 @@ export class Dashboard extends Component {
                 text={
                   <IntlMessage
                     defaultMessage="Endorsed"
-                    id="discoin.endorsed"
+                    id="dashboard.endorsed"
                   />
                 }
-                coin={"DSC"}
+                coin={currency.symbol}
                 fontColor="#1C222C"
                 bgColor="#fff"
               />
@@ -204,7 +209,7 @@ export class Dashboard extends Component {
                 text={
                   <IntlMessage
                     defaultMessage="Accepted / Received ratio"
-                    id="discoin.acceptedRatio"
+                    id="dashboard.acceptedRatio"
                   />
                 }
                 scale={getBalanceWarnings(
@@ -225,7 +230,7 @@ export class Dashboard extends Component {
                 text={
                   <IntlMessage
                     defaultMessage="Reward & Refund"
-                    id="discoin.rewardAndRefund"
+                    id="dashboard.rewardAndRefund"
                   />
                 }
                 fontColor="#1C222C"
@@ -258,7 +263,7 @@ export class Dashboard extends Component {
     return (
       <LayoutContentWrapper>
         <PageHeader>
-          <IntlMessage id="discoin.dashboard" defaultMessage="Dashboard" />
+          <IntlMessage id="dashboard.dashboard" defaultMessage="Dashboard" />
         </PageHeader>
 
         <Modal
@@ -266,7 +271,7 @@ export class Dashboard extends Component {
           title={
             <IntlMessage
               defaultMessage="Credit available"
-              id="discoint.overdraftAvailable"
+              id="dashboard.overdraftAvailable"
             />
           }
           onOk={this.doApplyOverdraft}
@@ -274,7 +279,7 @@ export class Dashboard extends Component {
         >
           <label>
             <IntlMessage
-              id="discoin.acceptAvailableOverdraft"
+              id="dashboard.acceptAvailableOverdraft"
               defaultMessage="Do you wish to accept the available overdraft?"
             />
           </label>

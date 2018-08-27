@@ -13,6 +13,7 @@ import RegisterBox from "./components/register";
 import { bindActionCreators } from "redux";
 import message from "../../../components/uielements/message";
 import { injectIntl } from "react-intl";
+import { siteConfig } from "../../../config";
 
 const { login, loginFromLocal, cleanStorage, register } = authAction;
 
@@ -120,7 +121,10 @@ class SignIn extends Component {
           <div className="isoLoginContent">
             <div className="isoLogoWrapper">
               <Link to="/dashboard">
-                <IntlMessages id="page.signInTitle" defaultMessage="DISCOIN" />
+                <IntlMessages
+                  id="page.signInTitle"
+                  defaultMessage={siteConfig.siteName}
+                />
               </Link>
             </div>
 

@@ -2,6 +2,7 @@ import React from "react";
 import Card from "../../../../components/uielements/card";
 import HashImage from "../../../../components/hashImage";
 import { Icon, Tooltip } from "antd";
+import { currency } from "../../../../config";
 
 const style = {
   box: {
@@ -39,7 +40,7 @@ const AccountBox = ({
         <p>
           <b>Type:</b> {type}
           <br />
-          <b>Daily Permission:</b> DSC{" "}
+          <b>Daily Permission:</b> {currency.symbol}{" "}
           {Number(dailyPermission).toLocaleString()}
         </p>
       }

@@ -5,7 +5,7 @@ import appActions from "../../../redux/app/actions";
 import TopbarUser from "./topbarUser";
 import TopbarWrapper from "./topbar.style";
 import themes from "../../../config/themes";
-import { themeConfig } from "../../../config";
+import { themeConfig, currency } from "../../../config";
 
 const { Header } = Layout;
 const { toggleCollapsed } = appActions;
@@ -45,7 +45,9 @@ class Topbar extends Component {
               {" - "}
               <span style={{ fontWeight: "bold", color: "#555" }}>
                 {"("}
-                {"DSC " + Number(this.props.balance).toLocaleString()}
+                {currency.symbol +
+                  " " +
+                  Number(this.props.balance).toLocaleString()}
                 {")"}
               </span>
             </li>

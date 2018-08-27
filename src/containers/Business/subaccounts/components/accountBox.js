@@ -3,6 +3,7 @@ import Card from "../../../../components/uielements/card";
 import HashImage from "../../../../components/hashImage";
 import { Icon, Tooltip } from "antd";
 import IntlMessages from "../../../../components/utility/intlMessages";
+import { currency } from "../../../../config";
 
 const style = {
   box: {
@@ -59,7 +60,9 @@ const AccountBox = ({
             defaultMessage="Daily amount"
           />
           {": "}
-          <b>DSC {Number(dailyPermission).toLocaleString()}0</b>
+          <b>
+            {currency.symbol} {Number(dailyPermission).toLocaleString()}0
+          </b>
           <br />
           <IntlMessages
             id="subaccounts.enabledSince"
@@ -77,7 +80,10 @@ const AccountBox = ({
             defaultMessage="Withdrawn in this period"
           />
           {": "}
-          <b>DSC {Number(account.claimed_this_period || 0).toLocaleString()}</b>
+          <b>
+            {currency.symbol}{" "}
+            {Number(account.claimed_this_period || 0).toLocaleString()}
+          </b>
           <br />
         </p>
       }

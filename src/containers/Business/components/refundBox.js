@@ -4,6 +4,7 @@ import Input from "../../../components/uielements/input";
 import { notification } from "antd";
 import PropTypes from "prop-types"; // ES6
 import IntlMessage from "../../../components/utility/intlMessages";
+import { currency } from "../../../config";
 
 export class RefundBox extends Component {
   constructor(props) {
@@ -140,9 +141,9 @@ export class RefundBox extends Component {
             />
           </Col>
           <Col style={colStyle} xs={24} md={12}>
-            DisCoins
+            {currency.plural}
             <Input
-              addonBefore={"DSC"}
+              addonBefore={currency.symbol}
               value={this.state.amount}
               onChange={e => this.updateAmount(e.target.value)}
             />

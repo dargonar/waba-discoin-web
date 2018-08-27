@@ -3,6 +3,7 @@ import { Col, Row, Tooltip } from "antd";
 import StoreCardWrapper from "../store.style";
 import BalanceSticker from "../../../../components/balance-sticker/balance-sticker";
 import Button from "../../../../components/uielements/button";
+import { currency } from "../../../../config";
 
 class StoreCard extends Component {
   shortNumber(number) {
@@ -57,7 +58,7 @@ class StoreCard extends Component {
           </Col>
           <Col md={4} sm={24} xs={24} style={{ marginBottom: "10px" }}>
             <BalanceSticker
-              coin={"DSC"}
+              coin={currency.symbol}
               amount={this.props.balances.balance}
               text={"Balance"}
               bgColor={"#f5f5f5"}
@@ -65,7 +66,7 @@ class StoreCard extends Component {
           </Col>
           <Col md={4} sm={24} xs={24} style={{ marginBottom: "10px" }}>
             <BalanceSticker
-              coin={"DSC"}
+              coin={currency.symbol}
               amount={this.props.balances.initial_credit}
               text={"Credito inicial"}
               bgColor={"#f5f5f5"}
@@ -73,7 +74,7 @@ class StoreCard extends Component {
           </Col>
           <Col md={4} sm={24} xs={24} style={{ marginBottom: "10px" }}>
             <BalanceSticker
-              coin={"DSC"}
+              coin={currency.symbol}
               amount={this.props.balances.ready_to_access}
               text={"Disponible para solicitar credito"}
               bgColor={"#f5f5f5"}

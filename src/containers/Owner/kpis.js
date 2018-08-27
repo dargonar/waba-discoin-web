@@ -26,6 +26,7 @@ import IntlMessages from "../../components/utility/intlMessages";
 
 import actions from "../../redux/owner/actions";
 import { bindActionCreators } from "redux";
+import { currency } from "../../config";
 
 class SimpleLineChart extends Component {
   render() {
@@ -142,7 +143,7 @@ class DiscountsAndRewards extends Component {
                     id="kpis.adminBalance"
                   />
                 }
-                coin="DSC"
+                coin={currency.symbol}
                 bgColor="#fff"
                 amount={json.balances.balance}
                 subtext={
@@ -166,10 +167,15 @@ class DiscountsAndRewards extends Component {
                     id="kpis.circulation"
                   />
                 }
-                coin="DSC"
+                coin={currency.symbol}
                 bgColor="#fff"
                 amount={json.main_asset.supply}
-                subtext={"Max suppply: DSC " + json.main_asset.max_supply}
+                subtext={
+                  "Max suppply: " +
+                  currency.symbol +
+                  " " +
+                  json.main_asset.max_supply
+                }
               />
             </Col>
             <Col md={10} sm={24} xs={24} style={colStyle}>
@@ -197,13 +203,16 @@ class DiscountsAndRewards extends Component {
               >
                 <p>
                   <span style={aidropIssuing}>
-                    <span style={{ color: "#999" }}>DSC</span>{" "}
+                    <span style={{ color: "#999" }}>{currency.symbol}</span>{" "}
                     {Number(json.airdrop.total_issued).toLocaleString()} <br />
                   </span>
                   <span style={{ color: "#999" }}>
                     {" "}
                     <IntlMessages
-                      defaultMessage="Dicoins airdroped"
+                      values={{
+                        currency: currency.plural
+                      }}
+                      defaultMessage="{currency} airdroped"
                       id="kpis.airdroped"
                     />
                   </span>

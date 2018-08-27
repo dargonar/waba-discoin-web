@@ -22,6 +22,7 @@ import { notification } from "antd";
 import moment from "moment";
 
 import { injectIntl } from "react-intl";
+import { currency } from "../../../config";
 const InputSearch = Input.Search;
 
 const { rowStyle, colStyle } = basicStyle;
@@ -357,9 +358,10 @@ class FindAccounts extends Component {
               <IntlMessages
                 id="subaccounts.authResume"
                 defaultMessage={
-                  "You are going to authorize {name} to withdraw daily DSC {amount} from {since} to {until}."
+                  "You are going to authorize {name} to withdraw daily {symbol} {amount} from {since} to {until}."
                 }
                 values={{
+                  symbol: currency.symbol,
                   name: this.state.selectedCustomer.name,
                   amount: this.state.subaccount_auth.amount.toLocaleString(),
                   since: this.state.subaccount_auth.checked_now
