@@ -23,6 +23,7 @@ const actions = {
   SET_MENU_ITEMS: "[UI] Set menu items",
   CHANGE_LANGUAGE: "CHANGE_LANGUAGE",
   ACTIVATE_LANG_MODAL: "ACTIVATE_LANG_MODAL",
+  ASK_PASSWORD: "[UI] Ask for local storage password",
 
   changeLanguage: language => {
     return {
@@ -30,7 +31,9 @@ const actions = {
       language: getCurrentLanguage(language)
     };
   },
-
+  togglePasswordBox: () => ({
+    type: actions.ASK_PASSWORD
+  }),
   toggleCollapsed: () => ({
     type: actions.COLLPSE_CHANGE
   }),

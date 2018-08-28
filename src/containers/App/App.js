@@ -9,6 +9,7 @@ import authAction from "../../redux/auth/actions";
 import appActions from "../../redux/app/actions";
 import Sidebar from "../Core/Sidebar/Sidebar";
 import Topbar from "../Core/Topbar/Topbar";
+import LocalLogin from "../Core/Signin/components/localLogin";
 import AppRouter from "./AppRouter";
 import { AppLocale } from "../../dashApp";
 import { siteConfig } from "../../config.js";
@@ -16,10 +17,10 @@ import themes from "../../config/themes";
 import { themeConfig } from "../../config";
 import AppHolder from "./commonStyle";
 import "./global.css";
-
+import { Icon, Button, Row, Col } from "antd";
 const { Content, Footer } = Layout;
 const { logout } = authAction;
-const { toggleAll } = appActions;
+const { toggleAll, togglePasswordBox } = appActions;
 
 export class App extends Component {
   render() {
@@ -62,8 +63,35 @@ export class App extends Component {
                         background: "#f1f3f6"
                       }}
                     >
+                      <LocalLogin />
                       <AppRouter url={url} />
                     </Content>
+                    {this.props.isEncrypted ? (
+                      <Footer
+                        style={{
+                          background: "#ffbf00"
+                        }}
+                      >
+                        {this.props.passwordBox}
+                        <Row>
+                          <Col md={20} style={{ marginTop: "6px" }}>
+                            <Icon type="warning" />
+                            <strong>Your keys are encrypted</strong>, please
+                            enter your local storage password to unlock them
+                          </Col>
+                          <Col md={4} style={{ textAlign: "right" }}>
+                            <Button
+                              type="danger"
+                              onClick={this.props.togglePasswordBox}
+                            >
+                              Unlock
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Footer>
+                    ) : (
+                      false
+                    )}
                     <Footer
                       style={{
                         background: "#ffffff",
@@ -87,7 +115,8 @@ export class App extends Component {
 export default connect(
   state => ({
     auth: state.Auth,
-    locale: state.App.toJS().language.locale
+    locale: state.App.toJS().language.locale,
+    isEncrypted: state.Auth.encrypted === true
   }),
-  { logout, toggleAll }
+  { logout, toggleAll, togglePasswordBox }
 )(App);

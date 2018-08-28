@@ -19,12 +19,16 @@ const initState = new Map({
   msg: null,
   msgType: null,
   menuItems: [],
-  language: getCurrentLanguage(config.defaultLanguage || "english")
+  language: getCurrentLanguage(config.defaultLanguage || "english"),
+  passwordBox: false
 });
+
 export default function appReducer(state = initState, action) {
   switch (action.type) {
     case actions.CHANGE_LANGUAGE:
       return state.set("language", action.language);
+    case actions.ASK_PASSWORD:
+      return state.set("passwordBox", !state.get("passwordBox"));
     case actions.COLLPSE_CHANGE:
       return state.set("collapsed", !state.get("collapsed"));
     case actions.COLLPSE_OPEN_DRAWER:
