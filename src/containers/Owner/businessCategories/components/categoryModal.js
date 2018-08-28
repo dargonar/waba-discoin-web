@@ -44,9 +44,15 @@ export default class CategoryModal extends Component {
       <Modal
         title={
           this.props.form.id ? (
-            <IntlMessages id={"Edit Category"} />
+            <IntlMessages
+              defaultMessage={"Edit Category"}
+              id="bCategories.edit"
+            />
           ) : (
-            <IntlMessages id={"Add Category"} />
+            <IntlMessages
+              defaultMessage={"Add Category"}
+              id="bCategories.add"
+            />
           )
         }
         visible={this.props.visible}
@@ -57,43 +63,59 @@ export default class CategoryModal extends Component {
             {this.props.form.id ? (
               <Popconfirm
                 title={
-                  <IntlMessages id={"Are you sure you want to remove this category?"} />
+                  <IntlMessages
+                    id="bCategories.confirmMsg"
+                    defaultMessage={
+                      "Are you sure you want to remove this category?"
+                    }
+                  />
                 }
                 okText={<IntlMessages id="Yes" />}
                 cancelText={<IntlMessages id="No" />}
                 onConfirm={() => this.props.onDelete(this.props.form.id)}
               >
-                <Button type="danger">Delete</Button>
+                <Button type="danger">
+                  <IntlMessages
+                    defaultMessage="Delete"
+                    id="bCategories.delete"
+                  />
+                </Button>
               </Popconfirm>
             ) : (
               false
             )}
             <Button type="" onClick={this.props.onCancel}>
-              Cancel
+              <IntlMessages defaultMessage="Cancel" id="bCategories.cancel" />
             </Button>
             <Button type="primary" onClick={this.submit}>
-              Save
+              <IntlMessages defaultMessage="Save" id="bCategories.save" />
             </Button>
           </div>
         }
       >
         <Form>
           <label>
-            <IntlMessages id={"Name"} />
+            <IntlMessages defaultMessage={"Name"} id="bCategories.nam,e" />
           </label>
           <Input
             defaultValue={this.props.form.name}
             onChange={e => this.changeForm("name", e.target.value)}
           />
           <label>
-            <IntlMessages id={"Description"} />
+            <IntlMessages
+              defaultMessage={"Description"}
+              id="bCategories.description"
+            />
           </label>
           <Input
             defaultValue={this.props.form.description}
             onChange={e => this.changeForm("description", e.target.value)}
           />
           <label>
-            <IntlMessages id={"Parent Category"} />
+            <IntlMessages
+              defaultMessage={"Parent Category"}
+              id="bCategories.parentCategory"
+            />
           </label>
           <Select
             style={{ width: "100%" }}
@@ -101,7 +123,7 @@ export default class CategoryModal extends Component {
             onChange={value => this.changeForm("parent_id", value)}
           >
             <SelectOption value={0}>
-              <IntlMessages id={"None"} />
+              <IntlMessages defaultMessage={"None"} id="bCategories.none" />
             </SelectOption>
             {this.props.categories.map(category => (
               <SelectOption value={category.id}>{category.name}</SelectOption>
@@ -112,7 +134,10 @@ export default class CategoryModal extends Component {
           ) : (
             <div>
               <label>
-                <IntlMessages id={"Discount"} />
+                <IntlMessages
+                  defaultMessage={"Discount"}
+                  id="bCategories.discount"
+                />
               </label>
               <Input
                 type="number"

@@ -38,7 +38,7 @@ class Categories extends Component {
   }
 
   submitCategory(data) {
-    console.log(' **** submitCategory(data)', JSON.stringify(data));
+    console.log(" **** submitCategory(data)", JSON.stringify(data));
     this.props.saveCategory(data);
     this.toggleModal();
   }
@@ -87,7 +87,7 @@ class Categories extends Component {
           onClick={this.toggleModal}
           className="pull-right"
         >
-          Add new
+          <IntlMessages defaultMessage="Add new" id="bCategories.addNew" />
         </Button>
       </CategoryTableWrapper>
     );
@@ -109,7 +109,10 @@ class Categories extends Component {
     return (
       <LayoutContentWrapper>
         <PageHeader>
-          <IntlMessages id="sidebar.businessCategories" />
+          <IntlMessages
+            id="sidebar.businessCategories"
+            defaultMessage="Business Categories"
+          />
         </PageHeader>
         {this.props.loading === false ? this.renderPage() : <PageLoading />}
       </LayoutContentWrapper>
