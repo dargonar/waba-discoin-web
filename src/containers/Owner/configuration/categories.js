@@ -199,7 +199,12 @@ class Categories extends Component {
       let result = [
         {
           key: 0,
-          title: "Description",
+          title: (
+            <IntlMessages
+              defaultMessage="Description"
+              id="categories.description"
+            />
+          ),
           dataIndex: "description"
         }
       ];
@@ -263,13 +268,19 @@ class Categories extends Component {
             dataSource={getRows(this.state.data)}
           />
           <Button style={margin} onClick={() => this.addColumn()}>
-            Add Category
+            <IntlMessages
+              defaultMessage="Add Category"
+              id="categories.addCategory"
+            />
           </Button>
           <Button style={margin} onClick={() => this.addRow()}>
-            Add Discount
+            <IntlMessages
+              defaultMessage="Add Discount"
+              id="categories.addDiscount"
+            />
           </Button>
           <Button type="primary" style={margin} onClick={() => this.submit()}>
-            Save
+            <IntlMessages defaultMessage="Save" id="categories.save" />
           </Button>
         </LayoutContent>
       ) : (

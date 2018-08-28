@@ -738,5 +738,9 @@
   "bCategories.delete": "Eliminar",
   "bCategories.save": "Guardar",
   "bCategories.cancel": "Cancelar",
-  "localLogin.resume": "Reanudar sesión"
+  "localLogin.resume": "Reanudar sesión",
+  "categories.description": "Descripción",
+  "categories.addCategory": "Agrear categoría",
+  "categories.addDiscount": "Agregar descuento",
+  "categories.save": "Guardar"
 }
