@@ -140,7 +140,7 @@ class DiscountsAndRewards extends Component {
                 text={
                   <IntlMessages
                     defaultMessage="Admin balance"
-                    id="kpis.adminBalance"
+                    id={"kpis.adminBalance"}
                   />
                 }
                 coin={currency.symbol}
@@ -149,7 +149,7 @@ class DiscountsAndRewards extends Component {
                 subtext={
                   <IntlMessages
                     defaultMessage="Reserved founds"
-                    id="kpis.reservedFounds"
+                    id={"kpis.reservedFounds"}
                   />
                 }
               />
@@ -164,7 +164,7 @@ class DiscountsAndRewards extends Component {
                 text={
                   <IntlMessages
                     defaultMessage="Quantity of Dicoins in circulation"
-                    id="kpis.circulation"
+                    id={"kpis.circulation"}
                   />
                 }
                 coin={currency.symbol}
@@ -172,7 +172,7 @@ class DiscountsAndRewards extends Component {
                 amount={json.main_asset.supply}
                 subtext={
                   <IntlMessages
-                    id="kpis.maxSupply"
+                    id={"kpis.maxSupply"}
                     values={{
                       symbol: currency.symbol,
                       amount: json.main_asset.max_supply
@@ -187,7 +187,7 @@ class DiscountsAndRewards extends Component {
                 label={
                   <IntlMessages
                     defaultMessage="Daily Issuing"
-                    id="kṕis.dailyIssuing"
+                    id={"kpis.dailyIssuing"}
                   />
                 }
               >
@@ -201,7 +201,7 @@ class DiscountsAndRewards extends Component {
                 label={
                   <IntlMessages
                     defaultMessage="Airdrop Issuing"
-                    id="kpis.airdrop"
+                    id={"kpis.airdrop"}
                   />
                 }
               >
@@ -217,7 +217,7 @@ class DiscountsAndRewards extends Component {
                         currency: currency.plural
                       }}
                       defaultMessage="{currency} airdroped"
-                      id="kpis.airdroped"
+                      id={"kpis.airdroped"}
                     />
                   </span>
                 </p>
@@ -227,7 +227,7 @@ class DiscountsAndRewards extends Component {
                       amount: Number(json.airdrop.by_referrals).toLocaleString()
                     }}
                     defaultMessage="{amount} por Referidos"
-                    id="kpis.amountRefered"
+                    id={"kpis.amountRefered"}
                   />
                 </span>
                 <span style={aidropIssuing}>
@@ -238,7 +238,7 @@ class DiscountsAndRewards extends Component {
                       ).toLocaleString()
                     }}
                     defaultMessage="{amount} por Reembolso"
-                    id="kpis.amountRefund"
+                    id={"kpis.amountRefund"}
                   />
                 </span>
                 <span style={aidropIssuing}>
@@ -249,7 +249,7 @@ class DiscountsAndRewards extends Component {
                       ).toLocaleString()
                     }}
                     defaultMessage="{amount} por Billeteras con TX"
-                    id="kpis.amountWalletTx"
+                    id={"kpis.amountWalletTx"}
                   />
                 </span>
               </ReportsWidget>
@@ -262,7 +262,7 @@ class DiscountsAndRewards extends Component {
                 text={
                   <IntlMessages
                     defaultMessage="Number of businesses in the network"
-                    Id="kpis.amountBusinesses"
+                    id={"kpis.amountBusinesses"}
                   />
                 }
                 bgColor="#fff"
@@ -274,7 +274,7 @@ class DiscountsAndRewards extends Component {
                 label={
                   <IntlMessages
                     defaultMessage="Businesses balance status"
-                    id="kpis.businessesBalance"
+                    id={"kpis.businessesBalance"}
                   />
                 }
               >
@@ -288,7 +288,7 @@ class DiscountsAndRewards extends Component {
                 label={
                   <IntlMessages
                     defaultMessage="Businesses by CI"
-                    id="kpis.businessesCi"
+                    id={"kpis.businessesCi"}
                   />
                 }
               >
@@ -306,7 +306,7 @@ class DiscountsAndRewards extends Component {
                 text={
                   <IntlMessages
                     defaultMessage="Number of transactions"
-                    id="kpis.numberTransactions"
+                    id={"kpis.numberTransactions"}
                   />
                 }
                 bgColor="#fff"
@@ -320,13 +320,13 @@ class DiscountsAndRewards extends Component {
                     label={
                       <IntlMessages
                         defaultMessage="Daily transactions"
-                        id="kpis.dailyTransactions"
+                        id={"kpis.dailyTransactions"}
                       />
                     }
                     details={
                       <IntlMessages
                         defaultMessage="Last 30 days"
-                        id="kpis.last30Days"
+                        id={"kpis.last30Days"}
                       />
                     }
                   >
@@ -340,13 +340,13 @@ class DiscountsAndRewards extends Component {
                     label={
                       <IntlMessages
                         defaultMessage="New Users"
-                        id="kpis.newUsers"
+                        id={"kpis.newUsers"}
                       />
                     }
                     details={
                       <IntlMessages
                         defaultMessage="Last 30 days"
-                        id="kpis.last30Days"
+                        id={"kpis.last30Days"}
                       />
                     }
                   >
@@ -360,13 +360,13 @@ class DiscountsAndRewards extends Component {
                     label={
                       <IntlMessages
                         defaultMessage="New Businesses"
-                        id="kpis.newBusinesses"
+                        id={"kpis.newBusinesses"}
                       />
                     }
                     details={
                       <IntlMessages
                         defaultMessage="Last 30 days"
-                        id="kpis.last30Days"
+                        id={"kpis.last30Days"}
                       />
                     }
                   >
