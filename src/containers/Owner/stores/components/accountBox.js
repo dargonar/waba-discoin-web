@@ -3,6 +3,7 @@ import Card from "../../../../components/uielements/card";
 import HashImage from "../../../../components/hashImage";
 import { Icon, Tooltip } from "antd";
 import { currency } from "../../../../config";
+import IntlMessages from "../../../../components/utility/intlMessages";
 
 const style = {
   box: {
@@ -29,8 +30,26 @@ const AccountBox = ({
   <Card
     style={style.box}
     actions={[
-      <BtnInfo text="Change amount" icon="edit" action={changeAmount} />,
-      <BtnInfo text="Change password" icon="unlock" action={changePassword} />
+      <BtnInfo
+        text={
+          <IntlMessages
+            defaultMessage="Change amount"
+            id="stores.changeAmount"
+          />
+        }
+        icon="edit"
+        action={changeAmount}
+      />,
+      <BtnInfo
+        text={
+          <IntlMessages
+            defaultMessage="Change password"
+            id="stores.changePassword"
+          />
+        }
+        icon="unlock"
+        action={changePassword}
+      />
     ]}
   >
     <Card.Meta
@@ -38,10 +57,19 @@ const AccountBox = ({
       title={name}
       description={
         <p>
-          <b>Type:</b> {type}
+          <b>
+            <IntlMessages defaultMessage="Type" id="stores.type" />:
+          </b>{" "}
+          {type}
           <br />
-          <b>Daily Permission:</b> {currency.symbol}{" "}
-          {Number(dailyPermission).toLocaleString()}
+          <b>
+            <IntlMessages
+              defaultMessage="Daily Permission"
+              id="stores.dailyPermission"
+            />
+            :
+          </b>{" "}
+          {currency.symbol} {Number(dailyPermission).toLocaleString()}
         </p>
       }
     />

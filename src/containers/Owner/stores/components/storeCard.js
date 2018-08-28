@@ -4,6 +4,7 @@ import StoreCardWrapper from "../store.style";
 import BalanceSticker from "../../../../components/balance-sticker/balance-sticker";
 import Button from "../../../../components/uielements/button";
 import { currency } from "../../../../config";
+import IntlMessages from "../../../../components/utility/intlMessages";
 
 class StoreCard extends Component {
   shortNumber(number) {
@@ -45,9 +46,16 @@ class StoreCard extends Component {
                 {this.props.category.description} >{" "}
                 {this.props.subcategory.description}
               </li>
-              <li>{this.shortNumber(this.props.total_refunded)} REFUNDED</li>
               <li>
-                {this.shortNumber(this.props.total_discounted)} DISCOUNTED
+                {this.shortNumber(this.props.total_refunded)}{" "}
+                <IntlMessages defaultMessage="REFUNDED" id="stores.refunded" />
+              </li>
+              <li>
+                {this.shortNumber(this.props.total_discounted)}{" "}
+                <IntlMessages
+                  defaultMessage="DISCOUNTED"
+                  id="stores.discounted"
+                />
               </li>
               <li>
                 <i>
@@ -60,7 +68,9 @@ class StoreCard extends Component {
             <BalanceSticker
               coin={currency.symbol}
               amount={this.props.balances.balance}
-              text={"Balance"}
+              text={
+                <IntlMessages defaultMessage="Balance" id="stores.balance" />
+              }
               bgColor={"#f5f5f5"}
             />
           </Col>
@@ -68,7 +78,12 @@ class StoreCard extends Component {
             <BalanceSticker
               coin={currency.symbol}
               amount={this.props.balances.initial_credit}
-              text={"Credito inicial"}
+              text={
+                <IntlMessages
+                  defaultMessage="Initial Credit"
+                  id="stores.initialCredit"
+                />
+              }
               bgColor={"#f5f5f5"}
             />
           </Col>
@@ -76,7 +91,12 @@ class StoreCard extends Component {
             <BalanceSticker
               coin={currency.symbol}
               amount={this.props.balances.ready_to_access}
-              text={"Disponible para solicitar credito"}
+              text={
+                <IntlMessages
+                  defaultMessage="Available to apply"
+                  id="stores.readyToAccess"
+                />
+              }
               bgColor={"#f5f5f5"}
             />
           </Col>
@@ -86,7 +106,12 @@ class StoreCard extends Component {
                 (this.props.balances.balance * 100) /
                   this.props.balances.initial_credit || 0
               }
-              text="Descuentos & Recompensas"
+              text={
+                <IntlMessages
+                  defaultMessage="Discounts & Rewards"
+                  id="stores.discountsAndRewards"
+                />
+              }
               scale={getBalanceWarnings(this.props.warnings)}
               percentage={true}
               fontColor="#1C222C"
@@ -97,7 +122,12 @@ class StoreCard extends Component {
             <BalanceSticker
               amount={this.props.discount}
               percentage={true}
-              text="% de Descuento"
+              text={
+                <IntlMessages
+                  defaultMessage="% discount"
+                  id="stores.discountPercentage"
+                />
+              }
               fontColor="#1C222C"
               bgColor="#f5f5f5"
             />
@@ -113,7 +143,14 @@ class StoreCard extends Component {
             className={"rightButtons"}
           >
             {testing ? (
-              <Tooltip title="Edit account profile">
+              <Tooltip
+                title={
+                  <IntlMessages
+                    defaultMessage="Edit account profile"
+                    id="stores.editProfile"
+                  />
+                }
+              >
                 <Button
                   shape="circle"
                   onClick={() => this.props.edit(this.props.account_id)}
@@ -121,7 +158,14 @@ class StoreCard extends Component {
                 />
               </Tooltip>
             ) : null}
-            <Tooltip title="Change initial credit">
+            <Tooltip
+              title={
+                <IntlMessages
+                  defaultMessage="Change initial credit"
+                  id="stores.changeInitialCredit"
+                />
+              }
+            >
               <Button
                 shape="circle"
                 onClick={() => this.props.overdraft(this.props)}
@@ -130,7 +174,14 @@ class StoreCard extends Component {
               </Button>
             </Tooltip>
             {testing ? (
-              <Tooltip title="Manage subaccounts">
+              <Tooltip
+                title={
+                  <IntlMessages
+                    defaultMessage="Manage subaccounts"
+                    id="stores.manageSubaccounts"
+                  />
+                }
+              >
                 <Button
                   shape="circle"
                   onClick={() => this.props.accounts(this.props.account_id)}

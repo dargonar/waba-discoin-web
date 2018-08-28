@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Modal } from "antd";
 import Input from "../../../../components/uielements/input";
+import IntlMessages from "../../../../components/utility/intlMessages";
 
 class StoreOverdarfBox extends Component {
   constructor(props) {
@@ -29,7 +30,16 @@ class StoreOverdarfBox extends Component {
           visible={
             typeof this.props.business.name !== "undefined" ? true : false
           }
-          title={this.props.title || <b>Asignar crédito preacordado</b>}
+          title={
+            this.props.title || (
+              <b>
+                <IntlMessages
+                  defaultMessage="Allocate pre-arranged credit"
+                  id="stores.allocateCredit"
+                />
+              </b>
+            )
+          }
           onOk={this.submit}
           onCancel={this.cancel}
         >

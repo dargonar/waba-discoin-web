@@ -245,7 +245,7 @@ class ListStores extends Component {
     return (
       <LayoutContentWrapper>
         <PageHeader>
-          <IntlMessages id="sidebar.stores" />
+          <IntlMessages id="sidebar.stores" defaultMessage="Stores" />
         </PageHeader>
 
         <MessageBox

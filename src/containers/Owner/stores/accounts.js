@@ -50,12 +50,12 @@ class AccountsStores extends Component {
       this.setState({
         account_id: this.props.match.params.id
       });
-      this.props.fetch({
-        id: this.props.match.params.id
-      });
+      this.props.fetch(this.props.match.params.id);
       return;
     }
-    this.setState({ error: "No account id" });
+    this.setState({
+      error: { defaultMessage: "No account id", id: "subaccounts.noId" }
+    });
   }
 
   changePassword(account) {
@@ -72,9 +72,16 @@ class AccountsStores extends Component {
       <Row style={{ width: "100%" }}>
         {subaccounts.length === 0 ? (
           <Alert
-            message="Ups!"
+            message={
+              <IntlMessages defaultMessage="Ups!" id="subaccounts.alertTitle" />
+            }
             type="warning"
-            description="This store does not have subaccounts"
+            description={
+              <IntlMessages
+                defaultMessage="This store does not have subaccounts"
+                id="subaccounts.alertMessage"
+              />
+            }
             style={{ margin: "10px" }}
           />
         ) : (
@@ -100,7 +107,15 @@ class AccountsStores extends Component {
       <LayoutContentWrapper>
         {this.state.dailyBox ? (
           <AccountDailyBox
-            title={"Daily limit - " + this.state.accountSelected.name}
+            title={
+              <span>
+                <IntlMessages
+                  defaultMessage="Daily limit"
+                  id="subaccounts.dailyLimit"
+                />
+                {" - " + this.state.accountSelected.name}
+              </span>
+            }
             visible={this.state.dailyBox}
             business={this.state.accountSelected}
             value={
@@ -114,11 +129,12 @@ class AccountsStores extends Component {
         )}
         <MessageBox
           msg={this.props.msg}
-          error={this.props.error}
+          error={<IntlMessages {...this.props.error} />}
           clean={this.props.removeMsg}
         />
         <PageHeader>
-          <IntlMessages id="sidebar.accounts" />: {account.name}
+          <IntlMessages id="sidebar.accounts" defaultMessage="Accounts" />:{" "}
+          {account.name}
         </PageHeader>
         {this.props.loading || subaccounts === null ? (
           <PageLoading />

@@ -83,10 +83,6 @@ const apiConfig = {
     { action: "URL/SET_OVERDRAFT", path: "/business/endorse/create" },
     { action: "URL/REGISTER_BUSINESS", path: "/business/register" },
     {
-      action: "URL/GET_SUBACCOUNTS",
-      path: "/business/:id/subaccount/list/:start"
-    },
-    {
       action: "URL/UPDATE_BUSINESS",
       path: "/dashboard/business/profile/:account_id/update"
     },

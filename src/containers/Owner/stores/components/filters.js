@@ -65,12 +65,23 @@ export class Filters extends Component {
       <Form onChange={this.formChange}>
         <Row gutter={12}>
           <Col md={6}>
-            <Form.Item label={<IntlMessages id="filter.storeName" />}>
+            <Form.Item
+              label={
+                <IntlMessages
+                  defaultMessage="Store name"
+                  id="filter.storeName"
+                />
+              }
+            >
               {getFieldDecorator("name", {})(<Input />)}
             </Form.Item>
           </Col>
           <Col md={6}>
-            <Form.Item label={<IntlMessages id="filter.category" />}>
+            <Form.Item
+              label={
+                <IntlMessages defaultMessage="Category" id="filter.category" />
+              }
+            >
               {getFieldDecorator("category", {})(
                 <Select
                   onChange={value => {
@@ -93,7 +104,14 @@ export class Filters extends Component {
             </Form.Item>
           </Col>
           <Col md={6}>
-            <Form.Item label={<IntlMessages id="filter.subcategory" />}>
+            <Form.Item
+              label={
+                <IntlMessages
+                  id="filter.subcategory"
+                  defaultMessage="Subcategory"
+                />
+              }
+            >
               {getFieldDecorator("subcategory", {})(
                 <Select
                   onChange={value => {
@@ -119,7 +137,14 @@ export class Filters extends Component {
             </Form.Item>
           </Col>
           <Col md={6}>
-            <Form.Item label={<IntlMessages id="filter.overdraft" />}>
+            <Form.Item
+              label={
+                <IntlMessages
+                  id="filter.overdraft"
+                  defaultMessage="Overdraft only"
+                />
+              }
+            >
               {getFieldDecorator("overdraft", {
                 initialValue: false
               })(<Checkbox />)}
