@@ -76,15 +76,15 @@ class CreateStore extends Component {
 
   componentWillMount() {
     this.props.getCategories();
-
-    // if (typeof this.props.match.params.id !== "undefined") {
-    //   this.setState({
-    //     loading: true,
-    //     mode: "edit",
-    //     id: this.props.match.params.id
-    //   });
-    //   this.props.fetchBusiness(this.props.match.params.id);
-    // }
+    console.log;
+    if (typeof this.props.match.params.id !== "undefined") {
+      this.setState({
+        loading: true,
+        mode: "edit",
+        id: this.props.match.params.id
+      });
+      this.props.fetchBusiness(this.props.match.params.id);
+    }
 
     console.log(
       " ** componentWillMount",
@@ -141,23 +141,43 @@ class CreateStore extends Component {
     // [type + "_schedule"]: schedule
   }
 
+  componentWillUnmount() {
+    this.state = {
+      form: {
+        discount_schedule: [
+          { discount: "0", reward: "0", date: "monday" },
+          { discount: "0", reward: "0", date: "tuesday" },
+          { discount: "0", reward: "0", date: "wednesday" },
+          { discount: "0", reward: "0", date: "thursday" },
+          { discount: "0", reward: "0", date: "friday" },
+          { discount: "0", reward: "0", date: "saturday" },
+          { discount: "0", reward: "0", date: "sunday" }
+        ],
+        location: {}
+      }
+    };
+  }
   componentWillReceiveProps(nextProps) {
     const checkLoading = business => {
-      if (business) {
-        // const business = businesses.filter(x => x.account_id === this.state.id);
-        // if (business.length !== 0) {
+      if (business && this.state.id) {
+        const editableBusiness = business.filter(
+          x => x.account_id === this.state.id
+        );
+        if (editableBusiness.length !== 0) {
+          this.initForm(editableBusiness[0]);
+        }
+      } else if (business) {
         this.initForm(business);
-        // }
       }
     };
 
     console.log(
       " ** componentWillReceiveProps",
-      "---------this.props.business",
-      nextProps.business
+      "---------this.props",
+      nextProps
     );
     if (this.state.loading === true) {
-      checkLoading(nextProps.business);
+      checkLoading(nextProps.business || nextProps.businesses);
     }
   }
 
@@ -369,8 +389,8 @@ class CreateStore extends Component {
                         required: true,
                         message: (
                           <IntlMessages
-                            id="register.address"
-                            default="Address is required"
+                            id="profile.address.empty"
+                            defaultMessage="Address is required"
                           />
                         )
                       }
@@ -720,7 +740,8 @@ class CreateStore extends Component {
 
 const mapStateToProps = state => ({
   categories: state.Api.categoriesList,
-  business: state.Api.business
+  business: state.Api.business,
+  businesses: state.Owner.stores
 });
 
 const mapDispatchToProps = dispatch => ({

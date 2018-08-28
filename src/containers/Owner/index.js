@@ -42,12 +42,16 @@ class OwnerRouter extends React.Component {
         <Route
           exact
           path={`${url}/store/create`}
-          component={asyncComponent(() => import("./stores/create"))}
+          component={asyncComponent(() =>
+            import("../Business/editBusiness/editBusiness")
+          )}
         />
         <Route
           exact
           path={`${url}/store/:id/edit`}
-          component={asyncComponent(() => import("./stores/create"))}
+          component={asyncComponent(() =>
+            import("../Business/editBusiness/editBusiness")
+          )}
         />
         <Route
           exact

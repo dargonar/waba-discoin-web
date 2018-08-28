@@ -622,6 +622,7 @@
   "profile.email": "Correo electrónico",
   "profile.telephone": "Teléfono",
   "profile.address": "Dirección",
+  "profile.address.empty": "Dirección es requerida",
   "profile.description": "Descripción",
   "profile.category": "Categoría",
   "profile.subcategory": "Subcategoría",
