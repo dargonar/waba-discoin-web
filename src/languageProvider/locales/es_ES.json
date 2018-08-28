@@ -727,7 +727,7 @@
   "parameters.reimbursement": "Reembloso escalonado por transacción",
   "parameters.reimbursementFirst": "Primer escalón",
   "parameters.reimbursementSecond": "Segundo escalón",
-  "parameters.reimbursementThird": "Third escalón",
+  "parameters.reimbursementThird": "Tercer escalón",
   "parameters.reimbursementFromTx": "Desde transacción",
   "parameters.reimbursementToTx": "Hasta transacción",
   "parameters.reimbursementPercentRefunded": "Reintegro porcentual a comercio y usuario",
