@@ -737,5 +737,6 @@
   "bCategories.confirmMsg": "¿Está seguro de eliminar esta categoría?",
   "bCategories.delete": "Eliminar",
   "bCategories.save": "Guardar",
-  "bCategories.cancel": "Cancelar"
+  "bCategories.cancel": "Cancelar",
+  "localLogin.resume": "Reanudar sesión"
 }

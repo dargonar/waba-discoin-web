@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Modal } from "antd";
 import Input from "../../../../components/uielements/input";
+import IntlMessages from "../../../../components/utility/intlMessages";
+import { injectIntl } from "react-intl";
 
 class LocalLogin extends Component {
   constructor(props) {
@@ -31,13 +33,21 @@ class LocalLogin extends Component {
     return (
       <Modal
         visible={this.props.visible}
-        title="Resume session"
+        title={
+          <IntlMessages
+            defaultMessage="Resume session"
+            id="localLogin.resume"
+          />
+        }
         onOk={this.submit}
         onCancel={this.cancel}
       >
         <Input
           type="password"
-          placeholder="Local storage password"
+          placeholder={
+            this.props.intl.messages["core.sessionPassword"] ||
+            "Local storage password"
+          }
           onKeyPress={this._handleKeyPress}
           onChange={e => this.setState({ value: e.target.value })}
         />
@@ -47,4 +57,4 @@ class LocalLogin extends Component {
   }
 }
 
-export default LocalLogin;
+export default injectIntl(LocalLogin);
