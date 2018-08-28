@@ -3,6 +3,13 @@ import { Modal } from "antd";
 import Input from "../../../../components/uielements/input";
 import IntlMessages from "../../../../components/utility/intlMessages";
 import { injectIntl } from "react-intl";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import appActions from "../../../../redux/app/actions";
+import authActions from "../../../../redux/auth/actions";
+
+const { loginFromLocal } = authActions;
+const toggle = appActions.togglePasswordBox;
 
 class LocalLogin extends Component {
   constructor(props) {
@@ -22,7 +29,8 @@ class LocalLogin extends Component {
   }
 
   submit() {
-    this.props.submit(this.state.value);
+    this.props.loginFromLocal(this.state.value);
+    this.props.toggle();
     this.setState({ value: null });
   }
   cancel() {
@@ -40,7 +48,7 @@ class LocalLogin extends Component {
           />
         }
         onOk={this.submit}
-        onCancel={this.cancel}
+        onCancel={this.props.toggle}
       >
         <Input
           type="password"
@@ -57,4 +65,12 @@ class LocalLogin extends Component {
   }
 }
 
-export default injectIntl(LocalLogin);
+export default connect(
+  state => ({
+    visible: state.App.toJS().passwordBox
+  }),
+  dispatch => ({
+    toggle: () => dispatch(toggle()),
+    loginFromLocal: bindActionCreators(loginFromLocal, dispatch)
+  })
+)(injectIntl(LocalLogin));
