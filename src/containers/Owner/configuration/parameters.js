@@ -69,15 +69,32 @@ class Parameters extends Component {
       return this.props.configuration.parameters !== null ? (
         <form ref="form">
           <Row style={rowStyle} gutter={gutter} justify="start">
-            <Col md={12} sm={24} xs={24} style={colStyle}>
-              <Box title="Warnings indicators">
+            <Col md={8} sm={24} xs={24} style={colStyle}>
+              <Box
+                title={
+                  <IntlMessages
+                    defaultMessage="Warnings indicators"
+                    id="parameters.waringns"
+                  />
+                }
+              >
                 <ContentHolder>
                   <Row gutter={gutter}>
                     <Col md={24} sm={24} xs={24} style={colStyle}>
-                      <h4>Luz verde</h4>
+                      <h4>
+                        <IntlMessages
+                          id="parameters.lightGreen"
+                          defaultMessage="Green light"
+                        />
+                      </h4>
                     </Col>
-                    <Col md={12} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>Desde </span>
+                    <Col md={24} sm={24} xs={24} style={colStyle}>
+                      <span style={label}>
+                        <IntlMessages
+                          defaultMessage="From"
+                          id="parameters.from"
+                        />{" "}
+                      </span>
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -86,8 +103,10 @@ class Parameters extends Component {
                         defaultValue={data.warnings.first.from_amount}
                       />
                     </Col>
-                    <Col md={12} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>Hasta </span>
+                    <Col md={24} sm={24} xs={24} style={colStyle}>
+                      <span style={label}>
+                        <IntlMessages defaultMessage="To" id="parameters.to" />{" "}
+                      </span>
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -96,8 +115,13 @@ class Parameters extends Component {
                         defaultValue={data.warnings.first.to_amount}
                       />
                     </Col>
-                    <Col md={12} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>% extra </span>
+                    <Col md={24} sm={24} xs={24} style={colStyle}>
+                      <span style={label}>
+                        <IntlMessages
+                          defaultMessage="% extra"
+                          id="parameters.extra"
+                        />
+                      </span>{" "}
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -110,10 +134,20 @@ class Parameters extends Component {
 
                   <Row gutter={gutter}>
                     <Col md={24} sm={24} xs={24} style={colStyle}>
-                      <h4>Luz amarilla</h4>
+                      <h4>
+                        <IntlMessages
+                          id="parameters.lightYellow"
+                          defaultMessage="Yellow light"
+                        />
+                      </h4>
                     </Col>
-                    <Col md={12} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>Desde </span>
+                    <Col md={24} sm={24} xs={24} style={colStyle}>
+                      <span style={label}>
+                        <IntlMessages
+                          defaultMessage="From"
+                          id="parameters.from"
+                        />
+                      </span>{" "}
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -122,8 +156,10 @@ class Parameters extends Component {
                         defaultValue={data.warnings.second.from_amount}
                       />
                     </Col>
-                    <Col md={12} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>Hasta </span>
+                    <Col md={24} sm={24} xs={24} style={colStyle}>
+                      <span style={label}>
+                        <IntlMessages defaultMessage="To" id="parameters.to" />{" "}
+                      </span>
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -132,8 +168,13 @@ class Parameters extends Component {
                         defaultValue={data.warnings.second.to_amount}
                       />
                     </Col>
-                    <Col md={12} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>% extra </span>
+                    <Col md={24} sm={24} xs={24} style={colStyle}>
+                      <span style={label}>
+                        <IntlMessages
+                          defaultMessage="% extra"
+                          id="parameters.extra"
+                        />
+                      </span>{" "}
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -146,10 +187,20 @@ class Parameters extends Component {
 
                   <Row gutter={gutter}>
                     <Col md={24} sm={24} xs={24} style={colStyle}>
-                      <h4>Luz roja</h4>
+                      <h4>
+                        <IntlMessages
+                          id="parameters.lightRed"
+                          defaultMessage="Red light"
+                        />
+                      </h4>
                     </Col>
-                    <Col md={12} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>Desde </span>
+                    <Col md={24} sm={24} xs={24} style={colStyle}>
+                      <span style={label}>
+                        <IntlMessages
+                          defaultMessage="From"
+                          id="parameters.from"
+                        />
+                      </span>{" "}
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -158,8 +209,10 @@ class Parameters extends Component {
                         defaultValue={data.warnings.third.from_amount}
                       />
                     </Col>
-                    <Col md={12} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>Hasta </span>
+                    <Col md={24} sm={24} xs={24} style={colStyle}>
+                      <span style={label}>
+                        <IntlMessages defaultMessage="To" id="parameters.to" />{" "}
+                      </span>
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -168,8 +221,13 @@ class Parameters extends Component {
                         defaultValue={data.warnings.third.to_amount}
                       />
                     </Col>
-                    <Col md={12} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>% extra </span>
+                    <Col md={24} sm={24} xs={24} style={colStyle}>
+                      <span style={label}>
+                        <IntlMessages
+                          defaultMessage="% extra"
+                          id="parameters.extra"
+                        />
+                      </span>{" "}
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -182,16 +240,31 @@ class Parameters extends Component {
                 </ContentHolder>
               </Box>
             </Col>
-            <Col md={12} sm={24} xs={24} style={colStyle}>
-              <Box title="Airdrop">
+            <Col md={16} sm={24} xs={24} style={colStyle}>
+              <Box
+                title={
+                  <IntlMessages
+                    defaultMessage="Airdrop"
+                    id="parameters.airdop"
+                  />
+                }
+              >
                 <ContentHolder>
                   <Row gutter={gutter}>
                     <Col md={24} sm={24} xs={24} style={colStyle}>
-                      <h4>Sistema de referidos</h4>
+                      <h4>
+                        <IntlMessages
+                          defaultMessage="Referal System"
+                          id="parameters.referalSystem"
+                        />
+                      </h4>
                     </Col>
                     <Col md={12} sm={24} xs={24} style={colStyle}>
                       <span style={label}>
-                        Cuantas veces puede referir un usuario?
+                        <IntlMessages
+                          defaultMessage="How many times can a user refer?"
+                          id="parameters.referredMax"
+                        />
                       </span>
                       <Input
                         onChange={this.onFormChange}
@@ -204,7 +277,12 @@ class Parameters extends Component {
                       />
                     </Col>
                     <Col md={12} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>Recompensa al que refiere</span>
+                      <span style={label}>
+                        <IntlMessages
+                          defaultMessage="Reward to referer"
+                          id="parameters.referrerAmount"
+                        />
+                      </span>
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -213,7 +291,12 @@ class Parameters extends Component {
                       />
                     </Col>
                     <Col md={12} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>Recompensa al referido</span>
+                      <span style={label}>
+                        <IntlMessages
+                          defaultMessage="Reward to refered"
+                          id="parameters.referredAmount"
+                        />
+                      </span>
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -224,11 +307,19 @@ class Parameters extends Component {
                   </Row>
                   <Row gutter={gutter}>
                     <Col md={24} sm={24} xs={24} style={colStyle}>
-                      <h4>Primeras wallets</h4>
+                      <h4>
+                        <IntlMessages
+                          defaultMessage="First wallets"
+                          id="parameters.firstWallets"
+                        />
+                      </h4>
                     </Col>
                     <Col md={12} sm={24} xs={24} style={colStyle}>
                       <span style={label}>
-                        Cantidad de descargas con premio
+                        <IntlMessages
+                          defaultMessage="Number of downloads with reward"
+                          id="parameters.firstWalletDownload"
+                        />
                       </span>
                       <Input
                         onChange={this.onFormChange}
@@ -241,7 +332,12 @@ class Parameters extends Component {
                       />
                     </Col>
                     <Col md={12} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>Recompensa por descarga</span>
+                      <span style={label}>
+                        <IntlMessages
+                          defaultMessage="Download reward"
+                          id="parameters.downloadReward"
+                        />
+                      </span>
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -250,7 +346,12 @@ class Parameters extends Component {
                       />
                     </Col>
                     <Col md={12} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>Recompensa en primer Tx</span>
+                      <span style={label}>
+                        <IntlMessages
+                          defaultMessage="First Tx reward"
+                          id="parameters.firstTxReward"
+                        />
+                      </span>
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -264,14 +365,30 @@ class Parameters extends Component {
 
                   <Row gutter={gutter}>
                     <Col md={24} sm={24} xs={24} style={colStyle}>
-                      <h4>Reembloso escalonado por transacción</h4>
+                      <h4>
+                        <IntlMessages
+                          defaultMessage="Staggered reimbursement per transaction"
+                          id="parameters.reimbursement"
+                        />
+                      </h4>
                     </Col>
 
                     <Col md={24} sm={24} xs={24} style={colStyle}>
-                      <h5>Primer escalón</h5>
+                      <h5>
+                        <IntlMessages
+                          defaultMessage="First stage"
+                          id="parameters.reimbursementFirst"
+                        />
+                      </h5>
                     </Col>
                     <Col md={9} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>Desde transaccion:</span>
+                      <span style={label}>
+                        <IntlMessages
+                          defaultMessage="From transaction"
+                          id="parameters.reimbursementFromTx"
+                        />
+                        :
+                      </span>
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -283,7 +400,13 @@ class Parameters extends Component {
                       />
                     </Col>
                     <Col md={15} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>Hasta transaccion:</span>
+                      <span style={label}>
+                        <IntlMessages
+                          defaultMessage="To transaction"
+                          id="parameters.reimbursementToTx"
+                        />
+                        :
+                      </span>
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -294,7 +417,10 @@ class Parameters extends Component {
                     </Col>
                     <Col md={15} sm={24} xs={24} style={colStyle}>
                       <span style={label}>
-                        Reintegro porcentual a comercio y usuario{" "}
+                        <IntlMessages
+                          defaultMessage="Percentage refund to business and user"
+                          id="parameters.reimbursementPercentRefunded"
+                        />{" "}
                       </span>
                       <Input
                         onChange={this.onFormChange}
@@ -309,10 +435,22 @@ class Parameters extends Component {
                     </Col>
 
                     <Col md={24} sm={24} xs={24} style={colStyle}>
-                      <h5>Segundo escalón</h5>
+                      <h5>
+                        {" "}
+                        <IntlMessages
+                          defaultMessage="Second stage"
+                          id="parameters.reimbursementSecond"
+                        />
+                      </h5>
                     </Col>
                     <Col md={9} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>Desde transaccion:</span>
+                      <span style={label}>
+                        <IntlMessages
+                          defaultMessage="From transaction"
+                          id="parameters.reimbursementFromTx"
+                        />
+                        :
+                      </span>
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -324,7 +462,14 @@ class Parameters extends Component {
                       />
                     </Col>
                     <Col md={15} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>Hasta transaccion:</span>
+                      <span style={label}>
+                        {" "}
+                        <IntlMessages
+                          defaultMessage="To transaction"
+                          id="parameters.reimbursementToTx"
+                        />
+                        :
+                      </span>
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -337,7 +482,10 @@ class Parameters extends Component {
                     </Col>
                     <Col md={15} sm={24} xs={24} style={colStyle}>
                       <span style={label}>
-                        Reintegro porcentual a comercio y usuario{" "}
+                        <IntlMessages
+                          defaultMessage="Percentage refund to business and user"
+                          id="parameters.reimbursementPercentRefunded"
+                        />{" "}
                       </span>
                       <Input
                         onChange={this.onFormChange}
@@ -352,10 +500,21 @@ class Parameters extends Component {
                     </Col>
 
                     <Col md={24} sm={24} xs={24} style={colStyle}>
-                      <h5>Tercer escalón</h5>
+                      <h5>
+                        <IntlMessages
+                          defaultMessage="Third Stage"
+                          id="parameters.reimbursementThird"
+                        />
+                      </h5>
                     </Col>
                     <Col md={9} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>Desde transaccion:</span>
+                      <span style={label}>
+                        <IntlMessages
+                          defaultMessage="From transaction"
+                          id="parameters.reimbursementFromTx"
+                        />
+                        :
+                      </span>
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -367,7 +526,13 @@ class Parameters extends Component {
                       />
                     </Col>
                     <Col md={15} sm={24} xs={24} style={colStyle}>
-                      <span style={label}>Hasta transaccion:</span>
+                      <span style={label}>
+                        <IntlMessages
+                          defaultMessage="To transaction"
+                          id="parameters.reimbursementToTx"
+                        />
+                        :
+                      </span>
                       <Input
                         onChange={this.onFormChange}
                         type="number"
@@ -378,7 +543,10 @@ class Parameters extends Component {
                     </Col>
                     <Col md={15} sm={24} xs={24} style={colStyle}>
                       <span style={label}>
-                        Reintegro porcentual a comercio y usuario{" "}
+                        <IntlMessages
+                          defaultMessage="Percentage refund to business and user"
+                          id="parameters.reimbursementPercentRefunded"
+                        />{" "}
                       </span>
                       <Input
                         onChange={this.onFormChange}
@@ -396,12 +564,22 @@ class Parameters extends Component {
               </Box>
             </Col>
             <Col md={24} sm={24} xs={24} style={colStyle}>
-              <Box title="Fondo de reserva">
+              <Box
+                title={
+                  <IntlMessages
+                    id="parameters.reserveFund"
+                    defaultMessage="Reserve Fund"
+                  />
+                }
+              >
                 <ContentHolder style={{ width: "100%" }}>
                   <Row gutter={gutter}>
                     <Col md={12} sm={24} xs={24} style={colStyle}>
                       <span style={label}>
-                        Porcentaje de cada CI a nuevo negocio
+                        <IntlMessages
+                          id="parameters.newBusiness"
+                          defaultMessage="Percentage of each IC to new business"
+                        />
                       </span>
                       <Input
                         onChange={this.onFormChange}
@@ -420,7 +598,10 @@ class Parameters extends Component {
             style={{ marginLeft: "auto", marginRight: "16px" }}
             onClick={this.submit}
           >
-            Apply changes
+            <IntlMessages
+              defaultMessage="Apply changes"
+              id="parameters.apply"
+            />
           </Button>
         </form>
       ) : (
