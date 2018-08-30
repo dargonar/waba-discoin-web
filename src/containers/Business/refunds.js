@@ -18,6 +18,8 @@ import { injectIntl } from "react-intl";
 import { rewardCustomer } from "../../httpService";
 import { notification } from "antd";
 
+import { getKeys } from "../../redux/utils/getKeys";
+
 const InputSearch = Input.Search;
 
 const { rowStyle, colStyle } = basicStyle;
@@ -140,8 +142,6 @@ class Customers extends Component {
     // console.log(' === submitRefundBox::', 'account:', JSON.stringify(this.state.selectedCustomer));
     // console.log(e);
 
-    this.props.showLoading("Realizando reintegro. Por favor aguarde.");
-
     let tx = {
       from_id: this.props.account.account_id,
       to_id: this.state.selectedCustomer.account_id,
@@ -155,31 +155,37 @@ class Customers extends Component {
     // this.setState({loading:true})
 
     this.removeRefundBox();
-    rewardCustomer(this.props.account.keys.active.wif, tx).then(
-      res => {
-        console.log("rewardCustomer", "====OK===>", JSON.stringify(res));
 
-        this.props.endLoading();
-        if (typeof res.error !== "undefined") {
-          this.openNotificationWithIcon(
-            "error",
-            "Ha ocurrido un error",
-            res.error
-          );
-        } else {
-          this.openNotificationWithIcon(
-            "success",
-            "Reintegro exitoso",
-            "El reintegro fue exitoso. Puede verlo en Transacciones."
-          );
-        }
-      },
-      err => {
-        console.log("rewardCustomer", "====ERR===>", JSON.stringify(err));
-        this.openNotificationWithIcon("error", "Ha ocurrido un error", err);
-        this.props.endLoading();
-      }
-    );
+    getKeys()
+      .then(keys => {
+        this.props.showLoading("Realizando reintegro. Por favor aguarde.");
+        rewardCustomer(keys.active.wif, tx).then(
+          res => {
+            console.log("rewardCustomer", "====OK===>", JSON.stringify(res));
+
+            this.props.endLoading();
+            if (typeof res.error !== "undefined") {
+              this.openNotificationWithIcon(
+                "error",
+                "Ha ocurrido un error",
+                res.error
+              );
+            } else {
+              this.openNotificationWithIcon(
+                "success",
+                "Reintegro exitoso",
+                "El reintegro fue exitoso. Puede verlo en Transacciones."
+              );
+            }
+          },
+          err => {
+            console.log("rewardCustomer", "====ERR===>", JSON.stringify(err));
+            this.openNotificationWithIcon("error", "Ha ocurrido un error", err);
+            this.props.endLoading();
+          }
+        );
+      })
+      .catch(e => this.openNotificationWithIcon("error", e));
   }
 
   removeRefundBox() {
