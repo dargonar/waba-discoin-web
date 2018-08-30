@@ -25,10 +25,13 @@ export const getKeys = () => {
           //segun lo que ocurrió envio la respuesta
           if (store.getState().Auth.encrypted === false) {
             res(store.getState().Auth.keys);
+            return;
           } else {
-            rej("encrypted");
+            rej("Private keys encrypted");
+            return;
           }
         }
+        return;
       });
     }
   });
