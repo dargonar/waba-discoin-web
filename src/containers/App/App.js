@@ -63,17 +63,14 @@ export class App extends Component {
                         background: "#f1f3f6"
                       }}
                     >
-                      <LocalLogin />
-                      <AppRouter url={url} />
-                    </Content>
-                    {this.props.isEncrypted ? (
-                      <Footer
-                        style={{
-                          background: "#ffbf00"
-                        }}
-                      >
-                        {this.props.passwordBox}
-                        <Row>
+                      {this.props.isEncrypted ? (
+                        <Row
+                          style={{
+                            padding: "20px",
+                            background: "#ffbf00"
+                          }}
+                        >
+                          {this.props.passwordBox}
                           <Col md={20} style={{ marginTop: "6px" }}>
                             <Icon type="warning" />
                             <strong>Your keys are encrypted</strong>, please
@@ -88,10 +85,12 @@ export class App extends Component {
                             </Button>
                           </Col>
                         </Row>
-                      </Footer>
-                    ) : (
-                      false
-                    )}
+                      ) : (
+                        false
+                      )}
+                      <LocalLogin />
+                      <AppRouter url={url} />
+                    </Content>
                     <Footer
                       style={{
                         background: "#ffffff",
