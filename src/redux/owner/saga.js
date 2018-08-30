@@ -12,6 +12,7 @@ import actionsApi from "../api/actions";
 import actionsUI from "../app/actions";
 import { getPath, apiCall } from "../../httpService";
 import { signTx } from "./sagas/signTx";
+import { getKeys } from "../utils/getKeys";
 
 function* getBusinesses(action) {
   yield takeLatest(actions.FETCH_CONFIGURATION_BUSINESSES, function*(action) {
@@ -55,6 +56,24 @@ export function* setOverdraftError() {
 
 function* setOverdraft(action) {
   yield takeLatest(actions.BUSINESS_SET_OVERDRAFT, function*(action) {
+    let keys;
+    try {
+      keys = yield getKeys();
+    } catch (e) {
+      console.log("KEEY - OVERDRAFT ERROR", e);
+      yield put({
+        type: actionsUI.GLOBAL_MSG,
+        payload: {
+          msg: e,
+          msgType: "error"
+        }
+      });
+      return;
+    }
+    //pkey:
+    //keys.owner.wif ||
+    //"5JQGCnJCDyraociQmhDRDxzNFCd8WdcJ4BAj8q1YDZtVpk5NDw9"
+
     yield put({
       type: actionsUI.GLOBAL_LOADING_START,
       payload: { msg: "Asignando descubierto" }
@@ -74,7 +93,7 @@ function* setOverdraft(action) {
         type: "signTX",
         payload: {
           toSign: data,
-          signature: action.payload.pkey,
+          signature: keys.owner.wif,
           onSuccess: actions.BUSINESS_SET_OVERDRAFT_SUCCESS,
           onFail: actions.BUSINESS_SET_OVERDRAFT_FAILD
         }
