@@ -69,19 +69,13 @@ const actions = {
 
   overdraft: (business, overdraft) => (dispatch, getState) => {
     // This payload will be sent to the server
-    console.log(
-      "-- BIZ ACTIONS :: overdraft :: privkey :: ",
-      getState().Auth.keys.privKey
-    );
+    console.log("-- BIZ ACTIONS :: overdraft");
     dispatch({
       type: actions.BUSINESS_SET_OVERDRAFT,
       payload: {
         business_name: business.account,
         initial_credit: overdraft,
-        account_id: business.account_id,
-        pkey:
-          getState().Auth.keys.privKey ||
-          "5JQGCnJCDyraociQmhDRDxzNFCd8WdcJ4BAj8q1YDZtVpk5NDw9"
+        account_id: business.account_id
       }
     });
   },

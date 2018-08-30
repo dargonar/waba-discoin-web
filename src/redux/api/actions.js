@@ -74,7 +74,6 @@ const actions = {
       type: actions.UPDATE_SCHEDULE,
       payload: {
         schedule: newSchedule,
-        pkey: getState().Auth.keys.privKey,
         account_id: getState().Auth.account_id
       }
     });
