@@ -159,7 +159,6 @@ const actions = {
     dispatch({
       type: actions.APPLY_OVERDRAFT,
       payload: {
-        signature: getState().Auth.keys.active.wif,
         business_name: getState().Auth.account,
         account_id: getState().Auth.account_id
       }

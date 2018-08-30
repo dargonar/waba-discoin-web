@@ -3,8 +3,24 @@ import actions from "../actions";
 import appActions from "../../app/actions";
 import { apiCall, getPath } from "../../../httpService";
 
+import { getKeys } from "../../utils/getKeys";
+
 export const applyOverdraft = function*() {
   yield takeEvery(actions.APPLY_OVERDRAFT, function*(action) {
+    let keys;
+    try {
+      keys = yield getKeys();
+    } catch (e) {
+      yield put({
+        type: appActions.GLOBAL_MSG,
+        payload: {
+          msg: e,
+          msgType: "error"
+        }
+      });
+      return;
+    }
+
     /* START LOADING */
     yield put({
       type: appActions.GLOBAL_LOADING_START,
@@ -63,7 +79,7 @@ export const applyOverdraft = function*() {
     const push_url = getPath("URL/PUSH_SIGN_TX");
     const pushData = apiCall(push_url, "POST", {
       tx: tx,
-      pk: action.payload.signature
+      pk: keys.active.wif
     });
     const signData = yield call(pushData);
 
