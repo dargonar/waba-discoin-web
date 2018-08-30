@@ -30,7 +30,6 @@ class LocalLogin extends Component {
 
   submit() {
     this.props.loginFromLocal(this.state.value);
-    this.props.toggle();
     this.setState({ value: null });
   }
   cancel() {

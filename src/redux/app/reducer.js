@@ -1,6 +1,7 @@
 import { Map } from "immutable";
 import { getDefaultPath } from "../../helpers/urlSync";
 import actions, { getView } from "./actions";
+import authActions from "../auth/actions";
 import config, {
   getCurrentLanguage
 } from "../../containers/Core/LanguageSwitcher/config";
@@ -29,6 +30,10 @@ export default function appReducer(state = initState, action) {
       return state.set("language", action.language);
     case actions.ASK_PASSWORD:
       return state.set("passwordBox", !state.get("passwordBox"));
+    case authActions.LOGIN_SUCCESS:
+      return state.set("passwordBox", false);
+    case authActions.LOGIN_ERROR:
+      return state.set("passwordBox", false);
     case actions.COLLPSE_CHANGE:
       return state.set("collapsed", !state.get("collapsed"));
     case actions.COLLPSE_OPEN_DRAWER:
