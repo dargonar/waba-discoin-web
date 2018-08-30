@@ -40,6 +40,7 @@ export default function authReducer(state = initState, action) {
         ...state,
         loading: false,
         keys: action.payload.keys,
+        encrypted: false,
         account: action.payload.account,
         account_id: action.payload.account_id,
         secret: action.payload.secret,
