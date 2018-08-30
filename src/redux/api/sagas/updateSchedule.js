@@ -2,9 +2,24 @@ import { call, takeEvery, put } from "redux-saga/effects";
 import actions from "../actions";
 import appActions from "../../app/actions";
 import { apiCall, getPath } from "../../../httpService";
+import { getKeys } from "../../utils/getKeys";
 
 export const updateSchedule = function*() {
   yield takeEvery(actions.UPDATE_SCHEDULE, function*(action) {
+    let keys;
+    try {
+      keys = yield getKeys();
+    } catch (e) {
+      yield put({
+        type: appActions.GLOBAL_MSG,
+        payload: {
+          msg: e,
+          msgType: "error"
+        }
+      });
+      return;
+    }
+
     yield put({
       type: appActions.GLOBAL_LOADING_START,
       payload: { msg: "Actualizando esquema de descuentos" }
@@ -15,7 +30,7 @@ export const updateSchedule = function*() {
     });
     const fetchData = apiCall(url, "POST", {
       discount_schedule: action.payload.schedule,
-      signed_secret: action.payload.pkey
+      signed_secret: keys.owner.wif
     });
 
     const { data, err } = yield call(fetchData);
