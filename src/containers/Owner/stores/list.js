@@ -172,6 +172,7 @@ class ListStores extends Component {
   }
 
   submitOverdraftBox(value) {
+    this.removeOverdraftBox();
     this.props.setOverdraft(this.state.businessSelected, value);
     // const action = 'URL/SET_OVERDRAFT' ; //getPath();
     // const parameters = {
