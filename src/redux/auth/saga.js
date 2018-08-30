@@ -255,6 +255,7 @@ export function* loginError() {
 
 export function* logout() {
   yield takeEvery(actions.LOGOUT, function*() {
+    yield put({ type: actions.LS_CLEAN });
     yield put(push("/"));
   });
 }
