@@ -21,7 +21,7 @@ class Parameters extends Component {
     this.onFormChange = this.onFormChange.bind(this);
     this.submit = this.submit.bind(this);
     this.state = {
-      data: {}
+      data: props.configuration.parameters
     };
   }
 
@@ -40,7 +40,10 @@ class Parameters extends Component {
   }
 
   submit() {
-    this.props.sendParameters(this.state.data);
+    // let conf = { configuration : {...this.state.data}};
+    let conf = this.state.data;
+    console.log('------------------- submitting:', JSON.stringify( conf ));
+    this.props.sendParameters( conf );
   }
 
   render() {
@@ -63,7 +66,7 @@ class Parameters extends Component {
       width: "100%"
     };
 
-    console.log(" ---- render kpis", JSON.stringify(data));
+    // console.log(" ---- render kpis", JSON.stringify(data));
 
     const renderForm = () => {
       return this.props.configuration.parameters !== null ? (
