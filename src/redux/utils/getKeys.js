@@ -21,7 +21,7 @@ export const getKeys = () => {
         //significa que o se canceló la acción o terminó el login
         const actualPasswordBox = store.getState().App.get("passwordBox");
         const actualLoading = store.getState().Auth.loading;
-        if (!actualPasswordBox && !loading) {
+        if (!actualPasswordBox && !actualLoading) {
           //segun lo que ocurrió envio la respuesta
           if (store.getState().Auth.encrypted === false) {
             res(store.getState().Auth.keys);
