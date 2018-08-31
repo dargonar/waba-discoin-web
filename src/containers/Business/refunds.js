@@ -22,15 +22,7 @@ import { getKeys } from "../../redux/utils/getKeys";
 
 const InputSearch = Input.Search;
 
-const { rowStyle, colStyle } = basicStyle;
-
-const inputStyle = {
-  fontSize: "24px"
-};
-const avgStyle = {
-  display: "block",
-  paddingTop: "15px"
-};
+const { rowStyle } = basicStyle;
 
 class Customers extends Component {
   constructor(props) {
@@ -203,7 +195,7 @@ class Customers extends Component {
       return;
     }
     let discount = this.props.api.schedule.find(function(dis) {
-      return dis.date == today;
+      return dis.date === today;
     });
     //Check id discount is set
     return discount ? discount.discount : 0;
