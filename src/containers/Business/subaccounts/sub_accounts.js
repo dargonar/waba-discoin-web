@@ -16,7 +16,7 @@ import MessageBox from "../../../components/MessageBox";
 import AccountBox from "./components/accountBox";
 import AccountDailyBox from "./components/storeOvercraftBox";
 import { push } from "react-router-redux";
-
+import { getKeys } from "../../../redux/utils/getKeys";
 import { subaccountAddOrUpdate } from "../../../httpService";
 
 class SubAccounts extends Component {
@@ -58,7 +58,6 @@ class SubAccounts extends Component {
       amount: value
     };
     console.log(" -- updateSubaccount() #1  --- ", JSON.stringify(accountData));
-    this.props.showLoading("Actualizando subcuenta. Por favor aguarde.");
     console.log(" -- updateSubaccount() #2");
     this.removeDailyBox();
     console.log(" -- updateSubaccount() #3");
@@ -78,39 +77,50 @@ class SubAccounts extends Component {
     };
     console.log(" -- updateSubaccount() #4", JSON.stringify(tx));
 
-    subaccountAddOrUpdate(this.props.account.keys.active.wif, tx).then(
-      res => {
-        console.log("subaccountAddOrUpdate", "====OK===>", JSON.stringify(res));
-        this.props.endLoading();
-        if ("error" in res) {
-          this.openNotificationWithIcon(
-            "error",
-            "Ha ocurrido un error",
-            res.error
-          );
-        } else {
-          this.openNotificationWithIcon(
-            "success",
-            "Autorizar subcuenta",
-            "El límite diario de subcuenta fue autorizado satisfactoriamente."
-          );
-          if (typeof this.props.match.params.id !== "undefined") {
-            this.props.fetch(this.props.match.params.id);
-            return;
+    getKeys()
+      .then(keys =>
+        subaccountAddOrUpdate(keys.active.wif, tx).then(
+          res => {
+            this.props.showLoading(
+              "Actualizando subcuenta. Por favor aguarde."
+            );
+            console.log(
+              "subaccountAddOrUpdate",
+              "====OK===>",
+              JSON.stringify(res)
+            );
+            this.props.endLoading();
+            if ("error" in res) {
+              this.openNotificationWithIcon(
+                "error",
+                "Ha ocurrido un error",
+                res.error
+              );
+            } else {
+              this.openNotificationWithIcon(
+                "success",
+                "Autorizar subcuenta",
+                "El límite diario de subcuenta fue autorizado satisfactoriamente."
+              );
+              if (typeof this.props.match.params.id !== "undefined") {
+                this.props.fetch(this.props.match.params.id);
+                return;
+              }
+              this.props.fetch();
+            }
+          },
+          err => {
+            console.log(
+              "subaccountAddOrUpdate",
+              "====ERR===>",
+              JSON.stringify(err)
+            );
+            this.openNotificationWithIcon("error", "Ha ocurrido un error", err);
+            this.props.endLoading();
           }
-          this.props.fetch();
-        }
-      },
-      err => {
-        console.log(
-          "subaccountAddOrUpdate",
-          "====ERR===>",
-          JSON.stringify(err)
-        );
-        this.openNotificationWithIcon("error", "Ha ocurrido un error", err);
-        this.props.endLoading();
-      }
-    );
+        )
+      )
+      .catch(e => this.openNotificationWithIcon("error", e));
   }
 
   openNotificationWithIcon(type, title, msg) {

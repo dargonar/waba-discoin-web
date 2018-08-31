@@ -23,6 +23,9 @@ import moment from "moment";
 
 import { injectIntl } from "react-intl";
 import { currency } from "../../../config";
+
+import { getKeys } from "../../../redux/utils/getKeys";
+
 const InputSearch = Input.Search;
 
 const { rowStyle, colStyle } = basicStyle;
@@ -183,10 +186,8 @@ class FindAccounts extends Component {
 
   addSubAccount() {
     console.log(" -- addSubAccount() #1");
-    this.props.showLoading("Autorizando subcuenta. Por favor aguarde.");
-    console.log(" -- addSubAccount() #2");
     this.removeSubAccountBox();
-    console.log(" -- addSubAccount() #3");
+    console.log(" -- addSubAccount() #2");
     this.setState({
       confirm_visible: false
     });
@@ -235,48 +236,53 @@ class FindAccounts extends Component {
     console.log(JSON.stringify(this.props.account));
 
     // return;
-    subaccountAddOrUpdate(this.props.account.keys.active.wif, tx).then(
-      res => {
-        console.log(
-          "find_account::subaccountAddOrUpdate",
-          "====OK===>",
-          JSON.stringify(res)
-        );
-        this.props.endLoading();
-        if ("error" in res) {
-          this.openNotificationWithIcon(
-            "error",
-            this.props.intl.messages["subaccounts.genericError"] ||
-              "An error has occurred",
-            res.error
-          );
-        } else {
-          this.openNotificationWithIcon(
-            "success",
-            this.props.intl.messages[
-              "subaccounts.authorizeSubaccountSuccess"
-            ] || "Add subaccount",
-            this.props.intl.messages["subaccounts.succesLimit"] ||
-              "The daily sub-account limit was successfully authorized"
-          );
-          this.goBack();
-        }
-      },
-      err => {
-        console.log(
-          "subaccountAddOrUpdate",
-          "====ERR===>",
-          JSON.stringify(err)
-        );
-        this.openNotificationWithIcon(
-          "error",
-          this.props.intl.messages["subaccounts.genericError"] ||
-            "An error has occurred",
-          err
-        );
-        this.props.endLoading();
-      }
-    );
+    getKeys()
+      .then(keys =>
+        subaccountAddOrUpdate(keys.active.wif, tx).then(
+          res => {
+            this.props.showLoading("Autorizando subcuenta. Por favor aguarde.");
+            console.log(
+              "find_account::subaccountAddOrUpdate",
+              "====OK===>",
+              JSON.stringify(res)
+            );
+            this.props.endLoading();
+            if ("error" in res) {
+              this.openNotificationWithIcon(
+                "error",
+                this.props.intl.messages["subaccounts.genericError"] ||
+                  "An error has occurred",
+                res.error
+              );
+            } else {
+              this.openNotificationWithIcon(
+                "success",
+                this.props.intl.messages[
+                  "subaccounts.authorizeSubaccountSuccess"
+                ] || "Add subaccount",
+                this.props.intl.messages["subaccounts.succesLimit"] ||
+                  "The daily sub-account limit was successfully authorized"
+              );
+              this.goBack();
+            }
+          },
+          err => {
+            console.log(
+              "subaccountAddOrUpdate",
+              "====ERR===>",
+              JSON.stringify(err)
+            );
+            this.openNotificationWithIcon(
+              "error",
+              this.props.intl.messages["subaccounts.genericError"] ||
+                "An error has occurred",
+              err
+            );
+            this.props.endLoading();
+          }
+        )
+      )
+      .catch(e => this.openNotificationWithIcon("error", e));
   }
 
   goBack() {
