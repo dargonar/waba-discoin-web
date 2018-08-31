@@ -45,18 +45,6 @@ export class Dashboard extends Component {
     // console.log(' --- dashboard', this.props.account);
     // return;
     this.setState({ confirm_overdraft_visible: false });
-    // applyOverdraft(business.account_name, business.wif).then( res => {
-    // applyOverdraft(this.props.account.account, this.props.account.keys.active.wif).then( res => {
-    //     console.log('====OK===>', JSON.stringify(res));
-    //     alert(JSON.stringify(res));
-    //   }, err => {
-    //     console.log('====ERR===>', JSON.stringify(err));
-    //     alert(JSON.stringify(err));
-    // });
-    // console.log('-- doApplyoverdraft() account:', JSON.stringify(this.props.account));
-    // console.log('-- doApplyoverdraft() account_name:', this.props.account.account);
-    // return;
-    //{business_name: this.props.account.account}
     this.props.applyOverdraft();
   }
 
