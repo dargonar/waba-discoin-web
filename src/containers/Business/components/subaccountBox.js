@@ -9,7 +9,7 @@ import { injectIntl } from "react-intl";
 import IntlMessages from "../../../components/utility/intlMessages";
 const minutesOffset = 1;
 
-const checkActualDate = stringDate => {
+/* const checkActualDate = stringDate => {
   let date = moment(stringDate);
   // We need at least 1 minutes to get confirmation
   if (date.isBefore(moment().add(minutesOffset, "m"))) {
@@ -18,7 +18,7 @@ const checkActualDate = stringDate => {
   }
   return date.utc().valueOf();
 };
-
+ */
 export class SubAccountBox extends Component {
   constructor(props) {
     super(props);
