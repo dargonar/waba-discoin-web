@@ -3,13 +3,13 @@ import { Modal, Row, Col } from "antd";
 import Input from "../../../components/uielements/input";
 import { DatePicker } from "antd";
 import { notification } from "antd";
-import moment from "moment";
 import { Checkbox } from "antd";
 import { injectIntl } from "react-intl";
 import IntlMessages from "../../../components/utility/intlMessages";
-const minutesOffset = 1;
 
-/* const checkActualDate = stringDate => {
+/* 
+  const minutesOffset = 1;
+  const checkActualDate = stringDate => {
   let date = moment(stringDate);
   // We need at least 1 minutes to get confirmation
   if (date.isBefore(moment().add(minutesOffset, "m"))) {
@@ -47,10 +47,10 @@ export class SubAccountBox extends Component {
   }
 
   null_or_zero(value) {
-    return value == null || parseInt < 0;
+    return value === null || parseInt < 0;
   }
   null_or_empty(value) {
-    return !value || value == null || value == "";
+    return !value || value === null || value === "";
   }
 
   onOk() {

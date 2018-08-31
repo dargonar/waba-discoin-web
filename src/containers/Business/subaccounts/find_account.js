@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import LayoutContentWrapper from "../../../components/utility/layoutWrapper";
-import LayoutContent from "../../../components/utility/layoutContent";
 import PageHeader from "../../../components/utility/pageHeader";
 import PageLoading from "../../../components/pageLoading";
 import { Row, Col, Input, Modal } from "antd";
@@ -11,7 +10,6 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import actions from "../../../redux/api/actions";
 import appActions from "../../../redux/app/actions";
-import MessageBox from "../../../components/MessageBox";
 
 import CustomersBox from "../components/customerBox";
 import SubAccountBox from "../components/subaccountBox";
@@ -28,15 +26,7 @@ import { getKeys } from "../../../redux/utils/getKeys";
 
 const InputSearch = Input.Search;
 
-const { rowStyle, colStyle } = basicStyle;
-
-const inputStyle = {
-  fontSize: "24px"
-};
-const avgStyle = {
-  display: "block",
-  paddingTop: "15px"
-};
+const { rowStyle } = basicStyle;
 
 const minutesOffset = 2;
 
@@ -143,8 +133,8 @@ class FindAccounts extends Component {
     if (e.key === "Enter") {
       if (
         searchValue === "undefined" ||
-        searchValue == null ||
-        searchValue.trim() == ""
+        searchValue === null ||
+        searchValue.trim() === ""
       ) {
         this.openNotificationWithIcon(
           "warning",

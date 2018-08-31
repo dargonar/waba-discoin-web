@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import LayoutContentWrapper from "../../../components/utility/layoutWrapper";
-import LayoutContent from "../../../components/utility/layoutContent";
 import PageHeader from "../../../components/utility/pageHeader";
-import PageLoading from "../../../components/pageLoading";
 import { Row, Col } from "antd";
 import basicStyle from "../../../config/basicStyle";
 import { InputSearch } from "../../../components/uielements/input";
@@ -54,10 +52,7 @@ class Transactions extends Component {
   }
 
   renderContent() {
-    const { rowStyle, colStyle } = basicStyle;
-    const inputStyle = {
-      fontSize: "24px"
-    };
+    const { rowStyle } = basicStyle;
 
     return (
       <Row style={rowStyle} gutter={16} justify="start">

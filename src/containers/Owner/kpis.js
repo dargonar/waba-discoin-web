@@ -5,7 +5,6 @@ import basicStyle from "../../config/basicStyle";
 
 import { connect } from "react-redux";
 import BalanceSticker from "../../components/balance-sticker/balance-sticker";
-import SingleProgressWidget from "../../components/progress/progress-single";
 import ReportsWidget from "../../components/report/report-widget";
 import {
   BarChart,

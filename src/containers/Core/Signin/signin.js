@@ -77,7 +77,7 @@ class SignIn extends Component {
 
   handleLogin = () => {
     // alert(this.state.words);
-    if (this.state.remember && this.state.rememberKey == "") {
+    if (this.state.remember && this.state.rememberKey === "") {
       message.warning(
         this.props.intl.messages["core.sessionPasswordWarning"] ||
           "You must enter a session password"

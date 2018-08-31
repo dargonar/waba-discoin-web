@@ -1,6 +1,4 @@
 import { all, fork } from "redux-saga/effects";
-import actions from "./actions";
-import { apiCall, getPath } from "../../httpService";
 
 import { getProfile } from "./sagas/getProfile";
 import { getConfiguration } from "./sagas/getConfiguration";

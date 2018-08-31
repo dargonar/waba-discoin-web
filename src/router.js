@@ -75,7 +75,7 @@ ReduxGlobalMessage = connect(
 
 class PublicRoutes extends Component {
   render() {
-    const { history, isLoggedIn, userType } = this.props;
+    const { history, isLoggedIn } = this.props;
     return (
       <div>
         <ConnectedRouter history={history}>

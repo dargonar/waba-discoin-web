@@ -8,7 +8,7 @@ export class CustomerBox extends Component {
     super(props);
     this.handleButton1Click = this.handleButton1Click.bind(this);
     this.handleButton2Click = this.handleButton2Click.bind(this);
-    this.handleClick        = this.handleClick.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
@@ -52,8 +52,8 @@ export class CustomerBox extends Component {
       </Tooltip>
     );
     const icon2 =
-      this.props.icon2 != "hidden" ? (
-        <Tooltip title={this.props.title2}> 
+      this.props.icon2 !== "hidden" ? (
+        <Tooltip title={this.props.title2}>
           <Icon
             type={this.props.icon2 || "schedule"}
             onClick={e => this.handleButton2Click(e)}
@@ -62,7 +62,7 @@ export class CustomerBox extends Component {
       ) : (
         false
       );
-    
+
     return (
       <Card actions={[icon1, icon2]}>
         <HashImage

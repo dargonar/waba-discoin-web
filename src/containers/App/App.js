@@ -26,7 +26,7 @@ const { toggleAll, togglePasswordBox } = appActions;
 export class App extends Component {
   render() {
     const { url } = this.props.match;
-    const { locale, selectedTheme } = this.props;
+    const { locale } = this.props;
     const currentAppLocale = AppLocale[locale];
     return (
       <LocaleProvider locale={currentAppLocale.antd}>

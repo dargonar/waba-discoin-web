@@ -66,7 +66,6 @@ class Sidebar extends Component {
     const collapsed = clone(app.collapsed) && !clone(app.openDrawer);
     const { openDrawer } = app;
     const mode = collapsed === true ? "vertical" : "inline";
-    const hidden = { display: "none" };
     const onMouseEnter = event => {
       if (openDrawer === false) {
         toggleOpenDrawer();

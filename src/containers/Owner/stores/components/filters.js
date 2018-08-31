@@ -6,7 +6,6 @@ import Input from "../../../../components/uielements/input";
 import IntlMessages from "../../../../components/utility/intlMessages";
 
 import { connect } from "react-redux";
-import intlMessages from "../../../../components/utility/intlMessages";
 import { injectIntl } from "react-intl";
 
 export class Filters extends Component {

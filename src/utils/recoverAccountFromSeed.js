@@ -1,6 +1,4 @@
 import { PrivateKey, key } from "bitsharesjs";
-import { ChainConfig } from "bitsharesjs-ws";
-import bip39 from "bip39";
 import { currency } from "../config";
 
 // HACK - Remove hardcoded keys

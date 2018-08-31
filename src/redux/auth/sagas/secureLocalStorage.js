@@ -1,7 +1,6 @@
 import { takeEvery, put } from "redux-saga/effects";
-import { Aes } from "bitsharesjs";
 import actions from "../actions";
-import { decrypt, encrypt, a2hex, hex2a } from "../../../utils/buf2hex";
+import { decrypt, encrypt } from "../../../utils/buf2hex";
 import appActions from "../../app/actions";
 
 // Check local storage
@@ -85,7 +84,7 @@ export const readLS = function*() {
 // Encrypt and write local storage
 export const writeLS = function*() {
   yield takeEvery(actions.LS_WRITE, function*(action) {
-    const { keys, account, account_id, password, credentials } = action.payload;
+    const { keys, account, account_id, password } = action.payload;
 
     let obj = {
       keys: keys,

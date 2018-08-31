@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import LayoutContentWrapper from "../../components/utility/layoutWrapper";
-import LayoutContent from "../../components/utility/layoutContent";
 import PageHeader from "../../components/utility/pageHeader";
 import IsoWidgetsWrapper from "../../components/utility/widgets-wrapper";
 import PageLoading from "../../components/pageLoading";
-import { Modal, Col, Row, Tooltip } from "antd";
+import { Modal, Col, Row } from "antd";
 import basicStyle from "../../config/basicStyle";
 import { StripMessage } from "../../components/uielements/stripMessage";
 import BalanceSticker from "../../components/balance-sticker/balance-sticker";
@@ -14,7 +13,6 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import actions from "../../redux/api/actions";
 
-import Button from "../../components/uielements/button";
 import { currency } from "../../config";
 
 export class Dashboard extends Component {
@@ -68,7 +66,7 @@ export class Dashboard extends Component {
       isNaN(this.props.api.business.balances.initial_credit)
     )
       return 0;
-    if (this.props.api.business.balances.initial_credit == 0) return 0;
+    if (this.props.api.business.balances.initial_credit === 0) return 0;
     console.log(
       " RATIO::",
       this.props.api.business.balances.balance,

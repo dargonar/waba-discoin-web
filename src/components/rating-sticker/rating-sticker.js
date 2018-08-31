@@ -3,8 +3,6 @@ import { RatingStickerWidgetWrapper } from "./style";
 import { Icon } from "antd";
 import Review from "../../components/uielements/rate";
 
-const StarIcon = ({ full }) => <Icon type={full ? "star" : "star-o"} />;
-
 export default class extends Component {
   render() {
     const { fontColor, bgColor, width, icon, rating } = this.props;
