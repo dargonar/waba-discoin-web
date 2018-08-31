@@ -14,8 +14,8 @@ export default class extends Component {
         return prev;
       }
     });
-    if (param == "color") return { backgroundColor: obj.color || "gray" };
-    if (param == "extra_percentage") return obj.extra_percentage;
+    if (param === "color") return { backgroundColor: obj.color || "gray" };
+    if (param === "extra_percentage") return obj.extra_percentage;
   }
 
   render() {
