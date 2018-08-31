@@ -1,6 +1,8 @@
 import { call, takeEvery, put } from "redux-saga/effects";
 import actions from "../actions";
+import authActions from "../../auth/actions";
 import { apiCall, getPath } from "../../../httpService";
+import { siteConfig } from "../../../config";
 
 export const getProfile = function*() {
   yield takeEvery(actions.GET_PROFILE, function*(action) {
@@ -16,5 +18,11 @@ export const getProfile = function*() {
         payload: { discount_schedule: data.business.discount_schedule }
       });
     } else yield put({ type: actions.GET_PROFILE_FAILD, payload: err });
+  });
+
+  yield takeEvery(authActions.LS_CHECK_FULL, function*(action) {
+    if (action.payload.account !== siteConfig.adminAccount) {
+      yield put({ type: actions.GET_PROFILE, payload: action.payload });
+    }
   });
 };
