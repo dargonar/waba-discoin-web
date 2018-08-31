@@ -18,6 +18,7 @@ import { themeConfig } from "../../config";
 import AppHolder from "./commonStyle";
 import "./global.css";
 import { Icon, Button, Row, Col } from "antd";
+import IntlMessages from "../../components/utility/intlMessages";
 const { Content, Footer } = Layout;
 const { logout } = authAction;
 const { toggleAll, togglePasswordBox } = appActions;
@@ -73,15 +74,28 @@ export class App extends Component {
                           {this.props.passwordBox}
                           <Col md={20} style={{ marginTop: "6px" }}>
                             <Icon type="warning" />
-                            <strong>Your keys are encrypted</strong>, please
-                            enter your local storage password to unlock them
+                            <strong>
+                              {" "}
+                              <IntlMessages
+                                defaultMessage="Your keys are encrypted"
+                                id="localLogin.keysEncryptedTitle"
+                              />
+                            </strong>
+                            {": "}
+                            <IntlMessages
+                              defaultMessage="Please enter your local storage password to unlock them"
+                              id="localLogin.keysEncryptedMessage"
+                            />
                           </Col>
                           <Col md={4} style={{ textAlign: "right" }}>
                             <Button
                               type="danger"
                               onClick={this.props.togglePasswordBox}
                             >
-                              Unlock
+                              <IntlMessages
+                                defaultMessage="Unlock"
+                                id="localLogin.unlock"
+                              />
                             </Button>
                           </Col>
                         </Row>
