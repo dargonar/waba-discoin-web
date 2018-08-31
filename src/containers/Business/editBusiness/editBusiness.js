@@ -17,11 +17,8 @@ import apiActions from "../../../redux/api/actions";
 import appActions from "../../../redux/app/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-
-import { generateAccount } from "../../../httpService";
-
 import Form from "../../../components/uielements/form";
-import { message, Input, Select, InputNumber } from "antd";
+import { Input, Select, InputNumber } from "antd";
 const FormItem = Form.Item;
 const SelectOption = Select.Option;
 
@@ -76,7 +73,6 @@ class CreateStore extends Component {
 
   componentWillMount() {
     this.props.getCategories();
-    console.log;
     if (typeof this.props.match.params.id !== "undefined") {
       this.setState({
         loading: true,
@@ -135,7 +131,7 @@ class CreateStore extends Component {
     this.setState({
       form: {
         ...this.state.form,
-        ["discount_schedule"]: schedule
+        discount_schedule: schedule
       }
     });
     // [type + "_schedule"]: schedule
