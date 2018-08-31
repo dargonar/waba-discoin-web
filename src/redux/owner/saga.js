@@ -119,8 +119,23 @@ function* reloadBusiness(action) {
 }
 
 function* saveBusiness(action) {
-  console.log(" saveBusiness ========= #1");
   yield takeEvery(actions.SAVE_BUSINESS, function*(action) {
+    let keys;
+    try {
+      keys = yield getKeys();
+    } catch (e) {
+      console.log("KEY - SAVE BUSINESS ERROR", e);
+      yield put({
+        type: actionsUI.GLOBAL_MSG,
+        payload: {
+          msg: e,
+          msgType: "error"
+        }
+      });
+      return;
+    }
+
+    console.log(" saveBusiness ========= #1");
     yield put({
       type: actionsUI.GLOBAL_LOADING_START,
       payload: { msg: "Guardando comercio" }
@@ -128,7 +143,7 @@ function* saveBusiness(action) {
 
     const url = getPath("URL/UPDATE_BUSINESS", { ...action.payload });
     console.log(" saveBusiness ========= #2");
-    const signature = yield select(state => state.Auth.keys.active.wif);
+    const signature = yield select(state => keys.active.wif);
 
     console.log(" ===> about to POST");
     const fetchData = apiCall(url, "POST", {
