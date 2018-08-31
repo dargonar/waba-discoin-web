@@ -18,7 +18,6 @@ import Pagination from "../../../components/uielements/pagination";
 import { push } from "react-router-redux";
 
 import Filters from "./components/filters";
-import { void_result } from "bitsharesjs/dist/serializer/src/operations";
 
 function resolve(path, obj) {
   return path.split(".").reduce(function(prev, curr) {
@@ -40,11 +39,11 @@ const filters = {
       return true;
     }
     return (!isNaN(business.balances.ready_to_access) &&
-      parseInt(business.balances.ready_to_access) > 0) ||
+      Number(business.balances.ready_to_access) > 0) ||
       (!isNaN(business.balances.balance) &&
-        parseInt(business.balances.balance) > 0) ||
+        Number(business.balances.balance) > 0) ||
       (!isNaN(business.balances.initial_credit) &&
-        parseInt(business.balances.initial_credit) > 0)
+        Number(business.balances.initial_credit) > 0)
       ? true
       : false;
   },
@@ -130,7 +129,7 @@ class ListStores extends Component {
     if (
       typeof nextProps.setting_overdraft !== "undefined" &&
       nextProps.setting_overdraft === false &&
-      this.state.overdraftBox == true &&
+      this.state.overdraftBox === true &&
       this.state.businessSelected
     ) {
       this.removeOverdraftBox();
@@ -155,11 +154,11 @@ class ListStores extends Component {
     // console.log(JSON.stringify(bussines.balances));
     if (
       (!isNaN(bussines.balances.ready_to_access) &&
-        parseInt(bussines.balances.ready_to_access) > 0) ||
+        Number(bussines.balances.ready_to_access) > 0) ||
       (!isNaN(bussines.balances.balance) &&
-        parseInt(bussines.balances.balance) > 0) ||
+        Number(bussines.balances.balance) > 0) ||
       (!isNaN(bussines.balances.initial_credit) &&
-        parseInt(bussines.balances.initial_credit) > 0)
+        Number(bussines.balances.initial_credit) > 0)
     ) {
       alert("Funcion no disponible aun para comercios con credito.");
       return;
