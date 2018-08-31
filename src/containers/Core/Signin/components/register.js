@@ -97,12 +97,6 @@ export class Register extends Component {
     // Avoid duplicate checking
     if (typeof value === "undefined" || value.length === 0) return callback();
 
-    // Set state
-    let accountName = {
-      value: value,
-      valid: ChainValidation.is_account_name(value)
-    };
-
     //Send callback ->> HACK: If its ok this change null for undefined
     return callback(ChainValidation.is_account_name_error(value) || undefined);
   }
@@ -123,7 +117,13 @@ export class Register extends Component {
       .then(res => res.json())
       .then(data => {
         if (data && data.res === "account_not_found") callback();
-        else callback("account_already_exists");
+        else
+          callback(
+            <IntlMessages
+              id="register.account_already_exists"
+              defaultMessage="Account already exists"
+            />
+          );
       })
       .catch(e => {
         callback("network_error");

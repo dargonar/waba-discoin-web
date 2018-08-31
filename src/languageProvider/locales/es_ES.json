@@ -574,6 +574,7 @@
   "register.name.empty": "El nombre es requerido",
   "register.account_name": "Nombre de cuenta",
   "register.account_name.empty": "El nombre de la cuenta es requerido",
+  "register.account_already_exists": "Nombre ya registrado",
   "register.telephone": "Teléfono",
   "register.telephone.empty": "El número de teléfono es requerido",
   "register.category": "Categoría",
