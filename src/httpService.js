@@ -5,32 +5,9 @@ import { apiConfig } from "./config";
 // ********************************************************************
 // HACK ***************************************************************
 
-import {
-  Address,
-  ChainValidation,
-  Signature,
-  ChainStore,
-  FetchChain,
-  PrivateKey,
-  TransactionHelper,
-  Aes,
-  TransactionBuilder,
-  key
-} from "bitsharesjs";
-import {
-  Login as login,
-  hash,
-  PublicKey,
-  BigInteger,
-  sign,
-  recoverPubKey,
-  verify,
-  calcPubKeyRecoveryParam
-} from "bitsharesjs"; // bitsharesjs/lib/ecc/src/signature.js
-import { Serializer, ops, sha256 } from "bitsharesjs"; //'./hash';
-import { getCurveByName } from "ecurve";
+import { ChainValidation, PrivateKey, key } from "bitsharesjs";
+
 import { ChainConfig } from "bitsharesjs-ws";
-// import {bip39} from 'bip39';
 
 export const adminPrivKey =
   "5JQGCnJCDyraociQmhDRDxzNFCd8WdcJ4BAj8q1YDZtVpk5NDw9";
@@ -39,18 +16,9 @@ export const adminPubKey =
 
 export const privKey = "5JQGCnJCDyraociQmhDRDxzNFCd8WdcJ4BAj8q1YDZtVpk5NDw9";
 export const pubKeyEx = "BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk";
+
 let pKey = PrivateKey.fromWif(privKey);
 export const pubKey = pKey.toPublicKey().toString();
-let account = {
-  mnemonics: "",
-  wif: "5Jdcks7zmssddSFFJij63xKFKRMH4Rpi192C5u5D5Kp7TRu4eYc",
-  owner: "BTS6ewtnzaP7JEGs5RnQtkyG6ESaDHtLJTP6zrgViHBFTDxq2n66Q",
-  active: "BTS6ewtnzaP7JEGs5RnQtkyG6ESaDHtLJTP6zrgViHBFTDxq2n66Q",
-  memo: "BTS6ewtnzaP7JEGs5RnQtkyG6ESaDHtLJTP6zrgViHBFTDxq2n66Q"
-};
-const chain_id =
-  "2cfcf449d44f477bc8415666766d2258aa502240cb29d290c1b0de91e756c559";
-var secp256k1 = getCurveByName("secp256k1");
 
 var bip39 = require("bip39");
 
@@ -325,37 +293,3 @@ export const rewardCustomer = (signature, tx) => {
       );
   });
 };
-
-// ********************************************************************
-// ********************************************************************
-
-/*
-// HOW TO USE:
-
-//1. Set your api configutarion:
-const apiConfig = {
-    base: 'http://localhost/',
-    verion: 'v1',
-    urls: [{action:'test', patch: '/test/:id}]
-};
-
-//2. Build your path:
-const testPath = getPath('test', {id: 1234}); //-> 'http://localhost/v1/test/1234'
-
-//3. Get your call function:
-const callTestAPI = apiCall(testPath)
-
-//4. Execute!
-callTestAPI() //-> return Promise
-
-// Anothers examples: 
-
-// POST
-apiCall(testPath, 'POST', {name: 'marcos'})()
-
-// SECUNDARY CALLBACK
-// apiCall returns a promise but you can also run an additional callback.
-apiCall(testPath, 'POST', {name: 'marcos'}, (res) => {console.log('RESPONSE', res)})
-apiCall(testPath, 'GET', undefined, (res) => {console.log('RESPONSE', res)})
-
-*/

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import DashApp from "./dashApp";
 import registerServiceWorker from "./registerServiceWorker";
 import "antd/dist/antd.css";
-import "./httpService";
+
 import { siteConfig } from "./config";
 ReactDOM.render(<DashApp />, document.getElementById("root"));
 document.title = siteConfig.siteName;
