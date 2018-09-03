@@ -612,7 +612,7 @@
   "refund.acceptDiscount": "Accept Discount",
   "refund.customers": "Customers",
   "refund.refoundTo": "Refound To {name}",
-  "refund.amount": "Amount",
+  "refund.amount": "Bill total amount",
   "refund.percentage": "Percentage",
   "refund.invoice": "Invoice",
   "profile.minimumDiscount": "(Minimum Discount: {discount})"
