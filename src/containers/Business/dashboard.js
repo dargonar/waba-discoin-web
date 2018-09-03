@@ -12,6 +12,7 @@ import IntlMessage from "../../components/utility/intlMessages";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import actions from "../../redux/api/actions";
+import { push } from "react-router-redux";
 
 import { currency } from "../../config";
 
@@ -22,11 +23,18 @@ export class Dashboard extends Component {
       confirm_overdraft_visible: false,
       ignoreOverdraft: false
     };
-    this.renderContent = this.renderContent.bind(this);
+    this.renderContent      = this.renderContent.bind(this);
     this.showApplyOverdraft = this.showApplyOverdraft.bind(this);
 
-    this.doApplyOverdraft = this.doApplyOverdraft.bind(this);
-    this.doCancelOverdraft = this.doCancelOverdraft.bind(this);
+    this.doApplyOverdraft   = this.doApplyOverdraft.bind(this);
+    this.doCancelOverdraft  = this.doCancelOverdraft.bind(this);
+
+    this.onPercentageClick  = this.onPercentageClick.bind(this);
+    
+  }
+
+  onPercentageClick(){
+    this.props.goTo("/dashboard/business/profile");
   }
 
   componentWillMount() {
@@ -66,7 +74,7 @@ export class Dashboard extends Component {
       isNaN(this.props.api.business.balances.initial_credit)
     )
       return 0;
-    if (this.props.api.business.balances.initial_credit === 0) return 0;
+    if (parseInt(this.props.api.business.balances.initial_credit) === 0) return 0;
     console.log(
       " RATIO::",
       this.props.api.business.balances.balance,
@@ -208,7 +216,7 @@ export class Dashboard extends Component {
             </IsoWidgetsWrapper>
           </Col>
 
-          <Col md={6} sm={12} xs={24} style={colStyle}>
+          <Col md={6} sm={12} xs={24} style={colStyle} onClick={this.onPercentageClick}>
             <IsoWidgetsWrapper>
               <BalanceSticker
                 amount={this.props.api.business.discount}
@@ -291,6 +299,7 @@ const mapStateToProps = state => ({
 const dispatchToProps = dispatch => ({
   cleanMsg: bindActionCreators(actions.cleanMsg, dispatch),
   fetchProfile: bindActionCreators(actions.fetchProfile, dispatch),
+  goTo: url => dispatch(push(url)),
   fetchConfiguration: bindActionCreators(actions.fetchConfiguration, dispatch),
   applyOverdraft: bindActionCreators(actions.applyOverdraft, dispatch)
 });

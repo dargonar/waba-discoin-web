@@ -44,7 +44,8 @@ class CreateStore extends Component {
           { discount: "0", reward: "0", date: "saturday" },
           { discount: "0", reward: "0", date: "sunday" }
         ],
-        location: {}
+        location: {},
+        mode: "edit"
       }
     };
     this.inputChange = this.inputChange.bind(this);
@@ -138,20 +139,20 @@ class CreateStore extends Component {
   }
 
   componentWillUnmount() {
-    this.state = {
-      form: {
-        discount_schedule: [
-          { discount: "0", reward: "0", date: "monday" },
-          { discount: "0", reward: "0", date: "tuesday" },
-          { discount: "0", reward: "0", date: "wednesday" },
-          { discount: "0", reward: "0", date: "thursday" },
-          { discount: "0", reward: "0", date: "friday" },
-          { discount: "0", reward: "0", date: "saturday" },
-          { discount: "0", reward: "0", date: "sunday" }
-        ],
-        location: {}
-      }
-    };
+    this.setState ({
+          form: {
+            discount_schedule: [
+              { discount: "0", reward: "0", date: "monday" },
+              { discount: "0", reward: "0", date: "tuesday" },
+              { discount: "0", reward: "0", date: "wednesday" },
+              { discount: "0", reward: "0", date: "thursday" },
+              { discount: "0", reward: "0", date: "friday" },
+              { discount: "0", reward: "0", date: "saturday" },
+              { discount: "0", reward: "0", date: "sunday" }
+            ],
+            location: {}
+          }
+        });
   }
   componentWillReceiveProps(nextProps) {
     const checkLoading = business => {
@@ -298,6 +299,9 @@ class CreateStore extends Component {
       return (
         <Form style={{ width: "100%" }} onSubmit={this.submit}>
           <Box>
+            <h3>
+              <IntlMessages id="profile.profile_info" defaultMessage="Perfil" />
+            </h3>
             <Row style={{ width: "100%" }} gutter={16}>
               <Col lg={12} md={24} sm={24}>
                 {getFieldDecorator("account_id", {
@@ -577,130 +581,138 @@ class CreateStore extends Component {
                   </DropzoneWrapper>
                 </FormItem>
 
-                <FormItem
-                  label={
-                    <IntlMessages id="profile.rates" defaultMessage="Rates" />
-                  }
-                >
-                  <Row style={{ width: "100%" }}>
-                    <Col sm={3}>
-                      <Row style={{ width: "100%", textAlign: "center" }}>
-                        <Col>
-                          <IntlMessages
-                            defaultMessage="Type"
-                            id="profile.type"
-                          />
-                        </Col>
-                        <Col>
-                          <IntlMessages
-                            defaultMessage="Reward"
-                            id="profile.reward"
-                          />
-                        </Col>
-                        <Col>
-                          <IntlMessages
-                            defaultMessage="Discount"
-                            id="profile.discount"
-                          />
-                        </Col>
-                      </Row>
-                    </Col>
-                    {this.state.form.discount_schedule.map((discount, key) => (
-                      <Col sm={3} key={"discount-" + key}>
-                        <Row>
-                          <Col
-                            style={{
-                              textAlign: "center",
-                              textTransform: "capitalize"
-                            }}
-                          >
+                
+              </Col>
+            </Row>
+
+
+          
+            <Row style={{ width: "100%" }} gutter={16}>
+              <Col lg={24} md={24} sm={24}>
+                <FormItem>
+                    <h3>
+                      <IntlMessages id="profile.rates_extended" defaultMessage="Rates" />
+                    </h3>
+                    <Row style={{ width: "100%" }}>
+                      <Col sm={3}>
+                        <Row style={{ width: "100%", textAlign: "center" }}>
+                          <Col>
                             <IntlMessages
-                              defaultMessage={discount.date.substr(0, 3)}
-                              id={"profile.day-" + discount.date.substr(0, 3)}
+                              defaultMessage="Type"
+                              id="profile.type"
                             />
                           </Col>
                           <Col>
-                            {getFieldDecorator(
-                              "discount_schedule[" + key + "].date",
-                              {
-                                initialValue: this.state.form.discount_schedule[
-                                  key
-                                ].date
-                              }
-                            )(
-                              <Input
-                                type="hidden"
-                                name={"discount_schedule[" + key + "].date"}
-                              />
-                            )}
-                            <FormItem style={{ marginBottom: "3px" }}>
-                              {getFieldDecorator(
-                                "discount_schedule[" + key + "].reward",
-                                {
-                                  initialValue: Number(
-                                    discount.reward ? discount.reward : 0
-                                  ),
-                                  rules: [
-                                    {
-                                      message: "",
-                                      validator: (field, value, cb) => {
-                                        value >= minimumDiscount
-                                          ? cb()
-                                          : cb(true);
-                                      }
-                                    }
-                                  ]
-                                }
-                              )(
-                                <InputNumber
-                                  name={"discount_schedule[" + key + "].reward"}
-                                  max={100}
-                                  style={{
-                                    width: "100%"
-                                  }}
-                                />
-                              )}
-                            </FormItem>
+                            <IntlMessages
+                              defaultMessage="Reward"
+                              id="profile.reward"
+                            />
                           </Col>
                           <Col>
-                            <FormItem style={{ marginBottom: "3px" }}>
-                              {getFieldDecorator(
-                                "discount_schedule[" + key + "].discount",
-                                {
-                                  initialValue: Number(
-                                    discount ? discount.discount : 0
-                                  ),
-                                  rules: [
-                                    {
-                                      message: "",
-                                      validator: (field, value, cb) => {
-                                        value >= minimumDiscount
-                                          ? cb()
-                                          : cb(true);
-                                      }
-                                    }
-                                  ]
-                                }
-                              )(
-                                <InputNumber
-                                  name={
-                                    "discount_schedule[" + key + "].discount"
-                                  }
-                                  max={100}
-                                  style={{
-                                    width: "100%"
-                                  }}
-                                />
-                              )}
-                            </FormItem>
+                            <IntlMessages
+                              defaultMessage="Discount"
+                              id="profile.discount"
+                            />
                           </Col>
                         </Row>
                       </Col>
-                    ))}
-                  </Row>
-                </FormItem>
+                      {this.state.form.discount_schedule.map((discount, key) => (
+                        <Col sm={3} key={"discount-" + key}>
+                          <Row>
+                            <Col
+                              style={{
+                                textAlign: "center",
+                                textTransform: "capitalize"
+                              }}
+                            >
+                              <IntlMessages
+                                defaultMessage={discount.date.substr(0, 3)}
+                                id={"profile.day-" + discount.date.substr(0, 3)}
+                              />
+                            </Col>
+                            <Col>
+                              {getFieldDecorator(
+                                "discount_schedule[" + key + "].date",
+                                {
+                                  initialValue: this.state.form.discount_schedule[
+                                    key
+                                  ].date
+                                }
+                              )(
+                                <Input
+                                  type="hidden"
+                                  name={"discount_schedule[" + key + "].date"}
+                                />
+                              )}
+                              <FormItem style={{ marginBottom: "3px" }}>
+                                {getFieldDecorator(
+                                  "discount_schedule[" + key + "].reward",
+                                  {
+                                    initialValue: Number(
+                                      discount.reward ? discount.reward : 0
+                                    ),
+                                    rules: [
+                                      {
+                                        message: "",
+                                        validator: (field, value, cb) => {
+                                          value >= minimumDiscount
+                                            ? cb()
+                                            : cb(true);
+                                        }
+                                      }
+                                    ]
+                                  }
+                                )(
+                                  <InputNumber
+                                    name={"discount_schedule[" + key + "].reward"}
+                                    max={100}
+                                    style={{
+                                      width: "100%"
+                                    }}
+                                  />
+                                )}
+                              </FormItem>
+                            </Col>
+                            <Col>
+                              <FormItem style={{ marginBottom: "3px" }}>
+                                {getFieldDecorator(
+                                  "discount_schedule[" + key + "].discount",
+                                  {
+                                    initialValue: Number(
+                                      discount ? discount.discount : 0
+                                    ),
+                                    rules: [
+                                      {
+                                        message: "",
+                                        validator: (field, value, cb) => {
+                                          value >= minimumDiscount
+                                            ? cb()
+                                            : cb(true);
+                                        }
+                                      }
+                                    ]
+                                  }
+                                )(
+                                  <InputNumber
+                                    name={
+                                      "discount_schedule[" + key + "].discount"
+                                    }
+                                    max={100}
+                                    style={{
+                                      width: "100%"
+                                    }}
+                                  />
+                                )}
+                              </FormItem>
+                            </Col>
+                          </Row>
+                        </Col>
+                      ))}
+                    </Row>
+                  </FormItem>
               </Col>
             </Row>
+
             <Button
               type="primary"
               style={{ margin: "20px 0" }}
@@ -711,7 +723,10 @@ class CreateStore extends Component {
                 defaultMessage="Save store"
               />
             </Button>
+          
           </Box>
+
+
         </Form>
       );
     };

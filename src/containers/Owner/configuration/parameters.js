@@ -5,7 +5,7 @@ import PageLoading from "../../../components/pageLoading";
 import IntlMessages from "../../../components/utility/intlMessages";
 import MessageBox from "../../../components/MessageBox";
 import Button from "../../../components/uielements/button";
-import { Col, Row, Badge, Tooltip } from "antd";
+import { Col, Row, Badge, Tooltip, Icon } from "antd";
 import ContentHolder from "../../../components/utility/contentHolder";
 import Box from "../../../components/utility/box";
 import Input from "../../../components/uielements/input";
@@ -42,6 +42,7 @@ class Parameters extends Component {
   submit() {
     // let conf = { configuration : {...this.state.data}};
     let conf = this.state.data;
+    
     console.log('------------------- submitting:', JSON.stringify( conf ));
     this.props.sendParameters( conf );
   }
@@ -523,18 +524,22 @@ class Parameters extends Component {
 
                    <Row gutter={gutter} style={grayBox}>
                     <Col md={24} sm={24} xs={24} style={colStyle}>
-                      <Tooltip title={
-                        <IntlMessages
-                            id="parameters.referalSystemDisabled"
-                            defaultMessage="Not available"
-                          />}>
-                      <h3>
-                        <IntlMessages
-                          defaultMessage="Referral Program"
-                          id="parameters.referalSystem"
-                        />
-                      </h3>
-                      </Tooltip>
+                        <h3>
+                          <IntlMessages
+                            defaultMessage="Referral Program"
+                            id="parameters.referalSystem"
+                          />
+                          {" "}
+                          <Tooltip title={
+                            <IntlMessages
+                                id="parameters.referalSystemDisabled"
+                                defaultMessage="Not available"
+                              />}>
+                              <Icon type="warning" />
+                          </Tooltip>
+                          
+                        </h3>
+                      
                       
                     </Col>
                     <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -597,11 +602,7 @@ class Parameters extends Component {
                 </h2>
                 <ContentHolder style={{ width: "100%" }}>
                   <Row gutter={gutter}>
-                    <Tooltip title={
-                      <IntlMessages
-                          id="parameters.newCIPercHint"
-                          defaultMessage="Percentage of each IC to new business"
-                        />}>
+                    
                   
 
                       <Col md={12} sm={24} xs={24} style={colStyle}>
@@ -610,6 +611,14 @@ class Parameters extends Component {
                             id="parameters.newCIPerc"
                             defaultMessage="Percentage of each IC to new business"
                           />
+                          {" "}
+                          <Tooltip title={
+                            <IntlMessages
+                                id="parameters.newCIPercHint"
+                                defaultMessage="Percentage of each IC to new business"
+                              />}>
+                              <Icon type="question-circle" />
+                          </Tooltip>
                         </span>
                         <Input
                           onChange={this.onFormChange}
@@ -618,7 +627,7 @@ class Parameters extends Component {
                           defaultValue={data.reserve_fund.new_business_percent}
                         />
                       </Col>
-                    </Tooltip>
+                    
                   </Row>
                 </ContentHolder>
               </Box>

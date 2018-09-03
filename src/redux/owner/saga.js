@@ -281,8 +281,17 @@ function* setParameters(action) {
     const body = {
       configuration: action.payload
     };
+    yield put({
+      type: actionsUI.GLOBAL_LOADING_START,
+      payload: { msg: "Guardando parámetros" }
+    });
     const fetchData = apiCall(url, "POST", body, console.log);
     const { data, ex } = yield call(fetchData);
+
+    yield put({
+      type: actionsUI.GLOBAL_LOADING_END
+    })
+
     if (data) {
       if (typeof data.error !== "undefined")
         yield put({
@@ -291,6 +300,9 @@ function* setParameters(action) {
         });
       else {
         yield put({ type: actions.SEND_CONFIGURATION_PARAMETERS_SUCCESS });
+        yield put({ type: actionsUI.GLOBAL_MSG, payload: { msg: "Parametros guardados correctamente", msgType: "success" }
+        });
+
         yield put({ type: actions.FETCH_CONFIGURATION_PARAMETERS });
       }
     } else {
