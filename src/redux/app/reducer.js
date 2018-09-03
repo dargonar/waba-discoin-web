@@ -30,7 +30,7 @@ export default function appReducer(state = initState, action) {
       return state.set("language", action.language);
     case actions.ASK_PASSWORD:
       return state.set("passwordBox", !state.get("passwordBox"));
-    case authActions.LOGIN_SUCCESS:
+    case authActions.LOCAL_LOGIN_SUCCESS:
       return state.set("passwordBox", false);
     case authActions.LOGIN_ERROR:
       return state.set("passwordBox", false);

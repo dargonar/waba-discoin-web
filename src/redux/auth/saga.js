@@ -268,15 +268,9 @@ export function* loginFromLocal() {
     );
 
     yield put({
-      type: actions.LOGIN_REQUEST,
+      type: actions.LOCAL_LOGIN_SUCCESS,
       payload: {
-        account_name: action.payload.account,
-        mnemonics: null,
-        is_brainkey: null,
-        remember: null,
-        rememberKey: null,
-        just_registered_data: null,
-        from_storage_data: action.payload
+        keys: action.payload.keys
       }
     });
   });

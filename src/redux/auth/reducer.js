@@ -35,6 +35,14 @@ export default function authReducer(state = initState, action) {
         ...state,
         loading: true
       };
+    case actions.LOCAL_LOGIN_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        keys: action.payload.keys,
+        encrypted: false,
+        secret: "no-apply"
+      };
     case actions.LOGIN_SUCCESS:
       return {
         ...state,

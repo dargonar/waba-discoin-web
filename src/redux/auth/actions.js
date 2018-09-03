@@ -4,6 +4,7 @@ const actions = {
   LOGOUT: "[Auth] Logout",
   LOGIN_SUCCESS: "[Auth] Login success",
   LOGIN_ERROR: "[Auth] Login error",
+  LOCAL_LOGIN_SUCCESS: "[Auth] Local login success",
   LS_CHECK: "[Auth] Check Local storage",
   LS_CHECK_FULL: "[Auth] Local storage is full",
   LS_CHECK_EMPTY: "[Auth] Local storage is empty",
