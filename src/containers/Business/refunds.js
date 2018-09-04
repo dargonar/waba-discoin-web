@@ -12,6 +12,8 @@ import appActions from "../../redux/app/actions";
 
 import CustomersBox from "./components/customerBox";
 import RefundBox from "./components/refundBox";
+import RewardBox from "./components/rewardBox";
+import RewardQr from "./components/rewardQr";
 import moment from "moment";
 import { injectIntl } from "react-intl";
 
@@ -30,6 +32,9 @@ class Customers extends Component {
     this.state = {
       searchValue: null,
       refundBox: false,
+      rewardBox: false,
+      rewardQr: false,
+      rewardData: {},
       selectedCustomer: null,
       msg: "",
       error: "",
@@ -39,9 +44,38 @@ class Customers extends Component {
 
     this.submitRefundBox = this.submitRefundBox.bind(this);
     this.removeRefundBox = this.removeRefundBox.bind(this);
+
+    this.submitRewardBox = this.submitRewardBox.bind(this);
+    this.removeRewardBox = this.removeRewardBox.bind(this);
+
     this.showRefundBox = this.showRefundBox.bind(this);
+    this.showRewardBox = this.showRewardBox.bind(this);
     this._handleChange = this._handleChange.bind(this);
     this._handleKeyPress = this._handleKeyPress.bind(this);
+  }
+
+  submitRewardBox(data) {
+    this.setState({
+      rewardBox: false,
+      rewardQr: true,
+      rewardData: {
+        bill_amount: data.bill_amount,
+        discount_dsc: (data.percentage * data.bill_amount) / 100,
+        discount_ars:
+          data.bill_amount - (data.percentage * data.bill_amount) / 100,
+        account_id: this.props.account.account_id,
+        account_name: this.props.account.account,
+        id: "INVOICE_DISCOUNT"
+      }
+    });
+  }
+
+  removeRewardBox() {
+    this.setState({
+      rewardBox: false,
+      rewardQr: false,
+      rewardData: {}
+    });
   }
 
   getDay() {
@@ -73,10 +107,8 @@ class Customers extends Component {
     this.showRefundBox(account);
   }
   handleOnDiscount(account) {
-    console.log(
-      " ============================= TODO: IMPLEMENT THIS - refound.js line 76",
-      account
-    );
+    console.log(" ============================= handleOnDiscount:", account);
+    this.showRewardBox(account);
   }
 
   componentWillMount() {
@@ -95,6 +127,13 @@ class Customers extends Component {
     this.setState({
       selectedCustomer: customer,
       refundBox: true
+    });
+  }
+
+  showRewardBox(customer) {
+    this.setState({
+      selectedCustomer: customer,
+      rewardBox: true
     });
   }
 
@@ -211,6 +250,19 @@ class Customers extends Component {
           submit={this.submitRefundBox}
           percentage={this.getTodayRate()}
           scheduleReward={this.props.scheduleReward}
+        />
+        <RewardBox
+          visible={this.state.rewardBox}
+          customer={this.state.selectedCustomer}
+          cancel={this.removeRewardBox}
+          submit={this.submitRewardBox}
+          percentage={this.getTodayRate()}
+          scheduleReward={this.props.scheduleReward}
+        />
+        <RewardQr
+          visible={this.state.rewardQr}
+          submit={this.removeRewardBox}
+          {...this.state.rewardData}
         />
         <Row style={rowStyle} gutter={16} justify="start">
           {this.props.customers.length === 0 ? (
