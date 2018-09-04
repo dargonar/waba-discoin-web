@@ -97,7 +97,7 @@ export default function authReducer(state = initState, action) {
       return {
         ...state,
         stores: [].concat(action.payload.businesses),
-        totalStores: action.payload.total || action.payload.businesses.length,
+        totalStores: action.payload.count || action.payload.businesses.length,
         loading: false
       };
     case actions.BUSINESS_SET_OVERDRAFT:
