@@ -60,9 +60,8 @@ class Customers extends Component {
       rewardQr: true,
       rewardData: {
         bill_amount: data.bill_amount,
-        discount_dsc: (data.percentage * data.bill_amount) / 100,
-        discount_ars:
-          data.bill_amount - (data.percentage * data.bill_amount) / 100,
+        discount_dsc: data.amount,
+        discount_ars: data.bill_amount - data.amount,
         account_id: this.props.account.account_id,
         account_name: this.props.account.account,
         id: "INVOICE_DISCOUNT"

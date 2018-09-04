@@ -9,6 +9,7 @@ export class RewardQr extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.onOk = this.onOk.bind(this);
   }
 
   onOk() {
@@ -51,7 +52,7 @@ export class RewardQr extends Component {
         width={350}
         footer={null}
         visible={this.props.visible}
-        onOk={this.onOk}
+        onCancel={this.onOk}
       >
         <QrCode value={qrString} size={300} />
         {/*<code>

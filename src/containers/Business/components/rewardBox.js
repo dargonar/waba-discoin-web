@@ -6,6 +6,8 @@ import PropTypes from "prop-types"; // ES6
 import IntlMessage from "../../../components/utility/intlMessages";
 import { currency } from "../../../config";
 
+const round = total => Math.round(total * 100) / 100;
+
 export class RewardBox extends Component {
   constructor(props) {
     super(props);
@@ -56,7 +58,7 @@ export class RewardBox extends Component {
   updatePercentage(percentage) {
     this.setState({
       percentage: percentage,
-      amount: Math.round((percentage * this.state.bill_amount) / 100)
+      amount: round((percentage * this.state.bill_amount) / 100)
     });
     this.checkForm(percentage);
   }
@@ -77,15 +79,13 @@ export class RewardBox extends Component {
     let bill_amount = e.target.value;
     this.setState({
       bill_amount: bill_amount,
-      amount: Math.round(
-        ((this.state.percentage || 0) * (bill_amount || 0)) / 100
-      )
+      amount: round(((this.state.percentage || 0) * (bill_amount || 0)) / 100)
     });
     this.checkForm(this.state.percentage);
   }
 
   updateAmount(amount) {
-    let percentage = Math.round((amount * 100) / this.state.bill_amount || 0);
+    let percentage = round((amount * 100) / this.state.bill_amount || 0);
     this.setState({
       amount: amount,
       percentage
