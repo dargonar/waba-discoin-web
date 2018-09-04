@@ -20,69 +20,6 @@ import { push } from "react-router-redux";
 
 import Filters from "./components/filters";
 
-function resolve(path, obj) {
-  return path.split(".").reduce(function(prev, curr) {
-    return prev ? prev[curr] : undefined;
-  }, obj);
-}
-
-const filters = {
-  search: (arg, business) => {
-    return (
-      business.account.toLowerCase().indexOf(arg.toLowerCase()) > -1 ||
-      business.description.toLowerCase().indexOf(arg.toLowerCase()) > -1
-    );
-  },
-  category: (arg, business) => business.category_id === arg,
-  subcategory: (arg, business) => business.subcategory_id === arg,
-  overdraft: (arg, business) => {
-    if (arg === false) {
-      return true;
-    }
-    return (!isNaN(business.balances.ready_to_access) &&
-      Number(business.balances.ready_to_access) > 0) ||
-      (!isNaN(business.balances.balance) &&
-        Number(business.balances.balance) > 0) ||
-      (!isNaN(business.balances.initial_credit) &&
-        Number(business.balances.initial_credit) > 0)
-      ? true
-      : false;
-  },
-  value: (arg, business) => {
-    switch (arg.action) {
-      case "minor":
-        return Number(resolve(arg.path, business)) < arg.amount;
-      case "equal":
-        return Number(resolve(arg.path, business)) === arg.amount;
-      case "greater":
-        return Number(resolve(arg.path, business)) > arg.amount;
-      default:
-        return false;
-    }
-  }
-};
-
-const order = (path, businesses, direction) => {
-  const mult = direction === "ASC" ? 1 : -1;
-  return businesses.sort(
-    (a, b) =>
-      resolve(path, a)
-        .toString()
-        .toLowerCase() <
-      resolve(path, b)
-        .toString()
-        .toLowerCase()
-        ? -1 * mult
-        : 1 * mult
-  );
-};
-
-const range = (businesses, page, size) => {
-  const to = page * size - 1;
-  const from = to - size - 1;
-  return businesses.filter((business, key) => key > from && key <= to);
-};
-
 class ListStores extends Component {
   constructor(props) {
     super(props);
@@ -101,30 +38,6 @@ class ListStores extends Component {
     this.accounts = this.accounts.bind(this);
     this.changePage = this.changePage.bind(this);
     this.fetchData = this.fetchData.bind(this);
-  }
-
-  applyFilters(businesses) {
-    if (this.state.filters.length === 0) {
-      return businesses;
-    }
-    let result = businesses.filter(
-      business =>
-        this.state.filters
-          .map(item => filters[item.filter](item.arg, business)) // Check filters
-          .reduce((prev, curr) => (!prev ? false : curr), true) // Check if one is false
-    );
-    console.log(result);
-    return result;
-  }
-
-  applyOrder(businesses) {
-    if (this.state.order.length === 0) {
-      return businesses;
-    }
-    return this.state.order.reduce(
-      (prev, act) => order(act.path, prev, act.type),
-      businesses
-    );
   }
 
   fetchData(data) {
@@ -263,8 +176,8 @@ class ListStores extends Component {
         />
         <Filters
           onChange={data => {
-            this.setState({ filters: data.filters, page: 1 });
-            this.fetchData({ ...data, page: 1 });
+            this.setState({ filters: data, page: 1 });
+            this.fetchData({ filters: data, page: 1 });
           }}
         />
         <StoreOverdarfBox
@@ -297,7 +210,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetch: bindActionCreators(actions.fetchBusinesses, dispatch),
+  fetch: bindActionCreators(actions.fetchListBusinesses, dispatch),
   fetchWarnings: bindActionCreators(actions.fetchParameteres, dispatch),
   setOverdraft: bindActionCreators(actions.overdraft, dispatch),
   removeMsg: bindActionCreators(actions.removeMsg, dispatch),
