@@ -16,45 +16,9 @@ export class Filters extends Component {
   }
 
   formChange() {
-    let formValue = this.props.form.getFieldsValue();
-    let result = {
-      orders: [], // to implement
-      filters: []
-    };
-
-    //SEARCH
-    if (formValue.name && formValue.name !== "") {
-      result.filters = result.filters.concat({
-        filter: "search",
-        arg: formValue.name
-      });
-    }
-
-    //OVERDRAFT
-    if (formValue.overdraft === true) {
-      result.filters = result.filters.concat({
-        filter: "overdraft",
-        arg: formValue.overdraft
-      });
-    }
-
-    //CATEGORY
-    if (typeof formValue.category !== "undefined") {
-      result.filters = result.filters.concat({
-        filter: "category",
-        arg: formValue.category
-      });
-    }
-
-    //OVERDRAFT
-    if (typeof formValue.subcategory !== "undefined") {
-      result.filters = result.filters.concat({
-        filter: "subcategory",
-        arg: formValue.subcategory
-      });
-    }
-
-    this.props.onChange(result);
+    const formValue = this.props.form.getFieldsValue();
+    console.log("FOOO", formValue);
+    this.props.onChange(formValue);
   }
 
   render() {
@@ -62,7 +26,7 @@ export class Filters extends Component {
     return (
       <Form onChange={this.formChange} style={{ width: "100%" }}>
         <Row gutter={12}>
-          <Col md={6}>
+          <Col md={4}>
             <Form.Item
               label={
                 <IntlMessages
@@ -71,23 +35,23 @@ export class Filters extends Component {
                 />
               }
             >
-              {getFieldDecorator("name", {})(<Input />)}
+              {getFieldDecorator("search_text", {})(<Input />)}
             </Form.Item>
           </Col>
-          <Col md={6}>
+          <Col md={5}>
             <Form.Item
               label={
                 <IntlMessages defaultMessage="Category" id="filter.category" />
               }
             >
-              {getFieldDecorator("category", {})(
+              {getFieldDecorator("selected_categories[0]", {})(
                 <Select
                   onChange={value => {
                     // Clean subcategory selectbox
-                    this.props.form.setFieldsValue({
-                      subcategory: undefined,
-                      category: value
-                    });
+                    let values = this.props.form.getFieldsValue();
+                    values.selected_categories[0] = value;
+                    values.selected_categories[1] = undefined;
+                    this.props.form.setFieldsValue(values);
                     // Trigger from change
                     this.formChange();
                   }}
@@ -101,7 +65,7 @@ export class Filters extends Component {
               )}
             </Form.Item>
           </Col>
-          <Col md={6}>
+          <Col md={5}>
             <Form.Item
               label={
                 <IntlMessages
@@ -110,12 +74,12 @@ export class Filters extends Component {
                 />
               }
             >
-              {getFieldDecorator("subcategory", {})(
+              {getFieldDecorator("selected_categories[1]", {})(
                 <Select
                   onChange={value => {
-                    this.props.form.setFieldsValue({
-                      subcategory: value
-                    });
+                    let values = this.props.form.getFieldsValue();
+                    values.selected_categories[1] = value;
+                    this.props.form.setFieldsValue(values);
                     this.formChange();
                   }}
                 >
@@ -123,7 +87,7 @@ export class Filters extends Component {
                     .filter(
                       category =>
                         category.parent_id ===
-                        this.props.form.getFieldValue("category")
+                        this.props.form.getFieldValue("selected_categories[0]")
                     )
                     .map(category => (
                       <SelectOption value={category.id}>
@@ -134,7 +98,7 @@ export class Filters extends Component {
               )}
             </Form.Item>
           </Col>
-          <Col md={6}>
+          <Col md={5}>
             <Form.Item
               label={
                 <IntlMessages
@@ -143,9 +107,81 @@ export class Filters extends Component {
                 />
               }
             >
-              {getFieldDecorator("overdraft", {
-                initialValue: false
-              })(<Checkbox />)}
+              {getFieldDecorator("credited", {})(
+                <Select
+                  name="filter.credited"
+                  onChange={value => {
+                    let values = this.props.form.getFieldsValue();
+                    values.credited = value;
+                    this.props.form.setFieldsValue(values);
+                    this.formChange();
+                  }}
+                >
+                  <SelectOption key="credited_none" value={undefined}>
+                    <IntlMessages defaultMessage="None" id="filter.none" />
+                  </SelectOption>
+                  <SelectOption key="credited_credit" value={"credit"}>
+                    <IntlMessages
+                      defaultMessage="Credited"
+                      id="filter.credited"
+                    />
+                  </SelectOption>
+                  <SelectOption key="credited_no-credit" value={"no-credited"}>
+                    <IntlMessages
+                      defaultMessage="No credit"
+                      id="filter.noCredit"
+                    />
+                  </SelectOption>
+                  <SelectOption
+                    key="credited_overdraft_send"
+                    value={"overdraft_send"}
+                  >
+                    <IntlMessages
+                      defaultMessage="Overdraft send"
+                      id="filter.overdraftSend"
+                    />
+                  </SelectOption>
+                </Select>
+              )}
+            </Form.Item>
+          </Col>
+          <Col md={5}>
+            <Form.Item
+              label={
+                <IntlMessages
+                  id="filter.paymentMethods"
+                  defaultMessage="Payment methods"
+                />
+              }
+            >
+              {getFieldDecorator("payment_methods", {})(
+                <Select
+                  mode="multiple"
+                  name="filter.payment_methods"
+                  onChange={values => {
+                    let formValues = this.props.form.getFieldsValue();
+                    formValues.payment_methods = values;
+                    this.props.form.setFieldsValue(formValues);
+                    this.formChange();
+                  }}
+                >
+                  <SelectOption value={"cash"}>
+                    <IntlMessages defaultMessage="Cash" id="filter.cash" />
+                  </SelectOption>
+                  <SelectOption value={"debit_card"}>
+                    <IntlMessages
+                      defaultMessages="Debit Card"
+                      id="filter.debitCard"
+                    />
+                  </SelectOption>
+                  <SelectOption value={"credit_card"}>
+                    <IntlMessages
+                      defaultMessages="Credit Card"
+                      id="filter.creditCard"
+                    />
+                  </SelectOption>
+                </Select>
+              )}
             </Form.Item>
           </Col>
         </Row>
