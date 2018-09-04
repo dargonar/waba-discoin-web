@@ -624,7 +624,7 @@
   "refund.acceptDiscount": "Aceptar descuento",
   "refund.customers": "Clientes",
   "refund.refoundTo": "Recompensar a {name}",
-  "refund.amount": "Cantidad",
+  "refund.amount": "Monto total de factura",
   "refund.percentage": "Porcentaje",
   "refund.invoice": "Factura",
   "profile.profile_info": "Información de perfil",
