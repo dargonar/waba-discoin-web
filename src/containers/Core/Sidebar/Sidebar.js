@@ -105,7 +105,7 @@ class Sidebar extends Component {
               theme="dark"
               mode={mode}
               openKeys={collapsed ? [] : app.openKeys}
-              selectedKeys={this.props.router.location.pathname}
+              selectedKeys={[this.props.router.location.pathname]}
               onOpenChange={this.onOpenChange}
               className="isoDashboardMenu"
             >
