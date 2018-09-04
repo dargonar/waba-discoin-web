@@ -121,9 +121,9 @@ export class RewardBox extends Component {
       <Modal
         title={
           <IntlMessage
-            id="refund.refoundTo"
+            id="refund.rewardTo"
             values={{ name }}
-            defaultMessage={`Refound to {name}`}
+            defaultMessage={`Accept discount to {name}`}
           />
         }
         visible={this.props.visible}
