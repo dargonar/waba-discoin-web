@@ -29,6 +29,7 @@ export class RefundBox extends Component {
     this.onOk = this.onOk.bind(this);
     this.onCancel = this.onCancel.bind(this);
     this._delayAction = this._delayAction.bind(this);
+    this.checkForm = this.checkForm.bind(this);
   }
 
   onOk() {
@@ -53,9 +54,14 @@ export class RefundBox extends Component {
   }
 
   updatePercentage(percentage) {
-    if (!Number(percentage)) {
-      percentage = 0;
-    }
+    this.setState({
+      percentage: percentage,
+      amount: Math.round((percentage * this.state.bill_amount) / 100)
+    });
+    this.checkForm(percentage);
+  }
+
+  checkForm(percentage) {
     const invalid = percentage < this.props.scheduleReward;
     if (invalid) {
       this.openNotificationWithIcon(
@@ -64,33 +70,27 @@ export class RefundBox extends Component {
         "El descuento debe ser de al menos " + this.props.scheduleReward + "%"
       );
     }
-    this.setState({
-      invalid_form: invalid,
-      percentage: percentage,
-      amount: Math.round((percentage * this.state.bill_amount) / 100)
-    });
+    this.setState({ invalid_form: invalid });
   }
 
   updateBillAmount(e) {
     let bill_amount = e.target.value;
-    if (!Number(bill_amount)) {
-      bill_amount = 0;
-    }
     this.setState({
       bill_amount: bill_amount,
-      amount: Math.round((this.state.percentage * bill_amount) / 100)
+      amount: Math.round(
+        ((this.state.percentage || 0) * (bill_amount || 0)) / 100
+      )
     });
-    this.updatePercentage(this.state.percentage);
+    this.checkForm(this.state.percentage);
   }
 
   updateAmount(amount) {
-    if (!Number(amount)) {
-      amount = 0;
-    }
+    let percentage = Math.round((amount * 100) / this.state.bill_amount || 0);
     this.setState({
-      amount: amount
+      amount: amount,
+      percentage
     });
-    this.updatePercentage(Math.round((amount * 100) / this.state.bill_amount));
+    this.checkForm(percentage);
   }
 
   _delayAction(value, cb) {
