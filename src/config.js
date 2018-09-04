@@ -77,6 +77,10 @@ const apiConfig = {
       path: "/dashboard/business/search"
     },
     {
+      action: "URL/FILTRED_BUSINESSES",
+      path: "/dashboard/business/credited/:skip/:count"
+    },
+    {
       action: "URL/GET_BUSINESS",
       path: "/dashboard/business/profile/:id/load"
     },

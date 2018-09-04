@@ -40,6 +40,8 @@ const actions = {
   FETCH_KPIS_FAIL: "[Owner] Fetch KPIS faild",
   FETCH_KPIS_SUCCESS: "[Owner] Fetch KPIS success",
 
+  FETCH_BUSINESSES_FILTRED: "FETCH_BUSINESSES_FILTRED",
+
   fetchKpis: () => (dispatch, getState) => {
     dispatch({ type: actions.FETCH_KPIS });
   },
@@ -64,6 +66,19 @@ const actions = {
         limit: payload.limit || 10,
         filters: payload.filters || [],
         order: payload.order || []
+      }
+    });
+  },
+
+  fetchListBusinesses: payload => (dispatch, getState) => {
+    payload = payload ? payload : {};
+    dispatch({
+      type: actions.FETCH_BUSINESSES_FILTRED,
+      payload: {
+        page: payload.page || 1,
+        limit: payload.limit || 10,
+        filters: payload.filters || {},
+        order: payload.order || {}
       }
     });
   },

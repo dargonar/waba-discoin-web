@@ -26,6 +26,39 @@ function* getBusinesses(action) {
       });
     else yield put({ type: actions.FETCH_CONFIGURATION_BUSINESSES_FAILD, ex });
   });
+
+  yield takeLatest(actions.FETCH_BUSINESSES_FILTRED, function*(action) {
+    const url = getPath("URL/FILTRED_BUSINESSES", {
+      skip:
+        action.payload.page === 1
+          ? 0
+          : (action.payload.page - 1) * action.payload.limit,
+      count: action.payload.page * action.payload.limit - 1
+    });
+    const categories = []
+      .concat(action.payload.filters.selected_categories)
+      .filter(x => !isNaN(x));
+
+    const toSend = {
+      filter: {
+        selected_categories: categories[1]
+          ? [categories[1]]
+          : categories[0]
+            ? [categories[0]]
+            : [],
+        payment_methods: action.payload.filters.payment_methods,
+        credited: action.payload.filters.credited
+      }
+    };
+    const fetchData = apiCall(url, "POST", toSend);
+    const { data, ex } = yield call(fetchData);
+    if (data)
+      yield put({
+        type: actions.FETCH_CONFIGURATION_BUSINESSES_SUCCESS,
+        payload: data
+      });
+    else yield put({ type: actions.FETCH_CONFIGURATION_BUSINESSES_FAILD, ex });
+  });
 }
 
 export function* setOverdraftSuccess() {
@@ -290,7 +323,7 @@ function* setParameters(action) {
 
     yield put({
       type: actionsUI.GLOBAL_LOADING_END
-    })
+    });
 
     if (data) {
       if (typeof data.error !== "undefined")
@@ -300,7 +333,12 @@ function* setParameters(action) {
         });
       else {
         yield put({ type: actions.SEND_CONFIGURATION_PARAMETERS_SUCCESS });
-        yield put({ type: actionsUI.GLOBAL_MSG, payload: { msg: "Parametros guardados correctamente", msgType: "success" }
+        yield put({
+          type: actionsUI.GLOBAL_MSG,
+          payload: {
+            msg: "Parametros guardados correctamente",
+            msgType: "success"
+          }
         });
 
         yield put({ type: actions.FETCH_CONFIGURATION_PARAMETERS });
