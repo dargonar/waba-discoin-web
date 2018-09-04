@@ -155,7 +155,7 @@ class ListStores extends Component {
         )}
         <Pagination
           defaultCurrent={this.state.page}
-          total={this.props.totalBusiness}
+          total={this.props.totalBusiness - 1}
           onChange={this.changePage}
         />
       </div>
