@@ -236,7 +236,7 @@ class Customers extends Component {
       return dis.date === today;
     });
     //Check id discount is set
-    return discount ? discount.discount : 0;
+    return discount ? discount : { discount: 0, reward: 0 };
   }
 
   renderContent() {
@@ -247,7 +247,7 @@ class Customers extends Component {
           customer={this.state.selectedCustomer}
           cancel={this.removeRefundBox}
           submit={this.submitRefundBox}
-          percentage={this.getTodayRate()}
+          percentage={this.getTodayRate().reward}
           scheduleReward={this.props.scheduleReward}
         />
         <RewardBox
@@ -255,7 +255,7 @@ class Customers extends Component {
           customer={this.state.selectedCustomer}
           cancel={this.removeRewardBox}
           submit={this.submitRewardBox}
-          percentage={this.getTodayRate()}
+          percentage={this.getTodayRate().discount}
           scheduleReward={this.props.scheduleReward}
         />
         <RewardQr
