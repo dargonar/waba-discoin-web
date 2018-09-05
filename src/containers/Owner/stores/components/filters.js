@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Form, Col, Row } from "antd";
 import Select, { SelectOption } from "../../../../components/uielements/select";
-import Checkbox from "../../../../components/uielements/checkbox";
 import Input from "../../../../components/uielements/input";
 import IntlMessages from "../../../../components/utility/intlMessages";
 

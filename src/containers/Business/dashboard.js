@@ -23,17 +23,16 @@ export class Dashboard extends Component {
       confirm_overdraft_visible: false,
       ignoreOverdraft: false
     };
-    this.renderContent      = this.renderContent.bind(this);
+    this.renderContent = this.renderContent.bind(this);
     this.showApplyOverdraft = this.showApplyOverdraft.bind(this);
 
-    this.doApplyOverdraft   = this.doApplyOverdraft.bind(this);
-    this.doCancelOverdraft  = this.doCancelOverdraft.bind(this);
+    this.doApplyOverdraft = this.doApplyOverdraft.bind(this);
+    this.doCancelOverdraft = this.doCancelOverdraft.bind(this);
 
-    this.onPercentageClick  = this.onPercentageClick.bind(this);
-    
+    this.onPercentageClick = this.onPercentageClick.bind(this);
   }
 
-  onPercentageClick(){
+  onPercentageClick() {
     this.props.goTo("/dashboard/business/profile");
   }
 
@@ -74,7 +73,7 @@ export class Dashboard extends Component {
       isNaN(this.props.api.business.balances.initial_credit)
     )
       return 0;
-    if (parseInt(this.props.api.business.balances.initial_credit) === 0) return 0;
+    if (Number(this.props.api.business.balances.initial_credit) === 0) return 0;
     console.log(
       " RATIO::",
       this.props.api.business.balances.balance,
@@ -216,7 +215,13 @@ export class Dashboard extends Component {
             </IsoWidgetsWrapper>
           </Col>
 
-          <Col md={6} sm={12} xs={24} style={colStyle} onClick={this.onPercentageClick}>
+          <Col
+            md={6}
+            sm={12}
+            xs={24}
+            style={colStyle}
+            onClick={this.onPercentageClick}
+          >
             <IsoWidgetsWrapper>
               <BalanceSticker
                 amount={this.props.api.business.discount}
