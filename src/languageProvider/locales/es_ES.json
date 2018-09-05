@@ -611,7 +611,7 @@
   "apply": "Aplicar",
   "ignore": "Ignorar",
   "dashboard.dashboard": "Panel de Control",
-  "dashboard.balance": "Balance de {currecny}",
+  "dashboard.balance": "Balance de {currency}",
   "dashboard.initialCredit": "Credito Inicial",
   "dashboard.endorsed": "Aprobado",
   "dashboard.acceptedRatio": "Relación aceptado/recibido",

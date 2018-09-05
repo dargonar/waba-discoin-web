@@ -16,9 +16,7 @@ export default class extends Component {
     });
     if (param === "color") return { backgroundColor: obj.color || "gray" };
     if (param === "extra_percentage") return obj.extra_percentage;
-
   }
-
 
   render() {
     const {
@@ -70,10 +68,14 @@ export default class extends Component {
           </h3>
           <span className="isoLabel" style={textColor}>
             {text}
-            <small>
-              <br />
-              {subtext} - {subtext2}
-            </small>
+            {subtext || subtext2 ? (
+              <small>
+                <br />
+                {subtext} - {subtext2}
+              </small>
+            ) : (
+              false
+            )}
           </span>
         </div>
       </BalanceStickerWidgetWrapper>

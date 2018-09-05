@@ -148,7 +148,7 @@ export class Dashboard extends Component {
                   <IntlMessage
                     id="dashboard.balance"
                     values={{
-                      currency: currency.name
+                      currency: currency.symbol
                     }}
                     defaultMessage={"{currency} Balance"}
                   />
