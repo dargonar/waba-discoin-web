@@ -5,9 +5,18 @@ import { apiConfig } from "./config";
 // ********************************************************************
 // HACK ***************************************************************
 
-import { ChainValidation, PrivateKey, key } from "bitsharesjs";
+import { ChainValidation, PrivateKey, key, hash } from "bitsharesjs";
+import Signature from "bitsharesjs/dist/ecc/src/signature";
+import { sha256 } from "bitsharesjs/dist/ecc/src/hash";
+
+import { store } from "./redux/store";
 
 import { ChainConfig } from "bitsharesjs-ws";
+
+import {
+  signMemo
+} from "./utils";
+
 
 export const adminPrivKey =
   "5JQGCnJCDyraociQmhDRDxzNFCd8WdcJ4BAj8q1YDZtVpk5NDw9";
@@ -25,7 +34,38 @@ var bip39 = require("bip39");
 // ********************************************************************
 // ********************************************************************
 
+const extractKey = () => store.getState().Auth.keys;
+
+const signString = bodyString =>
+  Signature.signBufferSha256(
+    sha256(bodyString),
+    PrivateKey.fromWif(extractKey().owner.wif)
+  ).toHex();
+
+const addSignatureToContent = data => ({
+  ...data,
+  signed: signString(JSON.stringify(data))
+});
+
 export const apiCall = (path, method, data, cb) => {
+  try {
+    // If user is logged sign content
+    if (data && store.getState().Auth && store.getState().Auth.keys) {
+      
+      // data = addSignatureToContent(data);
+      let signed = signMemo(adminPubKey, sha256(JSON.stringify(data)) , extractKey());
+      data = {
+        ...data,
+        signed: signed
+      }
+
+      console.log(JSON.stringify(data));
+      
+    }
+  } catch (e) {
+    console.warn("Error adding signature", { path, data, method }, e);
+  }
+
   // Check if there are any callbacks established
   return () => {
     cb = typeof cb === "function" ? cb : res => res;

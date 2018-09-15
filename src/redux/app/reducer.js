@@ -60,11 +60,16 @@ export default function appReducer(state = initState, action) {
     case actions.GLOBAL_MSG:
       //HACK
       let body = "";
+      console.log('---------------- app/reducer::actions.GLOBAL_MSG', JSON.stringify(action.payload))
       if (action.payload.data) {
         if (action.payload.data.error_list)
           body = action.payload.data.error_list.reduce(function(ret, item) {
             return ret + item.error + "\r\n";
           }, "");
+      }
+      if (action.payload.msg) {
+        if (action.payload.msg.payload)
+          body = action.payload.msg.payload;
       }
       return state
         .set("msg", action.payload.msg + "|" + body)
