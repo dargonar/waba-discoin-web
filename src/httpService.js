@@ -13,6 +13,11 @@ import { store } from "./redux/store";
 
 import { ChainConfig } from "bitsharesjs-ws";
 
+import {
+  signMemo
+} from "./utils";
+
+
 export const adminPrivKey =
   "5JQGCnJCDyraociQmhDRDxzNFCd8WdcJ4BAj8q1YDZtVpk5NDw9";
 export const adminPubKey =
@@ -46,8 +51,16 @@ export const apiCall = (path, method, data, cb) => {
   try {
     // If user is logged sign content
     if (data && store.getState().Auth && store.getState().Auth.keys) {
-      data = addSignatureToContent(data);
-      console.log("AAAA", data);
+      
+      // data = addSignatureToContent(data);
+      let signed = signMemo(adminPubKey, sha256(JSON.stringify(data)) , extractKey());
+      data = {
+        ...data,
+        signed: signed
+      }
+
+      console.log(JSON.stringify(data));
+      
     }
   } catch (e) {
     console.warn("Error adding signature", { path, data, method }, e);
