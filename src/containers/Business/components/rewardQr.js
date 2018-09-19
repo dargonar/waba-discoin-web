@@ -19,6 +19,7 @@ export class RewardQr extends Component {
   render() {
     const {
       bill_amount,
+      bill_id,
       discount_dsc,
       discount_ars,
       account_id,
@@ -27,6 +28,7 @@ export class RewardQr extends Component {
 
     let qrString = JSON.stringify({
       ba: bill_amount,
+      bi: bill_id,
       dd: discount_dsc,
       da: discount_ars,
       ai: account_id,
@@ -65,6 +67,7 @@ export class RewardQr extends Component {
 }
 RewardQr.protoTypes = {
   bill_amount: PropTypes.number,
+  bill_id: PropTypes.string,
   discount_dsc: PropTypes.number,
   discount_ars: PropTypes.number,
   account_id: PropTypes.string,
