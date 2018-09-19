@@ -616,5 +616,7 @@
   "refund.percentage": "Percentage",
   "refund.invoice": "Invoice",
   "profile.minimumDiscount": "(Minimum Discount: {discount})",
-  "stores.notFound": "No business found"
+  "stores.notFound": "No business found",
+  "sidebar.panelControl": "Control Panel",
+  "sidebar.main": "Home"
 }

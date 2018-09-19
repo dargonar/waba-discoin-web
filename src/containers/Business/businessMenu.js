@@ -1,9 +1,15 @@
 export default [
   {
-    name: "home",
-    url: "business/home",
+    name: "main",
+    url: "business/main",
     icon: "ion-android-apps",
-    intlMessage: "sidebar.home"
+    intlMessage: "sidebar.main"
+  },
+  {
+    name: "panelControl",
+    url: "business/home",
+    icon: "ion-stats-bars",
+    intlMessage: "sidebar.panelControl"
   },
   {
     name: "refunds",

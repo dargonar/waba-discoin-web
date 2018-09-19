@@ -30,7 +30,7 @@ class BusinessRouter extends React.Component {
         <Route
           exact
           path={`${url}/refounds`}
-          component={asyncComponent(() => import("./main/main"))}
+          component={asyncComponent(() => import("./refunds"))}
         />
         <Route
           exact
