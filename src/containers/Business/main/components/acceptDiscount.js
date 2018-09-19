@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import IntlMessages from "../../../../components/utility/intlMessages";
-import { Input } from "antd";
 import { currency } from "../../../../config";
 import { ColorBox } from "./colorBox";
 

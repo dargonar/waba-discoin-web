@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, List, Avatar } from "antd";
+import { Modal, List } from "antd";
 import IntlMessages from "../../../../components/utility/intlMessages";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -7,10 +7,6 @@ import actions from "../../../../redux/api/actions";
 import HashImg from "../../../../components/hashImage";
 
 class CustomerPicker extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentWillReceiveProps(newProps) {
     if (this.props.visible !== newProps.visible && newProps.visible === true) {
       this.props.searchAccount();
