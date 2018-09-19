@@ -15,7 +15,7 @@ export default [
     name: "refunds",
     url: "business/refounds",
     icon: "ion-calculator",
-    intlMessage: "sidebar.refound"
+    intlMessage: "sidebar.charge"
   },
   {
     name: "transactions",
