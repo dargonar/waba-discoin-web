@@ -116,6 +116,7 @@ export class Dashboard extends Component {
           <Col md={12}>
             <SendRefund
               {...this.state.bill}
+              account={this.props.account}
               percentage={this.props.discount.reward}
               onSubmit={data => {
                 console.log("Submited", { data });
