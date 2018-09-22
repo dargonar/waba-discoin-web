@@ -781,5 +781,13 @@
   "stores.allocateCredit": "Asignar crédito preacordado",
   "stores.notFound": "No se encontraron tiendas en el sistema",
   "sidebar.panelControl": "Panel de Control",
-  "sidebar.main": "Inicio"
+  "sidebar.main": "Inicio",
+  "bussinesMain.rewardAndRefund": "Aceptar pagos en {currency} y dar recompensas",
+  "bussinesMain.billAmount": "Monto total de factura",
+  "bussinesMain.billReference": "Referencia, ticket, nro. de factura",
+  "mainBusiness.sendReward" : "Recompensar cliente",
+  "mainBusiness.acceptPayment": "Aceptar pago con descuento en {currency}",
+  "businessMain.transactions" :"Listado de transacciones",
+  "mainBusiness.reward" : "Recompensar",
+  "mainBusiness.discount" : "Aceptar descuento"
 }

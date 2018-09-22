@@ -30,7 +30,7 @@ export class AcceptDiscount extends Component {
     return (
       <div>
         <ColorBox
-          title={<IntlMessages id="reward" defaultMessage="Reward" />}
+          title={<IntlMessages id="mainBusiness.discount" defaultMessage="Discount" />}
           value={this.state.reward}
           onChange={this.updateReward}
           buttonText={

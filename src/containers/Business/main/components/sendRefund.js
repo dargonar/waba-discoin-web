@@ -149,7 +149,7 @@ class SendRefundComponent extends Component {
           onCancel={() => this.setState({ selectCustomer: false })}
         />
         <ColorBox
-          title={<IntlMessages id="discount" defaultMessage="Discount" />}
+          title={<IntlMessages id="mainBusiness.reward" defaultMessage="Rewaard" />}
           value={this.state.discount}
           onChange={this.updateDiscount}
           onSubmit={this.selectCustomer}
