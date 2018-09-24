@@ -131,8 +131,9 @@ export class Dashboard extends Component {
               percentage={this.props.discount.discount}
               onSubmit={data => {
                 console.log("Submited", { data });
-                this.setTimmer(1000, 20000);
+                //this.setTimmer(1000, 20000);
               }}
+              setTimmer={this.setTimmer}
             />
           </Col>
 
