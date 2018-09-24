@@ -4,8 +4,11 @@ import PropTypes from "prop-types"; // ES6
 import IntlMessages from "../../../components/utility/intlMessages";
 import { currency } from "../../../config";
 import QrCode from "qrcode.react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import appActions from "../../../redux/app/actions";
 
-export class RewardQr extends Component {
+class RewardQrComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -14,6 +17,20 @@ export class RewardQr extends Component {
 
   onOk() {
     this.props.submit();
+  }
+
+  componentWillReceiveProps(newProps) {
+    const memo = "~di:" + this.props.bill_amount + ":" + this.props.bill_id;
+    if (
+      newProps.autoClose === true &&
+      this.props.autoClose !== newProps.autoClose
+    ) {
+      this.props.showMessage({
+        msgType: "success",
+        msg: "Transaction " + memo + " approved"
+      });
+      this.props.submit();
+    }
   }
 
   render() {
@@ -65,12 +82,10 @@ export class RewardQr extends Component {
     );
   }
 }
-RewardQr.protoTypes = {
-  bill_amount: PropTypes.number,
-  bill_id: PropTypes.string,
-  discount_dsc: PropTypes.number,
-  discount_ars: PropTypes.number,
-  account_id: PropTypes.string,
-  account_name: PropTypes.string
-};
-export default RewardQr;
+
+export default connect(
+  state => ({}),
+  dispatch => ({
+    showMessage: bindActionCreators(appActions.showMessage, dispatch)
+  })
+)(RewardQrComponent);
