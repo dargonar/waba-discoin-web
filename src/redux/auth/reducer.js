@@ -47,7 +47,11 @@ export default function authReducer(state = initState, action) {
       return {
         ...state,
         loading: false,
-        keys: action.payload.keys,
+        keys: {
+          owner: Object.assign({}, action.payload.keys.owner),
+          active: Object.assign({}, action.payload.keys.active),
+          memo: Object.assign({}, action.payload.keys.memo)
+        },
         encrypted: false,
         account: action.payload.account,
         account_id: action.payload.account_id,

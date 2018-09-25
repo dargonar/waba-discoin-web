@@ -49,7 +49,7 @@ export function* loginRequest() {
     }
 
     let account = {};
-    if (from_storage_data != null) {
+    if (typeof from_storage_data !== "undefined") {
       console.log(
         "[redux/auth/saga]---- from_storage_data :",
         JSON.stringify(from_storage_data)
