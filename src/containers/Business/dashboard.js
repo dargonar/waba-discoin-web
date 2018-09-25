@@ -101,13 +101,12 @@ export class Dashboard extends Component {
   }
 
   getTodayDiscount() {
-    return this.getTodayRate('discount');
-    
+    return this.getTodayRate("discount");
   }
   getTodayReward() {
-    return this.getTodayRate('reward')
+    return this.getTodayRate("reward");
   }
-  
+
   getTodayRate(discount_reward) {
     const today = this.getDay();
     if (this.props.api.schedule === null) {
@@ -119,8 +118,8 @@ export class Dashboard extends Component {
       return dis.date === today;
     });
     //Check id discount is set
-    
-    return (discount_reward=='discount')?discount.discount:discount.reward //? discount : { discount: 0, reward: 0 };
+
+    return discount_reward === "discount" ? discount.discount : discount.reward; //? discount : { discount: 0, reward: 0 };
   }
 
   renderContent() {
@@ -359,7 +358,7 @@ export class Dashboard extends Component {
 
 const mapStateToProps = state => ({
   api: state.Api,
-  account: state.Auth,
+  account: state.Auth
 });
 
 const dispatchToProps = dispatch => ({
@@ -368,7 +367,7 @@ const dispatchToProps = dispatch => ({
   goTo: url => dispatch(push(url)),
   fetchConfiguration: bindActionCreators(actions.fetchConfiguration, dispatch),
   applyOverdraft: bindActionCreators(actions.applyOverdraft, dispatch),
-  getSchedule: bindActionCreators(actions.getSchedule, dispatch),
+  getSchedule: bindActionCreators(actions.getSchedule, dispatch)
 });
 
 export default connect(

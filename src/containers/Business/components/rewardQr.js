@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Modal } from "antd";
-import PropTypes from "prop-types"; // ES6
 import IntlMessages from "../../../components/utility/intlMessages";
 import { currency } from "../../../config";
 import QrCode from "qrcode.react";
