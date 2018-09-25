@@ -61,7 +61,7 @@ const AccountBox = ({
           />
           {": "}
           <b>
-            {currency.symbol} {Number(dailyPermission).toLocaleString()}0
+            {currency.symbol} {Number(dailyPermission).toLocaleString()}
           </b>
           <br />
           <IntlMessages
