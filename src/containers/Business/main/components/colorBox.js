@@ -39,8 +39,12 @@ export class ColorBox extends Component {
           onChange={e => this.props.onChange(e.target.value)}
         />
         {this.props.children}
-        <div
+        <button
+          disabled={!this.props.valid}
           style={{
+            border: "none",
+            display: "block",
+            width: "100%",
             background: this.props.color || "#e1e1e1",
             color: "#fff",
             textTransform: "uppercase",
@@ -48,12 +52,13 @@ export class ColorBox extends Component {
             padding: "10px",
             fontSize: "20px",
             marginTop: "5px",
+            opacity: this.props.valid ? 1 : 0.5,
             cursor: "pointer"
           }}
           onClick={this.props.onSubmit}
         >
           {this.props.buttonText}
-        </div>
+        </button>
       </div>
     );
   }

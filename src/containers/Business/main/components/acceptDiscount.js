@@ -26,6 +26,7 @@ class AcceptDiscountComponent extends Component {
     this.updateReward = this.updateReward.bind(this);
     this.checkValue = this.checkValue.bind(this);
     this.userSelected = this.userSelected.bind(this);
+    this._delayAction = this._delayAction.bind(this);
   }
 
   userSelected(customer) {
@@ -41,13 +42,24 @@ class AcceptDiscountComponent extends Component {
   }
 
   updateReward(value) {
-    this.setState({
-      reward: this.checkValue(value)
+    if (isNaN(value)) return;
+    this.setState({ reward: value });
+    this._delayAction("", () => {
+      this.setState({
+        reward: this.checkValue(Number(value))
+      });
     });
   }
 
+  _delayAction(value, cb) {
+    clearTimeout(this.tid);
+    this.tid = setTimeout(() => {
+      cb(value);
+    }, 1000);
+  }
+
   checkValue(value) {
-    if (value >= 0 && value <= this.props.percentage) return value;
+    if (value <= 100 && value >= this.props.percentage) return value;
     return this.props.percentage;
   }
 
@@ -90,6 +102,9 @@ class AcceptDiscountComponent extends Component {
             />
           }
           value={this.state.reward}
+          valid={
+            this.props.percentage <= this.state.reward && this.props.amount > 0
+          }
           onChange={this.updateReward}
           onSubmit={() => {
             this.setState({

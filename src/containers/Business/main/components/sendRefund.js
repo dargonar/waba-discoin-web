@@ -104,7 +104,7 @@ class SendRefundComponent extends Component {
   }
 
   checkValue(value) {
-    if (value <= 100 && value >= this.props.percentage) return value;
+    if (value >= this.props.percentage) return value;
     return this.props.percentage;
   }
 
@@ -130,6 +130,9 @@ class SendRefundComponent extends Component {
           from={this.props.account.account}
           to={this.state.customer}
           reference={this.props.reference}
+          validate={({ amount, percentage }) =>
+            percentage >= this.props.percentage && amount > 0
+          }
           discount={roundAmount(
             (this.state.discount * (this.props.amount || 0)) / 100
           ).toFixed(2)}
@@ -153,6 +156,10 @@ class SendRefundComponent extends Component {
             <IntlMessages id="mainBusiness.reward" defaultMessage="Reward" />
           }
           value={this.state.discount}
+          valid={
+            this.props.percentage <= this.state.discount &&
+            this.props.amount > 0
+          }
           onChange={this.updateDiscount}
           onSubmit={this.selectCustomer}
           buttonText={
