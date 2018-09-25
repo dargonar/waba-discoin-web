@@ -22,7 +22,7 @@ const mapboxConfig = {
   tileLayer: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   maxZoom: 22,
   defaultZoom: 16,
-  center: [-34.603722, -58.381592] // Buenos Aires
+  center: [-34.92145, -57.95453] // La plata
 };
 
 const apiConfig = {
