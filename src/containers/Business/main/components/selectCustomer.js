@@ -42,8 +42,8 @@ class CustomerPicker extends Component {
         visible={this.props.visible}
         title={
           <IntlMessages
-            defaultMessage="Select customer"
-            id="businessMain.selectCustomer"
+            id="refund.searchCustomer"
+            defaultMessage="Search Customer"
           />
         }
         footer={null}
