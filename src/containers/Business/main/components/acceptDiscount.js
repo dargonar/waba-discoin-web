@@ -6,6 +6,8 @@ import { connect } from "react-redux";
 import CustomerPicker from "./selectCustomer";
 import QrReward from "../../components/rewardQr";
 import moment from "moment";
+import { bindActionCreators } from "redux";
+import actions from "../../../../redux/api/actions";
 
 const filterTx = (memo, from) => txs => {
   return (
@@ -28,6 +30,48 @@ class AcceptDiscountComponent extends Component {
     this.userSelected = this.userSelected.bind(this);
     this._delayAction = this._delayAction.bind(this);
   }
+
+  componentDidMount() {
+    this.setState({      reward: this.getTodayDiscount() })
+  }
+  
+  // HACK: robado de dashboard.js
+  getDay() {
+    const now = new Date();
+    const days = [
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday"
+    ];
+    return days[now.getDay()];
+  }
+
+  getTodayDiscount() {
+    return this.getTodayRate("discount");
+  }
+  getTodayReward() {
+    return this.getTodayRate("reward");
+  }
+
+  getTodayRate(discount_reward) {
+    const today = this.getDay();
+    if (this.props.api.schedule === null) {
+      console.log(" -- Refund:componentWillMount() -- ");
+      this.props.getSchedule();
+      return;
+    }
+    let discount = this.props.api.schedule.find(function(dis) {
+      return dis.date === today;
+    });
+    //Check id discount is set
+
+    return discount_reward === "discount" ? discount.discount : discount.reward; //? discount : { discount: 0, reward: 0 };
+  }
+
 
   userSelected(customer) {
     this.setState({
@@ -140,7 +184,18 @@ class AcceptDiscountComponent extends Component {
   }
 }
 
-export const AcceptDiscount = connect(state => ({
+const mapDispatchToProps = dispatch => ({
+  getSchedule: bindActionCreators(actions.getSchedule, dispatch),
+
+});
+
+const mapStateToProps = state => ({
+  api: state.Api,
   account: state.Auth,
   transactions: state.Api.transactions || []
-}))(AcceptDiscountComponent);
+});
+
+export const AcceptDiscount = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AcceptDiscountComponent);

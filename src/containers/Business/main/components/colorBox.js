@@ -23,21 +23,23 @@ export class ColorBox extends Component {
         >
           {this.props.title}
         </span>
-        <input
-          style={{
-            background: "#fff",
-            border: "none",
-            color: this.props.color || "#ccc",
-            borderBottom: `1px solid ${this.props.color || "#ccc"}`,
-            display: "block",
-            fontSize: "50px",
-            margin: "0 auto 20px auto",
-            textAlign: "center",
-            width: "130px"
-          }}
-          value={this.props.value}
-          onChange={e => this.props.onChange(e.target.value)}
-        />
+        <div style={{background: "#fff"}}>
+          <input
+            style={{
+              background: "#fff",
+              border: "none",
+              color: this.props.color || "#ccc",
+              fontSize: "50px",
+              borderBottom: `1px solid ${this.props.color || "#ccc"}`,
+              margin: "0 auto 20px auto",
+              textAlign: "center",
+              width: "130px"
+            }}
+            value={this.props.value}
+            onChange={e => this.props.onChange(e.target.value)}
+          />
+          <span style={{color: this.props.color || "#ccc", fontSize: "50px"}}>%</span>
+        </div>
         {this.props.children}
         <button
           disabled={!this.props.valid}

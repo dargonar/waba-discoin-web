@@ -153,6 +153,7 @@ export class Dashboard extends Component {
 }
 
 const getDiscount = discounts => {
+  console.log('----------------------')
   console.log(
     moment()
       .format("dddd")
@@ -160,6 +161,7 @@ const getDiscount = discounts => {
     discounts,
     getDiscount
   );
+
   return discounts
     .filter(
       discount =>
