@@ -60,6 +60,7 @@ class Customers extends Component {
       rewardQr: true,
       rewardData: {
         bill_amount: data.bill_amount,
+        bill_id: data.bill_id,
         discount_dsc: data.amount,
         discount_ars: data.bill_amount - data.amount,
         account_id: this.props.account.account_id,

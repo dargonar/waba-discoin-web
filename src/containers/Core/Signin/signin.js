@@ -30,6 +30,7 @@ class SignIn extends Component {
       words: "" //'onza redondo ficha polvo lista útil vivero goteo potro mucho dosis aire'
     };
 
+    this.sessionPasswordInput = React.createRef();
     this.handleLogin = this.handleLogin.bind(this);
     this.loginLocal = this.loginLocal.bind(this);
     this.toggle = this.toggle.bind(this);
@@ -153,8 +154,12 @@ class SignIn extends Component {
                 />
               </div>
               {this.state.remember ? (
-                <div className="isoInputWrapper">
+                <div
+                  className="isoInputWrapper"
+                  ref={this.sessionPasswordInput}
+                >
                   <Input
+                    required={true}
                     size="large"
                     type="text"
                     placeholder={
@@ -173,7 +178,18 @@ class SignIn extends Component {
               )}
 
               <div className="isoInputWrapper isoLeftRightComponent">
-                <Checkbox onChange={() => this.toggle("remember")}>
+                <Checkbox
+                  onChange={e => {
+                    this.toggle("remember");
+                    setTimeout(
+                      () =>
+                        e.target.checked
+                          ? this.sessionPasswordInput.current.children[0].focus()
+                          : false,
+                      500
+                    );
+                  }}
+                >
                   <IntlMessages
                     id="page.signInRememberMe"
                     defaultMessage="Remember me"

@@ -155,7 +155,6 @@ export class Register extends Component {
   }
 
   render() {
-    console.log(this.openNotificationWithIcon);
     const { getFieldDecorator } = this.props.form;
     const { current } = this.state;
 
@@ -310,6 +309,11 @@ export class Register extends Component {
                           id="register.pleaseSelect"
                           defaultMessage="Please select one"
                         />
+                      }
+                      onChange={() =>
+                        this.props.form.setFieldsValue({
+                          subcategory: undefined
+                        })
                       }
                     >
                       {this.props.categories.map((category, index) => (

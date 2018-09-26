@@ -14,6 +14,7 @@ import {
 } from "../../utils";
 
 export function* loginRequest() {
+  // localStorage.removeItem("business_account");
   yield takeEvery(actions.LOGIN_REQUEST, function*(action) {
     let {
       account_name,
@@ -49,7 +50,7 @@ export function* loginRequest() {
     }
 
     let account = {};
-    if (from_storage_data != null) {
+    if (typeof from_storage_data !== "undefined") {
       console.log(
         "[redux/auth/saga]---- from_storage_data :",
         JSON.stringify(from_storage_data)
@@ -255,8 +256,11 @@ export function* loginError() {
 
 export function* logout() {
   yield takeEvery(actions.LOGOUT, function*() {
+    console.log(
+      "-------------saga::logout()"
+    );
     yield put({ type: actions.LS_CLEAN });
-    yield put(push("/"));
+    // yield put(push("/"));
   });
 }
 

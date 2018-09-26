@@ -116,6 +116,7 @@ export const writeLS = function*() {
 // Clean Local storage
 export const cleanLS = function*() {
   yield takeEvery(actions.LS_CLEAN, function*() {
+    console.log(" ---------- actions.LS_CLEAN")
     localStorage.removeItem("business_account");
     yield put({ type: actions.LS_CLEAN_SUCCESS });
   });

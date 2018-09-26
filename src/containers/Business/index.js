@@ -19,6 +19,11 @@ class BusinessRouter extends React.Component {
         />
         <Route
           exact
+          path={`${url}/main`}
+          component={asyncComponent(() => import("./main/main"))}
+        />
+        <Route
+          exact
           path={`${url}/discount-and-rewards`}
           component={asyncComponent(() => import("./discountAndRewards"))}
         />
@@ -51,7 +56,7 @@ class BusinessRouter extends React.Component {
             import("./editBusiness/editBusiness")
           )}
         />
-        <Redirect from={`${url}/`} to={`${url}/home`} />
+        <Redirect from={`${url}/`} to={`${url}/main`} />
       </Switch>
     );
   }

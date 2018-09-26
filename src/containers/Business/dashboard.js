@@ -85,6 +85,43 @@ export class Dashboard extends Component {
     );
   }
 
+  // robado de refunds
+  getDay() {
+    const now = new Date();
+    const days = [
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday"
+    ];
+    return days[now.getDay()];
+  }
+
+  getTodayDiscount() {
+    return this.getTodayRate("discount");
+  }
+  getTodayReward() {
+    return this.getTodayRate("reward");
+  }
+
+  getTodayRate(discount_reward) {
+    const today = this.getDay();
+    if (this.props.api.schedule === null) {
+      console.log(" -- Refund:componentWillMount() -- ");
+      this.props.getSchedule();
+      return;
+    }
+    let discount = this.props.api.schedule.find(function(dis) {
+      return dis.date === today;
+    });
+    //Check id discount is set
+
+    return discount_reward === "discount" ? discount.discount : discount.reward; //? discount : { discount: 0, reward: 0 };
+  }
+
   renderContent() {
     const { rowStyle, colStyle } = basicStyle;
     let _ratio = this.calcRatio();
@@ -224,12 +261,35 @@ export class Dashboard extends Component {
           >
             <IsoWidgetsWrapper>
               <BalanceSticker
-                amount={this.props.api.business.discount}
+                amount={this.getTodayDiscount()}
                 percentage={true}
                 text={
                   <IntlMessage
-                    defaultMessage="Reward & Refund"
-                    id="dashboard.rewardAndRefund"
+                    defaultMessage="Reward & Discount"
+                    id="dashboard.todayDiscount"
+                  />
+                }
+                fontColor="#1C222C"
+                bgColor="#fff"
+              />
+            </IsoWidgetsWrapper>
+          </Col>
+
+          <Col
+            md={6}
+            sm={12}
+            xs={24}
+            style={colStyle}
+            onClick={this.onPercentageClick}
+          >
+            <IsoWidgetsWrapper>
+              <BalanceSticker
+                amount={this.getTodayReward()}
+                percentage={true}
+                text={
+                  <IntlMessage
+                    defaultMessage="Today reward"
+                    id="dashboard.todayReward"
                   />
                 }
                 fontColor="#1C222C"
@@ -306,7 +366,8 @@ const dispatchToProps = dispatch => ({
   fetchProfile: bindActionCreators(actions.fetchProfile, dispatch),
   goTo: url => dispatch(push(url)),
   fetchConfiguration: bindActionCreators(actions.fetchConfiguration, dispatch),
-  applyOverdraft: bindActionCreators(actions.applyOverdraft, dispatch)
+  applyOverdraft: bindActionCreators(actions.applyOverdraft, dispatch),
+  getSchedule: bindActionCreators(actions.getSchedule, dispatch)
 });
 
 export default connect(

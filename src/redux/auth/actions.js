@@ -36,7 +36,11 @@ const actions = {
       payload: { password }
     });
   },
-  logout: () => ({
+  logout: () => dispatch =>
+    dispatch({
+      type: actions.LOGOUT
+    }),
+  logoutOLD: () => ({
     type: actions.LOGOUT
   }),
   clearMsg: () => dispatch =>
