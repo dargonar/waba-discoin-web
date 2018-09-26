@@ -9,15 +9,30 @@ export const getProfile = function*() {
     const url = getPath("URL/GET_PROFILE", { id: action.payload.account_id });
     const fetchData = apiCall(url);
 
-    const { data, err } = yield call(fetchData);
-    if (data) {
+    let result;
+
+    //catch network error
+    try {
+      result = yield call(fetchData);
+    } catch (err) {
+      console.log("Network error: Fail loading profile!");
+    }
+
+    //catch error message in response
+    const { data, error } = result.data;
+
+    if (typeof data !== "undefined") {
       yield put({ type: actions.GET_PROFILE_SUCCESS, payload: data });
       // As they share the same type of response I can update the business status as well.
       yield put({
         type: actions.GET_SCHEDULE_SUCCESS,
         payload: { discount_schedule: data.business.discount_schedule }
       });
-    } else yield put({ type: actions.GET_PROFILE_FAILD, payload: err });
+    } else {
+      // Logout user
+      yield put({ type: actions.GET_PROFILE_FAILD, payload: error });
+      yield put({ type: authActions.LOGOUT });
+    }
   });
 
   yield takeEvery(authActions.LS_CHECK_FULL, function*(action) {
