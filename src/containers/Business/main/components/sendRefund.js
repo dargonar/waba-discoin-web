@@ -122,11 +122,13 @@ class SendRefundComponent extends Component {
     });
   }
 
-
-  componentDidMount() {
-    this.setState({      discount: this.getTodayReward() })
+  componentWillReceiveProps(newProps) {
+    this.props.percentage !== newProps.percentage ||
+    this.state.discount < newProps.percentage
+      ? this.updateDiscount(newProps.percentage)
+      : false;
   }
-  
+
   // HACK: robado de dashboard.js
   getDay() {
     const now = new Date();
@@ -163,7 +165,6 @@ class SendRefundComponent extends Component {
 
     return discount_reward === "discount" ? discount.discount : discount.reward; //? discount : { discount: 0, reward: 0 };
   }
-
 
   render() {
     return (

@@ -102,6 +102,13 @@ class AcceptDiscountComponent extends Component {
     return this.props.percentage;
   }
 
+  componentWillReceiveProps(newProps) {
+    this.props.percentage !== newProps.percentage ||
+    this.state.reward < newProps.percentage
+      ? this.updateReward(newProps.percentage)
+      : false;
+  }
+
   render() {
     const roundAmount = value => Math.round(value * 100) / 100;
     return (
@@ -154,13 +161,13 @@ class AcceptDiscountComponent extends Component {
             {Number(
               this.props.amount -
                 roundAmount(
-                  (this.state.reward * (this.props.amount || 0)) / 100
+                  (this.state.reward * (this.props.amount || 0)) / 100 || 0
                 )
             ).toFixed(2)}
             <br />+ <br />
             {currency.symbol}{" "}
             {roundAmount(
-              (this.state.reward * (this.props.amount || 0)) / 100
+              (this.state.reward * (this.props.amount || 0)) / 100 || 0
             ).toFixed(2)}
           </span>
         </ColorBox>
