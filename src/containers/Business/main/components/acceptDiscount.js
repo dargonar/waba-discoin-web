@@ -3,7 +3,6 @@ import IntlMessages from "../../../../components/utility/intlMessages";
 import { currency } from "../../../../config";
 import { ColorBox } from "./colorBox";
 import { connect } from "react-redux";
-import CustomerPicker from "./selectCustomer";
 import QrReward from "../../components/rewardQr";
 import moment from "moment";
 import { bindActionCreators } from "redux";
@@ -22,19 +21,18 @@ class AcceptDiscountComponent extends Component {
     super(props);
     this.state = {
       reward: 0,
-      selectCustomer: false,
-      userSelected: undefined
+      qr: false
     };
     this.updateReward = this.updateReward.bind(this);
     this.checkValue = this.checkValue.bind(this);
-    this.userSelected = this.userSelected.bind(this);
+    this.showQr = this.showQr.bind(this);
     this._delayAction = this._delayAction.bind(this);
   }
 
   componentDidMount() {
-    this.setState({      reward: this.getTodayDiscount() })
+    this.setState({ reward: this.getTodayDiscount() });
   }
-  
+
   // HACK: robado de dashboard.js
   getDay() {
     const now = new Date();
@@ -72,14 +70,11 @@ class AcceptDiscountComponent extends Component {
     return discount_reward === "discount" ? discount.discount : discount.reward; //? discount : { discount: 0, reward: 0 };
   }
 
-
-  userSelected(customer) {
+  showQr(customer) {
     this.setState({
-      selectCustomer: false,
       qr: true,
       memo: "~di:" + this.props.amount + ":" + this.props.reference,
-      from: moment(),
-      customer // {name , }
+      from: moment()
     });
     //update tx every second in the next twenty secconds
     this.props.setTimmer(1000, 20000);
@@ -109,17 +104,11 @@ class AcceptDiscountComponent extends Component {
 
   render() {
     const roundAmount = value => Math.round(value * 100) / 100;
-
     return (
       <div>
-        <CustomerPicker
-          visible={this.state.selectCustomer}
-          onSelect={this.userSelected}
-          onCancel={() => this.setState({ selectCustomer: false })}
-        />
         <QrReward
           submit={() => {
-            this.setState({ qr: false, userSelected: undefined });
+            this.setState({ qr: false });
           }}
           autoClose={filterTx(this.state.memo, this.state.from)(
             this.props.transactions
@@ -150,11 +139,7 @@ class AcceptDiscountComponent extends Component {
             this.props.percentage <= this.state.reward && this.props.amount > 0
           }
           onChange={this.updateReward}
-          onSubmit={() => {
-            this.setState({
-              selectCustomer: true
-            });
-          }}
+          onSubmit={this.showQr}
           buttonText={
             <IntlMessages
               id="mainBusiness.acceptPayment"
@@ -185,8 +170,7 @@ class AcceptDiscountComponent extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  getSchedule: bindActionCreators(actions.getSchedule, dispatch),
-
+  getSchedule: bindActionCreators(actions.getSchedule, dispatch)
 });
 
 const mapStateToProps = state => ({
