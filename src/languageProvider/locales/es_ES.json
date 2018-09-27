@@ -792,5 +792,9 @@
   "mainBusiness.acceptPayment": "Aceptar pago con descuento en {currency}",
   "businessMain.transactions" :"Listado de transacciones",
   "mainBusiness.reward" : "Recompensar",
-  "mainBusiness.discount" : "Aceptar descuento"
+  "mainBusiness.discount" : "Aceptar descuento",
+  "bussinesMain.memo" : "Memo",
+  "confirmRefund.from" : "De",
+  "confirmRefund.to" : "A",
+  "confirmRefund.date" : "Fecha"
 }

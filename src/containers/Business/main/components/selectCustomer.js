@@ -20,7 +20,7 @@ class CustomerPicker extends Component {
 
   componentWillReceiveProps(newProps) {
     if (this.props.visible !== newProps.visible && newProps.visible === true) {
-      this.props.searchAccount();
+      // this.props.searchAccount();
     }
   }
 

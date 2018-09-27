@@ -143,7 +143,7 @@ export class ConfirmBox extends Component {
         <TotalBox discount={this.props.discount} />
         <Row type="flex" justify="space-around" align="middle">
           <UserBox
-            type={<IntlMessages id="from" defaultMessage="From" />}
+            type={<IntlMessages id="confirmRefund.from" defaultMessage="De" />}
             name={this.props.from}
           />
           <Col
@@ -158,7 +158,7 @@ export class ConfirmBox extends Component {
             <Icon type="arrow-right" theme="outlined" />
           </Col>
           <UserBox
-            type={<IntlMessages id="to" defaultMessage="To" />}
+            type={<IntlMessages id="confirmRefund.to" defaultMessage="A" />}
             name={this.props.to.name}
           />
         </Row>
