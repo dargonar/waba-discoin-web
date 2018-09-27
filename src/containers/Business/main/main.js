@@ -12,6 +12,7 @@ import { AcceptDiscount } from "./components/acceptDiscount";
 import { TransactionList } from "./components/transactionList";
 import { injectIntl } from "react-intl";
 import moment from "moment";
+import PageLoading from "../../../components/pageLoading";
 
 export class Dashboard extends Component {
   constructor(props) {
@@ -26,6 +27,7 @@ export class Dashboard extends Component {
     this.setTimmer = this.setTimmer.bind(this);
     this.changeBillAmount = this.changeBillAmount.bind(this);
     this.changeBillReference = this.changeBillReference.bind(this);
+    this.renderContent = this.renderContent.bind(this);
   }
 
   clearState() {
@@ -77,6 +79,71 @@ export class Dashboard extends Component {
     clearInterval(this.loop);
   }
 
+  renderContent() {
+    return (
+      <Row style={{ width: "100%" }} gutter={16}>
+        <Col md={12}>
+          <Input
+            type="number"
+            min="0"
+            size="large"
+            value={this.state.bill.amount}
+            placeholder={
+              this.props.intl.messages["bussinesMain.billAmount"] ||
+              "Bill amount"
+            }
+            onChange={e => this.changeBillAmount(e.target.value)}
+          />
+        </Col>
+
+        <Col md={12}>
+          <Input
+            size="large"
+            placeholder={
+              this.props.intl.messages["bussinesMain.billReference"] ||
+              "Reference (ticket number, invoice, other)"
+            }
+            onChange={e => this.changeBillReference(e.target.value)}
+          />
+        </Col>
+
+        <Col md={12}>
+          <SendRefund
+            {...this.state.bill}
+            account={this.props.account}
+            percentage={this.props.discount.reward}
+            onSubmit={data => {
+              console.log("Submited", { data });
+              this.setTimmer(1000, 20000);
+            }}
+          />
+        </Col>
+
+        <Col md={12}>
+          <AcceptDiscount
+            {...this.state.bill}
+            percentage={this.props.discount.discount}
+            onSubmit={data => {
+              console.log("Submited", { data });
+              //this.setTimmer(1000, 20000);
+            }}
+            setTimmer={this.setTimmer}
+          />
+        </Col>
+
+        <Col md={24} style={{ paddingTop: "40px" }}>
+          <PageHeader>
+            <IntlMessage
+              defaultMessage="Transactions"
+              id="businessMain.transactions"
+            />
+          </PageHeader>
+          <TransactionList txs={this.props.transactions} />
+        </Col>
+      </Row>
+    );
+  }
+
   render() {
     return (
       <LayoutContentWrapper>
@@ -87,73 +154,18 @@ export class Dashboard extends Component {
             values={{ currency: currency.plural }}
           />
         </PageHeader>
-        <Row style={{ width: "100%" }} gutter={16}>
-          <Col md={12}>
-            <Input
-              type="number"
-              min="0"
-              size="large"
-              value={this.state.bill.amount}
-              placeholder={
-                this.props.intl.messages["bussinesMain.billAmount"] ||
-                "Bill amount"
-              }
-              onChange={e => this.changeBillAmount(e.target.value)}
-            />
-          </Col>
-
-          <Col md={12}>
-            <Input
-              size="large"
-              placeholder={
-                this.props.intl.messages["bussinesMain.billReference"] ||
-                "Reference (ticket number, invoice, other)"
-              }
-              onChange={e => this.changeBillReference(e.target.value)}
-            />
-          </Col>
-
-          <Col md={12}>
-            <SendRefund
-              {...this.state.bill}
-              account={this.props.account}
-              percentage={this.props.discount.reward}
-              onSubmit={data => {
-                console.log("Submited", { data });
-                this.setTimmer(1000, 20000);
-              }}
-            />
-          </Col>
-
-          <Col md={12}>
-            <AcceptDiscount
-              {...this.state.bill}
-              percentage={this.props.discount.discount}
-              onSubmit={data => {
-                console.log("Submited", { data });
-                //this.setTimmer(1000, 20000);
-              }}
-              setTimmer={this.setTimmer}
-            />
-          </Col>
-
-          <Col md={24} style={{ paddingTop: "40px" }}>
-            <PageHeader>
-              <IntlMessage
-                defaultMessage="Transactions"
-                id="businessMain.transactions"
-              />
-            </PageHeader>
-            <TransactionList txs={this.props.transactions} />
-          </Col>
-        </Row>
+        {typeof this.props.discount.discount !== "undefined" ? (
+          this.renderContent()
+        ) : (
+          <PageLoading />
+        )}
       </LayoutContentWrapper>
     );
   }
 }
 
 const getDiscount = discounts => {
-  console.log('----------------------')
+  console.log("----------------------");
   console.log(
     moment()
       .format("dddd")
