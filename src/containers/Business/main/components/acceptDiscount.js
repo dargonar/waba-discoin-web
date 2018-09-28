@@ -162,22 +162,35 @@ class AcceptDiscountComponent extends Component {
               defaultMessage="Accept Payment in {currency}"
             />
           }
-          color="#ff8f5d"
+          color="#FF9E5D"
         >
-          <span>
-            ${" "}
-            {Number(
-              this.props.amount -
-                roundAmount(
+          <div class="w-100 d-flex flex-row bill-amount">
+            <div class="col flex-1 text-left">
+              <span class="label">
+              ARS
+              </span>
+              <span class="bill-amount-value">
+                {" "}
+                {Number(
+                  this.props.amount -
+                    roundAmount(
+                      (this.state.reward * (this.props.amount || 0)) / 100
+                    )
+                ).toFixed(2)}
+              </span>
+
+            </div>
+            <div class="col flex-1 text-right">
+              <span class="label">
+              {currency.symbol}{" "}
+              </span>
+              <span class="bill-amount-value">
+                {roundAmount(
                   (this.state.reward * (this.props.amount || 0)) / 100
-                )
-            ).toFixed(2)}
-            <br />+ <br />
-            {currency.symbol}{" "}
-            {roundAmount(
-              (this.state.reward * (this.props.amount || 0)) / 100
-            ).toFixed(2)}
-          </span>
+                ).toFixed(2)}
+              </span>
+            </div>
+          </div>
         </ColorBox>
       </div>
     );
