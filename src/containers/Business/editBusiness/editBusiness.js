@@ -10,8 +10,6 @@ import { Col, Row } from "antd";
 
 import Button from "../../../components/uielements/button";
 import Async from "../../../helpers/asyncComponent";
-import Dropzone from "../../../components/uielements/dropzone.js";
-import DropzoneWrapper from "../components/dropzone.style";
 import actions from "../../../redux/owner/actions";
 import apiActions from "../../../redux/api/actions";
 import appActions from "../../../redux/app/actions";
@@ -19,6 +17,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Form from "../../../components/uielements/form";
 import { Input, Select, InputNumber } from "antd";
+import { ImageUpload } from "../components/imageUpload";
 const FormItem = Form.Item;
 const SelectOption = Select.Option;
 
@@ -53,24 +52,8 @@ class CreateStore extends Component {
     this.inputChange = this.inputChange.bind(this);
     this.locationChange = this.locationChange.bind(this);
     this.categoryChange = this.categoryChange.bind(this);
-    this.componentConfig = {
-      iconFiletypes: [".jpg", ".png", ".gif"],
-      showFiletypeIcon: true,
-      parallelUploads: 1,
-      uploadMultiple: false,
-      maxFilesize: 1, // MB
-      dictRemoveFile: "Delete",
-      dictCancelUploadConfirmation: "Are you sure to cancel upload?",
-      postUrl: "no-url"
-    };
-    this.djsConfig = {
-      autoProcessQueue: false,
-      thumbnailHeight: 300,
-      thumbnailWidth: 300
-    };
     this.imageUpload = this.imageUpload.bind(this);
     this.initForm = this.initForm.bind(this);
-    this.dropzone = null;
     this.submit = this.submit.bind(this);
   }
 
@@ -203,8 +186,8 @@ class CreateStore extends Component {
     });
   }
 
-  imageUpload(file) {
-    this.props.form.setFieldsValue({ image: file });
+  imageUpload(file, field) {
+    this.props.form.setFieldsValue({ [field]: file });
   }
 
   locationChange(e) {
@@ -280,19 +263,6 @@ class CreateStore extends Component {
       border: "1px solid #e9e9e9"
     };
 
-    const eventHandlers = {
-      init: dz => {
-        this.dropzone = dz;
-        dz.on("addedfile", function(file) {
-          if (dz.files.length > 1) {
-            dz.removeFile(dz.files[0]);
-          }
-        });
-      },
-      thumbnail: (fullimage, data) =>
-        setTimeout(() => this.imageUpload(data), 1000)
-    };
-
     const renderForm = () => {
       // console.log( " ===> render");
       // console.log( JSON.stringify(this.state.form));
@@ -308,7 +278,7 @@ class CreateStore extends Component {
         this.props.form.getFieldValue("category_id")
       );
 
-      console.log(this.props.form, this.props.form.getFieldsValue());
+      //console.log(this.props.form, this.props.form.getFieldsValue());
       return (
         <Form style={{ width: "100%" }} onSubmit={this.submit}>
           <Box>
@@ -581,19 +551,30 @@ class CreateStore extends Component {
 
                 <FormItem
                   label={
-                    <IntlMessages id="profile.image" defaultMessage="Image" />
+                    <IntlMessages id="profile.logo" defaultMessage="Logo" />
                   }
                 >
                   {getFieldDecorator("image", {
                     initialValue: this.state.form.image
                   })(<Input type="hidden" name="image" />)}
-                  <DropzoneWrapper>
-                    <Dropzone
-                      config={this.componentConfig}
-                      eventHandlers={eventHandlers}
-                      djsConfig={this.djsConfig}
-                    />
-                  </DropzoneWrapper>
+                  <ImageUpload
+                    fileChange={image => this.imageUpload(image, "image")}
+                    defaultImage={this.state.form.image}
+                  />
+                </FormItem>
+
+                <FormItem
+                  label={
+                    <IntlMessages id="profile.avatar" defaultMessage="Avatar" />
+                  }
+                >
+                  {getFieldDecorator("avatar", {
+                    initialValue: this.state.form.avatar
+                  })(<Input type="hidden" name="avatar" />)}
+                  <ImageUpload
+                    fileChange={image => this.imageUpload(image, "avatar")}
+                    defaultImage={this.state.form.avatar}
+                  />
                 </FormItem>
               </Col>
             </Row>
