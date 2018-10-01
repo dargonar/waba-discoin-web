@@ -30,20 +30,22 @@ const BasicLeafletMapWithMarker = props => (
   />
 );
 
+const defualtSchedule = [
+  { discount: "0", reward: "0", date: "monday" },
+  { discount: "0", reward: "0", date: "tuesday" },
+  { discount: "0", reward: "0", date: "wednesday" },
+  { discount: "0", reward: "0", date: "thursday" },
+  { discount: "0", reward: "0", date: "friday" },
+  { discount: "0", reward: "0", date: "saturday" },
+  { discount: "0", reward: "0", date: "sunday" }
+];
+
 class CreateStore extends Component {
   constructor(props) {
     super(props);
     this.state = {
       form: {
-        discount_schedule: [
-          { discount: "0", reward: "0", date: "monday" },
-          { discount: "0", reward: "0", date: "tuesday" },
-          { discount: "0", reward: "0", date: "wednesday" },
-          { discount: "0", reward: "0", date: "thursday" },
-          { discount: "0", reward: "0", date: "friday" },
-          { discount: "0", reward: "0", date: "saturday" },
-          { discount: "0", reward: "0", date: "sunday" }
-        ],
+        discount_schedule: defualtSchedule,
         location: {},
         mode: "edit"
       }
@@ -112,6 +114,12 @@ class CreateStore extends Component {
           "----------------------- saving business:",
           JSON.stringify(result)
         );
+
+        //Inject discount:schedule after submit
+        if (!this.props.isAdmin) {
+          result.discount_schedule =
+            this.props.business.discount_schedule || defualtSchedule;
+        }
         this.props.saveBusiness(result);
       } else {
         this.props.showMessage({
@@ -141,15 +149,7 @@ class CreateStore extends Component {
   componentWillUnmount() {
     this.setState({
       form: {
-        discount_schedule: [
-          { discount: "0", reward: "0", date: "monday" },
-          { discount: "0", reward: "0", date: "tuesday" },
-          { discount: "0", reward: "0", date: "wednesday" },
-          { discount: "0", reward: "0", date: "thursday" },
-          { discount: "0", reward: "0", date: "friday" },
-          { discount: "0", reward: "0", date: "saturday" },
-          { discount: "0", reward: "0", date: "sunday" }
-        ],
+        discount_schedule: defualtSchedule,
         location: {}
       }
     });
