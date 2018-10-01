@@ -131,7 +131,7 @@ const SidebarWrapper = styled.div`
         &:hover {
           i,
           .nav-text {
-            color: #ffffff;
+            color: rgba(190,51,255,1);
           }
         }
       }
