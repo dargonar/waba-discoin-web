@@ -21,6 +21,8 @@ import { ImageUpload } from "../components/imageUpload";
 const FormItem = Form.Item;
 const SelectOption = Select.Option;
 
+const socialMedia = ["Website", "Twiter", "Instagram", "Facebook"];
+
 const BasicLeafletMapWithMarker = props => (
   <Async
     load={import(/* webpackChunkName: "basicLeafletMapWithMarker" */ "../components/map.js")}
@@ -28,6 +30,17 @@ const BasicLeafletMapWithMarker = props => (
     componentArguement={"leafletMap"}
   />
 );
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 8 }
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 16 }
+  }
+};
 
 const defualtSchedule = [
   { discount: "0", reward: "0", date: "monday" },
@@ -46,6 +59,7 @@ class CreateStore extends Component {
       form: {
         discount_schedule: defualtSchedule,
         location: {},
+        links: {},
         mode: "edit"
       }
     };
@@ -145,6 +159,7 @@ class CreateStore extends Component {
   componentWillUnmount() {
     this.setState({
       form: {
+        links: {},
         discount_schedule: defualtSchedule,
         location: {}
       }
@@ -291,6 +306,7 @@ class CreateStore extends Component {
                   initialValue: this.state.form.account_id
                 })(<Input type="hidden" name="acccount_id" />)}
                 <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages id="profile.name" defaultMessage="Name" />
                   }
@@ -312,6 +328,7 @@ class CreateStore extends Component {
                 </FormItem>
 
                 <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages id="profile.email" defaultMessage="Email" />
                   }
@@ -334,6 +351,7 @@ class CreateStore extends Component {
                 </FormItem>
 
                 <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages
                       id="profile.telephone"
@@ -358,6 +376,7 @@ class CreateStore extends Component {
                 </FormItem>
 
                 <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages
                       id="profile.address"
@@ -382,6 +401,7 @@ class CreateStore extends Component {
                 </FormItem>
 
                 <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages
                       id="profile.description"
@@ -406,6 +426,7 @@ class CreateStore extends Component {
                 </FormItem>
 
                 <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages
                       id="profile.category"
@@ -465,6 +486,7 @@ class CreateStore extends Component {
                 </FormItem>
 
                 <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages
                       id="profile.subcategory"
@@ -519,10 +541,72 @@ class CreateStore extends Component {
                     </Select>
                   )}
                 </FormItem>
+
+                <h3>
+                  <IntlMessages
+                    id="profile.linksAndSocialMedia"
+                    defaultMessage="Links and Social Media"
+                  />
+                </h3>
+                {socialMedia.map(media => (
+                  <FormItem
+                    {...formItemLayout}
+                    label={
+                      <IntlMessages
+                        id={"profile.linksAndSocialMedia." + media}
+                        defaultMessage={media}
+                      />
+                    }
+                  >
+                    {getFieldDecorator("links." + media.toLowerCase(), {
+                      initialValue: this.state.form.links[media.toLowerCase()]
+                    })(<Input type="url" name={"links." + media} />)}
+                  </FormItem>
+                ))}
               </Col>
 
-              <Col md={12} sm={24}>
+              <Col md={24} lg={12}>
                 <FormItem
+                  {...formItemLayout}
+                  label={
+                    <IntlMessages
+                      id="profile.payments"
+                      defaultMessage="Payments methods"
+                    />
+                  }
+                >
+                  {getFieldDecorator("payments", {})(
+                    <Select mode="multiple">
+                      <SelectOption value="cash">
+                        <IntlMessages
+                          id="profile.payments.cash"
+                          defaultMessage="Cash"
+                        />
+                      </SelectOption>
+                      <SelectOption value="debit">
+                        <IntlMessages
+                          id="profile.payments.debit"
+                          defaultMessage="Debit"
+                        />
+                      </SelectOption>
+                      <SelectOption value="credit">
+                        <IntlMessages
+                          id="profile.payments.credit"
+                          defaultMessage="Credit"
+                        />
+                      </SelectOption>
+                      <SelectOption value="mercadopago">
+                        <IntlMessages
+                          id="profile.payments.mercadopago"
+                          defaultMessage="MercadoPago"
+                        />
+                      </SelectOption>
+                    </Select>
+                  )}
+                </FormItem>
+
+                <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages
                       id="profile.location"
@@ -550,6 +634,7 @@ class CreateStore extends Component {
                 </FormItem>
 
                 <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages id="profile.logo" defaultMessage="Logo" />
                   }
@@ -564,6 +649,7 @@ class CreateStore extends Component {
                 </FormItem>
 
                 <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages id="profile.avatar" defaultMessage="Avatar" />
                   }
