@@ -18,18 +18,14 @@ import { bindActionCreators } from "redux";
 import Form from "../../../components/uielements/form";
 import { Input, Select, InputNumber } from "antd";
 import { ImageUpload } from "../components/imageUpload";
+import { InputPlace } from "../components/placeInput";
+import Map from "../components/map";
 const FormItem = Form.Item;
 const SelectOption = Select.Option;
 
 const socialMedia = ["Website", "Twiter", "Instagram", "Facebook"];
 
-const BasicLeafletMapWithMarker = props => (
-  <Async
-    load={import(/* webpackChunkName: "basicLeafletMapWithMarker" */ "../components/map.js")}
-    componentProps={props}
-    componentArguement={"leafletMap"}
-  />
-);
+const BasicLeafletMapWithMarker = props => <Map {...props} />;
 
 const formItemLayout = {
   labelCol: {
@@ -210,8 +206,10 @@ class CreateStore extends Component {
       latitude: e.latlng.lat.toString(),
       longitude: e.latlng.lng.toString()
     });
-    console.log(" **********> locationChange");
-    console.log(e);
+    if (e.address) {
+      this.props.form.setFieldsValue({ address: e.address });
+    }
+    console.log(" **********> locationChange", e);
   }
 
   inputChange(e) {
@@ -373,31 +371,6 @@ class CreateStore extends Component {
                       }
                     ]
                   })(<Input type="tel" name="telephone" />)}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  label={
-                    <IntlMessages
-                      id="profile.address"
-                      defaultMessage="Address"
-                    />
-                  }
-                >
-                  {getFieldDecorator("address", {
-                    initialValue: this.state.form.address,
-                    rules: [
-                      {
-                        required: true,
-                        message: (
-                          <IntlMessages
-                            id="profile.address.empty"
-                            defaultMessage="Address is required"
-                          />
-                        )
-                      }
-                    ]
-                  })(<Input type="text" name="address" />)}
                 </FormItem>
 
                 <FormItem
@@ -609,6 +582,43 @@ class CreateStore extends Component {
                   {...formItemLayout}
                   label={
                     <IntlMessages
+                      id="profile.address"
+                      defaultMessage="Address"
+                    />
+                  }
+                >
+                  {getFieldDecorator("address", {
+                    initialValue: this.state.form.address,
+                    rules: [
+                      {
+                        required: true,
+                        message: (
+                          <IntlMessages
+                            id="profile.address.empty"
+                            defaultMessage="Address is required"
+                          />
+                        )
+                      }
+                    ]
+                  })(
+                    <InputPlace
+                      defaultValue={this.state.form.address}
+                      locationChange={this.locationChange}
+                      onChange={(v, e) => {
+                        this.props.form.setFieldsValue({
+                          address:
+                            e.props.children.split("//////")[0] ||
+                            e.props.value.split("//////")[0]
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+
+                <FormItem
+                  {...formItemLayout}
+                  label={
+                    <IntlMessages
                       id="profile.location"
                       defaultMessage="Location"
                     />
@@ -626,10 +636,8 @@ class CreateStore extends Component {
 
                   <BasicLeafletMapWithMarker
                     onChange={this.locationChange}
-                    marker={{
-                      lat: this.state.form.latitude,
-                      lng: this.state.form.longitude
-                    }}
+                    lat={this.props.form.getFieldValue("latitude")}
+                    lng={this.props.form.getFieldValue("longitude")}
                   />
                 </FormItem>
 
