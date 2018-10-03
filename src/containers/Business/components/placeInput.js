@@ -31,12 +31,15 @@ export class InputPlace extends Component {
   onSearch = input => {
     try {
       const gplacesService = new window.google.maps.places.AutocompleteService();
-      gplacesService.getQueryPredictions({ input }, (dataSource, status) => {
-        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-          this.setState({ dataSource });
-          //console.log({ dataSource });
+      gplacesService.getPlacePredictions(
+        { input, componentRestrictions: { country: "ar" } },
+        (dataSource, status) => {
+          if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+            this.setState({ dataSource });
+            //console.log({ dataSource });
+          }
         }
-      });
+      );
     } catch (e) {
       console.log("Error loading google maps", e);
     }
