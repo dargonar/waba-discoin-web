@@ -9,7 +9,8 @@ const initState = {
   totalStores: 0,
   subaccounts: [],
   parameters: null,
-  categories: null
+  categories: null,
+  filters: null
 };
 
 export default function authReducer(state = initState, action) {
@@ -97,7 +98,8 @@ export default function authReducer(state = initState, action) {
       return {
         ...state,
         stores: [].concat(action.payload.businesses),
-        totalStores: action.payload.count || action.payload.businesses.length,
+        totalStores: action.payload.total || action.payload.businesses.length,
+        actionLoading: false,
         loading: false
       };
     case actions.BUSINESS_SET_OVERDRAFT:
@@ -183,6 +185,14 @@ export default function authReducer(state = initState, action) {
         msg: "Error when updating subaccount."
       };
 
+    case actions.FETCH_BUSINESSES_FILTRED:
+      return {
+        ...state,
+        actionLoading: true,
+        filters: {
+          ...action.payload
+        }
+      };
     case actions.REMOVE_MSG:
       return {
         ...state,
