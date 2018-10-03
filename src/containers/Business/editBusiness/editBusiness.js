@@ -9,7 +9,6 @@ import PageLoading from "../../../components/pageLoading";
 import { Col, Row } from "antd";
 
 import Button from "../../../components/uielements/button";
-import Async from "../../../helpers/asyncComponent";
 import actions from "../../../redux/owner/actions";
 import apiActions from "../../../redux/api/actions";
 import appActions from "../../../redux/app/actions";
@@ -80,8 +79,8 @@ class CreateStore extends Component {
 
     console.log(
       " ** componentWillMount",
-      "---------this.props.business",
-      this.props.business
+      "---------this.props.business"
+      //this.props.business
     );
     if (
       typeof this.props.business !== "undefined" &&
@@ -98,7 +97,7 @@ class CreateStore extends Component {
 
   formatSchedule(category_id) {
     const categoryDiscount = this.props.categories.filter(
-      cat => cat.id == category_id
+      cat => Number(cat.id) === Number(category_id)
     )[0];
     return defualtSchedule.map(day => ({
       ...day,

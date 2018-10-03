@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Upload, Button, Icon } from "antd";
+import { Upload, Icon } from "antd";
 import { apiConfig } from "../../../config";
 import ImageUploadWrapper from "./imageUpload.syle";
 import IntlMessages from "../../../components/utility/intlMessages";

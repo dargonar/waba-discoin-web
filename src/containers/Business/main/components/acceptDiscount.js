@@ -103,10 +103,12 @@ class AcceptDiscountComponent extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    this.props.percentage !== newProps.percentage ||
-    this.state.reward < newProps.percentage
-      ? this.updateReward(newProps.percentage)
-      : false;
+    if (
+      this.props.percentage !== newProps.percentage ||
+      this.state.reward < newProps.percentage
+    ) {
+      this.updateReward(newProps.percentage);
+    }
   }
 
   render() {
