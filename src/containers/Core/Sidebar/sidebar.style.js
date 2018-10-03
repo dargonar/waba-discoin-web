@@ -43,7 +43,7 @@ const SidebarWrapper = styled.div`
           line-height: 70px;
           letter-spacing: 3px;
           text-transform: uppercase;
-          color: ${palette("grayscale", 6)};
+          color: ${palette("grayscale", 0)};
           display: block;
           text-decoration: none;
         }
