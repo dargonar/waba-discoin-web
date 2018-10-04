@@ -26,8 +26,6 @@ const socialMedia = ["Website", "Twiter", "Instagram", "Facebook"];
 
 const BasicLeafletMapWithMarker = props => <Map {...props} />;
 
-const FormItem = Form.Item;
-const SelectOption = Select.Option;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
