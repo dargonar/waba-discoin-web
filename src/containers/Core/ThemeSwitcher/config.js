@@ -133,7 +133,7 @@ const layoutTheme = {
     {
       themeName: "themedefault",
       buttonColor: "#ffffff",
-      backgroundColor: "#F1F3F6",
+      backgroundColor: "#F5F9FD",
       textColor: undefined
     },
     {

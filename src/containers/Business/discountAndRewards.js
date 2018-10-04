@@ -1,140 +1,486 @@
 import React, { Component } from "react";
 import LayoutContentWrapper from "../../components/utility/layoutWrapper";
 import PageHeader from "../../components/utility/pageHeader";
-import PageLoading from "../../components/pageLoading";
-import { Row, Col } from "antd";
-import basicStyle from "../../config/basicStyle";
-import Box from "../../components/utility/box";
-import ContentHolder from "../../components/utility/contentHolder";
-import Input from "../../components/uielements/input";
-import Button from "../../components/uielements/button";
+import IntlMessages from "../../components/utility/intlMessages";
 
+import Box from "../../components/utility/box";
+import PageLoading from "../../components/pageLoading";
+
+import { Col, Row } from "antd";
+
+import Button from "../../components/uielements/button";
+import Async from "../../helpers/asyncComponent";
+import actions from "../../redux/owner/actions";
+import apiActions from "../../redux/api/actions";
+import appActions from "../../redux/app/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import actions from "../../redux/api/actions";
-import MessageBox from "../../components/MessageBox";
+import Form from "../../components/uielements/form";
+import { Input, Select, InputNumber } from "antd";
+
+
+const socialMedia = ["Website", "Twiter", "Instagram", "Facebook"];
+
+const FormItem = Form.Item;
+const SelectOption = Select.Option;
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 4 }
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 20 }
+  }
+};
+
+const defualtSchedule = [
+  { discount: "0", reward: "0", date: "monday" },
+  { discount: "0", reward: "0", date: "tuesday" },
+  { discount: "0", reward: "0", date: "wednesday" },
+  { discount: "0", reward: "0", date: "thursday" },
+  { discount: "0", reward: "0", date: "friday" },
+  { discount: "0", reward: "0", date: "saturday" },
+  { discount: "0", reward: "0", date: "sunday" }
+];
 
 class DiscountsAndRewards extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    this.renderContent = this.renderContent.bind(this);
-    this.updateRefounds = this.updateRefounds.bind(this);
+    this.state = {
+      form: {
+        discount_schedule: defualtSchedule,
+        links: {},
+        mode: "edit"
+      }
+    };
+    this.inputChange = this.inputChange.bind(this);
+    this.initForm = this.initForm.bind(this);
     this.submit = this.submit.bind(this);
   }
 
   componentWillMount() {
-    if (this.props.api.schedule === null) {
-      console.log(" -- DiscountsAndRewards:componentWillMount() -- ");
-      this.props.getSchedule();
+    this.props.getCategories();
+    if (typeof this.props.match.params.id !== "undefined") {
+      this.setState({
+        loading: true,
+        mode: "edit",
+        id: this.props.match.params.id
+      });
+      this.props.fetchBusiness(this.props.match.params.id);
+    }
+
+    console.log(
+      " ** componentWillMount",
+      "---------this.props.business",
+      this.props.business
+    );
+    if (
+      typeof this.props.business !== "undefined" &&
+      this.props.business !== null
+    ) {
+      this.setState({
+        mode: "edit",
+        id: this.props.business.account_id,
+        loading: false
+      });
+      this.initForm(this.props.business);
     }
   }
 
-  updateRefounds(e, key) {
-    const value = e.target.value;
-    let discounts = this.state.discounts || this.props.api.schedule;
-    if (discounts[key]) {
-      discounts[key] = { ...discounts[key], discount: value };
-    }
-    this.setState({ discounts: discounts });
+  formatSchedule(category_id) {
+    const categoryDiscount = this.props.categories.filter(
+      cat => cat.id == category_id
+    )[0];
+    return defualtSchedule.map(day => ({
+      ...day,
+      discount: categoryDiscount.discount,
+      reward: categoryDiscount.discount
+    }));
   }
 
   submit() {
-    console.log(" -- submit():schedule:", JSON.stringify(this.state.discounts));
-    if (typeof this.state.discounts !== "undefined") {
-      this.props.updateSchedule(this.state.discounts);
+    // TODO: Validation!
+    console.log("*****> submit");
+    let result = this.props.form.getFieldsValue();
+    // result = formatSchedules(result);
+    this.props.form.validateFields((err, val) => {
+      if (err === null) {
+        console.log(
+          "----------------------- saving business:",
+          JSON.stringify(result)
+        );
+
+        return;
+        //Inject discount:schedule after submit
+        if (!this.props.isAdmin) {
+          result.discount_schedule =
+            this.props.business.discount_schedule.length === 7
+              ? this.props.business.discount_schedule
+              : this.formatSchedule(result.category_id);
+        }
+        this.props.saveBusiness(result);
+      } else {
+        this.props.showMessage({
+          msg: "Por favor corrija los errores e intente nuevamente",
+          msgType: "error"
+        });
+      }
+    });
+
+  }
+
+  changeSchedule(type, key, value) {
+    if (isNaN(value)) return;
+    // let schedule = this.state.form[type + "_schedule"];
+    let schedule = this.state.form["discount_schedule"];
+    schedule[key][type] = Number(value);
+    this.setState({
+      form: {
+        ...this.state.form,
+        discount_schedule: schedule
+      }
+    });
+    // [type + "_schedule"]: schedule
+  }
+
+  componentWillUnmount() {
+    this.setState({
+      form: {
+        links: {},
+        discount_schedule: defualtSchedule,
+        location: {}
+      }
+    });
+  }
+  componentWillReceiveProps(nextProps) {
+    const checkLoading = business => {
+      if (business && this.state.id) {
+        const editableBusiness = business.filter(
+          x => x.account_id === this.state.id
+        );
+        if (editableBusiness.length !== 0) {
+          this.initForm(editableBusiness[0]);
+        }
+      } else if (business) {
+        this.initForm(business);
+      }
+    };
+
+    console.log(
+      " ** componentWillReceiveProps",
+      "---------this.props",
+      nextProps
+    );
+    if (this.state.loading === true) {
+      checkLoading(nextProps.business || nextProps.businesses);
     }
   }
 
-  renderContent() {
-    const { rowStyle, colStyle } = basicStyle;
+  initForm(business) {
+    // console.log('==========initForm:');
+    // console.log(JSON.stringify(business));
+    this.setState({
+      form: {
+        ...this.state.form,
+        ...business
+      },
+      loading: false
+    });
+  }
 
-    const inputStyle = {
-      fontSize: "24px"
-    };
-    const avgStyle = {
-      display: "block",
-      paddingTop: "15px"
-    };
+  inputChange(e) {
+    // this.setState({
+    //   form: {
+    //     ...this.state.form,
+    //     latitude: e.latlng.lat,
+    //     longitude: e.latlng.lng
+    //   }
+    // })
 
-    if (this.props.api.schedule !== null) {
-      return (
-        <div>
-          <Row style={rowStyle} gutter={16} justify="start">
-            {this.props.api.schedule.map((data, key) => (
-              <Col md={6} sm={12} xs={24} style={colStyle} key={key}>
-                <Box
-                  title={
-                    <span style={{ textTransform: "capitalize" }}>
-                      {data.date}
-                    </span>
-                  }
-                >
-                  <ContentHolder>
-                    <Input
-                      type="number"
-                      defaultValue={data.discount}
-                      style={inputStyle}
-                      onChange={e => this.updateRefounds(e, key)}
-                    />
-                    {data.avg ? (
-                      <span style={avgStyle}>
-                        Avg. {Number(data.avg).toLocaleString()} %
-                      </span>
-                    ) : (
-                      false
-                    )}
-                  </ContentHolder>
-                </Box>
-              </Col>
-            ))}
+    // const result = set(
+    //   { data: this.state.form },
+    //   e.target.id,
+    //   e.target.value
+    // )
+
+    var key = e.target.id.replace("form.", "");
+    var val = e.target.value;
+    var obj = this.state.form;
+    obj[key] = val;
+    this.setState(obj);
+    
+  }
+
+  renderForm(){
+    // console.log( " ===> render");
+    // console.log( JSON.stringify(this.state.form));
+    const { getFieldDecorator } = this.props.form;
+
+    const getMinimunDiscount = (categories, id) =>
+      categories
+        .filter(category => category.id === id)
+        .reduce((prev, act) => act.discount, 0);
+
+    const minimumDiscount = 20;
+    // const minimumDiscount = getMinimunDiscount(
+    //   this.props.categories,
+    //   this.props.business.category_id
+    // );
+
+    //console.log(this.props.form, this.props.form.getFieldsValue());
+    return (
+      <Form style={{ width: "100%" }} onSubmit={this.submit}>
+        <Box>
+          <h3>
+            <intlMessages id="profile.profile_info" defaultMessage="Perfil" />
+          </h3>
+          <Row style={{ width: "100%" }} gutter={16}>
+            <Col lg={24} md={24} sm={24}>
+              {getFieldDecorator("account_id", {
+                initialValue: this.state.form.account_id
+              })(<Input type="hidden" name="acccount_id" />)}
+              {getFieldDecorator("post_type", {
+                  initialValue: 'discounts'
+                })(<Input type="hidden" name="post_type" />)}
+
+              <FormItem
+                {...formItemLayout}
+                label={
+                  <IntlMessages id="profile.paymentMethods" defaultMessage="Payment methods" />
+                }
+              >
+                {getFieldDecorator("payments", {})(
+                  <Select mode="multiple">
+                    <SelectOption value="cash">
+                      <IntlMessages
+                        id="profile.payments.cash"
+                        defaultMessage="Cash"
+                      />
+                    </SelectOption>
+                    <SelectOption value="debit">
+                      <IntlMessages
+                        id="profile.payments.debit"
+                        defaultMessage="Debit"
+                      />
+                    </SelectOption>
+                    <SelectOption value="credit">
+                      <IntlMessages
+                        id="profile.payments.credit"
+                        defaultMessage="Credit"
+                      />
+                    </SelectOption>
+                    <SelectOption value="mercadopago">
+                      <IntlMessages
+                        id="profile.payments.mercadopago"
+                        defaultMessage="MercadoPago"
+                      />
+                    </SelectOption>
+                  </Select>
+                )}
+              </FormItem>
+
+            </Col>
           </Row>
+
+            <Row style={{ width: "100%" }} gutter={16}>
+              <Col lg={24} md={24} sm={24}>
+                <FormItem>
+                  <h3>
+                    <IntlMessages
+                      id="profile.rates_extended"
+                      defaultMessage="Rates"
+                    />
+                  </h3>
+                  <Row style={{ width: "100%" }}>
+                    <Col sm={3}>
+                      <Row style={{ width: "100%", textAlign: "center" }}>
+                        <Col>
+                          <IntlMessages
+                            defaultMessage="Type"
+                            id="profile.type"
+                          />
+                        </Col>
+                        <Col>
+                          <IntlMessages
+                            defaultMessage="Reward"
+                            id="profile.reward"
+                          />
+                        </Col>
+                        <Col>
+                          <IntlMessages
+                            defaultMessage="Discount"
+                            id="profile.discount"
+                          />
+                        </Col>
+                      </Row>
+                    </Col>
+                    {this.state.form.discount_schedule.map(
+                      (discount, key) => (
+                        <Col sm={3} key={"discount-" + key}>
+                          <Row>
+                            <Col
+                              style={{
+                                textAlign: "center",
+                                textTransform: "capitalize"
+                              }}
+                            >
+                              <IntlMessages
+                                defaultMessage={discount.date.substr(0, 3)}
+                                id={
+                                  "profile.day-" + discount.date.substr(0, 3)
+                                }
+                              />
+                            </Col>
+                            <Col>
+                              {getFieldDecorator(
+                                "discount_schedule[" + key + "].date",
+                                {
+                                  initialValue: this.state.form
+                                    .discount_schedule[key].date
+                                }
+                              )(
+                                <Input
+                                  type="hidden"
+                                  name={"discount_schedule[" + key + "].date"}
+                                />
+                              )}
+                              <FormItem style={{ marginBottom: "3px" }}>
+                                {getFieldDecorator(
+                                  "discount_schedule[" + key + "].reward",
+                                  {
+                                    initialValue: Number(
+                                      discount.reward ? discount.reward : 0
+                                    ),
+                                    rules: [
+                                      {
+                                        message: "",
+                                        validator: (field, value, cb) => {
+                                          value >= minimumDiscount
+                                            ? cb()
+                                            : cb(true);
+                                        }
+                                      }
+                                    ]
+                                  }
+                                )(
+                                  <InputNumber
+                                    name={
+                                      "discount_schedule[" + key + "].reward"
+                                    }
+                                    max={100}
+                                    style={{
+                                      width: "90%"
+                                    }}
+                                  /> 
+                                )}
+                                {" %"}
+                              </FormItem>
+                            </Col>
+                            <Col>
+                              <FormItem style={{ marginBottom: "3px" }}>
+                                {getFieldDecorator(
+                                  "discount_schedule[" + key + "].discount",
+                                  {
+                                    initialValue: Number(
+                                      discount ? discount.discount : 0
+                                    ),
+                                    rules: [
+                                      {
+                                        message: "",
+                                        validator: (field, value, cb) => {
+                                          value >= minimumDiscount
+                                            ? cb()
+                                            : cb(true);
+                                        }
+                                      }
+                                    ]
+                                  }
+                                )(
+                                  <InputNumber
+                                    name={
+                                      "discount_schedule[" +
+                                      key +
+                                      "].discount"
+                                    }
+                                    max={100}
+                                    style={{
+                                      width: "90%"
+                                    }}
+                                  />
+                                )}
+                                {" %"}
+                              </FormItem>
+                            </Col>
+                          </Row>
+                        </Col>
+                      )
+                    )}
+                  </Row>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row style={{ width: "100%" }} gutter={16}>
+              <h4 style={{textAlign:'right'}}>
+                <IntlMessages
+                  id="configSchedule.minimumDiscount"
+                  defaultMessage="Descuento mínimo de : {min}"
+                  values={{ minimumDiscount }}
+                />
+              </h4>
+            </Row>
           <Button
             type="primary"
-            style={{ marginLeft: "auto", marginRight: "16px" }}
+            style={{ margin: "20px 0" }}
             onClick={this.submit}
-            loading={this.props.api.actionLoading}
           >
-            Apply changes
+            <IntlMessages
+              id="profile.saveStore"
+              defaultMessage="Save store"
+            />
           </Button>
-        </div>
-      );
-    } else {
-      return false;
-    }
+        </Box>
+      </Form>
+    );
   }
 
   render() {
+    const textAreaStyle = {
+      width: "100%",
+      padding: "10px",
+      height: "221px",
+      borderRadius: "4px",
+      border: "1px solid #e9e9e9"
+    };
+
     return (
       <LayoutContentWrapper>
-        <MessageBox
-          clean={this.props.cleanMsg}
-          msg={this.props.api.msg}
-          error={this.props.api.error !== false}
-        />
-        <PageHeader>Discounts and Rewards</PageHeader>
-        {this.props.api.loading !== false &&
-        this.props.api.schedule === null ? (
-          <PageLoading />
-        ) : (
-          this.renderContent()
-        )}
+        <PageHeader>
+          <IntlMessages id="configSchedule.title" defaultMessage="Configuración" />
+        </PageHeader>
+        {this.state.loading ? <PageLoading /> : this.renderForm()}
       </LayoutContentWrapper>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  api: state.Api
+  isAdmin: state.Auth.accountType === "admin",
+  categories: state.Api.categoriesList,
+  business: state.Api.business
 });
 
 const mapDispatchToProps = dispatch => ({
-  cleanMsg: bindActionCreators(actions.cleanMsg, dispatch),
-  getSchedule: bindActionCreators(actions.getSchedule, dispatch),
-  updateSchedule: bindActionCreators(actions.updateSchedule, dispatch)
+  showMessage: bindActionCreators(appActions.showMessage, dispatch),
+  getCategories: bindActionCreators(apiActions.getCategoriesList, dispatch),
+  fetchBusiness: bindActionCreators(actions.fetchBusiness, dispatch),
+  saveBusiness: bindActionCreators(actions.saveBusiness, dispatch)
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DiscountsAndRewards);
+//inject this.props.form, inject redux state and actions
+export default Form.create()(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(DiscountsAndRewards)
+);

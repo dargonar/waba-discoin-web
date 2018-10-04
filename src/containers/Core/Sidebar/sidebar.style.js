@@ -6,7 +6,7 @@ import WithDirection from "../../../config/withDirection";
 const SidebarWrapper = styled.div`
   .isomorphicSidebar {
     z-index: 1000;
-    background: ${palette("secondary", 0)};
+    background: ${palette("grayscale", 4)};
     width: 280px;
     flex: 0 0 280px;
 
@@ -30,7 +30,6 @@ const SidebarWrapper = styled.div`
 
     .isoLogoWrapper {
       height: 70px;
-      background: rgba(0, 0, 0, 0.3);
       margin: 0;
       padding: 0 10px;
       text-align: center;
@@ -44,7 +43,7 @@ const SidebarWrapper = styled.div`
           line-height: 70px;
           letter-spacing: 3px;
           text-transform: uppercase;
-          color: ${palette("grayscale", 6)};
+          color: ${palette("grayscale", 0)};
           display: block;
           text-decoration: none;
         }
@@ -114,7 +113,7 @@ const SidebarWrapper = styled.div`
       }
 
       .ant-menu-item-selected {
-        background-color: rgba(0, 0, 0, 0.4) !important;
+        background: linear-gradient(to right, rgba(190,51,255,1) 0%,rgba(155,93,255,1) 100%);
         .anticon {
           color: #fff;
         }
@@ -132,7 +131,7 @@ const SidebarWrapper = styled.div`
         &:hover {
           i,
           .nav-text {
-            color: #ffffff;
+            color: rgba(190,51,255,1);
           }
         }
       }

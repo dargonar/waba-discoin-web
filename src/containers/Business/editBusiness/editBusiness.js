@@ -26,6 +26,8 @@ const socialMedia = ["Website", "Twiter", "Instagram", "Facebook"];
 
 const BasicLeafletMapWithMarker = props => <Map {...props} />;
 
+const FormItem = Form.Item;
+const SelectOption = Select.Option;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -117,7 +119,7 @@ class CreateStore extends Component {
           "----------------------- saving business:",
           JSON.stringify(result)
         );
-
+        return;
         //Inject discount:schedule after submit
         if (!this.props.isAdmin) {
           result.discount_schedule =
@@ -231,17 +233,6 @@ class CreateStore extends Component {
     var obj = this.state.form;
     obj[key] = val;
     this.setState(obj);
-
-    // console.log( " ===> inputChange e.target.id");
-    // console.log(e.target.id);
-    // console.log( " ===> inputChange e.target.value");
-    // console.log(e.target.value);
-
-    // console.log( " ===> inputChange result form");
-    // console.log(result.form);
-    // this.setState({ form : result.form   });
-    // console.log( " ===> inputChange state form");
-    // console.log(this.state.form)
   }
 
   categoryChange(id) {
@@ -302,6 +293,9 @@ class CreateStore extends Component {
                 {getFieldDecorator("account_id", {
                   initialValue: this.state.form.account_id
                 })(<Input type="hidden" name="acccount_id" />)}
+                {getFieldDecorator("post_type", {
+                  initialValue: "profile"
+                })(<Input type="hidden" name="post_type" />)}
                 <FormItem
                   {...formItemLayout}
                   label={
@@ -538,45 +532,6 @@ class CreateStore extends Component {
               </Col>
 
               <Col md={24} lg={12}>
-                <FormItem
-                  {...formItemLayout}
-                  label={
-                    <IntlMessages
-                      id="profile.payments"
-                      defaultMessage="Payments methods"
-                    />
-                  }
-                >
-                  {getFieldDecorator("payments", {})(
-                    <Select mode="multiple">
-                      <SelectOption value="cash">
-                        <IntlMessages
-                          id="profile.payments.cash"
-                          defaultMessage="Cash"
-                        />
-                      </SelectOption>
-                      <SelectOption value="debit">
-                        <IntlMessages
-                          id="profile.payments.debit"
-                          defaultMessage="Debit"
-                        />
-                      </SelectOption>
-                      <SelectOption value="credit">
-                        <IntlMessages
-                          id="profile.payments.credit"
-                          defaultMessage="Credit"
-                        />
-                      </SelectOption>
-                      <SelectOption value="mercadopago">
-                        <IntlMessages
-                          id="profile.payments.mercadopago"
-                          defaultMessage="MercadoPago"
-                        />
-                      </SelectOption>
-                    </Select>
-                  )}
-                </FormItem>
-
                 <FormItem
                   {...formItemLayout}
                   label={
