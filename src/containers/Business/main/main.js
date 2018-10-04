@@ -145,8 +145,8 @@ export class Dashboard extends Component {
   }
 
   render() {
-
-    {/* <LayoutContentWrapper>
+    {
+      /* <LayoutContentWrapper>
               <PageHeader>
                 <IntlMessage
                   id="bussinesMain.rewardAndRefund"
@@ -158,22 +158,27 @@ export class Dashboard extends Component {
                 this.renderContent()
               ) : (
                 <PageLoading />
-              )} */}
-      
-    return (
+              )} */
+    }
 
+    return (
       <LayoutContentWrapper className="reward_discount-view">
         <Row type="flex">
           <Col className="col">
             <span class="label">Monto de la factura</span>
           </Col>
         </Row>
-        <Row justify="start" type="flex" flexDirection={Row} className="flexRow input-bill-container">
+        <Row
+          justify="start"
+          type="flex"
+          flexDirection={Row}
+          className="flexRow input-bill-container"
+        >
           <Col md={12} className="col">
             <Row type="flex" flexDirection={Row} className="flexRow">
               <Col className="d-flex flex-column text-right bill-currency">
-                <span>$</span> 
-                <p>ARS</p> 
+                <span>$</span>
+                <p>ARS</p>
               </Col>
               <Col className="d-flex">
                 <Input
@@ -182,9 +187,7 @@ export class Dashboard extends Component {
                   min="0"
                   size="large"
                   value={this.state.bill.amount}
-                  placeholder={
-                    0
-                  }
+                  placeholder={0}
                   onChange={e => this.changeBillAmount(e.target.value)}
                 />
               </Col>
@@ -203,7 +206,12 @@ export class Dashboard extends Component {
             />
           </Col>
         </Row>
-        <Row justify="start" type="flex" flexDirection={Row} className="flexRow w-100">
+        <Row
+          justify="start"
+          type="flex"
+          flexDirection={Row}
+          className="flexRow w-100"
+        >
           <Col md={12} className="col">
             <SendRefund
               {...this.state.bill}
@@ -229,14 +237,7 @@ export class Dashboard extends Component {
           </Col>
         </Row>
 
-
-
         <Row style={{ width: "100%" }} gutter={16}>
-
-
-
-
-
           <Col md={24} style={{ paddingTop: "40px" }}>
             <PageHeader>
               <IntlMessage
@@ -247,7 +248,6 @@ export class Dashboard extends Component {
             <TransactionList txs={this.props.transactions} />
           </Col>
         </Row>
->>>>>>> julian
       </LayoutContentWrapper>
     );
   }
