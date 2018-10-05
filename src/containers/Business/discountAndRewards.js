@@ -17,6 +17,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Form from "../../components/uielements/form";
 import { Input, Select, InputNumber } from "antd";
+import { PaymentMetodsEncoder } from "../../utils/paymentsEncoder";
 
 const socialMedia = ["Website", "Twiter", "Instagram", "Facebook"];
 
@@ -56,6 +57,7 @@ class DiscountsAndRewards extends Component {
     this.inputChange = this.inputChange.bind(this);
     this.initForm = this.initForm.bind(this);
     this.submit = this.submit.bind(this);
+    this.togglePayment = this.togglePayment.bind(this);
   }
 
   componentWillMount() {
@@ -116,7 +118,6 @@ class DiscountsAndRewards extends Component {
         // });
 
         // return;
-        
         // if (!this.props.isAdmin) {
         //   result.discount_schedule =
         //     this.props.business.discount_schedule.length === 7
@@ -125,7 +126,6 @@ class DiscountsAndRewards extends Component {
         // }
         // this.props.saveBusiness(result);
         this.props.updateSchedule(result);
-        
       } else {
         this.props.showMessage({
           msg: "Por favor corrija los errores e intente nuevamente",
@@ -133,6 +133,13 @@ class DiscountsAndRewards extends Component {
         });
       }
     });
+  }
+
+  togglePayment(key, values) {
+    let schedule = this.props.form.getFieldsValue().discount_schedule;
+    schedule[key] = { ...schedule[key], ...values };
+    this.props.form.setFieldsValue({ discount_schedule: schedule });
+    console.log(schedule);
   }
 
   changeSchedule(type, key, value) {
@@ -233,6 +240,7 @@ class DiscountsAndRewards extends Component {
     // );
 
     //console.log(this.props.form, this.props.form.getFieldsValue());
+    const paymentMethods = PaymentMetodsEncoder();
     return (
       <Form style={{ width: "100%" }} onSubmit={this.submit}>
         <Box>
@@ -240,11 +248,11 @@ class DiscountsAndRewards extends Component {
             <intlMessages id="profile.profile_info" defaultMessage="Perfil" />
           </h3>
           <Row style={{ width: "100%" }} gutter={16}>
-            <Col lg={24} md={24} sm={24}>
+            {/*<Col lg={24} md={24} sm={24}>
               {getFieldDecorator("account_id", {
                 initialValue: this.state.form.account_id
               })(<Input type="hidden" name="acccount_id" />)}
-              
+
               <FormItem
                 {...formItemLayout}
                 label={
@@ -283,7 +291,7 @@ class DiscountsAndRewards extends Component {
                   </Select>
                 )}
               </FormItem>
-            </Col>
+                </Col> */}
           </Row>
 
           <Row style={{ width: "100%" }} gutter={16}>
@@ -311,6 +319,12 @@ class DiscountsAndRewards extends Component {
                         <IntlMessages
                           defaultMessage="Discount"
                           id="profile.discount"
+                        />
+                      </Col>
+                      <Col>
+                        <IntlMessages
+                          id="profile.paymentMethods"
+                          defaultMessage="Payment methods"
                         />
                       </Col>
                     </Row>
@@ -406,6 +420,28 @@ class DiscountsAndRewards extends Component {
                             )}
                           </FormItem>
                         </Col>
+                        <Col>
+                          <FormItem>
+                            <Select
+                              mode="multiple"
+                              defaultValue={paymentMethods.encode(discount)}
+                              style={{ width: "100%" }}
+                              placeholder="Please select"
+                              onChange={e =>
+                                this.togglePayment(
+                                  key,
+                                  paymentMethods.decode(e)
+                                )
+                              }
+                            >
+                              {paymentMethods.paymentsLabels.map(method => (
+                                <SelectOption value={method}>
+                                  {method}
+                                </SelectOption>
+                              ))}
+                            </Select>
+                          </FormItem>
+                        </Col>
                       </Row>
                     </Col>
                   ))}
@@ -468,7 +504,7 @@ const mapDispatchToProps = dispatch => ({
   getCategories: bindActionCreators(apiActions.getCategoriesList, dispatch),
   fetchBusiness: bindActionCreators(actions.fetchBusiness, dispatch),
   updateSchedule: bindActionCreators(apiActions.updateSchedule, dispatch),
-  getSchedule: bindActionCreators(apiActions.getSchedule, dispatch),
+  getSchedule: bindActionCreators(apiActions.getSchedule, dispatch)
 });
 
 //inject this.props.form, inject redux state and actions
