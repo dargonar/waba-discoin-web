@@ -414,7 +414,7 @@ class DiscountsAndRewards extends Component {
             </Col>
           </Row>
           <Row style={{ width: "100%" }} gutter={16}>
-            <h4 style={{ textAlign: "right" }}>
+            <h4 style={{ float: 'right', color:'#fff', textAlign: "right", backgroundColor:'#f5222d' }}>
               <IntlMessages
                 id="configSchedule.minimumDiscount"
                 defaultMessage="Descuento mínimo de : {min}"
