@@ -72,6 +72,7 @@ export class Dashboard extends Component {
 
   componentWillMount() {
     this.props.loadTx();
+    this.props.loadSchedule();
     this.setTimmer(10000);
   }
 
@@ -81,88 +82,7 @@ export class Dashboard extends Component {
 
   renderContent() {
     return (
-      <Row style={{ width: "100%" }} gutter={16}>
-        <Col md={12}>
-          <Input
-            type="number"
-            min="0"
-            size="large"
-            value={this.state.bill.amount}
-            placeholder={
-              this.props.intl.messages["bussinesMain.billAmount"] ||
-              "Bill amount"
-            }
-            onChange={e => this.changeBillAmount(e.target.value)}
-          />
-        </Col>
-
-        <Col md={12}>
-          <Input
-            size="large"
-            placeholder={
-              this.props.intl.messages["bussinesMain.billReference"] ||
-              "Reference (ticket number, invoice, other)"
-            }
-            onChange={e => this.changeBillReference(e.target.value)}
-          />
-        </Col>
-
-        <Col md={12}>
-          <SendRefund
-            {...this.state.bill}
-            account={this.props.account}
-            percentage={this.props.discount.reward}
-            onSubmit={data => {
-              console.log("Submited", { data });
-              this.setTimmer(1000, 20000);
-            }}
-          />
-        </Col>
-
-        <Col md={12}>
-          <AcceptDiscount
-            {...this.state.bill}
-            percentage={this.props.discount.discount}
-            onSubmit={data => {
-              console.log("Submited", { data });
-              //this.setTimmer(1000, 20000);
-            }}
-            setTimmer={this.setTimmer}
-          />
-        </Col>
-
-        <Col md={24} style={{ paddingTop: "40px" }}>
-          <PageHeader>
-            <IntlMessage
-              defaultMessage="Transactions"
-              id="businessMain.transactions"
-            />
-          </PageHeader>
-          <TransactionList txs={this.props.transactions} />
-        </Col>
-      </Row>
-    );
-  }
-
-  render() {
-    {
-      /* <LayoutContentWrapper>
-              <PageHeader>
-                <IntlMessage
-                  id="bussinesMain.rewardAndRefund"
-                  defaultMessage="Reward and accept {currency}"
-                  values={{ currency: currency.plural }}
-                />
-              </PageHeader>
-              {typeof this.props.discount.discount !== "undefined" ? (
-                this.renderContent()
-              ) : (
-                <PageLoading />
-              )} */
-    }
-
-    return (
-      <LayoutContentWrapper className="reward_discount-view">
+      <div>
         <Row type="flex">
           <Col className="col">
             <span class="label">Monto de la factura</span>
@@ -237,7 +157,7 @@ export class Dashboard extends Component {
           </Col>
         </Row>
 
-        <Row style={{ width: "100%" }} gutter={16}>
+        <Row style={{ width: "100%", paddingTop: "40px" }} gutter={16}>
           <Col md={24} style={{ paddingTop: "40px" }}>
             <PageHeader>
               <IntlMessage
@@ -248,6 +168,19 @@ export class Dashboard extends Component {
             <TransactionList txs={this.props.transactions} />
           </Col>
         </Row>
+      </div>
+    );
+  }
+
+  render() {
+    return (
+      <LayoutContentWrapper className="reward_discount-view">
+        {typeof this.props.discount.discount !== "undefined" &&
+        typeof this.props.discount.reward !== "undefined" ? (
+          this.renderContent()
+        ) : (
+          <PageLoading />
+        )}
       </LayoutContentWrapper>
     );
   }
@@ -282,6 +215,7 @@ const mapStateToProps = state => ({
 });
 
 const dispatchToProps = dispatch => ({
+  loadSchedule: bindActionCreators(actions.getSchedule, dispatch),
   loadTx: bindActionCreators(actions.searchTransactions, dispatch)
 });
 

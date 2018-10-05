@@ -30,44 +30,7 @@ class AcceptDiscountComponent extends Component {
   }
 
   componentDidMount() {
-    this.setState({ reward: this.getTodayDiscount() });
-  }
-
-  // HACK: robado de dashboard.js
-  getDay() {
-    const now = new Date();
-    const days = [
-      "sunday",
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday"
-    ];
-    return days[now.getDay()];
-  }
-
-  getTodayDiscount() {
-    return this.getTodayRate("discount");
-  }
-  getTodayReward() {
-    return this.getTodayRate("reward");
-  }
-
-  getTodayRate(discount_reward) {
-    const today = this.getDay();
-    if (this.props.api.schedule === null) {
-      console.log(" -- Refund:componentWillMount() -- ");
-      this.props.getSchedule();
-      return;
-    }
-    let discount = this.props.api.schedule.find(function(dis) {
-      return dis.date === today;
-    });
-    //Check id discount is set
-
-    return discount_reward === "discount" ? discount.discount : discount.reward; //? discount : { discount: 0, reward: 0 };
+    this.setState({ reward: this.props.percentage });
   }
 
   showQr(customer) {
@@ -206,12 +169,9 @@ class AcceptDiscountComponent extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  getSchedule: bindActionCreators(actions.getSchedule, dispatch)
-});
+const mapDispatchToProps = dispatch => ({});
 
 const mapStateToProps = state => ({
-  api: state.Api,
   account: state.Auth,
   transactions: state.Api.transactions || []
 });
