@@ -1,5 +1,5 @@
 import { all, call, takeEvery, put, fork } from "redux-saga/effects";
-import { push } from "react-router-redux";
+//import { push } from "react-router-redux";
 
 import actions from "./actions";
 import actionsUI from "../app/actions";
@@ -256,9 +256,7 @@ export function* loginError() {
 
 export function* logout() {
   yield takeEvery(actions.LOGOUT, function*() {
-    console.log(
-      "-------------saga::logout()"
-    );
+    console.log("-------------saga::logout()");
     yield put({ type: actions.LS_CLEAN });
     // yield put(push("/"));
   });

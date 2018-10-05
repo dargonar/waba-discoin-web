@@ -103,16 +103,19 @@ class AcceptDiscountComponent extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    this.props.percentage !== newProps.percentage ||
-    this.state.reward < newProps.percentage
-      ? this.updateReward(newProps.percentage)
-      : false;
+    if (
+      this.props.percentage !== newProps.percentage ||
+      this.state.reward < newProps.percentage
+    ) {
+      this.updateReward(newProps.percentage);
+    }
   }
 
   render() {
     const roundAmount = value => Math.round(value * 100) / 100;
 
-    {/* <span>
+    {
+      /* <span>
                       ${" "}
                       {Number(
                         this.props.amount -
@@ -125,7 +128,8 @@ class AcceptDiscountComponent extends Component {
                       {roundAmount(
                         (this.state.reward * (this.props.amount || 0)) / 100 || 0
                       ).toFixed(2)}
-                    </span> */}
+                    </span> */
+    }
 
     return (
       <div>
@@ -148,6 +152,7 @@ class AcceptDiscountComponent extends Component {
           }
           account_id={this.props.account.account_id}
           account_name={this.props.account.account}
+          reward={this.state.reward}
           id="INVOICE_DISCOUNT"
         />
         <ColorBox
@@ -175,9 +180,7 @@ class AcceptDiscountComponent extends Component {
         >
           <div class="w-100 d-flex flex-row bill-amount">
             <div class="col flex-1 text-left">
-              <span class="label">
-              ARS
-              </span>
+              <span class="label">ARS</span>
               <span class="bill-amount-value">
                 {" "}
                 {Number(
@@ -189,9 +192,7 @@ class AcceptDiscountComponent extends Component {
               </span>
             </div>
             <div class="col flex-1 text-right">
-              <span class="label">
-              {currency.symbol}{" "}
-              </span>
+              <span class="label">{currency.symbol} </span>
               <span class="bill-amount-value">
                 {roundAmount(
                   (this.state.reward * (this.props.amount || 0)) / 100

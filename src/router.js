@@ -54,7 +54,7 @@ class ReduxGlobalMessage extends Component {
       notification[msgType]({
         message: nextProps.msg.split("|")[0],
         description: nextProps.msg.split("|")[1],
-        duration: 0
+        duration: msgType !== "error" ? 3 : 0
       });
       this.props.clearMsg();
     }

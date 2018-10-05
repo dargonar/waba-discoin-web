@@ -15,7 +15,11 @@ const language = "spanish";
 const currency = {
   name: "DISCOIN",
   symbol: "DSC",
-  plural: "Discoins"
+  plural: "Discoins",
+  fiat: {
+    symbol: "$",
+    plural: "Pesos"
+  }
 };
 
 const mapboxConfig = {

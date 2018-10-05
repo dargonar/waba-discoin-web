@@ -9,7 +9,6 @@ import PageLoading from "../../../components/pageLoading";
 import { Col, Row } from "antd";
 
 import Button from "../../../components/uielements/button";
-import Async from "../../../helpers/asyncComponent";
 import actions from "../../../redux/owner/actions";
 import apiActions from "../../../redux/api/actions";
 import appActions from "../../../redux/app/actions";
@@ -18,20 +17,15 @@ import { bindActionCreators } from "redux";
 import Form from "../../../components/uielements/form";
 import { Input, Select, InputNumber } from "antd";
 import { ImageUpload } from "../components/imageUpload";
-
+import { InputPlace } from "../components/placeInput";
+import Map from "../components/map";
+const FormItem = Form.Item;
+const SelectOption = Select.Option;
 
 const socialMedia = ["Website", "Twiter", "Instagram", "Facebook"];
 
-const BasicLeafletMapWithMarker = props => (
-  <Async
-    load={import(/* webpackChunkName: "basicLeafletMapWithMarker" */ "../components/map.js")}
-    componentProps={props}
-    componentArguement={"leafletMap"}
-  />
-);
+const BasicLeafletMapWithMarker = props => <Map {...props} />;
 
-const FormItem = Form.Item;
-const SelectOption = Select.Option;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -85,8 +79,8 @@ class CreateStore extends Component {
 
     console.log(
       " ** componentWillMount",
-      "---------this.props.business",
-      this.props.business
+      "---------this.props.business"
+      //this.props.business
     );
     if (
       typeof this.props.business !== "undefined" &&
@@ -103,7 +97,7 @@ class CreateStore extends Component {
 
   formatSchedule(category_id) {
     const categoryDiscount = this.props.categories.filter(
-      cat => cat.id == category_id
+      cat => Number(cat.id) === Number(category_id)
     )[0];
     return defualtSchedule.map(day => ({
       ...day,
@@ -211,8 +205,10 @@ class CreateStore extends Component {
       latitude: e.latlng.lat.toString(),
       longitude: e.latlng.lng.toString()
     });
-    console.log(" **********> locationChange");
-    console.log(e);
+    if (e.address) {
+      this.props.form.setFieldsValue({ address: e.address });
+    }
+    console.log(" **********> locationChange", e);
   }
 
   inputChange(e) {
@@ -235,7 +231,6 @@ class CreateStore extends Component {
     var obj = this.state.form;
     obj[key] = val;
     this.setState(obj);
-    
   }
 
   categoryChange(id) {
@@ -297,7 +292,7 @@ class CreateStore extends Component {
                   initialValue: this.state.form.account_id
                 })(<Input type="hidden" name="acccount_id" />)}
                 {getFieldDecorator("post_type", {
-                  initialValue: 'profile'
+                  initialValue: "profile"
                 })(<Input type="hidden" name="post_type" />)}
                 <FormItem
                   {...formItemLayout}
@@ -367,31 +362,6 @@ class CreateStore extends Component {
                       }
                     ]
                   })(<Input type="tel" name="telephone" />)}
-                </FormItem>
-
-                <FormItem
-                  {...formItemLayout}
-                  label={
-                    <IntlMessages
-                      id="profile.address"
-                      defaultMessage="Address"
-                    />
-                  }
-                >
-                  {getFieldDecorator("address", {
-                    initialValue: this.state.form.address,
-                    rules: [
-                      {
-                        required: true,
-                        message: (
-                          <IntlMessages
-                            id="profile.address.empty"
-                            defaultMessage="Address is required"
-                          />
-                        )
-                      }
-                    ]
-                  })(<Input type="text" name="address" />)}
                 </FormItem>
 
                 <FormItem
@@ -560,7 +530,43 @@ class CreateStore extends Component {
               </Col>
 
               <Col md={24} lg={12}>
-                
+                <FormItem
+                  {...formItemLayout}
+                  label={
+                    <IntlMessages
+                      id="profile.address"
+                      defaultMessage="Address"
+                    />
+                  }
+                >
+                  {getFieldDecorator("address", {
+                    initialValue: this.state.form.address,
+                    rules: [
+                      {
+                        required: true,
+                        message: (
+                          <IntlMessages
+                            id="profile.address.empty"
+                            defaultMessage="Address is required"
+                          />
+                        )
+                      }
+                    ]
+                  })(
+                    <InputPlace
+                      defaultValue={this.state.form.address}
+                      locationChange={this.locationChange}
+                      onChange={(v, e) => {
+                        this.props.form.setFieldsValue({
+                          address:
+                            e.props.children.split("//////")[0] ||
+                            e.props.value.split("//////")[0]
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+
                 <FormItem
                   {...formItemLayout}
                   label={
@@ -582,10 +588,8 @@ class CreateStore extends Component {
 
                   <BasicLeafletMapWithMarker
                     onChange={this.locationChange}
-                    marker={{
-                      lat: this.state.form.latitude,
-                      lng: this.state.form.longitude
-                    }}
+                    lat={this.props.form.getFieldValue("latitude")}
+                    lng={this.props.form.getFieldValue("longitude")}
                   />
                 </FormItem>
 

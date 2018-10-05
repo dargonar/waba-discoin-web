@@ -123,10 +123,12 @@ class SendRefundComponent extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    this.props.percentage !== newProps.percentage ||
-    this.state.discount < newProps.percentage
-      ? this.updateDiscount(newProps.percentage)
-      : false;
+    if (
+      this.props.percentage !== newProps.percentage ||
+      this.state.discount < newProps.percentage
+    ) {
+      this.updateDiscount(newProps.percentage);
+    }
   }
 
   // HACK: robado de dashboard.js
