@@ -22,7 +22,7 @@ export const getProfile = function*() {
     //catch error message in response
     const { data, error } = result;
 
-    if (typeof data !== "undefined") {
+    if (typeof data !== "undefined" && typeof data.error === "undefined") {
       yield put({ type: actions.GET_PROFILE_SUCCESS, payload: data });
       // As they share the same type of response I can update the business status as well.
       yield put({
@@ -31,7 +31,10 @@ export const getProfile = function*() {
       });
     } else {
       // Logout user
-      yield put({ type: actions.GET_PROFILE_FAILD, payload: error });
+      yield put({
+        type: actions.GET_PROFILE_FAILD,
+        payload: error || data.error
+      });
       yield put({ type: authActions.LOGOUT });
     }
   });
