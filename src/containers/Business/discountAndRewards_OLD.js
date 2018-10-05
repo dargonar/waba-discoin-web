@@ -112,7 +112,7 @@ class DiscountsAndRewards extends Component {
 
     if (this.props.api.schedule !== null) {
       
-      const { getFieldDecorator } = this.props.form;
+      // const { getFieldDecorator } = this.props.form;
       
       return (
         <Form style={{ width: "100%" }} onSubmit={this.submit}>
@@ -165,7 +165,7 @@ class DiscountsAndRewards extends Component {
                     />
                   }
                 >
-                  {getFieldDecorator("payments", {})(
+                  
                     <Select mode="multiple">
                       <SelectOption value="cash">
                         <IntlMessages
@@ -192,7 +192,7 @@ class DiscountsAndRewards extends Component {
                         />
                       </SelectOption>
                     </Select>
-                  )}
+                  
               </FormItem>
             </Row>
 
