@@ -233,10 +233,6 @@ export class Dashboard extends Component {
 
         <Row style={{ width: "100%" }} gutter={16}>
 
-
-
-
-
           <Col md={24} style={{ paddingTop: "40px" }}>
             <PageHeader>
               <IntlMessage
@@ -247,7 +243,7 @@ export class Dashboard extends Component {
             <TransactionList txs={this.props.transactions} />
           </Col>
         </Row>
->>>>>>> julian
+
       </LayoutContentWrapper>
     );
   }

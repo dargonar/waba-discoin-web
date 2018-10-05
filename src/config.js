@@ -26,9 +26,10 @@ const mapboxConfig = {
 };
 
 const apiConfig = {
-  base: "http://35.163.59.126:8088/api/",
-  baseFiles: "http://35.163.59.126:8088/files/",
+  base: "http://34.212.171.239:8088/api/",
+  baseFiles: "http://34.212.171.239:8088/files/",
   // base: "http://localhost:8088/api/",
+  chain_id: "bde617520673d18e67db5d7060ca2740f80e28093519c30176044c8d4a227e73",
   version: "v3",
   urls: [
     {
