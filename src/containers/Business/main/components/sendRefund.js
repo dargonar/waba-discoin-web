@@ -122,50 +122,17 @@ class SendRefundComponent extends Component {
     });
   }
 
+  componentWillMount() {
+    this.setState({ discount: this.props.percentage });
+  }
+
   componentWillReceiveProps(newProps) {
     if (
       this.props.percentage !== newProps.percentage ||
       this.state.discount < newProps.percentage
     ) {
-      this.updateDiscount(newProps.percentage);
+      this.setState({ discount: newProps.percentage });
     }
-  }
-
-  // HACK: robado de dashboard.js
-  getDay() {
-    const now = new Date();
-    const days = [
-      "sunday",
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday"
-    ];
-    return days[now.getDay()];
-  }
-
-  getTodayDiscount() {
-    return this.getTodayRate("discount");
-  }
-  getTodayReward() {
-    return this.getTodayRate("reward");
-  }
-
-  getTodayRate(discount_reward) {
-    const today = this.getDay();
-    if (this.props.api.schedule === null) {
-      console.log(" -- Refund:componentWillMount() -- ");
-      this.props.getSchedule();
-      return;
-    }
-    let discount = this.props.api.schedule.find(function(dis) {
-      return dis.date === today;
-    });
-    //Check id discount is set
-
-    return discount_reward === "discount" ? discount.discount : discount.reward; //? discount : { discount: 0, reward: 0 };
   }
 
   render() {
@@ -217,22 +184,15 @@ class SendRefundComponent extends Component {
           color="#3A99D9"
           arrow="arrow-down"
         >
-
-
           <div class="w-100 d-flex flex-row bill-amount">
             <div class="col flex-1 text-left">
-              <span class="label">
-              ARS
-              </span>
+              <span class="label">ARS</span>
               <span class="bill-amount-value">
                 $ {Number(this.props.amount || 0).toFixed(2)}
               </span>
-
             </div>
             <div class="col flex-1 text-right">
-              <span class="label">
-              {currency.symbol}{" "}
-              </span>
+              <span class="label">{currency.symbol} </span>
               <span class="bill-amount-value">
                 {roundAmount(
                   (this.state.discount * (this.props.amount || 0)) / 100
@@ -240,7 +200,6 @@ class SendRefundComponent extends Component {
               </span>
             </div>
           </div>
-
         </ColorBox>
       </div>
     );
@@ -259,7 +218,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   searchAccount: bindActionCreators(actions.searchAccount, dispatch),
   cleanMsg: bindActionCreators(actions.cleanMsg, dispatch),
-  getSchedule: bindActionCreators(actions.getSchedule, dispatch),
   showLoading: bindActionCreators(appActions.showLoading, dispatch),
   endLoading: bindActionCreators(appActions.endLoading, dispatch)
 });
