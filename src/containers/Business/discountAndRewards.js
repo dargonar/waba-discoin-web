@@ -19,7 +19,6 @@ import Form from "../../components/uielements/form";
 import { Input, Select, InputNumber } from "antd";
 import { PaymentMetodsEncoder } from "../../utils/paymentsEncoder";
 
-
 import basicStyle from "../../config/basicStyle";
 import ContentHolder from "../../components/utility/contentHolder";
 
@@ -52,6 +51,7 @@ class DiscountsAndRewards extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: true,
       form: {
         discount_schedule: defualtSchedule,
         links: {},
@@ -73,6 +73,8 @@ class DiscountsAndRewards extends Component {
         id: this.props.match.params.id
       });
       this.props.fetchBusiness(this.props.match.params.id);
+    } else {
+      this.props.getSchedule();
     }
 
     console.log(
@@ -228,7 +230,6 @@ class DiscountsAndRewards extends Component {
   }
 
   renderForm() {
-
     const { rowStyle, colStyle } = basicStyle;
 
     // console.log( " ===> render");
@@ -311,23 +312,33 @@ class DiscountsAndRewards extends Component {
                   />
                 </h3>
 
-
                 <Row style={rowStyle} gutter={16} justify="start">
                   {this.state.form.discount_schedule.map((discount, key) => (
-                    <Col md={6} sm={12} xs={24} style={colStyle} key={"discount-" + key}>
+                    <Col
+                      md={6}
+                      sm={12}
+                      xs={24}
+                      style={colStyle}
+                      key={"discount-" + key}
+                    >
                       <Box
                         title={
                           <span style={{ textTransform: "capitalize" }}>
                             <IntlMessages
                               defaultMessage={discount.date.substr(0, 3)}
                               id={"configSchedule." + discount.date}
-                          />
+                            />
                           </span>
                         }
                       >
                         <ContentHolder>
-                          <span><IntlMessages id="profile.discount" defaultMessage="Discount" /></span>
-                          
+                          <span>
+                            <IntlMessages
+                              id="profile.discount"
+                              defaultMessage="Discount"
+                            />
+                          </span>
+
                           {getFieldDecorator(
                             "discount_schedule[" + key + "].date",
                             {
@@ -373,9 +384,12 @@ class DiscountsAndRewards extends Component {
                             )}
                           </FormItem>
 
-                          
-
-                          <span><IntlMessages id="profile.reward" defaultMessage="Reward" /></span>
+                          <span>
+                            <IntlMessages
+                              id="profile.reward"
+                              defaultMessage="Reward"
+                            />
+                          </span>
                           <FormItem style={{ marginBottom: "3px" }}>
                             {getFieldDecorator(
                               "discount_schedule[" + key + "].discount",
@@ -407,8 +421,12 @@ class DiscountsAndRewards extends Component {
                             )}
                           </FormItem>
 
-
-                          <span><IntlMessages id="profile.paymentMethods" defaultMessage="Payment methods"/></span>
+                          <span>
+                            <IntlMessages
+                              id="profile.paymentMethods"
+                              defaultMessage="Payment methods"
+                            />
+                          </span>
                           <FormItem>
                             <Select
                               mode="multiple"
@@ -434,18 +452,18 @@ class DiscountsAndRewards extends Component {
                     </Col>
                   ))}
                 </Row>
-
-                
-
-
-
-
-
               </FormItem>
             </Col>
           </Row>
           <Row style={{ width: "100%" }} gutter={16}>
-            <h4 style={{ float: 'right', color:'#fff', textAlign: "right", backgroundColor:'#f5222d' }}>
+            <h4
+              style={{
+                float: "right",
+                color: "#fff",
+                textAlign: "right",
+                backgroundColor: "#f5222d"
+              }}
+            >
               <IntlMessages
                 id="configSchedule.minimumDiscount"
                 defaultMessage="Descuento mínimo de : {min}"
