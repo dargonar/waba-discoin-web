@@ -20,7 +20,7 @@ export class ImageUpload extends Component {
             uid: 1,
             name: newProps.defaultImage,
             status: "done",
-            url: apiConfig.baseFiles + newProps.defaultImage
+            url: apiConfig.baseImages+newProps.defaultImage
           }
         ]
       });
@@ -29,7 +29,7 @@ export class ImageUpload extends Component {
 
   render() {
     const props = {
-      action: "/",
+      action: '/',
       fileList: this.state.file,
       listType: "picture-card",
       multiple: false,
@@ -46,7 +46,7 @@ export class ImageUpload extends Component {
       },
       handlePreview: file => {
         this.setState({
-          previewImage: file.url || file.thumbUrl,
+          previewImage: file.url,
           previewVisible: true
         });
       }

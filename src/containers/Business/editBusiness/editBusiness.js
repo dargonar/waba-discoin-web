@@ -54,7 +54,6 @@ class CreateStore extends Component {
       form: {
         discount_schedule: defualtSchedule,
         location: {},
-        links: {},
         mode: "edit"
       }
     };
@@ -117,7 +116,7 @@ class CreateStore extends Component {
           "----------------------- saving business:",
           JSON.stringify(result)
         );
-        return;
+        
         //Inject discount:schedule after submit
         if (!this.props.isAdmin) {
           result.discount_schedule =
@@ -154,7 +153,6 @@ class CreateStore extends Component {
   componentWillUnmount() {
     this.setState({
       form: {
-        links: {},
         discount_schedule: defualtSchedule,
         location: {}
       }
@@ -522,9 +520,9 @@ class CreateStore extends Component {
                       />
                     }
                   >
-                    {getFieldDecorator("links." + media.toLowerCase(), {
-                      initialValue: this.state.form.links[media.toLowerCase()]
-                    })(<Input type="url" name={"links." + media} />)}
+                    {getFieldDecorator(media.toLowerCase(), {
+                      initialValue: this.state.form[media.toLowerCase()]
+                    })(<Input type="url" name={media} />)}
                   </FormItem>
                 ))}
               </Col>
@@ -599,6 +597,21 @@ class CreateStore extends Component {
                     <IntlMessages id="profile.logo" defaultMessage="Logo" />
                   }
                 >
+                  {getFieldDecorator("logo", {
+                    initialValue: this.state.form.logo
+                  })(<Input type="hidden" name="logo" />)}
+                  <ImageUpload
+                    fileChange={image => this.imageUpload(image, "logo")}
+                    defaultImage={this.state.form.logo}
+                  />
+                </FormItem>
+
+                <FormItem
+                  {...formItemLayout}
+                  label={
+                    <IntlMessages id="profile.image" defaultMessage="Imagen promocional" />
+                  }
+                >
                   {getFieldDecorator("image", {
                     initialValue: this.state.form.image
                   })(<Input type="hidden" name="image" />)}
@@ -608,20 +621,6 @@ class CreateStore extends Component {
                   />
                 </FormItem>
 
-                <FormItem
-                  {...formItemLayout}
-                  label={
-                    <IntlMessages id="profile.avatar" defaultMessage="Avatar" />
-                  }
-                >
-                  {getFieldDecorator("avatar", {
-                    initialValue: this.state.form.avatar
-                  })(<Input type="hidden" name="avatar" />)}
-                  <ImageUpload
-                    fileChange={image => this.imageUpload(image, "avatar")}
-                    defaultImage={this.state.form.avatar}
-                  />
-                </FormItem>
               </Col>
             </Row>
 

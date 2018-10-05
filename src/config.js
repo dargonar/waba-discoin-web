@@ -28,10 +28,11 @@ const mapboxConfig = {
   defaultZoom: 16,
   center: [-34.92145, -57.95453] // La plata
 };
-
+const base_url = 'http://34.212.171.239:8088/';
 const apiConfig = {
-  base: "http://34.212.171.239:8088/api/",
-  baseFiles: "http://34.212.171.239:8088/files/",
+  base: base_url+"api/",
+  baseFiles: base_url+"files/",
+  baseImages: base_url+"static/uploads/",
   // base: "http://localhost:8088/api/",
   chain_id: "bde617520673d18e67db5d7060ca2740f80e28093519c30176044c8d4a227e73",
   version: "v3",

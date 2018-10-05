@@ -119,11 +119,11 @@ const SidebarWrapper = styled.div`
         }
 
         i {
-          color: #fff;
+          color: #fff!important;
         }
 
         .nav-text {
-          color: #fff;
+          color: #fff!important;
         }
       }
 

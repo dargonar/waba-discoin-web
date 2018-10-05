@@ -111,14 +111,16 @@ class DiscountsAndRewards extends Component {
         );
 
         return;
-        //Inject discount:schedule after submit
-        if (!this.props.isAdmin) {
-          result.discount_schedule =
-            this.props.business.discount_schedule.length === 7
-              ? this.props.business.discount_schedule
-              : this.formatSchedule(result.category_id);
-        }
-        this.props.saveBusiness(result);
+        
+        // if (!this.props.isAdmin) {
+        //   result.discount_schedule =
+        //     this.props.business.discount_schedule.length === 7
+        //       ? this.props.business.discount_schedule
+        //       : this.formatSchedule(result.category_id);
+        // }
+        // this.props.saveBusiness(result);
+        this.props.updateSchedule(this.state.discounts);
+        
       } else {
         this.props.showMessage({
           msg: "Por favor corrija los errores e intente nuevamente",
@@ -463,7 +465,8 @@ const mapDispatchToProps = dispatch => ({
   showMessage: bindActionCreators(appActions.showMessage, dispatch),
   getCategories: bindActionCreators(apiActions.getCategoriesList, dispatch),
   fetchBusiness: bindActionCreators(actions.fetchBusiness, dispatch),
-  saveBusiness: bindActionCreators(actions.saveBusiness, dispatch)
+  updateSchedule: bindActionCreators(apiActions.updateSchedule, dispatch),
+  getSchedule: bindActionCreators(apiActions.getSchedule, dispatch),
 });
 
 //inject this.props.form, inject redux state and actions

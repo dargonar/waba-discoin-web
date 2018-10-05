@@ -126,6 +126,7 @@ class ListStores extends Component {
   }
 
   renderStores() {
+    
     return (
       <div
         style={{ width: "100%" }}
