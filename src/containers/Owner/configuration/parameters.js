@@ -95,13 +95,13 @@ class Parameters extends Component {
                 <ContentHolder>
                   <Row gutter={gutter}>
                     <Col md={24} sm={24} xs={24} style={colStyle}>
-                      <h4>
+                      <h3>
                         <IntlMessages
                           id="parameters.lightGreen"
                           defaultMessage="Green light"
                         />
                          <Badge showZero count={data.warnings.first.from_amount} style={{ marginLeft:10, backgroundColor: data.warnings.first.color }} />{" - "}<Badge showZero count={data.warnings.second.from_amount} style={{ backgroundColor: data.warnings.first.color }} />
-                      </h4>
+                      </h3>
                     </Col>
                     <Col md={24} sm={24} xs={24} style={colStyle}>
                       <span style={label}>
@@ -149,13 +149,13 @@ class Parameters extends Component {
 
                   <Row gutter={gutter}>
                     <Col md={24} sm={24} xs={24} style={colStyle}>
-                      <h4>
+                      <h3>
                         <IntlMessages
                           id="parameters.lightYellow"
                           defaultMessage="Yellow light"
                         />
                         <Badge showZero count={data.warnings.second.from_amount} style={{ marginLeft:10, backgroundColor: data.warnings.second.color }} />{" - "}<Badge showZero count={data.warnings.third.from_amount} style={{ backgroundColor: data.warnings.second.color }} />
-                      </h4>
+                      </h3>
                     </Col>
                     <Col md={24} sm={24} xs={24} style={colStyle}>
                       <span style={label}>
@@ -203,13 +203,13 @@ class Parameters extends Component {
 
                   <Row gutter={gutter}>
                     <Col md={24} sm={24} xs={24} style={colStyle}>
-                      <h4>
+                      <h3>
                         <IntlMessages
                           id="parameters.lightRed"
                           defaultMessage="Red light"
                         />
                         <Badge showZero count={data.warnings.third.from_amount} style={{ marginLeft:10, backgroundColor: data.warnings.third.color }} />{" - "}<Badge showZero overflowCount={999} count={data.warnings.third.to_amount} style={{ backgroundColor: data.warnings.third.color }} />
-                      </h4>
+                      </h3>
                     </Col>
                     <Col md={24} sm={24} xs={24} style={colStyle}>
                       <span style={label}>

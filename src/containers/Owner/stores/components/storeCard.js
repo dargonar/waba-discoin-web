@@ -67,7 +67,7 @@ class StoreCard extends Component {
           <Col md={4} sm={24} xs={24} style={{ marginBottom: "10px" }}>
             <BalanceSticker
               coin={currency.symbol}
-              amount={this.props.balances.balance}
+              amount={this.props.balances ? this.props.balances.balance : 0}
               text={
                 <IntlMessages defaultMessage="Balance" id="stores.balance" />
               }
@@ -77,7 +77,7 @@ class StoreCard extends Component {
           <Col md={4} sm={24} xs={24} style={{ marginBottom: "10px" }}>
             <BalanceSticker
               coin={currency.symbol}
-              amount={this.props.balances.initial_credit}
+              amount={this.props.balances ? this.props.balances.initial_credit : 0}
               text={
                 <IntlMessages
                   defaultMessage="Initial Credit"
@@ -90,7 +90,7 @@ class StoreCard extends Component {
           <Col md={4} sm={24} xs={24} style={{ marginBottom: "10px" }}>
             <BalanceSticker
               coin={currency.symbol}
-              amount={this.props.balances.ready_to_access}
+              amount={this.props.balances ? this.props.balances.ready_to_access : 0}
               text={
                 <IntlMessages
                   defaultMessage="Available to apply"
@@ -103,8 +103,8 @@ class StoreCard extends Component {
           <Col md={4} sm={24} xs={24} style={{ marginBottom: "10px" }}>
             <BalanceSticker
               amount={
-                (this.props.balances.balance * 100) /
-                  this.props.balances.initial_credit || 0
+                (this.props.balances)?((this.props.balances.balance * 100) /
+                                  this.props.balances.initial_credit || 0):0
               }
               text={
                 <IntlMessages
