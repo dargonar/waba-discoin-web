@@ -110,6 +110,11 @@ class DiscountsAndRewards extends Component {
           JSON.stringify(result)
         );
 
+        this.props.showMessage({
+          msg: "Esta en progreso :)",
+          msgType: "error"
+        });
+
         return;
         
         // if (!this.props.isAdmin) {
