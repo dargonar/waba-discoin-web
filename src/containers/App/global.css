@@ -319,3 +319,14 @@ html[dir='rtl'] .dz-hidden-input {
   line-height: 1.9rem;
 }
 
+
+.logoSidebarOpen{
+  width:auto;
+  height: 40px;
+  margin-right: 10px;
+  
+}
+.logoSidebarClosed{
+  width:auto;
+  height: 30px;
+}

@@ -110,12 +110,12 @@ class DiscountsAndRewards extends Component {
           JSON.stringify(result)
         );
 
-        this.props.showMessage({
-          msg: "Esta en progreso :)",
-          msgType: "error"
-        });
+        // this.props.showMessage({
+        //   msg: "Esta en progreso :)",
+        //   msgType: "error"
+        // });
 
-        return;
+        // return;
         
         // if (!this.props.isAdmin) {
         //   result.discount_schedule =
@@ -124,7 +124,7 @@ class DiscountsAndRewards extends Component {
         //       : this.formatSchedule(result.category_id);
         // }
         // this.props.saveBusiness(result);
-        this.props.updateSchedule(this.state.discounts);
+        this.props.updateSchedule(result);
         
       } else {
         this.props.showMessage({
@@ -244,10 +244,7 @@ class DiscountsAndRewards extends Component {
               {getFieldDecorator("account_id", {
                 initialValue: this.state.form.account_id
               })(<Input type="hidden" name="acccount_id" />)}
-              {getFieldDecorator("post_type", {
-                initialValue: "discounts"
-              })(<Input type="hidden" name="post_type" />)}
-
+              
               <FormItem
                 {...formItemLayout}
                 label={

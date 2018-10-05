@@ -289,9 +289,6 @@ class CreateStore extends Component {
                 {getFieldDecorator("account_id", {
                   initialValue: this.state.form.account_id
                 })(<Input type="hidden" name="acccount_id" />)}
-                {getFieldDecorator("post_type", {
-                  initialValue: "profile"
-                })(<Input type="hidden" name="post_type" />)}
                 <FormItem
                   {...formItemLayout}
                   label={

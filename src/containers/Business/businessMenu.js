@@ -33,7 +33,7 @@ export default [
   {
     name: "discountRewards",
     url: "business/discount-and-rewards",
-    icon: "ion-settings",
+    icon: "ion-pricetags",
     intlMessage: "sidebar.discountRewards"
   },
   {
