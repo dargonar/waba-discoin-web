@@ -93,7 +93,6 @@ class DiscountsAndRewards extends Component {
           JSON.stringify(result)
         );
 
-        return;
         // this.props.showMessage({
         //   msg: "Esta en progreso :)",
         //   msgType: "error"
@@ -225,18 +224,16 @@ class DiscountsAndRewards extends Component {
       <Form style={{ width: "100%" }} onSubmit={this.submit}>
         <Box>
           <h3>
-            <IntlMessages id="profile.profile_info" defaultMessage="Perfil" />
+            <IntlMessages
+              id="profile.rates_extended"
+              defaultMessage="Rates"
+            />
           </h3>
+
           <Row style={{ width: "100%" }} gutter={16}>
             <Col lg={24} md={24} sm={24}>
               <FormItem>
-                <h3>
-                  <IntlMessages
-                    id="profile.rates_extended"
-                    defaultMessage="Rates"
-                  />
-                </h3>
-
+                
                 <Row style={rowStyle} gutter={16} justify="start">
                   {this.state.form.discount_schedule.map((discount, key) => (
                     <Col
