@@ -19,9 +19,6 @@ import Form from "../../components/uielements/form";
 import { Input, Select, InputNumber } from "antd";
 import { PaymentMetodsEncoder } from "../../utils/paymentsEncoder";
 
-import basicStyle from "../../config/basicStyle";
-import ContentHolder from "../../components/utility/contentHolder";
-
 const socialMedia = ["Website", "Twiter", "Instagram", "Facebook"];
 
 const FormItem = Form.Item;
@@ -51,7 +48,6 @@ class DiscountsAndRewards extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
       form: {
         discount_schedule: defualtSchedule,
         links: {},
@@ -73,8 +69,6 @@ class DiscountsAndRewards extends Component {
         id: this.props.match.params.id
       });
       this.props.fetchBusiness(this.props.match.params.id);
-    } else {
-      this.props.getSchedule();
     }
 
     console.log(
@@ -117,7 +111,6 @@ class DiscountsAndRewards extends Component {
           "----------------------- saving schedule:",
           JSON.stringify(result)
         );
-
         return;
         // this.props.showMessage({
         //   msg: "Esta en progreso :)",
@@ -146,7 +139,7 @@ class DiscountsAndRewards extends Component {
     let schedule = this.props.form.getFieldsValue().discount_schedule;
     schedule[key] = { ...schedule[key], ...values };
     this.props.form.setFieldsValue({ discount_schedule: schedule });
-    console.log(' *** togglePayment(key, values): ', JSON.stringify(schedule));
+    console.log(schedule);
   }
 
   changeSchedule(type, key, value) {
@@ -231,8 +224,6 @@ class DiscountsAndRewards extends Component {
   }
 
   renderForm() {
-    const { rowStyle, colStyle } = basicStyle;
-
     // console.log( " ===> render");
     // console.log( JSON.stringify(this.state.form));
     const { getFieldDecorator } = this.props.form;
@@ -254,7 +245,7 @@ class DiscountsAndRewards extends Component {
       <Form style={{ width: "100%" }} onSubmit={this.submit}>
         <Box>
           <h3>
-            <IntlMessages id="profile.profile_info" defaultMessage="Perfil" />
+            <intlMessages id="profile.profile_info" defaultMessage="Perfil" />
           </h3>
           <Row style={{ width: "100%" }} gutter={16}>
             {/*<Col lg={24} md={24} sm={24}>
@@ -312,34 +303,47 @@ class DiscountsAndRewards extends Component {
                     defaultMessage="Rates"
                   />
                 </h3>
-
-                <Row style={rowStyle} gutter={16} justify="start">
+                <Row style={{ width: "100%" }}>
+                  <Col sm={3}>
+                    <Row style={{ width: "100%", textAlign: "center" }}>
+                      <Col>
+                        <IntlMessages defaultMessage="Type" id="profile.type" />
+                      </Col>
+                      <Col>
+                        <IntlMessages
+                          defaultMessage="Reward"
+                          id="profile.reward"
+                        />
+                      </Col>
+                      <Col>
+                        <IntlMessages
+                          defaultMessage="Discount"
+                          id="profile.discount"
+                        />
+                      </Col>
+                      <Col>
+                        <IntlMessages
+                          id="profile.paymentMethods"
+                          defaultMessage="Payment methods"
+                        />
+                      </Col>
+                    </Row>
+                  </Col>
                   {this.state.form.discount_schedule.map((discount, key) => (
-                    <Col
-                      md={6}
-                      sm={12}
-                      xs={24}
-                      style={colStyle}
-                      key={"discount-" + key}
-                    >
-                      <Box
-                        title={
-                          <span style={{ textTransform: "capitalize" }}>
-                            <IntlMessages
-                              defaultMessage={discount.date.substr(0, 3)}
-                              id={"configSchedule." + discount.date}
-                            />
-                          </span>
-                        }
-                      >
-                        <ContentHolder>
-                          <span>
-                            <IntlMessages
-                              id="profile.discount"
-                              defaultMessage="Discount"
-                            />
-                          </span>
-
+                    <Col sm={3} key={"discount-" + key}>
+                      <Row>
+                        <Col
+                          style={{
+                            textAlign: "center",
+                            textTransform: "capitalize"
+                          }}
+                        >
+                          <IntlMessages
+                            defaultMessage={discount.date.substr(0, 3)}
+                            id={"profile.day-" + discount.date.substr(0, 3)}
+                          />
+                        </Col>
+                        <Col>
                           {getFieldDecorator(
                             "discount_schedule[" + key + "].date",
                             {
@@ -353,7 +357,6 @@ class DiscountsAndRewards extends Component {
                               name={"discount_schedule[" + key + "].date"}
                             />
                           )}
-
                           <FormItem style={{ marginBottom: "3px" }}>
                             {getFieldDecorator(
                               "discount_schedule[" + key + "].reward",
@@ -384,13 +387,8 @@ class DiscountsAndRewards extends Component {
                               />
                             )}
                           </FormItem>
-
-                          <span>
-                            <IntlMessages
-                              id="profile.reward"
-                              defaultMessage="Reward"
-                            />
-                          </span>
+                        </Col>
+                        <Col>
                           <FormItem style={{ marginBottom: "3px" }}>
                             {getFieldDecorator(
                               "discount_schedule[" + key + "].discount",
@@ -421,13 +419,8 @@ class DiscountsAndRewards extends Component {
                               />
                             )}
                           </FormItem>
-
-                          <span>
-                            <IntlMessages
-                              id="profile.paymentMethods"
-                              defaultMessage="Payment methods"
-                            />
-                          </span>
+                        </Col>
+                        <Col>
                           <FormItem>
                             <Select
                               mode="multiple"
@@ -448,8 +441,8 @@ class DiscountsAndRewards extends Component {
                               ))}
                             </Select>
                           </FormItem>
-                        </ContentHolder>
-                      </Box>
+                        </Col>
+                      </Row>
                     </Col>
                   ))}
                 </Row>
@@ -457,14 +450,7 @@ class DiscountsAndRewards extends Component {
             </Col>
           </Row>
           <Row style={{ width: "100%" }} gutter={16}>
-            <h4
-              style={{
-                float: "right",
-                color: "#fff",
-                textAlign: "right",
-                backgroundColor: "#f5222d"
-              }}
-            >
+            <h4 style={{ textAlign: "right" }}>
               <IntlMessages
                 id="configSchedule.minimumDiscount"
                 defaultMessage="Descuento mínimo de : {min}"
