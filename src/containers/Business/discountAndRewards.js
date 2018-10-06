@@ -442,9 +442,9 @@ class DiscountsAndRewards extends Component {
         ) : (
           this.renderForm()
         )}
-        <pre>
+        {/*<pre>
           {JSON.stringify(this.props.form.getFieldsValue(), null, "  ")}
-        </pre>
+        </pre>*/}
       </LayoutContentWrapper>
     );
   }
