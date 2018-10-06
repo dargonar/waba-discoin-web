@@ -9,7 +9,6 @@ import PageLoading from "../../components/pageLoading";
 import { Col, Row } from "antd";
 
 import Button from "../../components/uielements/button";
-import Async from "../../helpers/asyncComponent";
 import actions from "../../redux/owner/actions";
 import apiActions from "../../redux/api/actions";
 import appActions from "../../redux/app/actions";
@@ -22,20 +21,8 @@ import { PaymentMetodsEncoder } from "../../utils/paymentsEncoder";
 import basicStyle from "../../config/basicStyle";
 import ContentHolder from "../../components/utility/contentHolder";
 
-const socialMedia = ["Website", "Twiter", "Instagram", "Facebook"];
-
 const FormItem = Form.Item;
 const SelectOption = Select.Option;
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 6 }
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 18 }
-  }
-};
 
 const defualtSchedule = [
   { discount: "0", reward: "0", date: "monday" },
@@ -46,6 +33,11 @@ const defualtSchedule = [
   { discount: "0", reward: "0", date: "saturday" },
   { discount: "0", reward: "0", date: "sunday" }
 ];
+
+const getMinimunDiscount = (categories, id) =>
+  categories
+    .filter(category => category.id === id)
+    .reduce((prev, act) => act.discount, 0);
 
 class DiscountsAndRewards extends Component {
   constructor(props) {
@@ -62,36 +54,19 @@ class DiscountsAndRewards extends Component {
     this.initForm = this.initForm.bind(this);
     this.submit = this.submit.bind(this);
     this.togglePayment = this.togglePayment.bind(this);
+    this.checkLoading = this.checkLoading.bind(this);
   }
 
   componentWillMount() {
     this.props.getCategories();
+
     if (typeof this.props.match.params.id !== "undefined") {
-      this.setState({
-        loading: true,
-        mode: "edit",
-        id: this.props.match.params.id
-      });
       this.props.fetchBusiness(this.props.match.params.id);
+    } else if (typeof this.props.business !== "undefined") {
+      //this.props.fetchBusiness(this.props.business.account_id);
+      this.checkLoading(this.props.business);
     } else {
       this.props.getSchedule();
-    }
-
-    console.log(
-      " ** componentWillMount",
-      "---------this.props.business",
-      this.props.business
-    );
-    if (
-      typeof this.props.business !== "undefined" &&
-      this.props.business !== null
-    ) {
-      this.setState({
-        mode: "edit",
-        id: this.props.business.account_id,
-        loading: false
-      });
-      this.initForm(this.props.business);
     }
   }
 
@@ -146,7 +121,7 @@ class DiscountsAndRewards extends Component {
     let schedule = this.props.form.getFieldsValue().discount_schedule;
     schedule[key] = { ...schedule[key], ...values };
     this.props.form.setFieldsValue({ discount_schedule: schedule });
-    console.log(' *** togglePayment(key, values): ', JSON.stringify(schedule));
+    console.log(" *** togglePayment(key, values): ", JSON.stringify(schedule));
   }
 
   changeSchedule(type, key, value) {
@@ -172,27 +147,28 @@ class DiscountsAndRewards extends Component {
       }
     });
   }
-  componentWillReceiveProps(nextProps) {
-    const checkLoading = business => {
-      if (business && this.state.id) {
-        const editableBusiness = business.filter(
-          x => x.account_id === this.state.id
-        );
-        if (editableBusiness.length !== 0) {
-          this.initForm(editableBusiness[0]);
-        }
-      } else if (business) {
-        this.initForm(business);
-      }
-    };
 
+  checkLoading = business => {
+    if (business && this.state.id) {
+      const editableBusiness = business.filter(
+        x => x.account_id === this.state.id
+      );
+      if (editableBusiness.length > 0) {
+        this.initForm(editableBusiness[0]);
+      }
+    } else if (typeof business !== "undefined") {
+      this.initForm(business);
+    }
+  };
+
+  componentWillReceiveProps(nextProps) {
     // console.log(
     //   " ** componentWillReceiveProps",
     //   "---------this.props",
     //   nextProps
     // );
     if (this.state.loading === true) {
-      checkLoading(nextProps.business || nextProps.businesses);
+      this.checkLoading(nextProps.business || nextProps.businesses);
     }
   }
 
@@ -237,16 +213,11 @@ class DiscountsAndRewards extends Component {
     // console.log( JSON.stringify(this.state.form));
     const { getFieldDecorator } = this.props.form;
 
-    const getMinimunDiscount = (categories, id) =>
-      categories
-        .filter(category => category.id === id)
-        .reduce((prev, act) => act.discount, 0);
-
-    const minimumDiscount = 20;
-    // const minimumDiscount = getMinimunDiscount(
-    //   this.props.categories,
-    //   this.props.business.category_id
-    // );
+    //const minimumDiscount = 20;
+    const minimumDiscount = getMinimunDiscount(
+      this.props.categories,
+      this.props.business.category_id
+    );
 
     //console.log(this.props.form, this.props.form.getFieldsValue());
     const paymentMethods = PaymentMetodsEncoder();
@@ -256,53 +227,6 @@ class DiscountsAndRewards extends Component {
           <h3>
             <IntlMessages id="profile.profile_info" defaultMessage="Perfil" />
           </h3>
-          <Row style={{ width: "100%" }} gutter={16}>
-            {/*<Col lg={24} md={24} sm={24}>
-              {getFieldDecorator("account_id", {
-                initialValue: this.state.form.account_id
-              })(<Input type="hidden" name="acccount_id" />)}
-
-              <FormItem
-                {...formItemLayout}
-                label={
-                  <IntlMessages
-                    id="profile.paymentMethods"
-                    defaultMessage="Payment methods"
-                  />
-                }
-              >
-                {getFieldDecorator("payments", {})(
-                  <Select mode="multiple">
-                    <SelectOption value="cash">
-                      <IntlMessages
-                        id="profile.payments.cash"
-                        defaultMessage="Cash"
-                      />
-                    </SelectOption>
-                    <SelectOption value="debit">
-                      <IntlMessages
-                        id="profile.payments.debit"
-                        defaultMessage="Debit"
-                      />
-                    </SelectOption>
-                    <SelectOption value="credit">
-                      <IntlMessages
-                        id="profile.payments.credit"
-                        defaultMessage="Credit"
-                      />
-                    </SelectOption>
-                    <SelectOption value="mercadopago">
-                      <IntlMessages
-                        id="profile.payments.mercadopago"
-                        defaultMessage="MercadoPago"
-                      />
-                    </SelectOption>
-                  </Select>
-                )}
-              </FormItem>
-                </Col> */}
-          </Row>
-
           <Row style={{ width: "100%" }} gutter={16}>
             <Col lg={24} md={24} sm={24}>
               <FormItem>
@@ -428,6 +352,21 @@ class DiscountsAndRewards extends Component {
                               defaultMessage="Payment methods"
                             />
                           </span>
+
+                          {paymentMethods.paymentsLabels.map(method =>
+                            getFieldDecorator(
+                              "discount_schedule[" + key + "].pm_" + method,
+                              {
+                                initialValue: discount["pm_" + method]
+                              }
+                            )(
+                              <Input
+                                type="hidden"
+                                key={key + "-hidden-" + method}
+                              />
+                            )
+                          )}
+
                           <FormItem>
                             <Select
                               mode="multiple"
@@ -442,7 +381,10 @@ class DiscountsAndRewards extends Component {
                               }
                             >
                               {paymentMethods.paymentsLabels.map(method => (
-                                <SelectOption value={method}>
+                                <SelectOption
+                                  value={method}
+                                  key={key + "-" + method}
+                                >
                                   {method}
                                 </SelectOption>
                               ))}
@@ -485,14 +427,6 @@ class DiscountsAndRewards extends Component {
   }
 
   render() {
-    const textAreaStyle = {
-      width: "100%",
-      padding: "10px",
-      height: "221px",
-      borderRadius: "4px",
-      border: "1px solid #e9e9e9"
-    };
-
     return (
       <LayoutContentWrapper>
         <PageHeader>
@@ -501,7 +435,16 @@ class DiscountsAndRewards extends Component {
             defaultMessage="Configuración"
           />
         </PageHeader>
-        {this.state.loading ? <PageLoading /> : this.renderForm()}
+        {this.state.loading ||
+        this.props.categories.length === 0 ||
+        typeof this.props.business === "undefined" ? (
+          <PageLoading />
+        ) : (
+          this.renderForm()
+        )}
+        <pre>
+          {JSON.stringify(this.props.form.getFieldsValue(), null, "  ")}
+        </pre>
       </LayoutContentWrapper>
     );
   }
@@ -510,7 +453,7 @@ class DiscountsAndRewards extends Component {
 const mapStateToProps = state => ({
   isAdmin: state.Auth.accountType === "admin",
   categories: state.Api.categoriesList,
-  business: state.Api.business
+  business: state.Api.business || undefined
 });
 
 const mapDispatchToProps = dispatch => ({
