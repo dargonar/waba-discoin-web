@@ -61,10 +61,7 @@ class DiscountsAndRewards extends Component {
     this.props.getCategories();
 
     if (typeof this.props.match.params.id !== "undefined") {
-      this.props.fetchBusiness(this.props.match.params.id);
-    } else if (typeof this.props.business !== "undefined") {
-      //this.props.fetchBusiness(this.props.business.account_id);
-      this.checkLoading(this.props.business);
+      this.props.getSchedule(this.props.match.params.id);
     } else {
       this.props.getSchedule();
     }
@@ -72,7 +69,7 @@ class DiscountsAndRewards extends Component {
 
   formatSchedule(category_id) {
     const categoryDiscount = this.props.categories.filter(
-      cat => cat.id == category_id
+      cat => cat.id === category_id
     )[0];
     return defualtSchedule.map(day => ({
       ...day,
@@ -106,7 +103,10 @@ class DiscountsAndRewards extends Component {
         //       : this.formatSchedule(result.category_id);
         // }
         // this.props.saveBusiness(result);
-        this.props.updateSchedule(result);
+        this.props.updateSchedule(
+          result,
+          this.props.match.params.id || undefined
+        );
       } else {
         this.props.showMessage({
           msg: "Por favor corrija los errores e intente nuevamente",
@@ -147,16 +147,10 @@ class DiscountsAndRewards extends Component {
     });
   }
 
-  checkLoading = business => {
-    if (business && this.state.id) {
-      const editableBusiness = business.filter(
-        x => x.account_id === this.state.id
-      );
-      if (editableBusiness.length > 0) {
-        this.initForm(editableBusiness[0]);
-      }
-    } else if (typeof business !== "undefined") {
-      this.initForm(business);
+  checkLoading = schedule => {
+    console.log({ schedule });
+    if (typeof schedule !== "undefined") {
+      this.initForm(schedule);
     }
   };
 
@@ -167,17 +161,23 @@ class DiscountsAndRewards extends Component {
     //   nextProps
     // );
     if (this.state.loading === true) {
-      this.checkLoading(nextProps.business || nextProps.businesses);
+      this.checkLoading(nextProps.schedule);
+    }
+
+    //Check actionLoading status
+    if (
+      nextProps.actionLoading === true &&
+      this.props.actionLoading === false
+    ) {
+      this.setState({ loading: true });
     }
   }
 
-  initForm(business) {
-    // console.log('==========initForm:');
-    // console.log(JSON.stringify(business));
+  initForm(schedule) {
     this.setState({
       form: {
         ...this.state.form,
-        ...business
+        discount_schedule: schedule
       },
       loading: false
     });
@@ -224,16 +224,12 @@ class DiscountsAndRewards extends Component {
       <Form style={{ width: "100%" }} onSubmit={this.submit}>
         <Box>
           <h3>
-            <IntlMessages
-              id="profile.rates_extended"
-              defaultMessage="Rates"
-            />
+            <IntlMessages id="profile.rates_extended" defaultMessage="Rates" />
           </h3>
 
           <Row style={{ width: "100%" }} gutter={16}>
             <Col lg={24} md={24} sm={24}>
               <FormItem>
-                
                 <Row style={rowStyle} gutter={16} justify="start">
                   {this.state.form.discount_schedule.map((discount, key) => (
                     <Col
@@ -448,9 +444,11 @@ class DiscountsAndRewards extends Component {
 }
 
 const mapStateToProps = state => ({
+  actionLoading: state.Api.actionLoading,
   isAdmin: state.Auth.accountType === "admin",
   categories: state.Api.categoriesList,
-  business: state.Api.business || undefined
+  business: state.Api.business || undefined,
+  schedule: state.Api.schedule || undefined
 });
 
 const mapDispatchToProps = dispatch => ({
