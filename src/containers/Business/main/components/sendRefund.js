@@ -221,7 +221,7 @@ class SendRefundComponent extends Component {
               ARS
               </span>
               <span class="bill-amount-value">
-                $ {Number(this.props.amount || 0).toFixed(2)}
+                {Number(this.props.amount || 0).toFixed(2)}
               </span>
 
             </div>
