@@ -3,6 +3,11 @@ import { Upload, Icon } from "antd";
 import { apiConfig } from "../../../config";
 import ImageUploadWrapper from "./imageUpload.syle";
 import IntlMessages from "../../../components/utility/intlMessages";
+import { createThumbnailFromUrl } from "../../../utils/imageResize";
+const DEFAULT = {
+  width: 200,
+  height: 200
+};
 
 export class ImageUpload extends Component {
   state = {
@@ -13,14 +18,17 @@ export class ImageUpload extends Component {
     if (typeof newProps === "undefined" || this.state.file.length > 0) {
       return;
     }
-    if (typeof newProps.defaultImage !== "undefined") {
+    if (
+      typeof newProps.defaultImage !== "undefined" &&
+      newProps.defaultImage !== ""
+    ) {
       this.setState({
         file: [
           {
             uid: 1,
             name: newProps.defaultImage,
             status: "done",
-            url: apiConfig.baseImages+newProps.defaultImage
+            url: apiConfig.baseImages + newProps.defaultImage
           }
         ]
       });
@@ -29,26 +37,33 @@ export class ImageUpload extends Component {
 
   render() {
     const props = {
-      action: '/',
+      action: "/",
       fileList: this.state.file,
       listType: "picture-card",
+      className: "upload-list-inline",
       multiple: false,
       onRemove: file => this.setState({ file: [] }),
       beforeUpload: file => {
-        this.setState({ file: [file] });
-
-        //Get base64 and send callback
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => this.props.fileChange(reader.result);
-
+        console.log(file);
+        createThumbnailFromUrl(
+          file,
+          this.props.width || DEFAULT.width,
+          this.props.height || DEFAULT.height,
+          image => {
+            this.props.fileChange(image);
+            this.setState({
+              file: [
+                {
+                  uid: 1,
+                  name: file.name,
+                  status: "done",
+                  url: image
+                }
+              ]
+            });
+          }
+        );
         return false;
-      },
-      handlePreview: file => {
-        this.setState({
-          previewImage: file.url,
-          previewVisible: true
-        });
       }
     };
 
