@@ -3,10 +3,12 @@ import { Upload, Icon } from "antd";
 import { apiConfig } from "../../../config";
 import ImageUploadWrapper from "./imageUpload.syle";
 import IntlMessages from "../../../components/utility/intlMessages";
-import { createThumbnailFromUrl } from "../../../utils/imageResize";
+import { createThumbnailFromUrl, isAllowed } from "../../../utils/imageResize";
+
 const DEFAULT = {
   width: 200,
-  height: 200
+  height: 200,
+  allowed: ["image/png", "image/jpeg"]
 };
 
 export class ImageUpload extends Component {
@@ -35,6 +37,19 @@ export class ImageUpload extends Component {
     }
   }
 
+  isValid(file, allowedFormats) {
+    return new Promise((res, rej) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const allowed = allowedFormats || DEFAULT.allowed;
+        isAllowed(reader.result, allowedFormats || DEFAULT.allowed)
+          ? res(true)
+          : rej({ error: "Format not allowed", allowed });
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
   render() {
     const props = {
       action: "/",
@@ -44,25 +59,35 @@ export class ImageUpload extends Component {
       multiple: false,
       onRemove: file => this.setState({ file: [] }),
       beforeUpload: file => {
-        console.log(file);
-        createThumbnailFromUrl(
-          file,
-          this.props.width || DEFAULT.width,
-          this.props.height || DEFAULT.height,
-          image => {
-            this.props.fileChange(image);
-            this.setState({
-              file: [
-                {
-                  uid: 1,
-                  name: file.name,
-                  status: "done",
-                  url: image
-                }
-              ]
-            });
-          }
-        );
+        //Check file type
+        this.isValid(file, this.props.allowed)
+          .then(() =>
+            createThumbnailFromUrl(
+              file,
+              this.props.width || DEFAULT.width,
+              this.props.height || DEFAULT.height,
+              image => {
+                this.props.fileChange(image);
+                this.setState({
+                  file: [
+                    {
+                      uid: 1,
+                      name: file.name,
+                      status: "done",
+                      url: image
+                    }
+                  ]
+                });
+              }
+            )
+          )
+          .catch(
+            error =>
+              this.props.onError
+                ? this.props.onError(error)
+                : console.warn(error)
+          );
+
         return false;
       }
     };

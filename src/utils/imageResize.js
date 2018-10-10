@@ -147,3 +147,11 @@ export const createThumbnailFromUrl = (file, width, height, callback) => {
 
   return fileReader.readAsDataURL(file);
 };
+
+export const getMimetype = base64file =>
+  base64file.match(/[^:]\w+\/[\w-+\d.]+(?=;|,)/)[0];
+
+export const isAllowed = (base64file, allowedTypes) =>
+  allowedTypes.length === 0
+    ? true
+    : allowedTypes.indexOf(getMimetype(base64file)) !== -1;
