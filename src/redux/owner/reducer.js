@@ -200,6 +200,21 @@ export default function authReducer(state = initState, action) {
         error: false,
         msg: null
       };
+    case actions.SAVE_BUSINESS:
+      return {
+        ...state,
+        actionLoading: true
+      };
+    case actions.SAVE_BUSINESS_SUCCESS:
+      return {
+        ...state,
+        actionLoading: false
+      };
+    case actions.SAVE_BUSINESS_FAIL:
+      return {
+        ...state,
+        actionLoading: false
+      };
     default:
       return state;
   }

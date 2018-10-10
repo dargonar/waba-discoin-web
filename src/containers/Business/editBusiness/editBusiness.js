@@ -51,10 +51,9 @@ class CreateStore extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      logo: {
-        state: undefined,
-        help: undefined
-      },
+      loading: true,
+      logo: {},
+      image: {},
       form: {
         discount_schedule: defualtSchedule,
         location: {},
@@ -157,6 +156,9 @@ class CreateStore extends Component {
 
   componentWillUnmount() {
     this.setState({
+      logo: {},
+      image: {},
+      loading: true,
       form: {
         discount_schedule: defualtSchedule,
         location: {}
@@ -169,7 +171,7 @@ class CreateStore extends Component {
         const editableBusiness = business.filter(
           x => x.account_id === this.state.id
         );
-        if (editableBusiness.length !== 0) {
+        if (editableBusiness.length > 0) {
           this.initForm(editableBusiness[0]);
         }
       } else if (business) {
@@ -182,8 +184,18 @@ class CreateStore extends Component {
       "---------this.props",
       nextProps
     );
-    if (this.state.loading === true) {
+    if (
+      this.state.loading === true &&
+      typeof nextProps.business !== "undefined"
+    ) {
       checkLoading(nextProps.business || nextProps.businesses);
+    }
+
+    if (
+      nextProps.actionLoading === true &&
+      this.props.actionLoading === false
+    ) {
+      this.setState({ loading: true });
     }
   }
 
@@ -630,6 +642,8 @@ class CreateStore extends Component {
 
                 <FormItem
                   {...formItemLayout}
+                  validateStatus={this.state.image.status}
+                  help={this.state.image.help}
                   label={
                     <IntlMessages
                       id="profile.image"
@@ -824,7 +838,8 @@ class CreateStore extends Component {
 const mapStateToProps = state => ({
   isAdmin: state.Auth.accountType === "admin",
   categories: state.Api.categoriesList,
-  business: state.Api.business,
+  business: state.Api.business || undefined,
+  actionLoading: state.Api.actionLoading,
   businesses: state.Owner.stores
 });
 
