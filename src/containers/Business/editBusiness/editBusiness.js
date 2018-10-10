@@ -51,6 +51,10 @@ class CreateStore extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      logo: {
+        state: undefined,
+        help: undefined
+      },
       form: {
         discount_schedule: defualtSchedule,
         location: {},
@@ -61,6 +65,7 @@ class CreateStore extends Component {
     this.locationChange = this.locationChange.bind(this);
     this.categoryChange = this.categoryChange.bind(this);
     this.imageUpload = this.imageUpload.bind(this);
+    this.imageUploadError = this.imageUploadError.bind(this);
     this.initForm = this.initForm.bind(this);
     this.submit = this.submit.bind(this);
   }
@@ -116,7 +121,7 @@ class CreateStore extends Component {
           "----------------------- saving business:",
           JSON.stringify(result)
         );
-        
+
         //Inject discount:schedule after submit
         if (!this.props.isAdmin) {
           result.discount_schedule =
@@ -196,6 +201,23 @@ class CreateStore extends Component {
 
   imageUpload(file, field) {
     this.props.form.setFieldsValue({ [field]: file });
+  }
+
+  imageUploadError(data, field) {
+    this.setState({
+      [field]: {
+        status: "error",
+        help: data.error
+      }
+    });
+    setTimeout(() => {
+      this.setState({
+        [field]: {
+          status: undefined,
+          help: undefined
+        }
+      });
+    }, 2000);
   }
 
   locationChange(e) {
@@ -589,6 +611,8 @@ class CreateStore extends Component {
                 </FormItem>
 
                 <FormItem
+                  validateStatus={this.state.logo.status}
+                  help={this.state.logo.help}
                   {...formItemLayout}
                   label={
                     <IntlMessages id="profile.logo" defaultMessage="Logo" />
@@ -600,13 +624,17 @@ class CreateStore extends Component {
                   <ImageUpload
                     fileChange={image => this.imageUpload(image, "logo")}
                     defaultImage={this.state.form.logo}
+                    onError={data => this.imageUploadError(data, "logo")}
                   />
                 </FormItem>
 
                 <FormItem
                   {...formItemLayout}
                   label={
-                    <IntlMessages id="profile.image" defaultMessage="Imagen promocional" />
+                    <IntlMessages
+                      id="profile.image"
+                      defaultMessage="Imagen promocional"
+                    />
                   }
                 >
                   {getFieldDecorator("image", {
@@ -614,10 +642,10 @@ class CreateStore extends Component {
                   })(<Input type="hidden" name="image" />)}
                   <ImageUpload
                     fileChange={image => this.imageUpload(image, "image")}
+                    onError={data => this.imageUploadError(data, "logo")}
                     defaultImage={this.state.form.image}
                   />
                 </FormItem>
-
               </Col>
             </Row>
 
