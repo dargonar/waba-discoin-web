@@ -378,7 +378,10 @@ class DiscountsAndRewards extends Component {
                                   value={method}
                                   key={key + "-" + method}
                                 >
-                                  {method}
+                                  {<IntlMessages
+                                      id={"profile.payments."+method}
+                                      defaultMessage=""
+                                    />}
                                 </SelectOption>
                               ))}
                             </Select>
