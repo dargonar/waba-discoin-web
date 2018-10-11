@@ -44,6 +44,13 @@ class BusinessRouter extends React.Component {
         />
         <Route
           exact
+          path={`${url}/sub_accounts/:id`}
+          component={asyncComponent(() =>
+            import("./subaccounts/sub_account_details")
+          )}
+        />
+        <Route
+          exact
           path={`${url}/transactions`}
           component={asyncComponent(() =>
             import("./transactions/transactions")

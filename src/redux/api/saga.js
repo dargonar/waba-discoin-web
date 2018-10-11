@@ -10,6 +10,7 @@ import { searchAccount } from "./sagas/searchCustomers";
 import { searchAllTransactions } from "./sagas/searchTransactions";
 import { applyOverdraft } from "./sagas/applyOverdraft";
 import { startSystem } from "./sagas/startSystem";
+import { getSubaccount } from "./sagas/getSubaccount";
 
 export default function* rootSaga() {
   yield all([
@@ -22,6 +23,7 @@ export default function* rootSaga() {
     fork(searchAccount),
     fork(searchAllTransactions),
     fork(applyOverdraft),
-    fork(startSystem)
+    fork(startSystem),
+    fork(getSubaccount)
   ]);
 }

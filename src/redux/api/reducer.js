@@ -11,7 +11,8 @@ const initState = {
   actionLoading: false,
   msg: null,
   categories: [],
-  categoriesList: []
+  categoriesList: [],
+  subaccount: {}
 };
 
 export default function apiReducer(state = initState, action) {
@@ -148,7 +149,31 @@ export default function apiReducer(state = initState, action) {
     case actions.SEARCH_TRANSACTIONS_SUCCESS:
       return {
         ...state,
-        transactions: action.payload.txs
+        transactions: action.payload.subaccount
+          ? state.transactions
+          : action.payload.txs,
+        subaccount: {
+          ...state.subaccount,
+          transactions: action.payload.subaccount
+            ? action.payload.txs
+            : state.subaccount.transactions
+        }
+      };
+
+    case actions.GET_SUBACCOUNT:
+      return {
+        ...state,
+        actionLoading: true,
+        subaccount: {}
+      };
+    case actions.GET_SUBACCOUNT_SUCCESS:
+      return {
+        ...state,
+        actionLoading: false,
+        subaccount: {
+          ...state.subaccount,
+          data: { ...action.payload.subaccount }
+        }
       };
     case actions.CLEAR_MSG:
       return {

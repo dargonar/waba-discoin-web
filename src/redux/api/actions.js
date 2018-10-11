@@ -44,6 +44,10 @@ const actions = {
   APPLY_OVERDRAFT_SUCCESS: "[Api] Apply Overdraft success",
   APPLY_OVERDRAFT_FAILD: "[Api] Apply Overdraft faild",
 
+  GET_SUBACCOUNT: "[Api] Get subaccount",
+  GET_SUBACCOUNT_SUCCESS: "[Api] Get subaccount success",
+  GET_SUBACCOUNT_FAILD: "[Api] Get subaccount faild",
+
   CLEAR_MSG: "[Api] Clear messages",
 
   fetchProfile: account_id => (dispatch, getState) =>
@@ -161,6 +165,15 @@ const actions = {
         business_name: getState().Auth.account,
         account_id: getState().Auth.account_id
       }
+    });
+  },
+
+  fetchSubaccount: account_id => (dispatch, getState) => {
+    const subaccount = getState().Api.subaccount;
+    if (subaccount && subaccount.account_id === account_id) return true;
+    dispatch({
+      type: actions.GET_SUBACCOUNT,
+      payload: { account_id: account_id }
     });
   },
 
