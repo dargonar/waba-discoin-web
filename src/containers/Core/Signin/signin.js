@@ -15,6 +15,8 @@ import message from "../../../components/uielements/message";
 import { injectIntl } from "react-intl";
 import { siteConfig } from "../../../config";
 
+import Image from '../../../image/logo.png';
+
 const { login, loginFromLocal, cleanStorage, register } = authAction;
 
 class SignIn extends Component {
@@ -122,10 +124,12 @@ class SignIn extends Component {
           <div className="isoLoginContent">
             <div className="isoLogoWrapper">
               <Link to="/dashboard">
+                <img alt="#" src={Image} height='25px'/>
                 <IntlMessages
                   id="page.signInTitle"
                   defaultMessage={siteConfig.siteName}
                 />
+
               </Link>
             </div>
 
