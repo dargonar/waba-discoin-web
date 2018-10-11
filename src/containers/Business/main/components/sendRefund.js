@@ -188,7 +188,7 @@ class SendRefundComponent extends Component {
             <div class="col flex-1 text-left">
               <span class="label">ARS</span>
               <span class="bill-amount-value">
-                $ {Number(this.props.amount || 0).toFixed(2)}
+                {Number(this.props.amount || 0).toFixed(2)}
               </span>
             </div>
             <div class="col flex-1 text-right">

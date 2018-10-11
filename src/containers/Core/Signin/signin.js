@@ -15,6 +15,8 @@ import message from "../../../components/uielements/message";
 import { injectIntl } from "react-intl";
 import { siteConfig } from "../../../config";
 
+import Image from '../../../image/logo.png';
+
 const { login, loginFromLocal, cleanStorage, register } = authAction;
 
 class SignIn extends Component {
@@ -87,7 +89,7 @@ class SignIn extends Component {
     }
     this.props.login({
       account_name: this.state.account,
-      is_brainkey: this.state.is_brainkey,
+      is_brainkey: this.state.words.split(' ').length>1,
       remember: this.state.remember,
       rememberKey: this.state.rememberKey,
       mnemonics: this.state.words,
@@ -122,10 +124,12 @@ class SignIn extends Component {
           <div className="isoLoginContent">
             <div className="isoLogoWrapper">
               <Link to="/dashboard">
+                <img alt="#" src={Image} height='25px'/>
                 <IntlMessages
                   id="page.signInTitle"
                   defaultMessage={siteConfig.siteName}
                 />
+
               </Link>
             </div>
 
@@ -195,15 +199,15 @@ class SignIn extends Component {
                     defaultMessage="Remember me"
                   />
                 </Checkbox>
-                <Checkbox
-                  defaultChecked={this.state.is_brainkey}
-                  onChange={() => this.toggle("is_brainkey")}
-                >
-                  <IntlMessages
-                    id="page.isBrainKey"
-                    defaultMessage="Is brain key"
-                  />
-                </Checkbox>
+                {/*<Checkbox
+                                  defaultChecked={this.state.is_brainkey}
+                                  onChange={() => this.toggle("is_brainkey")}
+                                >
+                                  <IntlMessages
+                                    id="page.isBrainKey"
+                                    defaultMessage="Is brain key"
+                                  />
+                                </Checkbox>*/}
                 <Button
                   type="primary"
                   onClick={this.handleLogin}

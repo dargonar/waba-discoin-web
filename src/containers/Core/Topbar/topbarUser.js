@@ -58,7 +58,6 @@ class TopbarUser extends Component {
             <HashImg
               text={this.props.account}
               size={430}
-              style={{ borderRadius: "100%" }}
             />
             <span className="userActivity online" />
           </div>

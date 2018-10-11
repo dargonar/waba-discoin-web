@@ -56,11 +56,15 @@ const SignInStyleWrapper = styled.div`
       flex-shrink: 0;
 
       a {
-        font-size: 24px;
+        font-size: 25px;
         font-weight: 300;
-        line-height: 1;
+        line-height: 25px;
         text-transform: uppercase;
         color: ${palette('secondary', 2)};
+      }
+
+      img{
+        margin-right:10px;
       }
     }
 

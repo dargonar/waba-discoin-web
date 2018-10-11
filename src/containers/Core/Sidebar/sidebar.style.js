@@ -4,6 +4,15 @@ import { transition, borderRadius } from "../../../config/style-util";
 import WithDirection from "../../../config/withDirection";
 
 const SidebarWrapper = styled.div`
+  .brandLogo{
+    background-image: url('');
+  }
+  .brandLogoContainer{
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+  }
   .isomorphicSidebar {
     z-index: 1000;
     background: ${palette("grayscale", 4)};
@@ -29,6 +38,8 @@ const SidebarWrapper = styled.div`
     }
 
     .isoLogoWrapper {
+      border-bottom: 1px solid #e5e5e5;
+      border-right: 1px solid #e5e5e5;
       height: 70px;
       margin: 0;
       padding: 0 10px;
@@ -37,11 +48,12 @@ const SidebarWrapper = styled.div`
       ${borderRadius()};
 
       h3 {
+        margin: 0 0 0 15px;
+
         a {
-          font-size: 21px;
-          font-weight: 300;
+          font-size: 12px;
           line-height: 70px;
-          letter-spacing: 3px;
+          letter-spacing: 0.75px;
           text-transform: uppercase;
           color: ${palette("text", 3)};
           display: block;
