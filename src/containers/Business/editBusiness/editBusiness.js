@@ -51,6 +51,9 @@ class CreateStore extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: true,
+      logo: {},
+      image: {},
       form: {
         discount_schedule: defualtSchedule,
         location: {},
@@ -61,6 +64,7 @@ class CreateStore extends Component {
     this.locationChange = this.locationChange.bind(this);
     this.categoryChange = this.categoryChange.bind(this);
     this.imageUpload = this.imageUpload.bind(this);
+    this.imageUploadError = this.imageUploadError.bind(this);
     this.initForm = this.initForm.bind(this);
     this.submit = this.submit.bind(this);
   }
@@ -116,7 +120,7 @@ class CreateStore extends Component {
           "----------------------- saving business:",
           JSON.stringify(result)
         );
-        
+
         //Inject discount:schedule after submit
         if (!this.props.isAdmin) {
           result.discount_schedule =
@@ -152,6 +156,9 @@ class CreateStore extends Component {
 
   componentWillUnmount() {
     this.setState({
+      logo: {},
+      image: {},
+      loading: true,
       form: {
         discount_schedule: defualtSchedule,
         location: {}
@@ -164,7 +171,7 @@ class CreateStore extends Component {
         const editableBusiness = business.filter(
           x => x.account_id === this.state.id
         );
-        if (editableBusiness.length !== 0) {
+        if (editableBusiness.length > 0) {
           this.initForm(editableBusiness[0]);
         }
       } else if (business) {
@@ -177,8 +184,18 @@ class CreateStore extends Component {
       "---------this.props",
       nextProps
     );
-    if (this.state.loading === true) {
+    if (
+      this.state.loading === true &&
+      typeof nextProps.business !== "undefined"
+    ) {
       checkLoading(nextProps.business || nextProps.businesses);
+    }
+
+    if (
+      nextProps.actionLoading === true &&
+      this.props.actionLoading === false
+    ) {
+      this.setState({ loading: true });
     }
   }
 
@@ -196,6 +213,23 @@ class CreateStore extends Component {
 
   imageUpload(file, field) {
     this.props.form.setFieldsValue({ [field]: file });
+  }
+
+  imageUploadError(data, field) {
+    this.setState({
+      [field]: {
+        status: "error",
+        help: data.error
+      }
+    });
+    setTimeout(() => {
+      this.setState({
+        [field]: {
+          status: undefined,
+          help: undefined
+        }
+      });
+    }, 2000);
   }
 
   locationChange(e) {
@@ -589,6 +623,8 @@ class CreateStore extends Component {
                 </FormItem>
 
                 <FormItem
+                  validateStatus={this.state.logo.status}
+                  help={this.state.logo.help}
                   {...formItemLayout}
                   label={
                     <IntlMessages id="profile.logo" defaultMessage="Logo" />
@@ -600,13 +636,19 @@ class CreateStore extends Component {
                   <ImageUpload
                     fileChange={image => this.imageUpload(image, "logo")}
                     defaultImage={this.state.form.logo}
+                    onError={data => this.imageUploadError(data, "logo")}
                   />
                 </FormItem>
 
                 <FormItem
                   {...formItemLayout}
+                  validateStatus={this.state.image.status}
+                  help={this.state.image.help}
                   label={
-                    <IntlMessages id="profile.image" defaultMessage="Imagen promocional" />
+                    <IntlMessages
+                      id="profile.image"
+                      defaultMessage="Imagen promocional"
+                    />
                   }
                 >
                   {getFieldDecorator("image", {
@@ -614,10 +656,10 @@ class CreateStore extends Component {
                   })(<Input type="hidden" name="image" />)}
                   <ImageUpload
                     fileChange={image => this.imageUpload(image, "image")}
+                    onError={data => this.imageUploadError(data, "logo")}
                     defaultImage={this.state.form.image}
                   />
                 </FormItem>
-
               </Col>
             </Row>
 
@@ -796,7 +838,8 @@ class CreateStore extends Component {
 const mapStateToProps = state => ({
   isAdmin: state.Auth.accountType === "admin",
   categories: state.Api.categoriesList,
-  business: state.Api.business,
+  business: state.Api.business || undefined,
+  actionLoading: state.Api.actionLoading,
   businesses: state.Owner.stores
 });
 
