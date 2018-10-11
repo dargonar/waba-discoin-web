@@ -5,6 +5,7 @@ import Image from '../../image/logo.png';
 
 export default ({ collapsed }) => {
   // <img src={process.env.PUBLIC_URL + '/images/logo/logo-c-04.png'} alt="" className="logoSidebarClosed" />
+  //<img src={process.env.PUBLIC_URL + '/images/logo/logo-c-04.png'} alt="" className="logoSidebarOpen" />
   return (
     <div className="isoLogoWrapper">
       {collapsed ? (
@@ -20,7 +21,6 @@ export default ({ collapsed }) => {
         <img alt="#" src={Image} height='25'/> 
         <h3>
           <Link to="./">
-            <img src={process.env.PUBLIC_URL + '/images/logo/logo-c-04.png'} alt="" className="logoSidebarOpen" />
             {siteConfig.siteName}
           </Link>
         </h3>
