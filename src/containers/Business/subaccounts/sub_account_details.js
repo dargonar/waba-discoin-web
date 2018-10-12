@@ -26,8 +26,6 @@ class SubAccountPage extends Component {
       : false;
   }
 
-  componentWillReceiveProps(newProps) {}
-
   renderContent() {
     return (
       <div>
