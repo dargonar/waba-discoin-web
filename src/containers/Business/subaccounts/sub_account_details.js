@@ -8,30 +8,25 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import actions from "../../../redux/api/actions";
 
+import {
+  subAccount,
+  isCurrentSubAccount,
+  subAccountTxs
+} from "../../../redux/api/selectors/subAccounts.selectors";
+
 class SubAccountPage extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      loading: true
-    };
     this.renderContent = this.renderContent.bind(this);
   }
 
   componentWillMount() {
-    if (this.props.match.params.id) {
-      let subaccount_id = this.props.match.params.id;
-      this.setState({ subaccount_id });
-      this.props.fetchSubaccount(subaccount_id);
-    }
+    !this.props.isCurrentSubAccount(this.props.match.params.id)
+      ? this.props.fetchSubaccount(this.props.match.params.id)
+      : false;
   }
 
-  componentWillReceiveProps(newProps) {
-    // Check subacount data
-    console.log(newProps);
-    if (typeof newProps.subaccount !== "undefined") {
-      this.setState({ loading: false });
-    }
-  }
+  componentWillReceiveProps(newProps) {}
 
   renderContent() {
     return (
@@ -53,7 +48,7 @@ class SubAccountPage extends Component {
             defaultMessage="Subaccount"
           />
         </PageHeader>
-        {this.state.loading === true || this.props.actionLoading === true ? (
+        {!this.props.isCurrentSubAccount(this.props.match.params.id) ? (
           <PageLoading />
         ) : (
           this.renderContent()
@@ -65,9 +60,9 @@ class SubAccountPage extends Component {
 
 export default connect(
   state => ({
-    transactions: state.Api.subaccount.transactions || [],
-    subaccount: state.Api.subaccount.data || undefined,
-    loading: state.Api.actionLoading
+    subaccount: subAccount(state),
+    transactions: subAccountTxs(state),
+    isCurrentSubAccount: isCurrentSubAccount(state)
   }),
   dispatch => ({
     fetchSubaccount: bindActionCreators(actions.fetchSubaccount, dispatch)
