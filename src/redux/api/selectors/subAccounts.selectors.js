@@ -1,5 +1,6 @@
 import get from "lodash.get";
 import { accountId } from "./user.selectors";
+import moment from "moment";
 
 // The selector pattern is an abstraction that standardizes an application’s
 // store querying logic. It is simple: for any part of the store that an
@@ -20,12 +21,48 @@ export const subAccount = state => get(state, "Api.subaccount.data", {});
 export const subAccountId = state => subAccount(state).id;
 
 //List of subaccount transactions that match to user id
-export const subAccountTxs = state =>
+// Unless all has value true (false ad default)
+export const subAccountTxs = (state, all = false) =>
   get(state, "Api.subaccount.transactions", []).filter(
-    onlyAccountTx(accountId(state))
+    !all ? onlyAccountTx(accountId(state)) : () => true
   );
 
 //See if the subaccount in the store is the one we want.
 //Returns a function in which we must enter the subaccount id
 export const isCurrentSubAccount = state => subaccount_id =>
   subAccountId(state) === subaccount_id ? true : false;
+
+//Get today txs
+export const txToday = (txs = []) =>
+  txs.filter(tx => moment().diff(tx.date, "days") === 0);
+
+//Get totals amounts in txs
+export const txTotals = (txs = []) =>
+  txs.reduce(
+    (prev, act) => ({
+      discount:
+        act.type === "discount"
+          ? {
+              coin: prev.discount.coin + Number(act.amount),
+              fiat: prev.discount.fiat + act.bill_amount
+            }
+          : prev.discount,
+      refund:
+        act.type === "refund"
+          ? {
+              coin: prev.refund.coin + Number(act.amount),
+              fiat: prev.refund.fiat + act.bill_amount
+            }
+          : prev.refund
+    }),
+    {
+      discount: {
+        fiat: 0,
+        coin: 0
+      },
+      refund: {
+        fiat: 0,
+        coin: 0
+      }
+    }
+  );

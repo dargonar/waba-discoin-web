@@ -11,7 +11,9 @@ import actions from "../../../redux/api/actions";
 import {
   subAccount,
   isCurrentSubAccount,
-  subAccountTxs
+  subAccountTxs,
+  txTotals,
+  txToday
 } from "../../../redux/api/selectors/subAccounts.selectors";
 
 class SubAccountPage extends Component {
@@ -31,8 +33,28 @@ class SubAccountPage extends Component {
       <div>
         <h2>Subaccount data</h2>
         <pre>{JSON.stringify(this.props.subaccount, null, "  ")}</pre>
+
         <h2>Subaccount transactions</h2>
         <pre>{JSON.stringify(this.props.transactions, null, "  ")}</pre>
+
+        <h2>Subaccount transactions totals</h2>
+        <pre>
+          {JSON.stringify(txTotals(this.props.transactions), null, "  ")}
+        </pre>
+
+        <h2>Subaccount transactions today</h2>
+        <pre>
+          {JSON.stringify(txToday(this.props.transactions), null, "  ")}
+        </pre>
+
+        <h2>Subaccount transactions today totals</h2>
+        <pre>
+          {JSON.stringify(
+            txTotals(txToday(this.props.transactions, null, "  ")),
+            null,
+            "  "
+          )}
+        </pre>
       </div>
     );
   }
@@ -59,7 +81,7 @@ class SubAccountPage extends Component {
 export default connect(
   state => ({
     subaccount: subAccount(state),
-    transactions: subAccountTxs(state),
+    transactions: subAccountTxs(state, false),
     isCurrentSubAccount: isCurrentSubAccount(state)
   }),
   dispatch => ({
