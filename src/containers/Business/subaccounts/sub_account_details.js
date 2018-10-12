@@ -81,7 +81,7 @@ class SubAccountPage extends Component {
 export default connect(
   state => ({
     subaccount: subAccount(state),
-    transactions: subAccountTxs(state, false),
+    transactions: subAccountTxs(state, true),
     isCurrentSubAccount: isCurrentSubAccount(state)
   }),
   dispatch => ({

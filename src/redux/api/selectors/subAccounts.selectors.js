@@ -32,37 +32,28 @@ export const subAccountTxs = (state, all = false) =>
 export const isCurrentSubAccount = state => subaccount_id =>
   subAccountId(state) === subaccount_id ? true : false;
 
+//Get only refunds txs
+export const txRefunds = txs => txs.filter(tx => tx.type === "refund");
+
+//Get only disocunts txs
+export const txDiscounts = txs => txs.filter(tx => tx.type === "discount");
+
+//Get txs total
+export const txTotal = txs =>
+  txs.reduce(
+    (prev, act) => ({
+      coin: prev.coin + Number(act.amount),
+      fiat: prev.fiat + act.bill_amount
+    }),
+    { coin: 0, fiat: 0 }
+  );
+
+//Get totals amounts in txs
+export const txTotals = (txs = []) => ({
+  discount: txTotal(txDiscounts(txs)),
+  refund: txTotal(txRefunds(txs))
+});
+
 //Get today txs
 export const txToday = (txs = []) =>
   txs.filter(tx => moment().diff(tx.date, "days") === 0);
-
-//Get totals amounts in txs
-export const txTotals = (txs = []) =>
-  txs.reduce(
-    (prev, act) => ({
-      discount:
-        act.type === "discount"
-          ? {
-              coin: prev.discount.coin + Number(act.amount),
-              fiat: prev.discount.fiat + act.bill_amount
-            }
-          : prev.discount,
-      refund:
-        act.type === "refund"
-          ? {
-              coin: prev.refund.coin + Number(act.amount),
-              fiat: prev.refund.fiat + act.bill_amount
-            }
-          : prev.refund
-    }),
-    {
-      discount: {
-        fiat: 0,
-        coin: 0
-      },
-      refund: {
-        fiat: 0,
-        coin: 0
-      }
-    }
-  );
