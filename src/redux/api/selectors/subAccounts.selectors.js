@@ -2,6 +2,11 @@ import get from "lodash.get";
 import { accountId } from "./user.selectors";
 import moment from "moment";
 
+const Box = x => ({
+  map: f => Box(f(x)),
+  fold: f => f(x)
+});
+
 // The selector pattern is an abstraction that standardizes an application’s
 // store querying logic. It is simple: for any part of the store that an
 // application needs access to, define a function that when given the full
@@ -50,10 +55,20 @@ export const txTotal = txs =>
 
 //Get totals amounts in txs
 export const txTotals = (txs = []) => ({
-  discount: txTotal(txDiscounts(txs)),
-  refund: txTotal(txRefunds(txs))
+  discount: Box(txs)
+    .map(txDiscounts)
+    .fold(txTotal),
+  refund: Box(txs)
+    .map(txRefunds)
+    .fold(txTotal)
 });
 
 //Get today txs
 export const txToday = (txs = []) =>
   txs.filter(tx => moment().diff(tx.date, "days") === 0);
+
+//Get today totals
+export const txTodayTotals = (txs = []) =>
+  Box(txs)
+    .map(txToday)
+    .fold(txTotals);

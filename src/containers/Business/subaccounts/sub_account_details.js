@@ -3,18 +3,30 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import PageLoading from "../../../components/pageLoading";
 import LayoutContentWrapper from "../../../components/utility/layoutWrapper";
 import PageHeader from "../../../components/utility/pageHeader";
+import AccountBox from "./components/accountBox";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import actions from "../../../redux/api/actions";
+
+import Transacction from "../transactions/components/transactionBox";
+import Sticker from "../../../components/balance-sticker/balance-sticker";
 
 import {
   subAccount,
   isCurrentSubAccount,
   subAccountTxs,
   txTotals,
-  txToday
+  txToday,
+  txTodayTotals
 } from "../../../redux/api/selectors/subAccounts.selectors";
+import { Row, Col } from "antd";
+
+const Box = props => (
+  <div style={{ marginBottom: "15px" }}>
+    <Sticker {...props} />
+  </div>
+);
 
 class SubAccountPage extends Component {
   constructor(props) {
@@ -30,31 +42,59 @@ class SubAccountPage extends Component {
 
   renderContent() {
     return (
-      <div>
-        <h2>Subaccount data</h2>
-        <pre>{JSON.stringify(this.props.subaccount, null, "  ")}</pre>
+      <div style={{ width: "100%" }}>
+        <AccountBox
+          name={this.props.subaccount.name}
+          dailyPermission={this.props.subaccount.amount}
+          account={this.props.subaccount}
+        />
 
-        <h2>Subaccount transactions</h2>
-        <pre>{JSON.stringify(this.props.transactions, null, "  ")}</pre>
+        <Row gutter={18} style={{ marginTop: "30px" }}>
+          <Col xs={24} md={18}>
+            <PageHeader>Subaccount transactions</PageHeader>
+            {this.props.transactions.map((tx, key) => (
+              <Transacction transaction={tx} key={"tx-" + key} />
+            ))}
+          </Col>
 
-        <h2>Subaccount transactions totals</h2>
-        <pre>
-          {JSON.stringify(txTotals(this.props.transactions), null, "  ")}
-        </pre>
+          <Col xs={24} md={6}>
+            <PageHeader>Descuentos</PageHeader>
 
-        <h2>Subaccount transactions today</h2>
-        <pre>
-          {JSON.stringify(txToday(this.props.transactions), null, "  ")}
-        </pre>
+            <Box
+              amount={txTotals(this.props.transactions).discount.coin}
+              text="Descuentos"
+              subtext="Discoins entregados"
+              bgColor="#fff"
+              coin="DSC"
+            />
 
-        <h2>Subaccount transactions today totals</h2>
-        <pre>
-          {JSON.stringify(
-            txTotals(txToday(this.props.transactions, null, "  ")),
-            null,
-            "  "
-          )}
-        </pre>
+            <Box
+              amount={txTotals(this.props.transactions).discount.fiat}
+              text="Descuentos"
+              subtext="Total facturado"
+              bgColor="#fff"
+              coin="$"
+            />
+
+            <PageHeader>Recompensas</PageHeader>
+
+            <Box
+              amount={txTotals(this.props.transactions).refund.coin}
+              text="Descuentos"
+              subtext="Discoins aceptados"
+              bgColor="#fff"
+              coin="DSC"
+            />
+
+            <Box
+              amount={txTotals(this.props.transactions).refund.fiat}
+              text="Descuentos"
+              subtext="Total facturado"
+              bgColor="#fff"
+              coin="$"
+            />
+          </Col>
+        </Row>
       </div>
     );
   }
