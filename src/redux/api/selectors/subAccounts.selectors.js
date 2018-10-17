@@ -67,8 +67,29 @@ export const txTotals = (txs = []) => ({
 export const txToday = (txs = []) =>
   txs.filter(tx => moment().diff(tx.date, "days") === 0);
 
+export const txYesterday = (txs = []) =>
+  txs.filter(
+    tx =>
+      moment()
+        .subtract(1, "days")
+        .diff(tx.date, "days") === 0
+  );
+
+export const txBetween = ({ from, until }, txs = []) =>
+  txs.filter(tx => moment(tx.date).isBetween(from, until));
+
 //Get today totals
 export const txTodayTotals = (txs = []) =>
   Box(txs)
     .map(txToday)
     .fold(txTotals);
+
+//Get all account in tx
+export const txAccounts = (txs = []) =>
+  [
+    ...new Set(
+      txs
+        .reduce((prev, tx) => [...prev, tx.from, tx.to], [])
+        .map(o => JSON.stringify(o))
+    ) //all accounts in string
+  ].map(s => JSON.parse(s)); // parse and remove duplicated

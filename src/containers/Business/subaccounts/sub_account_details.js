@@ -16,11 +16,39 @@ import {
   subAccount,
   isCurrentSubAccount,
   subAccountTxs,
+  onlyAccountTx,
   txTotals,
   txToday,
+  txDiscounts,
+  txRefunds,
+  txBetween,
+  txYesterday,
+  txAccounts,
   txTodayTotals
 } from "../../../redux/api/selectors/subAccounts.selectors";
 import { Row, Col } from "antd";
+
+const filters = {
+  //arg = "today" (Default) || "yesterday"
+  day: arg => txs => (arg === "yesterday" ? txYesterday(txs) : txToday(txs)),
+
+  //arg = {from: Date, until: Date }
+  between: arg => txs => txBetween({ from: arg.from, until: arg.until }, txs),
+
+  //arg = "account_id"
+  user: arg => txs => onlyAccountTx(arg)(txs),
+
+  //arg = "discount" (Default) || "refund"
+  byType: arg => txs => {
+    if (!arg) return txs;
+    return arg === "refund" ? txRefunds(txs) : txDiscounts(txs);
+  }
+};
+
+const applyFilters = (filterList = [], txs = []) =>
+  filterList
+    .map(item => filters[item.filter](item.arg)) // Init filters
+    .reduce((prev, curr) => curr(prev), txs); // Apply filters
 
 const Box = props => (
   <div style={{ marginBottom: "15px" }}>
@@ -41,6 +69,19 @@ class SubAccountPage extends Component {
   }
 
   renderContent() {
+    const txFiltred = applyFilters(
+      [
+        {
+          arg: {
+            from: "2018-10-11",
+            until: "2018-10-13"
+          },
+          filter: "between"
+        }
+      ],
+      this.props.transactions
+    );
+
     return (
       <div style={{ width: "100%" }}>
         <AccountBox
