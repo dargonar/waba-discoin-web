@@ -43,11 +43,12 @@ class SendRefundComponent extends Component {
       to_id: this.state.customer.account_id,
       amount: roundAmount(
         (this.state.discount * (this.props.amount || 0)) / 100
-      ),
+      ).toFixed(2),
       bill_amount: Number(this.props.amount),
       bill_id: this.props.reference
     };
 
+    console.log(JSON.stringify(tx));
     this.setState({
       confirm: false,
       selectCustomer: false,
