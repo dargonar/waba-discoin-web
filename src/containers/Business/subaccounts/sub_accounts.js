@@ -181,6 +181,11 @@ class SubAccounts extends Component {
                 account={account}
                 changeAmount={() => this.changeAmount(account)}
                 changePassword={() => this.changePassword(account)}
+                showInfo={() =>
+                  this.props.goTo(
+                    "/dashboard/business/sub_accounts/" + account.id
+                  )
+                }
               />
             </Col>
           ))
