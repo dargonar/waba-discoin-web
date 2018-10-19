@@ -99,9 +99,16 @@ class SubAccountPage extends Component {
                 id="subaccountsDetails.transactions"
               />
             </PageHeader>
-            {this.props.transactions.map((tx, key) => (
-              <Transacction transaction={tx} key={"tx-" + key} />
-            ))}
+            {this.props.transactions.length > 0 ? (
+              this.props.transactions.map((tx, key) => (
+                <Transacction transaction={tx} key={"tx-" + key} />
+              ))
+            ) : (
+              <p style={{ textAlign: "center" }}>
+                Esta subcuenta no ha realizado ninguna transacción por el
+                momento.
+              </p>
+            )}
           </Col>
 
           <Col xs={24} md={6}>
