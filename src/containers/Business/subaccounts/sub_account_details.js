@@ -27,6 +27,7 @@ import {
   txTodayTotals
 } from "../../../redux/api/selectors/subAccounts.selectors";
 import { Row, Col } from "antd";
+import { currency } from "../../../config";
 
 const filters = {
   //arg = "today" (Default) || "yesterday"
@@ -92,26 +93,39 @@ class SubAccountPage extends Component {
 
         <Row gutter={18} style={{ marginTop: "30px" }}>
           <Col xs={24} md={18}>
-            <PageHeader>Subaccount transactions</PageHeader>
+            <PageHeader>
+              <IntlMessages
+                defaultMessage="Subaccount transactions"
+                id="subaccountsDetails.transactions"
+              />
+            </PageHeader>
             {this.props.transactions.map((tx, key) => (
               <Transacction transaction={tx} key={"tx-" + key} />
             ))}
           </Col>
 
           <Col xs={24} md={6}>
-            <PageHeader>Descuentos</PageHeader>
+            <PageHeader>
+              <IntlMessages defaultMessage="Discounts" id="discounts" />
+            </PageHeader>
 
             <Box
               amount={txTotals(this.props.transactions).discount.coin}
-              text="Descuentos"
-              subtext="Discoins entregados"
+              text={<IntlMessages defaultMessage="Discounts" id="discounts" />}
+              subtext={
+                <IntlMessages
+                  defaultMessage="{currency} sent"
+                  id="discountsSent"
+                  values={{ currency: currency.plural }}
+                />
+              }
               bgColor="#fff"
               coin="DSC"
             />
 
             <Box
               amount={txTotals(this.props.transactions).discount.fiat}
-              text="Descuentos"
+              text={<IntlMessages defaultMessage="Discounts" id="discounts" />}
               subtext="Total facturado"
               bgColor="#fff"
               coin="$"
@@ -121,7 +135,7 @@ class SubAccountPage extends Component {
 
             <Box
               amount={txTotals(this.props.transactions).refund.coin}
-              text="Descuentos"
+              text="Recompensas"
               subtext="Discoins aceptados"
               bgColor="#fff"
               coin="DSC"
@@ -129,7 +143,7 @@ class SubAccountPage extends Component {
 
             <Box
               amount={txTotals(this.props.transactions).refund.fiat}
-              text="Descuentos"
+              text="Recompensas"
               subtext="Total facturado"
               bgColor="#fff"
               coin="$"
