@@ -182,8 +182,8 @@ class SendRefundComponent extends Component {
               defaultMessage="Send reward"
             />
           }
-          color="#3A99D9"
-          arrow="arrow-down"
+          color="#FF9E5D"
+          arrow="arrow-up"
         >
           <div class="w-100 d-flex flex-row bill-amount">
             <div class="col flex-1 text-left">

@@ -4,12 +4,13 @@ import Identicon from 'identicon.js';
 
 const getSHA = (text) => {
     const result = new jsSHA('SHA-512', 'TEXT')
-    result.update(text)
+    result.update(text.replace('discoin.'))
     return result.getHash("HEX");
 }
 
 export const getBase64 = (text,size) => {
-    return 'data:image/png;base64,' + new Identicon(getSHA(text || ''), size || 430).toString()
+		let my_text = text.replace('discoin.');
+    return 'data:image/png;base64,' + new Identicon(getSHA(my_text || ''), size || 430).toString()
 }
 
 const HashImg = ({size, text, style, alt}) => (

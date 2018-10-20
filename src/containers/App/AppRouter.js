@@ -5,7 +5,7 @@ import asyncComponent from "../../helpers/AsyncFunc";
 class AppRouter extends React.Component {
   render() {
     const { url } = this.props;
-    console.log(this.props);
+    // console.log(this.props);
     return (
       <Switch>
         <Route

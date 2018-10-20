@@ -138,8 +138,9 @@ class AcceptDiscountComponent extends Component {
               defaultMessage="Accept Payment in {currency}"
             />
           }
-          color="#FF9E5D"
-          arrow="arrow-up"
+          color="#3A99D9"
+          arrow="arrow-down"
+          
         >
           <div class="w-100 d-flex flex-row bill-amount">
             <div class="col flex-1 text-left">

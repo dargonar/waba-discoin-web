@@ -19,8 +19,8 @@ class Transactions extends Component {
     this.state = {
       searchValue: null
     };
-    this.renderContent = this.renderContent.bind(this);
-    this._handleChange = this._handleChange.bind(this);
+    this.renderContent   = this.renderContent.bind(this);
+    this._handleChange   = this._handleChange.bind(this);
     this._handleKeyPress = this._handleKeyPress.bind(this);
   }
 
@@ -34,12 +34,14 @@ class Transactions extends Component {
   }
 
   componentWillReceiveProps(newProps) {
+    console.log(' ------- > transactions.js::componentWillReceiveProps', JSON.stringify(newProps));
     if (
       newProps.transactions !== null &&
       typeof newProps.transactions !== "undefined"
     ) {
       this.props.endLoading();
     }
+    this.props.endLoading();
   }
 
   _handleChange(e) {
@@ -66,19 +68,17 @@ class Transactions extends Component {
           />
         </Col>
         <Col xs={24}>
-          {this.props.transactions.length === 0 ? (
+          {this.props.transactions==='undefined' || !this.props.transactions || this.props.transactions.length === 0 ? (
             <Col style={{ textAlign: "center", padding: "10px" }} xs={24}>
-              <IntlMessages
-                id="transactions.notFound"
-                defaultMessage="No transactions were found"
+              <IntlMessages id="transactions.notFound" defaultMessage="No transactions were found"
               />
             </Col>
           ) : (
-            false
+            this.props.transactions.map(transaction => (
+              <TransactionBox transaction={transaction} key={transaction.date} />
+            ))
           )}
-          {this.props.transactions.map(transaction => (
-            <TransactionBox transaction={transaction} key={transaction.date} />
-          ))}
+          
         </Col>
       </Row>
     );
@@ -100,7 +100,7 @@ class Transactions extends Component {
 }
 
 const mapStateToProps = state => ({
-  transactions: state.Api.transactions
+  transactions: state.Api.transactions || [],
 });
 
 const mapDispatchToProps = dispatch => ({
