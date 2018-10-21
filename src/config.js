@@ -28,7 +28,8 @@ const mapboxConfig = {
   defaultZoom: 16,
   center: [-34.92145, -57.95453] // La plata
 };
-const base_url = 'http://35.163.59.126:8088/';
+// const base_url = 'http://35.163.59.126:8088/';
+const base_url = 'https://api.discoin.com.ar/';
 const apiConfig = {
   base: base_url+"api/",
   baseFiles: base_url+"files/",
