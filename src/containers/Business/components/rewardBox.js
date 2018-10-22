@@ -123,7 +123,7 @@ export class RewardBox extends Component {
           <IntlMessage
             id="refund.rewardTo"
             values={{ name }}
-            defaultMessage={`Accept discount to {name}`}
+            defaultMessage={`Accept discount from {name}`}
           />
         }
         visible={this.props.visible}

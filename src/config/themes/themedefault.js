@@ -19,7 +19,7 @@ theme.palette = {
   ],
   secondary: [
     '#2d3446', // 0: DarkBlue
-    '#f1f3f6', // 1: LightBluish
+    '#F5F9FD', // 1: LightBluish
     '#788195', // 2: LightBlue
     '#E4E6E9', // 3: LightBluish Darken 5%
     '#364d79', // 4:
@@ -62,7 +62,7 @@ theme.palette = {
     '#c1c1c1', // 1: GreyDark
     '#D8D8D8', // 2: Grey
     '#f1f1f1', // 3: GreyAlt
-    '#F3F3F3', // 4: GreyLight
+    '#F5F9FD', // 4: GreyLight
     '#fafafa', // 5: DarkWhite
     '#F9F9F9', // 6: DarkerWhite
     '#fcfcfc', // 7: #fff Darken 1%
@@ -97,7 +97,7 @@ theme.palette = {
 };
 
 theme.fonts = {
-  primary: 'Roboto, sans-serif',
+  primary: 'Montserrat, sans-serif',
   pre: 'Consolas, Liberation Mono, Menlo, Courier, monospace',
 };
 

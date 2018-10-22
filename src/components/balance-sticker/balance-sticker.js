@@ -3,8 +3,13 @@ import { BalanceStickerWidgetWrapper } from "./style";
 
 export default class extends Component {
   getScaleInfo(scale, amount, param) {
-    //console.log(' ------------------------ ')
-    //console.log(JSON.stringify(scale),amount);
+    console.log(' ------------------------ getScaleInfo ')
+    console.log(JSON.stringify(scale),amount);
+    if(!scale || scale.length==0)
+    { 
+      if (param === "color") return { backgroundColor: "gray" };
+      if (param === "extra_percentage") return '0';
+    }
     const obj = scale.reduce((prev, curr) => {
       //console.log(' ----- ' , JSON.stringify(curr));
       // if (amount >= curr.raw.from_amount && amount < curr.raw.to_amount) {

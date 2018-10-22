@@ -3,7 +3,6 @@ import IntlMessages from "../../../../components/utility/intlMessages";
 import { currency } from "../../../../config";
 import { ColorBox } from "./colorBox";
 import { connect } from "react-redux";
-import CustomerPicker from "./selectCustomer";
 import QrReward from "../../components/rewardQr";
 import moment from "moment";
 import { bindActionCreators } from "redux";
@@ -22,64 +21,23 @@ class AcceptDiscountComponent extends Component {
     super(props);
     this.state = {
       reward: 0,
-      selectCustomer: false,
-      userSelected: undefined
+      qr: false
     };
     this.updateReward = this.updateReward.bind(this);
     this.checkValue = this.checkValue.bind(this);
-    this.userSelected = this.userSelected.bind(this);
+    this.showQr = this.showQr.bind(this);
     this._delayAction = this._delayAction.bind(this);
   }
 
   componentDidMount() {
-    this.setState({      reward: this.getTodayDiscount() })
-  }
-  
-  // HACK: robado de dashboard.js
-  getDay() {
-    const now = new Date();
-    const days = [
-      "sunday",
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday"
-    ];
-    return days[now.getDay()];
+    this.setState({ reward: this.props.percentage });
   }
 
-  getTodayDiscount() {
-    return this.getTodayRate("discount");
-  }
-  getTodayReward() {
-    return this.getTodayRate("reward");
-  }
-
-  getTodayRate(discount_reward) {
-    const today = this.getDay();
-    if (this.props.api.schedule === null) {
-      console.log(" -- Refund:componentWillMount() -- ");
-      this.props.getSchedule();
-      return;
-    }
-    let discount = this.props.api.schedule.find(function(dis) {
-      return dis.date === today;
-    });
-    //Check id discount is set
-
-    return discount_reward === "discount" ? discount.discount : discount.reward; //? discount : { discount: 0, reward: 0 };
-  }
-
-
-  userSelected(customer) {
+  showQr(customer) {
     this.setState({
-      selectCustomer: false,
       qr: true,
       memo: "~di:" + this.props.amount + ":" + this.props.reference,
-      from: moment(),
-      customer // {name , }
+      from: moment()
     });
     //update tx every second in the next twenty secconds
     this.props.setTimmer(1000, 20000);
@@ -107,19 +65,40 @@ class AcceptDiscountComponent extends Component {
     return this.props.percentage;
   }
 
+  componentWillReceiveProps(newProps) {
+    if (
+      this.props.percentage !== newProps.percentage ||
+      this.state.reward < newProps.percentage
+    ) {
+      this.updateReward(newProps.percentage);
+    }
+  }
+
   render() {
     const roundAmount = value => Math.round(value * 100) / 100;
 
+    {
+      /* <span>
+                      ${" "}
+                      {Number(
+                        this.props.amount -
+                          roundAmount(
+                            (this.state.reward * (this.props.amount || 0)) / 100 || 0
+                          )
+                      ).toFixed(2)}
+                      <br />+ <br />
+                      {currency.symbol}{" "}
+                      {roundAmount(
+                        (this.state.reward * (this.props.amount || 0)) / 100 || 0
+                      ).toFixed(2)}
+                    </span> */
+    }
+
     return (
       <div>
-        <CustomerPicker
-          visible={this.state.selectCustomer}
-          onSelect={this.userSelected}
-          onCancel={() => this.setState({ selectCustomer: false })}
-        />
         <QrReward
           submit={() => {
-            this.setState({ qr: false, userSelected: undefined });
+            this.setState({ qr: false });
           }}
           autoClose={filterTx(this.state.memo, this.state.from)(
             this.props.transactions
@@ -136,6 +115,7 @@ class AcceptDiscountComponent extends Component {
           }
           account_id={this.props.account.account_id}
           account_name={this.props.account.account}
+          reward={this.state.reward}
           id="INVOICE_DISCOUNT"
         />
         <ColorBox
@@ -150,11 +130,7 @@ class AcceptDiscountComponent extends Component {
             this.props.percentage <= this.state.reward && this.props.amount > 0
           }
           onChange={this.updateReward}
-          onSubmit={() => {
-            this.setState({
-              selectCustomer: true
-            });
-          }}
+          onSubmit={this.showQr}
           buttonText={
             <IntlMessages
               id="mainBusiness.acceptPayment"
@@ -162,35 +138,41 @@ class AcceptDiscountComponent extends Component {
               defaultMessage="Accept Payment in {currency}"
             />
           }
-          color="#ff8f5d"
+          color="#3A99D9"
+          arrow="arrow-down"
+          
         >
-          <span>
-            ${" "}
-            {Number(
-              this.props.amount -
-                roundAmount(
+          <div class="w-100 d-flex flex-row bill-amount">
+            <div class="col flex-1 text-left">
+              <span class="label">ARS</span>
+              <span class="bill-amount-value">
+                {" "}
+                {Number(
+                  this.props.amount -
+                    roundAmount(
+                      (this.state.reward * (this.props.amount || 0)) / 100
+                    )
+                ).toFixed(2)}
+              </span>
+            </div>
+            <div class="col flex-1 text-right">
+              <span class="label">{currency.symbol} </span>
+              <span class="bill-amount-value">
+                {roundAmount(
                   (this.state.reward * (this.props.amount || 0)) / 100
-                )
-            ).toFixed(2)}
-            <br />+ <br />
-            {currency.symbol}{" "}
-            {roundAmount(
-              (this.state.reward * (this.props.amount || 0)) / 100
-            ).toFixed(2)}
-          </span>
+                ).toFixed(2)}
+              </span>
+            </div>
+          </div>
         </ColorBox>
       </div>
     );
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  getSchedule: bindActionCreators(actions.getSchedule, dispatch),
-
-});
+const mapDispatchToProps = dispatch => ({});
 
 const mapStateToProps = state => ({
-  api: state.Api,
   account: state.Auth,
   transactions: state.Api.transactions || []
 });

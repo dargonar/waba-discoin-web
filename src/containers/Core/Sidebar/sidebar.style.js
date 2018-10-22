@@ -4,9 +4,18 @@ import { transition, borderRadius } from "../../../config/style-util";
 import WithDirection from "../../../config/withDirection";
 
 const SidebarWrapper = styled.div`
+  .brandLogo{
+    background-image: url('');
+  }
+  .brandLogoContainer{
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+  }
   .isomorphicSidebar {
     z-index: 1000;
-    background: ${palette("secondary", 0)};
+    background: ${palette("grayscale", 4)};
     width: 280px;
     flex: 0 0 280px;
 
@@ -29,8 +38,9 @@ const SidebarWrapper = styled.div`
     }
 
     .isoLogoWrapper {
+      border-bottom: 1px solid #e5e5e5;
+      border-right: 1px solid #e5e5e5;
       height: 70px;
-      background: rgba(0, 0, 0, 0.3);
       margin: 0;
       padding: 0 10px;
       text-align: center;
@@ -38,13 +48,14 @@ const SidebarWrapper = styled.div`
       ${borderRadius()};
 
       h3 {
+        margin: 0 0 0 15px;
+
         a {
-          font-size: 21px;
-          font-weight: 300;
+          font-size: 12px;
           line-height: 70px;
-          letter-spacing: 3px;
+          letter-spacing: 0.75px;
           text-transform: uppercase;
-          color: ${palette("grayscale", 6)};
+          color: ${palette("text", 3)};
           display: block;
           text-decoration: none;
         }
@@ -114,17 +125,18 @@ const SidebarWrapper = styled.div`
       }
 
       .ant-menu-item-selected {
-        background-color: rgba(0, 0, 0, 0.4) !important;
+        // background: linear-gradient(to right, rgba(190,51,255,1) 0%,rgba(155,93,255,1) 100%);
+        background: linear-gradient(to right, rgba(58,153,217,1) 0%,rgba(161,204,236,1) 100%);
         .anticon {
           color: #fff;
         }
 
         i {
-          color: #fff;
+          color: #fff!important;
         }
 
         .nav-text {
-          color: #fff;
+          color: #fff!important;
         }
       }
 
@@ -132,7 +144,7 @@ const SidebarWrapper = styled.div`
         &:hover {
           i,
           .nav-text {
-            color: #ffffff;
+            color: rgba(58,153,217,1);
           }
         }
       }

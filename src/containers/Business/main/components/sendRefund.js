@@ -43,11 +43,12 @@ class SendRefundComponent extends Component {
       to_id: this.state.customer.account_id,
       amount: roundAmount(
         (this.state.discount * (this.props.amount || 0)) / 100
-      ),
+      ).toFixed(2),
       bill_amount: Number(this.props.amount),
       bill_id: this.props.reference
     };
 
+    console.log(JSON.stringify(tx));
     this.setState({
       confirm: false,
       selectCustomer: false,
@@ -122,48 +123,18 @@ class SendRefundComponent extends Component {
     });
   }
 
-
-  componentDidMount() {
-    this.setState({      discount: this.getTodayReward() })
-  }
-  
-  // HACK: robado de dashboard.js
-  getDay() {
-    const now = new Date();
-    const days = [
-      "sunday",
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday"
-    ];
-    return days[now.getDay()];
+  componentWillMount() {
+    this.setState({ discount: this.props.percentage });
   }
 
-  getTodayDiscount() {
-    return this.getTodayRate("discount");
-  }
-  getTodayReward() {
-    return this.getTodayRate("reward");
-  }
-
-  getTodayRate(discount_reward) {
-    const today = this.getDay();
-    if (this.props.api.schedule === null) {
-      console.log(" -- Refund:componentWillMount() -- ");
-      this.props.getSchedule();
-      return;
+  componentWillReceiveProps(newProps) {
+    if (
+      this.props.percentage !== newProps.percentage ||
+      this.state.discount < newProps.percentage
+    ) {
+      this.setState({ discount: newProps.percentage });
     }
-    let discount = this.props.api.schedule.find(function(dis) {
-      return dis.date === today;
-    });
-    //Check id discount is set
-
-    return discount_reward === "discount" ? discount.discount : discount.reward; //? discount : { discount: 0, reward: 0 };
   }
-
 
   render() {
     return (
@@ -211,16 +182,25 @@ class SendRefundComponent extends Component {
               defaultMessage="Send reward"
             />
           }
-          color="#55a6e4"
+          color="#FF9E5D"
+          arrow="arrow-up"
         >
-          <span>
-            $ {Number(this.props.amount || 0).toFixed(2)}
-            <br />+ <br />
-            {currency.symbol}{" "}
-            {roundAmount(
-              (this.state.discount * (this.props.amount || 0)) / 100
-            ).toFixed(2)}
-          </span>
+          <div class="w-100 d-flex flex-row bill-amount">
+            <div class="col flex-1 text-left">
+              <span class="label">ARS</span>
+              <span class="bill-amount-value">
+                {Number(this.props.amount || 0).toFixed(2)}
+              </span>
+            </div>
+            <div class="col flex-1 text-right">
+              <span class="label">{currency.symbol} </span>
+              <span class="bill-amount-value">
+                {roundAmount(
+                  (this.state.discount * (this.props.amount || 0)) / 100
+                ).toFixed(2)}
+              </span>
+            </div>
+          </div>
         </ColorBox>
       </div>
     );
@@ -239,7 +219,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   searchAccount: bindActionCreators(actions.searchAccount, dispatch),
   cleanMsg: bindActionCreators(actions.cleanMsg, dispatch),
-  getSchedule: bindActionCreators(actions.getSchedule, dispatch),
   showLoading: bindActionCreators(appActions.showLoading, dispatch),
   endLoading: bindActionCreators(appActions.endLoading, dispatch)
 });

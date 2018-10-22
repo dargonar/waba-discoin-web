@@ -1,11 +1,22 @@
 import React, { Component } from "react";
-import { Modal } from "antd";
+import { Modal, Col, Row } from "antd";
 import IntlMessages from "../../../components/utility/intlMessages";
 import { currency } from "../../../config";
 import QrCode from "qrcode.react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import appActions from "../../../redux/app/actions";
+
+const LineItem = ({ title, value }) => (
+  <Row type="flex" justify="space-around" align="middle">
+    <Col xs={12}>
+      <h3 style={{ color: "rgb(255, 158, 93)" }}>{title}</h3>
+    </Col>
+    <Col xs={12} style={{ textAlign: "right", paddingRight: "20px" }}>
+      <h3>{value}</h3>
+    </Col>
+  </Row>
+);
 
 class RewardQrComponent extends Component {
   constructor(props) {
@@ -61,22 +72,59 @@ class RewardQrComponent extends Component {
             values={{
               name: account_name,
               account_id: account_id,
-              currency: currency.symbol,
-              amount: discount_dsc
+              memo: "~di:" + bill_amount + ":" + bill_id
             }}
-            defaultMessage={`{name} ({account_id})  - {currency} {amount}`}
+            defaultMessage={`{name} ({account_id})  - {memo}`}
           />
         }
-        width={350}
+        width={650}
         footer={null}
         visible={this.props.visible}
         onCancel={this.onOk}
       >
-        <QrCode value={qrString} size={300} />
-        {/*<code>
-            For debug:
-            <pre>{JSON.stringify(JSON.parse(qrString), null, " ")}</pre>
-          </code> */}
+        <Row>
+          <Col md={12}>
+            <LineItem
+              title={
+                <IntlMessages id="qr.total" defaultMessage="Total to pay" />
+              }
+              value={"$ " + Number(bill_amount).toFixed(2)}
+            />
+            <LineItem
+              title={
+                <IntlMessages id="qr.discount" defaultMessage="Discount" />
+              }
+              value={"% " + this.props.reward}
+            />
+            <LineItem
+              title={
+                <IntlMessages
+                  id="qr.totalCoins"
+                  defaultMessage="Total in {currency}"
+                  values={{ currency: currency.plural }}
+                />
+              }
+              value={currency.symbol + " " + Number(discount_dsc).toFixed(2)}
+            />
+            <LineItem
+              title={
+                <IntlMessages
+                  id="qr.totalCoins"
+                  defaultMessage="Total in {currency}"
+                  values={{ currency: currency.fiat.plural }}
+                />
+              }
+              value={"$ " + Number(discount_ars).toFixed(2)}
+            />
+            <LineItem
+              title={<IntlMessages id="qr.ticket" defaultMessage="Ticket/ID" />}
+              value={bill_id}
+            />
+          </Col>
+          <Col md={12}>
+            <QrCode value={qrString} size={300} />
+          </Col>
+        </Row>
       </Modal>
     );
   }

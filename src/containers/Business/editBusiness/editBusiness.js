@@ -9,9 +9,6 @@ import PageLoading from "../../../components/pageLoading";
 import { Col, Row } from "antd";
 
 import Button from "../../../components/uielements/button";
-import Async from "../../../helpers/asyncComponent";
-import Dropzone from "../../../components/uielements/dropzone.js";
-import DropzoneWrapper from "../components/dropzone.style";
 import actions from "../../../redux/owner/actions";
 import apiActions from "../../../redux/api/actions";
 import appActions from "../../../redux/app/actions";
@@ -19,31 +16,46 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Form from "../../../components/uielements/form";
 import { Input, Select, InputNumber } from "antd";
+import { ImageUpload } from "../components/imageUpload";
+import { InputPlace } from "../components/placeInput";
+import Map from "../components/map";
 const FormItem = Form.Item;
 const SelectOption = Select.Option;
 
-const BasicLeafletMapWithMarker = props => (
-  <Async
-    load={import(/* webpackChunkName: "basicLeafletMapWithMarker" */ "../components/map.js")}
-    componentProps={props}
-    componentArguement={"leafletMap"}
-  />
-);
+const socialMedia = ["Website", "Twiter", "Instagram", "Facebook"];
+
+const BasicLeafletMapWithMarker = props => <Map {...props} />;
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 8 }
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 16 }
+  }
+};
+
+const defualtSchedule = [
+  { discount: "0", reward: "0", date: "monday" },
+  { discount: "0", reward: "0", date: "tuesday" },
+  { discount: "0", reward: "0", date: "wednesday" },
+  { discount: "0", reward: "0", date: "thursday" },
+  { discount: "0", reward: "0", date: "friday" },
+  { discount: "0", reward: "0", date: "saturday" },
+  { discount: "0", reward: "0", date: "sunday" }
+];
 
 class CreateStore extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: true,
+      logo: {},
+      image: {},
       form: {
-        discount_schedule: [
-          { discount: "0", reward: "0", date: "monday" },
-          { discount: "0", reward: "0", date: "tuesday" },
-          { discount: "0", reward: "0", date: "wednesday" },
-          { discount: "0", reward: "0", date: "thursday" },
-          { discount: "0", reward: "0", date: "friday" },
-          { discount: "0", reward: "0", date: "saturday" },
-          { discount: "0", reward: "0", date: "sunday" }
-        ],
+        discount_schedule: defualtSchedule,
         location: {},
         mode: "edit"
       }
@@ -51,24 +63,9 @@ class CreateStore extends Component {
     this.inputChange = this.inputChange.bind(this);
     this.locationChange = this.locationChange.bind(this);
     this.categoryChange = this.categoryChange.bind(this);
-    this.componentConfig = {
-      iconFiletypes: [".jpg", ".png", ".gif"],
-      showFiletypeIcon: true,
-      parallelUploads: 1,
-      uploadMultiple: false,
-      maxFilesize: 1, // MB
-      dictRemoveFile: "Delete",
-      dictCancelUploadConfirmation: "Are you sure to cancel upload?",
-      postUrl: "no-url"
-    };
-    this.djsConfig = {
-      autoProcessQueue: false,
-      thumbnailHeight: 300,
-      thumbnailWidth: 300
-    };
     this.imageUpload = this.imageUpload.bind(this);
+    this.imageUploadError = this.imageUploadError.bind(this);
     this.initForm = this.initForm.bind(this);
-    this.dropzone = null;
     this.submit = this.submit.bind(this);
   }
 
@@ -85,8 +82,8 @@ class CreateStore extends Component {
 
     console.log(
       " ** componentWillMount",
-      "---------this.props.business",
-      this.props.business
+      "---------this.props.business"
+      //this.props.business
     );
     if (
       typeof this.props.business !== "undefined" &&
@@ -101,6 +98,17 @@ class CreateStore extends Component {
     }
   }
 
+  formatSchedule(category_id) {
+    const categoryDiscount = this.props.categories.filter(
+      cat => Number(cat.id) === Number(category_id)
+    )[0];
+    return defualtSchedule.map(day => ({
+      ...day,
+      discount: categoryDiscount.discount,
+      reward: categoryDiscount.discount
+    }));
+  }
+
   submit() {
     // TODO: Validation!
     console.log("*****> submit");
@@ -112,6 +120,14 @@ class CreateStore extends Component {
           "----------------------- saving business:",
           JSON.stringify(result)
         );
+
+        //Inject discount:schedule after submit
+        if (!this.props.isAdmin) {
+          result.discount_schedule =
+            this.props.business.discount_schedule.length === 7
+              ? this.props.business.discount_schedule
+              : this.formatSchedule(result.category_id);
+        }
         this.props.saveBusiness(result);
       } else {
         this.props.showMessage({
@@ -140,16 +156,11 @@ class CreateStore extends Component {
 
   componentWillUnmount() {
     this.setState({
+      logo: {},
+      image: {},
+      loading: true,
       form: {
-        discount_schedule: [
-          { discount: "0", reward: "0", date: "monday" },
-          { discount: "0", reward: "0", date: "tuesday" },
-          { discount: "0", reward: "0", date: "wednesday" },
-          { discount: "0", reward: "0", date: "thursday" },
-          { discount: "0", reward: "0", date: "friday" },
-          { discount: "0", reward: "0", date: "saturday" },
-          { discount: "0", reward: "0", date: "sunday" }
-        ],
+        discount_schedule: defualtSchedule,
         location: {}
       }
     });
@@ -160,7 +171,7 @@ class CreateStore extends Component {
         const editableBusiness = business.filter(
           x => x.account_id === this.state.id
         );
-        if (editableBusiness.length !== 0) {
+        if (editableBusiness.length > 0) {
           this.initForm(editableBusiness[0]);
         }
       } else if (business) {
@@ -173,8 +184,18 @@ class CreateStore extends Component {
       "---------this.props",
       nextProps
     );
-    if (this.state.loading === true) {
+    if (
+      this.state.loading === true &&
+      typeof nextProps.business !== "undefined"
+    ) {
       checkLoading(nextProps.business || nextProps.businesses);
+    }
+
+    if (
+      nextProps.actionLoading === true &&
+      this.props.actionLoading === false
+    ) {
+      this.setState({ loading: true });
     }
   }
 
@@ -190,8 +211,25 @@ class CreateStore extends Component {
     });
   }
 
-  imageUpload(file) {
-    this.props.form.setFieldsValue({ image: file });
+  imageUpload(file, field) {
+    this.props.form.setFieldsValue({ [field]: file });
+  }
+
+  imageUploadError(data, field) {
+    this.setState({
+      [field]: {
+        status: "error",
+        help: data.error
+      }
+    });
+    setTimeout(() => {
+      this.setState({
+        [field]: {
+          status: undefined,
+          help: undefined
+        }
+      });
+    }, 2000);
   }
 
   locationChange(e) {
@@ -199,8 +237,10 @@ class CreateStore extends Component {
       latitude: e.latlng.lat.toString(),
       longitude: e.latlng.lng.toString()
     });
-    console.log(" **********> locationChange");
-    console.log(e);
+    if (e.address) {
+      this.props.form.setFieldsValue({ address: e.address });
+    }
+    console.log(" **********> locationChange", e);
   }
 
   inputChange(e) {
@@ -223,17 +263,6 @@ class CreateStore extends Component {
     var obj = this.state.form;
     obj[key] = val;
     this.setState(obj);
-
-    // console.log( " ===> inputChange e.target.id");
-    // console.log(e.target.id);
-    // console.log( " ===> inputChange e.target.value");
-    // console.log(e.target.value);
-
-    // console.log( " ===> inputChange result form");
-    // console.log(result.form);
-    // this.setState({ form : result.form   });
-    // console.log( " ===> inputChange state form");
-    // console.log(this.state.form)
   }
 
   categoryChange(id) {
@@ -267,19 +296,6 @@ class CreateStore extends Component {
       border: "1px solid #e9e9e9"
     };
 
-    const eventHandlers = {
-      init: dz => {
-        this.dropzone = dz;
-        dz.on("addedfile", function(file) {
-          if (dz.files.length > 1) {
-            dz.removeFile(dz.files[0]);
-          }
-        });
-      },
-      thumbnail: (fullimage, data) =>
-        setTimeout(() => this.imageUpload(data), 1000)
-    };
-
     const renderForm = () => {
       // console.log( " ===> render");
       // console.log( JSON.stringify(this.state.form));
@@ -295,7 +311,7 @@ class CreateStore extends Component {
         this.props.form.getFieldValue("category_id")
       );
 
-      console.log(this.props.form, this.props.form.getFieldsValue());
+      //console.log(this.props.form, this.props.form.getFieldsValue());
       return (
         <Form style={{ width: "100%" }} onSubmit={this.submit}>
           <Box>
@@ -308,6 +324,7 @@ class CreateStore extends Component {
                   initialValue: this.state.form.account_id
                 })(<Input type="hidden" name="acccount_id" />)}
                 <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages id="profile.name" defaultMessage="Name" />
                   }
@@ -329,6 +346,7 @@ class CreateStore extends Component {
                 </FormItem>
 
                 <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages id="profile.email" defaultMessage="Email" />
                   }
@@ -351,6 +369,7 @@ class CreateStore extends Component {
                 </FormItem>
 
                 <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages
                       id="profile.telephone"
@@ -375,30 +394,7 @@ class CreateStore extends Component {
                 </FormItem>
 
                 <FormItem
-                  label={
-                    <IntlMessages
-                      id="profile.address"
-                      defaultMessage="Address"
-                    />
-                  }
-                >
-                  {getFieldDecorator("address", {
-                    initialValue: this.state.form.address,
-                    rules: [
-                      {
-                        required: true,
-                        message: (
-                          <IntlMessages
-                            id="profile.address.empty"
-                            defaultMessage="Address is required"
-                          />
-                        )
-                      }
-                    ]
-                  })(<Input type="text" name="address" />)}
-                </FormItem>
-
-                <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages
                       id="profile.description"
@@ -423,6 +419,7 @@ class CreateStore extends Component {
                 </FormItem>
 
                 <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages
                       id="profile.category"
@@ -445,7 +442,7 @@ class CreateStore extends Component {
                     ]
                   })(
                     <Select
-                      disabled={this.state.mode === "edit"}
+                      disabled={!this.props.isAdmin}
                       name="category_id"
                       style={{
                         width: "100%"
@@ -482,6 +479,7 @@ class CreateStore extends Component {
                 </FormItem>
 
                 <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages
                       id="profile.subcategory"
@@ -504,7 +502,7 @@ class CreateStore extends Component {
                     ]
                   })(
                     <Select
-                      disabled={this.state.mode === "edit"}
+                      disabled={!this.props.isAdmin}
                       name="subcategory_id"
                       style={{
                         width: "100%"
@@ -536,10 +534,70 @@ class CreateStore extends Component {
                     </Select>
                   )}
                 </FormItem>
+
+                <h3>
+                  <IntlMessages
+                    id="profile.linksAndSocialMedia"
+                    defaultMessage="Links and Social Media"
+                  />
+                </h3>
+                {socialMedia.map(media => (
+                  <FormItem
+                    {...formItemLayout}
+                    label={
+                      <IntlMessages
+                        id={"profile.linksAndSocialMedia." + media}
+                        defaultMessage={media}
+                      />
+                    }
+                  >
+                    {getFieldDecorator(media.toLowerCase(), {
+                      initialValue: this.state.form[media.toLowerCase()]
+                    })(<Input type="url" name={media} />)}
+                  </FormItem>
+                ))}
               </Col>
 
-              <Col md={12} sm={24}>
+              <Col md={24} lg={12}>
                 <FormItem
+                  {...formItemLayout}
+                  label={
+                    <IntlMessages
+                      id="profile.address"
+                      defaultMessage="Address"
+                    />
+                  }
+                >
+                  {getFieldDecorator("address", {
+                    initialValue: this.state.form.address,
+                    rules: [
+                      {
+                        required: true,
+                        message: (
+                          <IntlMessages
+                            id="profile.address.empty"
+                            defaultMessage="Address is required"
+                          />
+                        )
+                      }
+                    ]
+                  })(
+                    <InputPlace
+                      defaultValue={this.state.form.address}
+                      locationChange={this.locationChange}
+                      onChange={(v, e) => {
+                        this.props.form.setFieldsValue({
+                          address:
+                            e.props.children.split("//////")[0] ||
+                            e.props.value.split("//////")[0]
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+
+                <FormItem
+                  {...formItemLayout}
                   label={
                     <IntlMessages
                       id="profile.location"
@@ -559,161 +617,191 @@ class CreateStore extends Component {
 
                   <BasicLeafletMapWithMarker
                     onChange={this.locationChange}
-                    marker={{
-                      lat: this.state.form.latitude,
-                      lng: this.state.form.longitude
-                    }}
+                    lat={this.props.form.getFieldValue("latitude")}
+                    lng={this.props.form.getFieldValue("longitude")}
                   />
                 </FormItem>
 
                 <FormItem
+                  validateStatus={this.state.logo.status}
+                  help={this.state.logo.help}
+                  {...formItemLayout}
                   label={
-                    <IntlMessages id="profile.image" defaultMessage="Image" />
+                    <IntlMessages id="profile.logo" defaultMessage="Logo" />
+                  }
+                >
+                  {getFieldDecorator("logo", {
+                    initialValue: this.state.form.logo
+                  })(<Input type="hidden" name="logo" />)}
+                  <ImageUpload
+                    fileChange={image => this.imageUpload(image, "logo")}
+                    defaultImage={this.state.form.logo}
+                    onError={data => this.imageUploadError(data, "logo")}
+                  />
+                </FormItem>
+
+                <FormItem
+                  {...formItemLayout}
+                  validateStatus={this.state.image.status}
+                  help={this.state.image.help}
+                  label={
+                    <IntlMessages
+                      id="profile.image"
+                      defaultMessage="Imagen promocional"
+                    />
                   }
                 >
                   {getFieldDecorator("image", {
                     initialValue: this.state.form.image
                   })(<Input type="hidden" name="image" />)}
-                  <DropzoneWrapper>
-                    <Dropzone
-                      config={this.componentConfig}
-                      eventHandlers={eventHandlers}
-                      djsConfig={this.djsConfig}
-                    />
-                  </DropzoneWrapper>
+                  <ImageUpload
+                    fileChange={image => this.imageUpload(image, "image")}
+                    onError={data => this.imageUploadError(data, "logo")}
+                    defaultImage={this.state.form.image}
+                  />
                 </FormItem>
               </Col>
             </Row>
 
-            <Row style={{ width: "100%" }} gutter={16}>
-              <Col lg={24} md={24} sm={24}>
-                <FormItem>
-                  <h3>
-                    <IntlMessages
-                      id="profile.rates_extended"
-                      defaultMessage="Rates"
-                    />
-                  </h3>
-                  <Row style={{ width: "100%" }}>
-                    <Col sm={3}>
-                      <Row style={{ width: "100%", textAlign: "center" }}>
-                        <Col>
-                          <IntlMessages
-                            defaultMessage="Type"
-                            id="profile.type"
-                          />
-                        </Col>
-                        <Col>
-                          <IntlMessages
-                            defaultMessage="Reward"
-                            id="profile.reward"
-                          />
-                        </Col>
-                        <Col>
-                          <IntlMessages
-                            defaultMessage="Discount"
-                            id="profile.discount"
-                          />
-                        </Col>
-                      </Row>
-                    </Col>
-                    {this.state.form.discount_schedule.map((discount, key) => (
-                      <Col sm={3} key={"discount-" + key}>
-                        <Row>
-                          <Col
-                            style={{
-                              textAlign: "center",
-                              textTransform: "capitalize"
-                            }}
-                          >
+            {this.props.isAdmin ? (
+              <Row style={{ width: "100%" }} gutter={16}>
+                <Col lg={24} md={24} sm={24}>
+                  <FormItem>
+                    <h3>
+                      <IntlMessages
+                        id="profile.rates_extended"
+                        defaultMessage="Rates"
+                      />
+                    </h3>
+                    <Row style={{ width: "100%" }}>
+                      <Col sm={3}>
+                        <Row style={{ width: "100%", textAlign: "center" }}>
+                          <Col>
                             <IntlMessages
-                              defaultMessage={discount.date.substr(0, 3)}
-                              id={"profile.day-" + discount.date.substr(0, 3)}
+                              defaultMessage="Type"
+                              id="profile.type"
                             />
                           </Col>
                           <Col>
-                            {getFieldDecorator(
-                              "discount_schedule[" + key + "].date",
-                              {
-                                initialValue: this.state.form.discount_schedule[
-                                  key
-                                ].date
-                              }
-                            )(
-                              <Input
-                                type="hidden"
-                                name={"discount_schedule[" + key + "].date"}
-                              />
-                            )}
-                            <FormItem style={{ marginBottom: "3px" }}>
-                              {getFieldDecorator(
-                                "discount_schedule[" + key + "].reward",
-                                {
-                                  initialValue: Number(
-                                    discount.reward ? discount.reward : 0
-                                  ),
-                                  rules: [
-                                    {
-                                      message: "",
-                                      validator: (field, value, cb) => {
-                                        value >= minimumDiscount
-                                          ? cb()
-                                          : cb(true);
-                                      }
-                                    }
-                                  ]
-                                }
-                              )(
-                                <InputNumber
-                                  name={"discount_schedule[" + key + "].reward"}
-                                  max={100}
-                                  style={{
-                                    width: "100%"
-                                  }}
-                                />
-                              )}
-                            </FormItem>
+                            <IntlMessages
+                              defaultMessage="Reward"
+                              id="profile.reward"
+                            />
                           </Col>
                           <Col>
-                            <FormItem style={{ marginBottom: "3px" }}>
-                              {getFieldDecorator(
-                                "discount_schedule[" + key + "].discount",
-                                {
-                                  initialValue: Number(
-                                    discount ? discount.discount : 0
-                                  ),
-                                  rules: [
-                                    {
-                                      message: "",
-                                      validator: (field, value, cb) => {
-                                        value >= minimumDiscount
-                                          ? cb()
-                                          : cb(true);
-                                      }
-                                    }
-                                  ]
-                                }
-                              )(
-                                <InputNumber
-                                  name={
-                                    "discount_schedule[" + key + "].discount"
-                                  }
-                                  max={100}
-                                  style={{
-                                    width: "100%"
-                                  }}
-                                />
-                              )}
-                            </FormItem>
+                            <IntlMessages
+                              defaultMessage="Discount"
+                              id="profile.discount"
+                            />
                           </Col>
                         </Row>
                       </Col>
-                    ))}
-                  </Row>
-                </FormItem>
-              </Col>
-            </Row>
-
+                      {this.state.form.discount_schedule.map(
+                        (discount, key) => (
+                          <Col sm={3} key={"discount-" + key}>
+                            <Row>
+                              <Col
+                                style={{
+                                  textAlign: "center",
+                                  textTransform: "capitalize"
+                                }}
+                              >
+                                <IntlMessages
+                                  defaultMessage={discount.date.substr(0, 3)}
+                                  id={
+                                    "profile.day-" + discount.date.substr(0, 3)
+                                  }
+                                />
+                              </Col>
+                              <Col>
+                                {getFieldDecorator(
+                                  "discount_schedule[" + key + "].date",
+                                  {
+                                    initialValue: this.state.form
+                                      .discount_schedule[key].date
+                                  }
+                                )(
+                                  <Input
+                                    type="hidden"
+                                    name={"discount_schedule[" + key + "].date"}
+                                  />
+                                )}
+                                <FormItem style={{ marginBottom: "3px" }}>
+                                  {getFieldDecorator(
+                                    "discount_schedule[" + key + "].reward",
+                                    {
+                                      initialValue: Number(
+                                        discount.reward ? discount.reward : 0
+                                      ),
+                                      rules: [
+                                        {
+                                          message: "",
+                                          validator: (field, value, cb) => {
+                                            value >= minimumDiscount
+                                              ? cb()
+                                              : cb(true);
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  )(
+                                    <InputNumber
+                                      name={
+                                        "discount_schedule[" + key + "].reward"
+                                      }
+                                      max={100}
+                                      style={{
+                                        width: "100%"
+                                      }}
+                                    />
+                                  )}
+                                </FormItem>
+                              </Col>
+                              <Col>
+                                <FormItem style={{ marginBottom: "3px" }}>
+                                  {getFieldDecorator(
+                                    "discount_schedule[" + key + "].discount",
+                                    {
+                                      initialValue: Number(
+                                        discount ? discount.discount : 0
+                                      ),
+                                      rules: [
+                                        {
+                                          message: "",
+                                          validator: (field, value, cb) => {
+                                            value >= minimumDiscount
+                                              ? cb()
+                                              : cb(true);
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  )(
+                                    <InputNumber
+                                      name={
+                                        "discount_schedule[" +
+                                        key +
+                                        "].discount"
+                                      }
+                                      max={100}
+                                      style={{
+                                        width: "100%"
+                                      }}
+                                    />
+                                  )}
+                                </FormItem>
+                              </Col>
+                            </Row>
+                          </Col>
+                        )
+                      )}
+                    </Row>
+                  </FormItem>
+                </Col>
+              </Row>
+            ) : (
+              false
+            )}
             <Button
               type="primary"
               style={{ margin: "20px 0" }}
@@ -748,8 +836,10 @@ class CreateStore extends Component {
 }
 
 const mapStateToProps = state => ({
+  isAdmin: state.Auth.accountType === "admin",
   categories: state.Api.categoriesList,
-  business: state.Api.business,
+  business: state.Api.business || undefined,
+  actionLoading: state.Api.actionLoading,
   businesses: state.Owner.stores
 });
 

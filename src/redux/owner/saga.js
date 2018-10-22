@@ -33,7 +33,7 @@ function* getBusinesses(action) {
         action.payload.page === 1
           ? 0
           : (action.payload.page - 1) * action.payload.limit,
-      count: action.payload.page * action.payload.limit - 1
+      count: action.payload.limit
     });
     const categories = []
       .concat(action.payload.filters.selected_categories)
@@ -71,17 +71,23 @@ export function* setOverdraftSuccess() {
         msg: "Descubierto asignado satisfactoriamente"
       }
     });
+
+    //Reload bussines list
+    const filters = yield select(state => state.Owner.filters);
+    if (filters !== null) {
+      yield put({ type: actions.FETCH_BUSINESSES_FILTRED, payload: filters });
+    }
   });
 }
 
 export function* setOverdraftError() {
-  yield takeEvery(actions.BUSINESS_SET_OVERDRAFT_FAILD, function*(payload) {
+  yield takeEvery(actions.BUSINESS_SET_OVERDRAFT_FAILD, function*(action) {
     yield put({ type: actionsUI.GLOBAL_LOADING_END });
     yield put({
       type: actionsUI.GLOBAL_MSG,
       payload: {
-        msgType: "error",
-        msg: payload
+        msg: action.payload,
+        msgType: "error"
       }
     });
   });
@@ -95,11 +101,8 @@ function* setOverdraft(action) {
     } catch (e) {
       console.log("KEEY - OVERDRAFT ERROR", e);
       yield put({
-        type: actionsUI.GLOBAL_MSG,
-        payload: {
-          msg: e,
-          msgType: "error"
-        }
+        type: actions.BUSINESS_SET_OVERDRAFT_FAILD,
+        payload: e
       });
       return;
     }

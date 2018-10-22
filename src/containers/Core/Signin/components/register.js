@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import IntlMessages from "../../../../components/utility/intlMessages";
 import { Modal, notification } from "antd";
+import { Tooltip } from "antd";
 import Form from "../../../../components/uielements/form";
 import Input from "../../../../components/uielements/input";
 import Button from "../../../../components/uielements/button";
@@ -196,9 +197,12 @@ export class Register extends Component {
                     message: this.props.intl.messages["register.name.empty"]
                   }
                 ]
-              })(<Input name="name" id="name" />)}
+              })(
+                <Input name="name" id="name" title="Nombre del comercio"/>
+                )}
             </FormItem>
-
+            
+                
             <FormItem
               {...formItemLayout}
               label={
@@ -207,8 +211,10 @@ export class Register extends Component {
                   defaultMessage="Account name"
                 />
               }
+
               hasFeedback
             >
+
               {getFieldDecorator("account_name", {
                 rules: [
                   {
@@ -224,9 +230,14 @@ export class Register extends Component {
                     validator: this.checkAccontNameAvailable
                   }
                 ]
-              })(<Input name="account_name" id="account_name" />)}
-            </FormItem>
+              })(
+              
+              <Input name="account_name" id="account_name" title="Nombre de usuario: Sólo letras minúsculas, números, puntos y guiones, debe comenzar con una letra y finalizar con letra o número. Longitud mayor a 2 caracteres."/>
+  
 
+              )}
+            </FormItem>
+            
             <FormItem
               {...formItemLayout}
               label={

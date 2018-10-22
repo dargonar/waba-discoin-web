@@ -84,6 +84,12 @@ export default function apiReducer(state = initState, action) {
         actionLoading: false,
         schedule: action.payload.discount_schedule
       };
+    case actions.UPDATE_SCHEDULE_SUCCESS:
+      return {
+        ...state,
+        actionLoading: false,
+        schedule: action.payload.discount_schedule
+      };
     case actions.GET_SCHEDULE_FAILD:
       return {
         ...state,

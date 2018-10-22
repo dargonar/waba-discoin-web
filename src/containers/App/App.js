@@ -61,7 +61,7 @@ export class App extends Component {
                       style={{
                         padding: "70px 0 0",
                         flexShrink: "0",
-                        background: "#f1f3f6"
+                        background: "#F5F9FD"
                       }}
                     >
                       {this.props.isEncrypted ? (

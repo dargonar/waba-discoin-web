@@ -1,10 +1,10 @@
 export default [
-  {
-    name: "main",
-    url: "business/main",
-    icon: "ion-android-apps",
-    intlMessage: "sidebar.main"
-  },
+  // {
+  //   name: "main",
+  //   url: "business/main",
+  //   icon: "ion-android-apps",
+  //   intlMessage: "sidebar.main"
+  // },
   {
     name: "panelControl",
     url: "business/home",
@@ -13,7 +13,8 @@ export default [
   },
   {
     name: "refunds",
-    url: "business/refounds",
+    // url: "business/refounds",
+    url: "business/main",
     icon: "ion-calculator",
     intlMessage: "sidebar.charge"
   },
@@ -29,12 +30,12 @@ export default [
     icon: "ion-android-people",
     intlMessage: "sidebar.subAccounts"
   },
-  // {
-  //   name: "discountRewards",
-  //   url: "business/discount-and-rewards",
-  //   icon: "ion-settings",
-  //   intlMessage: "sidebar.discountRewards"
-  // },
+  {
+    name: "discountRewards",
+    url: "business/discount-and-rewards",
+    icon: "ion-pricetags",
+    intlMessage: "sidebar.discountRewards"
+  },
   {
     name: "profile",
     url: "business/profile",

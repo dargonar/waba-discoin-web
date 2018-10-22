@@ -126,6 +126,7 @@ class ListStores extends Component {
   }
 
   renderStores() {
+    
     return (
       <div
         style={{ width: "100%" }}
@@ -133,17 +134,24 @@ class ListStores extends Component {
           this.mainScroll = el;
         }}
       >
-        {this.props.businesses.map(store => (
-          <StoreCard
-            {...store}
-            key={store.id}
-            overdraft={this.showOverdraft}
-            accounts={this.accounts}
-            edit={this.edit}
-            warnings={this.props.warnings}
-          />
-        ))}
-        {this.props.businesses.length === 0 ? (
+        {this.props.actionLoading === false ? (
+          this.props.businesses.map(store => (
+            <StoreCard
+              {...store}
+              key={store.id}
+              overdraft={this.showOverdraft}
+              accounts={this.accounts}
+              edit={this.edit}
+              warnings={this.props.warnings}
+            />
+          ))
+        ) : (
+          <div style={{ width: "100%", textAlign: "center" }}>
+            <PageLoading />
+          </div>
+        )}
+        {this.props.businesses.length === 0 &&
+        this.props.actionLoading === false ? (
           <Alert
             message="Ups!"
             type="warning"

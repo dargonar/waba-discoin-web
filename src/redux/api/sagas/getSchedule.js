@@ -19,7 +19,10 @@ export const getSchedule = function*() {
         payload: { discount_schedule: data.business.discount_schedule }
       });
       // As they share the same type of response I can update the business status as well.
-      yield put({ type: actions.GET_PROFILE, payload: data });
+      yield put({
+        type: actions.GET_PROFILE,
+        payload: { account_id: data.business.account_id }
+      });
       yield put({ type: "GLOBAL_LOADING_END" });
     } else {
       yield put({ type: actions.GET_SCHEDULE_FAILD, payload: err });

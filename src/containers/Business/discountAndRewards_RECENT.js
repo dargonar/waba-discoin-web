@@ -9,6 +9,7 @@ import PageLoading from "../../components/pageLoading";
 import { Col, Row } from "antd";
 
 import Button from "../../components/uielements/button";
+import Async from "../../helpers/asyncComponent";
 import actions from "../../redux/owner/actions";
 import apiActions from "../../redux/api/actions";
 import appActions from "../../redux/app/actions";
@@ -18,11 +19,20 @@ import Form from "../../components/uielements/form";
 import { Input, Select, InputNumber } from "antd";
 import { PaymentMetodsEncoder } from "../../utils/paymentsEncoder";
 
-import basicStyle from "../../config/basicStyle";
-import ContentHolder from "../../components/utility/contentHolder";
+const socialMedia = ["Website", "Twiter", "Instagram", "Facebook"];
 
 const FormItem = Form.Item;
 const SelectOption = Select.Option;
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 6 }
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 18 }
+  }
+};
 
 const defualtSchedule = [
   { discount: "0", reward: "0", date: "monday" },
@@ -34,16 +44,10 @@ const defualtSchedule = [
   { discount: "0", reward: "0", date: "sunday" }
 ];
 
-const getMinimunDiscount = (categories, id) =>
-  categories
-    .filter(category => category.id === id)
-    .reduce((prev, act) => act.discount, 0);
-
 class DiscountsAndRewards extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
       form: {
         discount_schedule: defualtSchedule,
         links: {},
@@ -54,22 +58,40 @@ class DiscountsAndRewards extends Component {
     this.initForm = this.initForm.bind(this);
     this.submit = this.submit.bind(this);
     this.togglePayment = this.togglePayment.bind(this);
-    this.checkLoading = this.checkLoading.bind(this);
   }
 
   componentWillMount() {
     this.props.getCategories();
-
     if (typeof this.props.match.params.id !== "undefined") {
-      this.props.getSchedule(this.props.match.params.id);
-    } else {
-      this.props.getSchedule();
+      this.setState({
+        loading: true,
+        mode: "edit",
+        id: this.props.match.params.id
+      });
+      this.props.fetchBusiness(this.props.match.params.id);
+    }
+
+    console.log(
+      " ** componentWillMount",
+      "---------this.props.business",
+      this.props.business
+    );
+    if (
+      typeof this.props.business !== "undefined" &&
+      this.props.business !== null
+    ) {
+      this.setState({
+        mode: "edit",
+        id: this.props.business.account_id,
+        loading: false
+      });
+      this.initForm(this.props.business);
     }
   }
 
   formatSchedule(category_id) {
     const categoryDiscount = this.props.categories.filter(
-      cat => cat.id === category_id
+      cat => cat.id == category_id
     )[0];
     return defualtSchedule.map(day => ({
       ...day,
@@ -89,7 +111,7 @@ class DiscountsAndRewards extends Component {
           "----------------------- saving schedule:",
           JSON.stringify(result)
         );
-
+        return;
         // this.props.showMessage({
         //   msg: "Esta en progreso :)",
         //   msgType: "error"
@@ -103,10 +125,7 @@ class DiscountsAndRewards extends Component {
         //       : this.formatSchedule(result.category_id);
         // }
         // this.props.saveBusiness(result);
-        this.props.updateSchedule(
-          result,
-          this.props.match.params.id || undefined
-        );
+        this.props.updateSchedule(result);
       } else {
         this.props.showMessage({
           msg: "Por favor corrija los errores e intente nuevamente",
@@ -120,7 +139,7 @@ class DiscountsAndRewards extends Component {
     let schedule = this.props.form.getFieldsValue().discount_schedule;
     schedule[key] = { ...schedule[key], ...values };
     this.props.form.setFieldsValue({ discount_schedule: schedule });
-    console.log(" *** togglePayment(key, values): ", JSON.stringify(schedule));
+    console.log(schedule);
   }
 
   changeSchedule(type, key, value) {
@@ -146,38 +165,37 @@ class DiscountsAndRewards extends Component {
       }
     });
   }
-
-  checkLoading = schedule => {
-    console.log({ schedule });
-    if (typeof schedule !== "undefined") {
-      this.initForm(schedule);
-    }
-  };
-
   componentWillReceiveProps(nextProps) {
+    const checkLoading = business => {
+      if (business && this.state.id) {
+        const editableBusiness = business.filter(
+          x => x.account_id === this.state.id
+        );
+        if (editableBusiness.length !== 0) {
+          this.initForm(editableBusiness[0]);
+        }
+      } else if (business) {
+        this.initForm(business);
+      }
+    };
+
     // console.log(
     //   " ** componentWillReceiveProps",
     //   "---------this.props",
     //   nextProps
     // );
     if (this.state.loading === true) {
-      this.checkLoading(nextProps.schedule);
-    }
-
-    //Check actionLoading status
-    if (
-      nextProps.actionLoading === true &&
-      this.props.actionLoading === false
-    ) {
-      this.setState({ loading: true });
+      checkLoading(nextProps.business || nextProps.businesses);
     }
   }
 
-  initForm(schedule) {
+  initForm(business) {
+    // console.log('==========initForm:');
+    // console.log(JSON.stringify(business));
     this.setState({
       form: {
         ...this.state.form,
-        discount_schedule: schedule
+        ...business
       },
       loading: false
     });
@@ -206,17 +224,20 @@ class DiscountsAndRewards extends Component {
   }
 
   renderForm() {
-    const { rowStyle, colStyle } = basicStyle;
-
     // console.log( " ===> render");
     // console.log( JSON.stringify(this.state.form));
     const { getFieldDecorator } = this.props.form;
 
-    //const minimumDiscount = 20;
-    const minimumDiscount = getMinimunDiscount(
-      this.props.categories,
-      this.props.business.category_id
-    );
+    const getMinimunDiscount = (categories, id) =>
+      categories
+        .filter(category => category.id === id)
+        .reduce((prev, act) => act.discount, 0);
+
+    const minimumDiscount = 20;
+    // const minimumDiscount = getMinimunDiscount(
+    //   this.props.categories,
+    //   this.props.business.category_id
+    // );
 
     //console.log(this.props.form, this.props.form.getFieldsValue());
     const paymentMethods = PaymentMetodsEncoder();
@@ -224,39 +245,105 @@ class DiscountsAndRewards extends Component {
       <Form style={{ width: "100%" }} onSubmit={this.submit}>
         <Box>
           <h3>
-            <IntlMessages id="profile.rates_extended" defaultMessage="Rates" />
+            <intlMessages id="profile.profile_info" defaultMessage="Perfil" />
           </h3>
+          <Row style={{ width: "100%" }} gutter={16}>
+            {/*<Col lg={24} md={24} sm={24}>
+              {getFieldDecorator("account_id", {
+                initialValue: this.state.form.account_id
+              })(<Input type="hidden" name="acccount_id" />)}
+
+              <FormItem
+                {...formItemLayout}
+                label={
+                  <IntlMessages
+                    id="profile.paymentMethods"
+                    defaultMessage="Payment methods"
+                  />
+                }
+              >
+                {getFieldDecorator("payments", {})(
+                  <Select mode="multiple">
+                    <SelectOption value="cash">
+                      <IntlMessages
+                        id="profile.payments.cash"
+                        defaultMessage="Cash"
+                      />
+                    </SelectOption>
+                    <SelectOption value="debit">
+                      <IntlMessages
+                        id="profile.payments.debit"
+                        defaultMessage="Debit"
+                      />
+                    </SelectOption>
+                    <SelectOption value="credit">
+                      <IntlMessages
+                        id="profile.payments.credit"
+                        defaultMessage="Credit"
+                      />
+                    </SelectOption>
+                    <SelectOption value="mercadopago">
+                      <IntlMessages
+                        id="profile.payments.mercadopago"
+                        defaultMessage="MercadoPago"
+                      />
+                    </SelectOption>
+                  </Select>
+                )}
+              </FormItem>
+                </Col> */}
+          </Row>
 
           <Row style={{ width: "100%" }} gutter={16}>
             <Col lg={24} md={24} sm={24}>
               <FormItem>
-                <Row style={rowStyle} gutter={16} justify="start">
+                <h3>
+                  <IntlMessages
+                    id="profile.rates_extended"
+                    defaultMessage="Rates"
+                  />
+                </h3>
+                <Row style={{ width: "100%" }}>
+                  <Col sm={3}>
+                    <Row style={{ width: "100%", textAlign: "center" }}>
+                      <Col>
+                        <IntlMessages defaultMessage="Type" id="profile.type" />
+                      </Col>
+                      <Col>
+                        <IntlMessages
+                          defaultMessage="Reward"
+                          id="profile.reward"
+                        />
+                      </Col>
+                      <Col>
+                        <IntlMessages
+                          defaultMessage="Discount"
+                          id="profile.discount"
+                        />
+                      </Col>
+                      <Col>
+                        <IntlMessages
+                          id="profile.paymentMethods"
+                          defaultMessage="Payment methods"
+                        />
+                      </Col>
+                    </Row>
+                  </Col>
                   {this.state.form.discount_schedule.map((discount, key) => (
-                    <Col
-                      md={6}
-                      sm={12}
-                      xs={24}
-                      style={colStyle}
-                      key={"discount-" + key}
-                    >
-                      <Box
-                        title={
-                          <span style={{ textTransform: "capitalize" }}>
-                            <IntlMessages
-                              defaultMessage={discount.date.substr(0, 3)}
-                              id={"configSchedule." + discount.date}
-                            />
-                          </span>
-                        }
-                      >
-                        <ContentHolder>
-                          <span>
-                            <IntlMessages
-                              id="profile.discount"
-                              defaultMessage="Discount"
-                            />
-                          </span>
-
+                    <Col sm={3} key={"discount-" + key}>
+                      <Row>
+                        <Col
+                          style={{
+                            textAlign: "center",
+                            textTransform: "capitalize"
+                          }}
+                        >
+                          <IntlMessages
+                            defaultMessage={discount.date.substr(0, 3)}
+                            id={"profile.day-" + discount.date.substr(0, 3)}
+                          />
+                        </Col>
+                        <Col>
                           {getFieldDecorator(
                             "discount_schedule[" + key + "].date",
                             {
@@ -270,44 +357,6 @@ class DiscountsAndRewards extends Component {
                               name={"discount_schedule[" + key + "].date"}
                             />
                           )}
-
-                          <FormItem style={{ marginBottom: "3px" }}>
-                            {getFieldDecorator(
-                              "discount_schedule[" + key + "].discount",
-                              {
-                                initialValue: Number(
-                                  discount.discount ? discount.discount : 0
-                                ),
-                                rules: [
-                                  {
-                                    message: "",
-                                    validator: (field, value, cb) => {
-                                      value >= minimumDiscount
-                                        ? cb()
-                                        : cb(true);
-                                    }
-                                  }
-                                ]
-                              }
-                            )(
-                              <InputNumber
-                                name={"discount_schedule[" + key + "].discount"}
-                                max={100}
-                                style={{
-                                  width: "90%"
-                                }}
-                                formatter={value => `${value}%`}
-                                parser={value => value.replace("%", "")}
-                              />
-                            )}
-                          </FormItem>
-
-                          <span>
-                            <IntlMessages
-                              id="profile.reward"
-                              defaultMessage="Reward"
-                            />
-                          </span>
                           <FormItem style={{ marginBottom: "3px" }}>
                             {getFieldDecorator(
                               "discount_schedule[" + key + "].reward",
@@ -338,28 +387,40 @@ class DiscountsAndRewards extends Component {
                               />
                             )}
                           </FormItem>
-
-                          <span>
-                            <IntlMessages
-                              id="profile.paymentMethods"
-                              defaultMessage="Payment methods"
-                            />
-                          </span>
-
-                          {paymentMethods.paymentsLabels.map(method =>
-                            getFieldDecorator(
-                              "discount_schedule[" + key + "].pm_" + method,
+                        </Col>
+                        <Col>
+                          <FormItem style={{ marginBottom: "3px" }}>
+                            {getFieldDecorator(
+                              "discount_schedule[" + key + "].discount",
                               {
-                                initialValue: discount["pm_" + method]
+                                initialValue: Number(
+                                  discount ? discount.discount : 0
+                                ),
+                                rules: [
+                                  {
+                                    message: "",
+                                    validator: (field, value, cb) => {
+                                      value >= minimumDiscount
+                                        ? cb()
+                                        : cb(true);
+                                    }
+                                  }
+                                ]
                               }
                             )(
-                              <Input
-                                type="hidden"
-                                key={key + "-hidden-" + method}
+                              <InputNumber
+                                name={"discount_schedule[" + key + "].discount"}
+                                max={100}
+                                style={{
+                                  width: "90%"
+                                }}
+                                formatter={value => `${value}%`}
+                                parser={value => value.replace("%", "")}
                               />
-                            )
-                          )}
-
+                            )}
+                          </FormItem>
+                        </Col>
+                        <Col>
                           <FormItem>
                             <Select
                               mode="multiple"
@@ -374,20 +435,14 @@ class DiscountsAndRewards extends Component {
                               }
                             >
                               {paymentMethods.paymentsLabels.map(method => (
-                                <SelectOption
-                                  value={method}
-                                  key={key + "-" + method}
-                                >
-                                  {<IntlMessages
-                                      id={"profile.payments."+method}
-                                      defaultMessage=""
-                                    />}
+                                <SelectOption value={method}>
+                                  {method}
                                 </SelectOption>
                               ))}
                             </Select>
                           </FormItem>
-                        </ContentHolder>
-                      </Box>
+                        </Col>
+                      </Row>
                     </Col>
                   ))}
                 </Row>
@@ -395,14 +450,7 @@ class DiscountsAndRewards extends Component {
             </Col>
           </Row>
           <Row style={{ width: "100%" }} gutter={16}>
-            <h4
-              style={{
-                float: "right",
-                color: "#fff",
-                textAlign: "right",
-                backgroundColor: "#f5222d"
-              }}
-            >
+            <h4 style={{ textAlign: "right" }}>
               <IntlMessages
                 id="configSchedule.minimumDiscount"
                 defaultMessage="Descuento mínimo de : {min}"
@@ -423,6 +471,14 @@ class DiscountsAndRewards extends Component {
   }
 
   render() {
+    const textAreaStyle = {
+      width: "100%",
+      padding: "10px",
+      height: "221px",
+      borderRadius: "4px",
+      border: "1px solid #e9e9e9"
+    };
+
     return (
       <LayoutContentWrapper>
         <PageHeader>
@@ -431,27 +487,16 @@ class DiscountsAndRewards extends Component {
             defaultMessage="Configuración"
           />
         </PageHeader>
-        {this.state.loading ||
-        this.props.categories.length === 0 ||
-        typeof this.props.business === "undefined" ? (
-          <PageLoading />
-        ) : (
-          this.renderForm()
-        )}
-        {/*<pre>
-          {JSON.stringify(this.props.form.getFieldsValue(), null, "  ")}
-        </pre>*/}
+        {this.state.loading ? <PageLoading /> : this.renderForm()}
       </LayoutContentWrapper>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  actionLoading: state.Api.actionLoading,
   isAdmin: state.Auth.accountType === "admin",
   categories: state.Api.categoriesList,
-  business: state.Api.business || undefined,
-  schedule: state.Api.schedule || undefined
+  business: state.Api.business
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -12,6 +12,7 @@ import { AcceptDiscount } from "./components/acceptDiscount";
 import { TransactionList } from "./components/transactionList";
 import { injectIntl } from "react-intl";
 import moment from "moment";
+import PageLoading from "../../../components/pageLoading";
 
 export class Dashboard extends Component {
   constructor(props) {
@@ -26,6 +27,7 @@ export class Dashboard extends Component {
     this.setTimmer = this.setTimmer.bind(this);
     this.changeBillAmount = this.changeBillAmount.bind(this);
     this.changeBillReference = this.changeBillReference.bind(this);
+    this.renderContent = this.renderContent.bind(this);
   }
 
   clearState() {
@@ -70,6 +72,7 @@ export class Dashboard extends Component {
 
   componentWillMount() {
     this.props.loadTx();
+    this.props.loadSchedule();
     this.setTimmer(10000);
   }
 
@@ -77,33 +80,43 @@ export class Dashboard extends Component {
     clearInterval(this.loop);
   }
 
-  render() {
+  renderContent() {
     return (
-      <LayoutContentWrapper>
-        <PageHeader>
-          <IntlMessage
-            id="bussinesMain.rewardAndRefund"
-            defaultMessage="Reward and accept {currency}"
-            values={{ currency: currency.plural }}
-          />
-        </PageHeader>
-        <Row style={{ width: "100%" }} gutter={16}>
-          <Col md={12}>
-            <Input
-              type="number"
-              min="0"
-              size="large"
-              value={this.state.bill.amount}
-              placeholder={
-                this.props.intl.messages["bussinesMain.billAmount"] ||
-                "Bill amount"
-              }
-              onChange={e => this.changeBillAmount(e.target.value)}
-            />
+      <div>
+        <Row type="flex">
+          <Col className="col">
+            <span class="label">Monto de la factura</span>
+          </Col>
+        </Row>
+        <Row
+          justify="start"
+          type="flex"
+          flexDirection={Row}
+          className="flexRow input-bill-container"
+        >
+          <Col md={12} className="col">
+            <Row type="flex" flexDirection={Row} className="flexRow">
+              <Col className="d-flex flex-column text-right bill-currency">
+                <span>$</span>
+                <p>ARS</p>
+              </Col>
+              <Col className="d-flex">
+                <Input
+                  className="input-bill"
+                  type="number"
+                  min="0"
+                  size="large"
+                  value={this.state.bill.amount}
+                  placeholder={0}
+                  onChange={e => this.changeBillAmount(e.target.value)}
+                />
+              </Col>
+            </Row>
           </Col>
 
-          <Col md={12}>
+          <Col md={12} className="col">
             <Input
+              className="input-bill-reference"
               size="large"
               placeholder={
                 this.props.intl.messages["bussinesMain.billReference"] ||
@@ -112,8 +125,26 @@ export class Dashboard extends Component {
               onChange={e => this.changeBillReference(e.target.value)}
             />
           </Col>
-
-          <Col md={12}>
+        </Row>
+        <Row
+          justify="start"
+          type="flex"
+          flexDirection={Row}
+          className="flexRow w-100"
+        >
+          <Col md={12} className="col">
+            <AcceptDiscount
+              {...this.state.bill}
+              percentage={this.props.discount.discount}
+              onSubmit={data => {
+                console.log("Submited", { data });
+                //this.setTimmer(1000, 20000);
+              }}
+              setTimmer={this.setTimmer}
+            />
+          </Col>
+          
+          <Col md={12} className="col">
             <SendRefund
               {...this.state.bill}
               account={this.props.account}
@@ -125,18 +156,10 @@ export class Dashboard extends Component {
             />
           </Col>
 
-          <Col md={12}>
-            <AcceptDiscount
-              {...this.state.bill}
-              percentage={this.props.discount.discount}
-              onSubmit={data => {
-                console.log("Submited", { data });
-                //this.setTimmer(1000, 20000);
-              }}
-              setTimmer={this.setTimmer}
-            />
-          </Col>
+          
+        </Row>
 
+        <Row style={{ width: "100%", paddingTop: "40px" }} gutter={16}>
           <Col md={24} style={{ paddingTop: "40px" }}>
             <PageHeader>
               <IntlMessage
@@ -147,13 +170,26 @@ export class Dashboard extends Component {
             <TransactionList txs={this.props.transactions} />
           </Col>
         </Row>
+      </div>
+    );
+  }
+
+  render() {
+    return (
+      <LayoutContentWrapper className="reward_discount-view">
+        {typeof this.props.discount.discount !== "undefined" &&
+        typeof this.props.discount.reward !== "undefined" ? (
+          this.renderContent()
+        ) : (
+          <PageLoading />
+        )}
       </LayoutContentWrapper>
     );
   }
 }
 
 const getDiscount = discounts => {
-  console.log('----------------------')
+  console.log("----------------------");
   console.log(
     moment()
       .format("dddd")
@@ -181,6 +217,7 @@ const mapStateToProps = state => ({
 });
 
 const dispatchToProps = dispatch => ({
+  loadSchedule: bindActionCreators(actions.getSchedule, dispatch),
   loadTx: bindActionCreators(actions.searchTransactions, dispatch)
 });
 

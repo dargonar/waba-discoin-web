@@ -1,5 +1,5 @@
 import { all, call, takeEvery, put, fork } from "redux-saga/effects";
-import { push } from "react-router-redux";
+//import { push } from "react-router-redux";
 
 import actions from "./actions";
 import actionsUI from "../app/actions";
@@ -36,15 +36,11 @@ export function* loginRequest() {
       from_storage_data == null &&
       (!account_name || !mnemonics)
     ) {
-      yield put({ type: actions.LOGIN_ERROR });
-      yield put({ type: actionsUI.GLOBAL_LOADING_END });
       yield put({
-        type: actionsUI.GLOBAL_MSG,
-        payload: {
-          msgType: "error",
-          msg: "Información insuficiente para iniciar sesión"
-        }
+        type: actions.LOGIN_ERROR,
+        payload: { error: "Información insuficiente para iniciar sesión" }
       });
+      yield put({ type: actionsUI.GLOBAL_LOADING_END });
 
       return;
     }
@@ -98,13 +94,6 @@ export function* loginRequest() {
           });
 
           yield put({ type: actionsUI.GLOBAL_LOADING_END });
-          yield put({
-            type: actionsUI.GLOBAL_MSG,
-            payload: {
-              msgType: "error",
-              msg: e.toString()
-            }
-          });
 
           return;
         }
@@ -140,19 +129,10 @@ export function* loginRequest() {
       yield put({
         type: actions.LOGIN_ERROR,
         payload: {
-          err:
-            typeof secretRes.ex !== "undefined" ? secretRes.ex.message : null,
-          error: secretRes.data
+          error: secretRes.ex || secretRes.data.error
         }
       });
       yield put({ type: actionsUI.GLOBAL_LOADING_END });
-      yield put({
-        type: actionsUI.GLOBAL_MSG,
-        payload: {
-          msgType: "error",
-          msg: secretRes.ex || secretRes.data.error
-        }
-      });
       return;
     } else {
       console.log("[redux/auth/saga]-- auth/saga loginRequest OK#1");
@@ -212,18 +192,11 @@ export function* loginRequest() {
           yield put({
             type: actions.LOGIN_ERROR,
             payload: {
-              err: typeof ex !== "undefined" ? ex.message : null,
+              err: typeof ex !== "undefined" ? ex.message : undefined,
               error: data.error
             }
           });
           yield put({ type: actionsUI.GLOBAL_LOADING_END });
-          yield put({
-            type: actionsUI.GLOBAL_MSG,
-            payload: {
-              msgType: "error",
-              msg: ex || data.error
-            }
-          });
         }
       } catch (e) {
         yield put({
@@ -256,9 +229,7 @@ export function* loginError() {
 
 export function* logout() {
   yield takeEvery(actions.LOGOUT, function*() {
-    console.log(
-      "-------------saga::logout()"
-    );
+    console.log("-------------saga::logout()");
     yield put({ type: actions.LS_CLEAN });
     // yield put(push("/"));
   });

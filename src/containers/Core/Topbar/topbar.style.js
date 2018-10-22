@@ -71,6 +71,7 @@ const TopbarWrapper = styled.div`
     }
 
     .isoRight {
+      margin-bottom: 0;
       display: flex;
       align-items: center;
 
@@ -121,7 +122,6 @@ const TopbarWrapper = styled.div`
               props["data-rtl"] === "rtl" ? "inherit" : "10px"};
             right: ${props =>
               props["data-rtl"] === "rtl" ? "10px" : "inherit"};
-            ${borderRadius("50%")};
           }
         }
 
@@ -166,22 +166,22 @@ const TopbarWrapper = styled.div`
             justify-content: center;
             position: relative;
             background-color: ${palette("grayscale", 9)};
-            ${borderRadius("50%")};
 
             img {
               height: 100%;
               object-fit: cover;
+              border-radius: 4px;
             }
 
             .userActivity {
-              width: 10px;
-              height: 10px;
+              width: 15px;
+              height: 15px;
               display: block;
               background-color: ${palette("color", 3)};
               position: absolute;
-              bottom: 0;
-              right: 3px;
-              border: 1px solid #ffffff;
+              bottom: -6px;
+              right: 33px;
+              border: 1px solid #e4e4e4;
               ${borderRadius("50%")};
             }
           }

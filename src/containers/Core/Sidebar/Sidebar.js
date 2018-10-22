@@ -79,9 +79,7 @@ class Sidebar extends Component {
       return;
     };
     const scrollheight = app.height || window.innerHeight;
-    const styling = {
-      backgroundColor: customizedTheme.backgroundColor
-    };
+
     const submenuColor = {
       color: customizedTheme.textColor
     };
@@ -96,13 +94,13 @@ class Sidebar extends Component {
           className="isomorphicSidebar"
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
-          style={styling}
+
         >
           <Logo collapsed={collapsed} />
           <Scrollbars style={{ height: scrollheight - 70 }}>
             <Menu
               onClick={this.handleClick}
-              theme="dark"
+              theme="transparent"
               mode={mode}
               openKeys={collapsed ? [] : app.openKeys}
               selectedKeys={[this.props.router.location.pathname]}

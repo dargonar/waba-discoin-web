@@ -60,21 +60,21 @@ const actions = {
     });
   },
 
-  getSchedule: () => (dispatch, getState) => {
+  getSchedule: account_id => (dispatch, getState) => {
     dispatch({
       type: actions.GET_SCHEDULE,
       payload: {
-        account_id: getState().Auth.account_id
+        account_id: account_id || getState().Auth.account_id
       }
     });
   },
 
-  updateSchedule: newSchedule => (dispatch, getState) => {
+  updateSchedule: (newSchedule, account_id) => (dispatch, getState) => {
     dispatch({
       type: actions.UPDATE_SCHEDULE,
       payload: {
         schedule: newSchedule,
-        account_id: getState().Auth.account_id
+        account_id: account_id || getState().Auth.account_id
       }
     });
   },
