@@ -39,8 +39,9 @@ const apiConfig = {
   // chain_id: "f5a42a1c16cf678773313f5f94ef7ebb69257c5f33a147aa8c4ac0fa5e451805",   // TUTI TESNET
   chain_id: "4018d7844c78f6a6c41c6a552b898022310fc5dec06da467ee7905a8dad512c8", // MAIN NET
 
-  admin_pub_key : 'BTS5KqreoEjBrfuPC8G5ntzv3p1ByHe2HCyUMyDnvex7B42MYzo4u',    // TUTI TESNET
+  // admin_pub_key : 'BTS5KqreoEjBrfuPC8G5ntzv3p1ByHe2HCyUMyDnvex7B42MYzo4u',    // TUTI TESNET
   // admin_pub_key = 'BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk', // PRIVATE TESNET
+  admin_pub_key : 'BTS5QnCpdUT696G8LA6xBonNsuD1PwP5Xgr5GvYXBrxGx6YnqMmdC',    // MAIN NET
   version: "v3",
   urls: [
     { action: "URL/UPDATE_BUSINESS", path: "/dashboard/business/profile/:account_id/update" },
