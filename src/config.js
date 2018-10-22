@@ -1,7 +1,7 @@
 const siteConfig = {
   siteName: "Discoin",
   siteIcon: "ion-flash",
-  footerText: "WABA.network ©2018",
+  footerText: "WABA.network ©2018 - v1.0.1",
   // adminAccount: "admin"    // PRIVATE TESNET
   adminAccount: "discoin-gov" // TUTI TESNET
 };
