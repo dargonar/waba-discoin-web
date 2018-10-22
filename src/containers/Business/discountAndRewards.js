@@ -273,6 +273,43 @@ class DiscountsAndRewards extends Component {
 
                           <FormItem style={{ marginBottom: "3px" }}>
                             {getFieldDecorator(
+                              "discount_schedule[" + key + "].discount",
+                              {
+                                initialValue: Number(
+                                  discount.discount ? discount.discount : 0
+                                ),
+                                rules: [
+                                  {
+                                    message: "",
+                                    validator: (field, value, cb) => {
+                                      value >= minimumDiscount
+                                        ? cb()
+                                        : cb(true);
+                                    }
+                                  }
+                                ]
+                              }
+                            )(
+                              <InputNumber
+                                name={"discount_schedule[" + key + "].discount"}
+                                max={100}
+                                style={{
+                                  width: "90%"
+                                }}
+                                formatter={value => `${value}%`}
+                                parser={value => value.replace("%", "")}
+                              />
+                            )}
+                          </FormItem>
+
+                          <span>
+                            <IntlMessages
+                              id="profile.reward"
+                              defaultMessage="Reward"
+                            />
+                          </span>
+                          <FormItem style={{ marginBottom: "3px" }}>
+                            {getFieldDecorator(
                               "discount_schedule[" + key + "].reward",
                               {
                                 initialValue: Number(
@@ -292,43 +329,6 @@ class DiscountsAndRewards extends Component {
                             )(
                               <InputNumber
                                 name={"discount_schedule[" + key + "].reward"}
-                                max={100}
-                                style={{
-                                  width: "90%"
-                                }}
-                                formatter={value => `${value}%`}
-                                parser={value => value.replace("%", "")}
-                              />
-                            )}
-                          </FormItem>
-
-                          <span>
-                            <IntlMessages
-                              id="profile.reward"
-                              defaultMessage="Reward"
-                            />
-                          </span>
-                          <FormItem style={{ marginBottom: "3px" }}>
-                            {getFieldDecorator(
-                              "discount_schedule[" + key + "].discount",
-                              {
-                                initialValue: Number(
-                                  discount ? discount.discount : 0
-                                ),
-                                rules: [
-                                  {
-                                    message: "",
-                                    validator: (field, value, cb) => {
-                                      value >= minimumDiscount
-                                        ? cb()
-                                        : cb(true);
-                                    }
-                                  }
-                                ]
-                              }
-                            )(
-                              <InputNumber
-                                name={"discount_schedule[" + key + "].discount"}
                                 max={100}
                                 style={{
                                   width: "90%"

@@ -9,12 +9,12 @@ const getSHA = (text) => {
 }
 
 export const getBase64 = (text,size) => {
-		let my_text = text.replace('discoin.');
+		let my_text = text?text.replace('discoin.'):'';
     return 'data:image/png;base64,' + new Identicon(getSHA(my_text || ''), size || 430).toString()
 }
 
 const HashImg = ({size, text, style, alt}) => (
-    <img src={getBase64(text,size)} style={style} alt={alt || ''}/>
+    <img src={getBase64(text,size)} style={style} alt={alt || text} title={text}/>
 )
 
 export default HashImg

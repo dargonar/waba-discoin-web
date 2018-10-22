@@ -17,22 +17,22 @@ export default [
     icon: "ion-grid",
     intlMessage: "sidebar.businessCategories"
   },
-  {
-    name: "categories",
-    url: "owner/categories",
-    icon: "ion-filing",
-    intlMessage: "sidebar.categories"
-  },
+  // {
+  //   name: "categories",
+  //   url: "owner/categories",
+  //   icon: "ion-filing",
+  //   intlMessage: "sidebar.categories"
+  // },
   {
     name: "store-list",
     url: "owner/store/list",
     icon: "ion-android-list",
     intlMessage: "sidebar.list"
   },
-  {
-    name: "store-create",
-    url: "owner/store/create",
-    icon: "ion-android-add",
-    intlMessage: "sidebar.createStore"
-  }
+  // {
+  //   name: "store-create",
+  //   url: "owner/store/create",
+  //   icon: "ion-android-add",
+  //   intlMessage: "sidebar.createStore"
+  // }
 ];

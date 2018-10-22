@@ -15,16 +15,12 @@ import { ChainConfig } from "bitsharesjs-ws";
 
 import { signMemo } from "./utils";
 
-export const adminPrivKey =
-  "5JQGCnJCDyraociQmhDRDxzNFCd8WdcJ4BAj8q1YDZtVpk5NDw9";
-export const adminPubKey =
-  "BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk";
-
-export const privKey = "5JQGCnJCDyraociQmhDRDxzNFCd8WdcJ4BAj8q1YDZtVpk5NDw9";
-export const pubKeyEx = "BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk";
-
-let pKey = PrivateKey.fromWif(privKey);
-export const pubKey = pKey.toPublicKey().toString();
+// export const adminPrivKey  = "5JQGCnJCDyraociQmhDRDxzNFCd8WdcJ4BAj8q1YDZtVpk5NDw9";
+// export const adminPubKey   =  "BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk";
+// export const privKey       = "5JQGCnJCDyraociQmhDRDxzNFCd8WdcJ4BAj8q1YDZtVpk5NDw9";
+// export const pubKeyEx      = "BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk";
+// let pKey                   = PrivateKey.fromWif(privKey);
+// export const pubKey        = pKey.toPublicKey().toString();
 
 var bip39 = require("bip39");
 
@@ -50,7 +46,7 @@ export const apiCall = (path, method, data, cb) => {
     if (data && store.getState().Auth && store.getState().Auth.keys) {
       // data = addSignatureToContent(data);
       let signed = signMemo(
-        adminPubKey,
+        apiConfig.admin_pub_key,
         sha256(JSON.stringify(data)),
         extractKey()
       );
@@ -102,61 +98,61 @@ export const getPath = (action, parameters) => {
   return apiConfig.base + apiConfig.version + path;
 };
 
-export const recoverAccountFromSeed = (mnemonics, is_brainkey) => {
-  console.log("MNEMONICS:", mnemonics);
-  var seed = bip39.mnemonicToSeedHex(mnemonics, "");
-  // let mnemonic_valid = bip39.validateMnemonic(mnemonic,bip39.wordlists.spanish);
+// export const recoverAccountFromSeed = (mnemonics, is_brainkey) => {
+//   console.log("MNEMONICS:", mnemonics);
+//   var seed = bip39.mnemonicToSeedHex(mnemonics, "");
+//   // let mnemonic_valid = bip39.validateMnemonic(mnemonic,bip39.wordlists.spanish);
 
-  ChainConfig.setPrefix("BTS");
+//   ChainConfig.setPrefix("BTS");
 
-  let myPrivateKey = PrivateKey.fromSeed(seed);
-  if (is_brainkey)
-    myPrivateKey = PrivateKey.fromSeed(key.normalize_brainKey(seed));
-  let myPublicKey = myPrivateKey.toPublicKey().toString("BTS");
-  let wif = myPrivateKey.toWif();
+//   let myPrivateKey = PrivateKey.fromSeed(seed);
+//   if (is_brainkey)
+//     myPrivateKey = PrivateKey.fromSeed(key.normalize_brainKey(seed));
+//   let myPublicKey = myPrivateKey.toPublicKey().toString("BTS");
+//   let wif = myPrivateKey.toWif();
 
-  // HACK - No esta recreando WIF como deberia
-  wif = adminPrivKey;
-  myPublicKey = adminPubKey;
-  var ret = {
-    master: { wif: wif, pubKey: myPublicKey, privKeyObj: myPrivateKey },
-    owner: { wif: wif, pubKey: myPublicKey, privKeyObj: myPrivateKey },
-    active: { wif: wif, pubKey: myPublicKey, privKeyObj: myPrivateKey },
-    memo: { wif: wif, pubKey: myPublicKey, privKeyObj: myPrivateKey }
-  };
-  console.log(JSON.stringify({ wif: wif, pubKey: myPublicKey }));
-  return ret;
-};
+//   // HACK - No esta recreando WIF como deberia
+//   wif = adminPrivKey;
+//   myPublicKey = adminPubKey;
+//   var ret = {
+//     master: { wif: wif, pubKey: myPublicKey, privKeyObj: myPrivateKey },
+//     owner: { wif: wif, pubKey: myPublicKey, privKeyObj: myPrivateKey },
+//     active: { wif: wif, pubKey: myPublicKey, privKeyObj: myPrivateKey },
+//     memo: { wif: wif, pubKey: myPublicKey, privKeyObj: myPrivateKey }
+//   };
+//   console.log(JSON.stringify({ wif: wif, pubKey: myPublicKey }));
+//   return ret;
+// };
 
-export const generateAccount = account_name => {
-  // 1) Se valida nombre
-  let is_valid_name = ChainValidation.is_account_name(account_name);
-  let is_cheap_name = ChainValidation.is_cheap_name(account_name);
+// export const generateAccount = account_name => {
+//   // 1) Se valida nombre
+//   let is_valid_name = ChainValidation.is_account_name(account_name);
+//   let is_cheap_name = ChainValidation.is_cheap_name(account_name);
 
-  console.log("USERNAME_VALID: ", is_valid_name);
-  console.log("USERNAME_CHEAP: ", is_cheap_name);
+//   console.log("USERNAME_VALID: ", is_valid_name);
+//   console.log("USERNAME_CHEAP: ", is_cheap_name);
 
-  let mnemonics = bip39.generateMnemonic(
-    128,
-    undefined,
-    bip39.wordlists.spanish
-  );
-  mnemonics =
-    "lingote colegio bahía altura baba nevera flor triste fauna choza cine áspero";
+//   let mnemonics = bip39.generateMnemonic(
+//     128,
+//     undefined,
+//     bip39.wordlists.spanish
+//   );
+//   mnemonics =
+//     "lingote colegio bahía altura baba nevera flor triste fauna choza cine áspero";
 
-  return recoverAccountFromSeed(mnemonics);
+//   return recoverAccountFromSeed(mnemonics);
 
-  // UWCrypto.generateMnemonic('es', 128).then(function(res1) {
-  // UWCrypto.mnemonicToMasterKey(res1.mnemonic).then(function(res2) {
-  //    UWCrypto.derivePrivate('', '', res2.masterPrivateKey, 1),
-  //    UWCrypto.derivePrivate('', '', res2.masterPrivateKey, 2),
-  //    UWCrypto.derivePrivate('', '', res2.masterPrivateKey, 3)
+//   // UWCrypto.generateMnemonic('es', 128).then(function(res1) {
+//   // UWCrypto.mnemonicToMasterKey(res1.mnemonic).then(function(res2) {
+//   //    UWCrypto.derivePrivate('', '', res2.masterPrivateKey, 1),
+//   //    UWCrypto.derivePrivate('', '', res2.masterPrivateKey, 2),
+//   //    UWCrypto.derivePrivate('', '', res2.masterPrivateKey, 3)
 
-  // const supersecret = 'supersecret' + (new Date().getTime()).toString();
-  // let keys = login.generateKeys(account_name, supersecret);
-  // console.log(keys);
-  // return keys;
-};
+//   // const supersecret = 'supersecret' + (new Date().getTime()).toString();
+//   // let keys = login.generateKeys(account_name, supersecret);
+//   // console.log(keys);
+//   // return keys;
+// };
 
 export const subaccountAddOrUpdate = (signature, tx) => {
   const get_tx_url = getPath("URL/NEW_SUBACCOUNT");
