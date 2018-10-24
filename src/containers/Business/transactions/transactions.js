@@ -12,6 +12,7 @@ import appActions from "../../../redux/app/actions";
 import IntlMessages from "../../../components/utility/intlMessages";
 import { injectIntl } from "react-intl";
 import TransactionBox from "./components/transactionBox";
+import PageLoading from "../../../components/pageLoading";
 
 class Transactions extends Component {
   constructor(props) {
@@ -19,29 +20,22 @@ class Transactions extends Component {
     this.state = {
       searchValue: null
     };
-    this.renderContent   = this.renderContent.bind(this);
-    this._handleChange   = this._handleChange.bind(this);
+    this.renderContent = this.renderContent.bind(this);
+    this._handleChange = this._handleChange.bind(this);
     this._handleKeyPress = this._handleKeyPress.bind(this);
   }
 
   componentDidMount() {
     console.log(" --- Transactions::componentDidMount PRE");
-    this.props.showLoading(
-      this.props.intl.messages["transactions.loading"] || "Loading transactions"
-    );
     this.props.searchTransactions();
     console.log(" --- Transactions::componentDidMount DONE");
   }
 
   componentWillReceiveProps(newProps) {
-    console.log(' ------- > transactions.js::componentWillReceiveProps', JSON.stringify(newProps));
-    if (
-      newProps.transactions !== null &&
-      typeof newProps.transactions !== "undefined"
-    ) {
-      this.props.endLoading();
-    }
-    this.props.endLoading();
+    console.log(
+      " ------- > transactions.js::componentWillReceiveProps",
+      JSON.stringify(newProps)
+    );
   }
 
   _handleChange(e) {
@@ -67,19 +61,29 @@ class Transactions extends Component {
             onChange={this._handleChange}
           />
         </Col>
-        <Col xs={24}>
-          {this.props.transactions==='undefined' || !this.props.transactions || this.props.transactions.length === 0 ? (
-            <Col style={{ textAlign: "center", padding: "10px" }} xs={24}>
-              <IntlMessages id="transactions.notFound" defaultMessage="No transactions were found"
-              />
-            </Col>
-          ) : (
-            this.props.transactions.map(transaction => (
-              <TransactionBox transaction={transaction} key={transaction.date} />
-            ))
-          )}
-          
-        </Col>
+        {this.props.loading ? (
+          <PageLoading />
+        ) : (
+          <Col xs={24}>
+            {this.props.transactions === "undefined" ||
+            !this.props.transactions ||
+            this.props.transactions.length === 0 ? (
+              <Col style={{ textAlign: "center", padding: "10px" }} xs={24}>
+                <IntlMessages
+                  id="transactions.notFound"
+                  defaultMessage="No transactions were found"
+                />
+              </Col>
+            ) : (
+              this.props.transactions.map(transaction => (
+                <TransactionBox
+                  transaction={transaction}
+                  key={transaction.date}
+                />
+              ))
+            )}
+          </Col>
+        )}
       </Row>
     );
   }
@@ -101,12 +105,11 @@ class Transactions extends Component {
 
 const mapStateToProps = state => ({
   transactions: state.Api.transactions || [],
+  loading: state.Api.transactionsLoading
 });
 
 const mapDispatchToProps = dispatch => ({
-  searchTransactions: bindActionCreators(actions.searchTransactions, dispatch),
-  showLoading: bindActionCreators(appActions.showLoading, dispatch),
-  endLoading: bindActionCreators(appActions.endLoading, dispatch)
+  searchTransactions: bindActionCreators(actions.searchTransactions, dispatch)
 });
 
 export default injectIntl(
