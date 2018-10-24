@@ -708,7 +708,7 @@
   "core.sessionPasswordWarning": "Debe ingresar una contraseña de sesión",
   "kpis.adminBalance": "Balance del admin",
   "kpis.reservedFounds": " Fondos de reserva",
-  "kpis.circulation": "Cantidad de Discoun en circulación",
+  "kpis.circulation": "Cantidad de Discoins en circulación",
   "kpis.dailyIssuing": "Uso diario",
   "kpis.airdrop": "Airdrop utilizado",
   "kpis.airdroped": "{currency} en airdrop",
