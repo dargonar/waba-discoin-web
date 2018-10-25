@@ -15,12 +15,16 @@ class CustomerPicker extends Component {
     super(props);
     this._handleChange = this._handleChange.bind(this);
     this._handleKeyPress = this._handleKeyPress.bind(this);
-    this.state = { searchValue: undefined };
+    this.state = { searchValue: undefined, customers: [] };
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.visible !== newProps.visible && newProps.visible === true) {
-      // this.props.searchAccount();
+      this.setState({ searchValue: undefined, customers: [] });
+    }
+
+    if (this.props.customers !== newProps.customers) {
+      this.setState({ customers: newProps.customers });
     }
   }
 
@@ -57,6 +61,7 @@ class CustomerPicker extends Component {
                 "Search Customer"
               }
               onKeyPress={this._handleKeyPress}
+              value={this.state.searchValue}
               onSearch={() => this.props.searchAccount(this.state.searchValue)}
               onChange={this._handleChange}
               enterButton={
@@ -70,7 +75,7 @@ class CustomerPicker extends Component {
           <Col xs={24}>
             <List
               loading={this.props.isLoading}
-              dataSource={this.props.customers}
+              dataSource={this.state.customers}
               renderItem={customer => (
                 <List.Item
                   onClick={() => this.props.onSelect(customer)}
