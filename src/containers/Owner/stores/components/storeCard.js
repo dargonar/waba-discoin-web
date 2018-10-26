@@ -38,7 +38,8 @@ class StoreCard extends Component {
 
     return (
       <StoreCardWrapper>
-        <h3>{this.props.description}</h3>
+        <h3>{this.props.name}</h3>
+        <h5>{this.props.description}</h5>
         <Row gutter={12}>
           <Col md={5} sm={24} xs={24}>
             <ul>

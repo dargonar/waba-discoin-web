@@ -2,8 +2,8 @@ const siteConfig = {
   siteName: "Discoin",
   siteIcon: "ion-flash",
   footerText: "WABA.network ©2018 - v1.0.1",
-  adminAccount: "admin"    // PRIVATE TESNET
-  // adminAccount: "discoin-gov" // TUTI TESNET & MAIN NET
+  // adminAccount: "admin"    // PRIVATE TESNET
+  adminAccount: "discoin-gov" // TUTI TESNET & MAIN NET
 };
 const themeConfig = {
   topbar: "themedefault",
@@ -30,19 +30,23 @@ const mapboxConfig = {
   center: [-34.92145, -57.95453] // La plata
 };
 //const base_url = 'http://127.0.0.1:8088/';            // TUTI TESNET
-// const base_url = 'https://api.discoin.com.ar/';      // MAIN NET
-const base_url = 'http://52.37.57.13/';                 // PRIVATE TESNET
+const base_url = 'https://api.discoin.com.ar/';      // MAIN NET
+// const base_url = 'https://devapi.discoin.com.ar/';      // PRIVATE TESNET
+// const base_url = 'http://52.37.57.13/';                 // PRIVATE TESNET
 
 const apiConfig = {
   base: base_url+"api/",
   baseFiles: base_url+"files/",
   baseImages: base_url+"static/uploads/",
+  
   // chain_id: "f5a42a1c16cf678773313f5f94ef7ebb69257c5f33a147aa8c4ac0fa5e451805",   // TUTI TESNET
   // admin_pub_key : 'BTS5KqreoEjBrfuPC8G5ntzv3p1ByHe2HCyUMyDnvex7B42MYzo4u',        // TUTI TESNET
-  chain_id: "bde617520673d18e67db5d7060ca2740f80e28093519c30176044c8d4a227e73",      // PRIVATE TESNET
-  admin_pub_key : 'BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk',           // PRIVATE TESNET   // admin_pub_key = 'BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk', // PRIVATE TESNET
-  // chain_id: "4018d7844c78f6a6c41c6a552b898022310fc5dec06da467ee7905a8dad512c8",   // MAIN NET
-  // admin_pub_key : 'BTS5QnCpdUT696G8LA6xBonNsuD1PwP5Xgr5GvYXBrxGx6YnqMmdC',        // MAIN NET
+  
+  // chain_id: "bde617520673d18e67db5d7060ca2740f80e28093519c30176044c8d4a227e73",      // PRIVATE TESNET
+  // admin_pub_key : 'BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk',           // PRIVATE TESNET   
+  
+  chain_id: "4018d7844c78f6a6c41c6a552b898022310fc5dec06da467ee7905a8dad512c8",   // MAIN NET
+  admin_pub_key : 'BTS5QnCpdUT696G8LA6xBonNsuD1PwP5Xgr5GvYXBrxGx6YnqMmdC',        // MAIN NET
   version: "v3",
   urls: [
     { action: "URL/UPDATE_BUSINESS", path: "/dashboard/business/profile/:account_id/update" },

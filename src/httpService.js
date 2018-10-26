@@ -287,6 +287,7 @@ export const rewardCustomer = (signature, tx) => {
           console.log(" ---- A PUNTO DE RECOMPENSAR!!! -> tx2");
           console.log(JSON.stringify(packet));
 
+
           fetch(push_url, {
             method: "POST",
             headers: {
