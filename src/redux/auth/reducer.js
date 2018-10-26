@@ -58,7 +58,7 @@ export default function authReducer(state = initState, action) {
         secret: action.payload.secret,
         raw: action.payload.raw,
         accountType:
-          action.payload.account === siteConfig.adminAccount
+          siteConfig.adminAccount.indexOf(action.payload.account) !== -1
             ? "owner"
             : "business"
       };
