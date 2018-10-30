@@ -40,7 +40,7 @@ export const getProfile = function*() {
   });
 
   yield takeEvery(authActions.LS_CHECK_FULL, function*(action) {
-    if (action.payload.account !== siteConfig.adminAccount) {
+    if (siteConfig.adminAccount.indexOf(action.payload.account) === -1) {
       yield put({ type: actions.GET_PROFILE, payload: action.payload });
     }
   });

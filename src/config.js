@@ -2,8 +2,7 @@ const siteConfig = {
   siteName: "Discoin",
   siteIcon: "ion-flash",
   footerText: "WABA.network ©2018 - v1.0.1",
-  // adminAccount: "admin"    // PRIVATE TESNET
-  adminAccount: "discoin-gov" // TUTI TESNET & MAIN NET
+  adminAccount: ["admin", "discoin-gov"] // (admin)-> PRIVATE TESNET || (discoin-dev) ->TUTI TESNET & MAIN NET
 };
 const base_url = 'http://127.0.0.1:8088/';            // TUTI TESNET
 // const base_url = 'https://api.discoin.com.ar/';      // MAIN NET
@@ -55,7 +54,7 @@ const apiConfig = {
     { action: "URL/GET_PROFILE", path: "/dashboard/business/profile/:id/load" },
     { action: "URL/GET_CONFIGURATION", path: "/dashboard/configuration" },
     { action: "URL/GET_CATEGORIES", path: "/dashboard/categories" },
-    { action: "URL/GET_CATEGORIES_LIST",    path: "/business/category/list" },
+    { action: "URL/GET_CATEGORIES_LIST", path: "/business/category/list" },
     { action: "URL/ADD_OR_UPDATE_CATEGORY", path: "/business/category/add_or_update" },
     { action: "URL/DELETE_CATEGORY", path: "/business/category/delete" },
     { action: "URL/UPDATE_SCHEDULE", path: "/dashboard/business/schedule/:id/update" },
@@ -77,8 +76,8 @@ const apiConfig = {
     { action: "URL/GET_CATEGORIES_LIST", path: "/business/category/list" },
     { action: "URL/GET_BUSINESSES", path: "/dashboard/business/search" },
     { action: "URL/FILTRED_BUSINESSES", path: "/dashboard/business/filter/:skip/:count" },
-    { action: "URL/GET_BUSINESS",      path: "/dashboard/business/profile/:id/load" },
-    { action: "URL/SET_OVERDRAFT", path: "/business/endorse/create" },
+    { action: "URL/GET_BUSINESS", path: "/dashboard/business/profile/:id/load" },
+    { action: "URL/SET_OVERDRAFT", path: "/business/endorse/create" }
     // { action: "URL/REGISTER_BUSINESS", path: "/business/register" },
     // { action: "URL/UPDATE_BUSINESS", path: "/dashboard/business/profile/:account_id/update" },
     // { action: "URL/PUSH_TX", path: "/push_tx" },
