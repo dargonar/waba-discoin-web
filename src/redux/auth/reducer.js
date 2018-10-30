@@ -16,6 +16,7 @@ export default function authReducer(state = initState, action) {
         inLocal: true,
         encrypted: true,
         accountType: action.payload.account === "admin" ? "owner" : "business",
+        // accountType: action.payload.account === siteConfig.adminAccount ? "admin" : "business",
         account: action.payload.account,
         account_id: action.payload.account_id
       };
