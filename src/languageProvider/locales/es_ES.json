@@ -819,5 +819,6 @@
   "configSchedule.minimumDiscount": "Descuento mínimo de: {minimumDiscount}%",
   "qr.total": "Total a cobrar",
   "qr.totalCoins": "Total en {currency}",
-  "qr.ticket": "Ticket/N° de factura:"
+  "qr.ticket": "Ticket/N° de factura:",
+  "qr.discount" : "Descuento"
 }
