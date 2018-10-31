@@ -10,6 +10,7 @@ import Signature from "bitsharesjs/dist/ecc/src/signature";
 import { sha256 } from "bitsharesjs/dist/ecc/src/hash";
 
 import { store } from "./redux/store";
+import appActions from "./redux/app/actions";
 
 import { ChainConfig } from "bitsharesjs-ws";
 
@@ -29,11 +30,7 @@ var bip39 = require("bip39");
 
 const extractKey = () => store.getState().Auth.keys;
 
-const signString = bodyString =>
-  Signature.signBufferSha256(
-    sha256(bodyString),
-    PrivateKey.fromWif(extractKey().owner.wif)
-  ).toHex();
+const signString = bodyString => Signature.signBufferSha256(sha256(bodyString), PrivateKey.fromWif(extractKey().owner.wif)).toHex();
 
 export const addSignatureToContent = data => ({
   ...data,
@@ -45,11 +42,7 @@ export const apiCall = (path, method, data, cb) => {
     // If user is logged sign content
     if (data && store.getState().Auth && store.getState().Auth.keys) {
       // data = addSignatureToContent(data);
-      let signed = signMemo(
-        apiConfig.admin_pub_key,
-        sha256(JSON.stringify(data)),
-        extractKey()
-      );
+      let signed = signMemo(apiConfig.admin_pub_key, sha256(JSON.stringify(data)), extractKey());
       data = {
         ...data,
         signed: signed
@@ -80,9 +73,19 @@ export const apiCall = (path, method, data, cb) => {
       .then(res => res.json())
       .then(data => {
         cb(data);
+        // if (store.getState().App.toJS().connectionStatus.status === false) {
+        //   store.dispatch(appActions.connectionStatus(true));
+        // }
         return { data };
       })
-      .catch(ex => ({ data: null, ex }));
+      .catch(ex => {
+        // if (store.getState().App.toJS().connectionStatus.status === true) {
+        //   store.dispatch(appActions.connectionStatus(false));
+        // }
+        console.warn({ networkError: ex });
+        cb({ data: { error: ex }, networkError: true });
+        return { data: { error: ex }, networkError: true };
+      });
   };
 };
 
@@ -91,9 +94,7 @@ export const getPath = (action, parameters) => {
     action: url.action,
     getPath: pathToRegexp.compile(url.path)
   }));
-  let path = actions
-    .filter(act => act.action === action)
-    .reduce((pre, act) => act.getPath(parameters), "");
+  let path = actions.filter(act => act.action === action).reduce((pre, act) => act.getPath(parameters), "");
 
   return apiConfig.base + apiConfig.version + path;
 };
@@ -180,16 +181,10 @@ export const subaccountAddOrUpdate = (signature, tx) => {
       )
       .then(
         responseJson => {
-          console.log(
-            "===========> subaccountAddOrUpdate()::res #2 ==> ",
-            JSON.stringify(responseJson)
-          );
+          console.log("===========> subaccountAddOrUpdate()::res #2 ==> ", JSON.stringify(responseJson));
 
           if (typeof responseJson.error !== "undefined") {
-            console.log(
-              " subaccountAddOrUpdate() ===== #1.5",
-              JSON.stringify(responseJson.error)
-            );
+            console.log(" subaccountAddOrUpdate() ===== #1.5", JSON.stringify(responseJson.error));
             reject(responseJson.error);
             return;
           }
@@ -212,29 +207,20 @@ export const subaccountAddOrUpdate = (signature, tx) => {
             .then(
               response => response.json(),
               err => {
-                console.log(
-                  " subaccountAddOrUpdate() ===== #3",
-                  JSON.stringify(err)
-                );
+                console.log(" subaccountAddOrUpdate() ===== #3", JSON.stringify(err));
                 reject(err);
                 return;
               }
             )
             .then(
               responseJson2 => {
-                console.log(
-                  "===========> subaccountAddOrUpdate()::res #4 ==> ",
-                  JSON.stringify(responseJson2)
-                );
+                console.log("===========> subaccountAddOrUpdate()::res #4 ==> ", JSON.stringify(responseJson2));
                 console.log(" == subaccountAddOrUpdate() :: resolving!!!!!!!!");
                 resolve(responseJson2);
                 return;
               },
               err => {
-                console.log(
-                  " subaccountAddOrUpdate() ===== #5",
-                  JSON.stringify(err)
-                );
+                console.log(" subaccountAddOrUpdate() ===== #5", JSON.stringify(err));
                 reject(err);
                 return;
               }
@@ -275,10 +261,7 @@ export const rewardCustomer = (signature, tx) => {
       )
       .then(
         responseJson => {
-          console.log(
-            "===========> rewardCustomer()::res #2 ==> ",
-            JSON.stringify(responseJson)
-          );
+          console.log("===========> rewardCustomer()::res #2 ==> ", JSON.stringify(responseJson));
 
           const push_url = getPath("URL/PUSH_SIGN_TX");
           let tx2 = responseJson.tx;
@@ -286,7 +269,6 @@ export const rewardCustomer = (signature, tx) => {
 
           console.log(" ---- A PUNTO DE RECOMPENSAR!!! -> tx2");
           console.log(JSON.stringify(packet));
-
 
           fetch(push_url, {
             method: "POST",
@@ -306,10 +288,7 @@ export const rewardCustomer = (signature, tx) => {
             )
             .then(
               responseJson2 => {
-                console.log(
-                  "===========> rewardCustomer()::res #4 ==> ",
-                  JSON.stringify(responseJson2)
-                );
+                console.log("===========> rewardCustomer()::res #4 ==> ", JSON.stringify(responseJson2));
                 console.log(" == rewardCustomer() :: resolving!!!!!!!!");
                 resolve(responseJson2);
                 return;

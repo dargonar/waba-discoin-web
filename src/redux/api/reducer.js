@@ -95,7 +95,7 @@ export default function apiReducer(state = initState, action) {
       return {
         ...state,
         actionLoading: false,
-        error: action.payload.err,
+        error: action.payload.error,
         msg: "Error loading discount schedule"
       };
 
@@ -142,7 +142,7 @@ export default function apiReducer(state = initState, action) {
         ...state,
         actionLoading: false,
         error: true,
-        msg: action.payload.err || action.payload.error
+        msg: action.payload.error
       };
 
     // SEARCH TRANSACTIONS --> HACK

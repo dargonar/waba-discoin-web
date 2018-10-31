@@ -11,12 +11,12 @@ function* runRequestSuggest({ name, account_id }) {
   });
   const fetchData = apiCall(url);
 
-  const { data, error } = yield call(fetchData);
+  const { data } = yield call(fetchData);
   console.log(" --- runRequestSuggest:", name, data);
-  if (data && !error) {
+  if (data && typeof data.error === "undefined") {
     yield put({ type: actions.SEARCH_TRANSACTIONS_SUCCESS, payload: data });
   } else {
-    yield put({ type: actions.SEARCH_TRANSACTIONS_FAILD, payload: error });
+    yield put({ type: actions.SEARCH_TRANSACTIONS_FAILD, payload: { error: data.error } });
   }
 }
 
@@ -52,11 +52,11 @@ export const searchAllTransactions = function*() {
 
     const { data, error } = yield call(fetchData);
     console.log(" --- runRequestSuggest:", data);
-    if (data && !error) {
+    if (data && typeof data.error === "undefined") {
       yield put({ type: actions.SEARCH_TRANSACTIONS_SUCCESS, payload: data });
       //yield put({ type: 'GLOBAL_LOADING_END'})
     } else {
-      yield put({ type: actions.SEARCH_TRANSACTIONS_FAILD, payload: error });
+      yield put({ type: actions.SEARCH_TRANSACTIONS_FAILD, payload: { error: data.error } });
       //yield put({ type: 'GLOBAL_LOADING_END'})
     }
   });
