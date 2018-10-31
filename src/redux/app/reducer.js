@@ -2,9 +2,7 @@ import { Map } from "immutable";
 import { getDefaultPath } from "../../helpers/urlSync";
 import actions, { getView } from "./actions";
 import authActions from "../auth/actions";
-import config, {
-  getCurrentLanguage
-} from "../../containers/Core/LanguageSwitcher/config";
+import config, { getCurrentLanguage } from "../../containers/Core/LanguageSwitcher/config";
 
 const preKeys = getDefaultPath();
 
@@ -21,7 +19,11 @@ const initState = new Map({
   msgType: null,
   menuItems: [],
   language: getCurrentLanguage(config.defaultLanguage || "english"),
-  passwordBox: false
+  passwordBox: false,
+  connectionStatus: {
+    status: true,
+    tryNumber: 0
+  }
 });
 
 export default function appReducer(state = initState, action) {
@@ -52,15 +54,13 @@ export default function appReducer(state = initState, action) {
     case actions.CHANGE_CURRENT:
       return state.set("current", action.current);
     case actions.GLOBAL_LOADING_START:
-      return state
-        .set("loading", true)
-        .set("loadingMsg", action.payload.msg || "");
+      return state.set("loading", true).set("loadingMsg", action.payload.msg || "");
     case actions.GLOBAL_LOADING_END:
       return state.set("loading", false).set("loadingMsg", null);
     case actions.GLOBAL_MSG:
       //HACK
       let body = "";
-      console.log('---------------- app/reducer::actions.GLOBAL_MSG', JSON.stringify(action.payload))
+      console.log("---------------- app/reducer::actions.GLOBAL_MSG", JSON.stringify(action.payload));
       if (action.payload.data) {
         if (action.payload.data.error_list)
           body = action.payload.data.error_list.reduce(function(ret, item) {
@@ -68,16 +68,28 @@ export default function appReducer(state = initState, action) {
           }, "");
       }
       if (action.payload.msg) {
-        if (action.payload.msg.payload)
-          body = action.payload.msg.payload;
+        if (action.payload.msg.payload) body = action.payload.msg.payload;
       }
-      return state
-        .set("msg", action.payload.msg + "|" + body)
-        .set("msgType", action.payload.msgType);
+      return state.set("msg", action.payload.msg + "|" + body).set("msgType", action.payload.msgType);
     case actions.GLOBAL_MSG_CLEAR:
       return state.set("msg", null).set("msgType", null);
     case actions.SET_MENU_ITEMS:
       return state.set("menuItems", action.payload);
+    case actions.CONNECTION_STATUS:
+      return state.set("connectionStatus", {
+        status: action.payload,
+        tryNumber: action.payload === true ? 0 : state.get("connectionStatus").tryNumber
+      });
+    case actions.CONNECTION_STATUS_TRY:
+      return state.set("connectionStatus", {
+        status: typeof action.payload !== "undefined" ? action.payload : state.get("connectionStatus").status,
+        tryNumber: state.get("connectionStatus").tryNumber + 1
+      });
+    case actions.CONNECTION_STATUS_RETRY:
+      return state.set("connectionStatus", {
+        status: true,
+        tryNumber: 0
+      });
     default:
       return state;
   }

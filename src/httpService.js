@@ -73,15 +73,15 @@ export const apiCall = (path, method, data, cb) => {
       .then(res => res.json())
       .then(data => {
         cb(data);
-        // if (store.getState().App.toJS().connectionStatus.status === false) {
-        //   store.dispatch(appActions.connectionStatus(true));
-        // }
+        if (store.getState().App.toJS().connectionStatus.status === false) {
+          store.dispatch(appActions.connectionStatus(true));
+        }
         return { data };
       })
       .catch(ex => {
-        // if (store.getState().App.toJS().connectionStatus.status === true) {
-        //   store.dispatch(appActions.connectionStatus(false));
-        // }
+        if (store.getState().App.toJS().connectionStatus.status === true) {
+          store.dispatch(appActions.connectionStatus(false));
+        }
         console.warn({ networkError: ex });
         cb({ data: { error: ex }, networkError: true });
         return { data: { error: ex }, networkError: true };

@@ -9,6 +9,7 @@ import App from "./containers/App/App";
 import asyncComponent from "./helpers/AsyncFunc";
 import actionsUI from "./redux/app/actions";
 import { GlobalLoading } from "./components/uielements/globalLoading";
+import { ConnectionStatus } from "./containers/Core/ConnectionStatus/ConnectionStatus";
 
 const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
   <Route
@@ -30,11 +31,7 @@ const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
 
 class ReduxGlobalLoading extends Component {
   render() {
-    return this.props.loading ? (
-      <GlobalLoading msg={this.props.loadingMsg} />
-    ) : (
-      false
-    );
+    return this.props.loading ? <GlobalLoading msg={this.props.loadingMsg} /> : false;
   }
 }
 
@@ -46,10 +43,7 @@ ReduxGlobalLoading = connect(state => ({
 class ReduxGlobalMessage extends Component {
   componentWillReceiveProps(nextProps) {
     if (typeof nextProps.msg === "string") {
-      const msgType =
-        typeof message[nextProps.msgType] === "function"
-          ? nextProps.msgType
-          : "info";
+      const msgType = typeof message[nextProps.msgType] === "function" ? nextProps.msgType : "info";
       // message[msgType](nextProps.msg);
       notification[msgType]({
         message: nextProps.msg.split("|")[0],
@@ -80,27 +74,12 @@ class PublicRoutes extends Component {
       <div>
         <ConnectedRouter history={history}>
           <div>
-            <Route
-              exact
-              path={"/"}
-              component={asyncComponent(() =>
-                import("./containers/Core/Signin/signin")
-              )}
-            />
-            <Route
-              exact
-              path={"/signin"}
-              component={asyncComponent(() =>
-                import("./containers/Core/Signin/signin")
-              )}
-            />
-            <RestrictedRoute
-              path={`/dashboard`}
-              component={App}
-              isLoggedIn={isLoggedIn}
-            />
+            <Route exact path={"/"} component={asyncComponent(() => import("./containers/Core/Signin/signin"))} />
+            <Route exact path={"/signin"} component={asyncComponent(() => import("./containers/Core/Signin/signin"))} />
+            <RestrictedRoute path={`/dashboard`} component={App} isLoggedIn={isLoggedIn} />
             <ReduxGlobalLoading />
             <ReduxGlobalMessage />
+            <ConnectionStatus />
           </div>
         </ConnectedRouter>
       </div>

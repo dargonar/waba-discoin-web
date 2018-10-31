@@ -1,3 +1,5 @@
+import appActions from "../app/actions";
+import { push } from "react-router-redux";
 const actions = {
   GET_PROFILE: "[Api] Get profile",
   GET_PROFILE_SUCCESS: "[Api] Get profile success",
@@ -162,6 +164,21 @@ const actions = {
         account_id: getState().Auth.account_id
       }
     });
+  },
+
+  checkStatus: () => (dispatch, getState) => {
+    dispatch({
+      type: appActions.CONNECTION_STATUS_TRY
+    });
+  },
+
+  recheckStatus: () => (dispatch, getState) => {
+    dispatch({
+      type: appActions.CONNECTION_STATUS_RETRY
+    });
+    //force redirecto to home
+    dispatch(push("/connectionError"));
+    dispatch(push("/"));
   },
 
   cleanMsg: () => dispatch =>

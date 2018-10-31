@@ -24,6 +24,9 @@ const actions = {
   CHANGE_LANGUAGE: "CHANGE_LANGUAGE",
   ACTIVATE_LANG_MODAL: "ACTIVATE_LANG_MODAL",
   ASK_PASSWORD: "[UI] Ask for local storage password",
+  CONNECTION_STATUS: "[UI] Change connection status",
+  CONNECTION_STATUS_TRY: "[UI] Try to reconnect",
+  CONNECTION_STATUS_RETRY: "[UI] Retry to reconnect",
 
   changeLanguage: language => {
     return {
@@ -68,6 +71,10 @@ const actions = {
   }),
   endLoading: () => ({
     type: actions.GLOBAL_LOADING_END
+  }),
+  connectionStatus: (status = false) => ({
+    type: actions.CONNECTION_STATUS,
+    payload: status
   })
 };
 export default actions;

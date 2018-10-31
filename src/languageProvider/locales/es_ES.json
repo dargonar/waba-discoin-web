@@ -819,5 +819,8 @@
   "configSchedule.minimumDiscount": "Descuento mínimo de: {minimumDiscount}%",
   "qr.total": "Total a cobrar",
   "qr.totalCoins": "Total en {currency}",
-  "qr.ticket": "Ticket/N° de factura:"
+  "qr.ticket": "Ticket/N° de factura:",
+  "connectionStatus.times": "Sin conexión, intentos faillidos: {times}",
+  "connectionStatus.fail": "Error en la conexión, intentamos {times} veces. {newLine} Prueba nuevamente luego de comprobar tu conexión a internet",
+  "connectionStatus.retry": "Intentar de nuevo"
 }
