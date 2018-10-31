@@ -263,6 +263,9 @@ export const rewardCustomer = (signature, tx) => {
         responseJson => {
           console.log("===========> rewardCustomer()::res #2 ==> ", JSON.stringify(responseJson));
 
+          // reject(' -- NAA --');
+          // return;
+
           const push_url = getPath("URL/PUSH_SIGN_TX");
           let tx2 = responseJson.tx;
           let packet = { tx: tx2, pk: signature };

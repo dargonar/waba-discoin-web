@@ -10,6 +10,7 @@ import { checkLS, writeLS, readLS, cleanLS } from "./sagas/secureLocalStorage";
 import { signMemo, recoverAccountFromSeed, formatAccountName } from "../../utils";
 
 export function* loginRequest() {
+  
   // localStorage.removeItem("business_account");
   yield takeEvery(actions.LOGIN_REQUEST, function*(action) {
     let { account_name, mnemonics, is_brainkey, remember, rememberKey, just_registered_data, from_storage_data } = action.payload;
