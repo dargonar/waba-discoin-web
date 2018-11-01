@@ -43,11 +43,12 @@ class SendRefundComponent extends Component {
       to_id: this.state.customer.account_id,
       amount: roundAmount(
         (this.state.discount * (this.props.amount || 0)) / 100
-      ),
+      ).toFixed(2),
       bill_amount: Number(this.props.amount),
       bill_id: this.props.reference
     };
 
+    console.log(JSON.stringify(tx));
     this.setState({
       confirm: false,
       selectCustomer: false,
@@ -181,8 +182,8 @@ class SendRefundComponent extends Component {
               defaultMessage="Send reward"
             />
           }
-          color="#3A99D9"
-          arrow="arrow-down"
+          color="#FF9E5D"
+          arrow="arrow-up"
         >
           <div class="w-100 d-flex flex-row bill-amount">
             <div class="col flex-1 text-left">

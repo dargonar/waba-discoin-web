@@ -7,6 +7,7 @@ const initState = {
   schedule: null,
   customers: [],
   loading: false,
+  transactionsLoading: false,
   error: false,
   actionLoading: false,
   msg: null,
@@ -146,17 +147,18 @@ export default function apiReducer(state = initState, action) {
       };
 
     // SEARCH TRANSACTIONS --> HACK
+    case actions.SEARCH_ALL_TRANSACTIONS:
+      return {
+        ...state,
+        transactionsLoading: true
+      };
     case actions.SEARCH_TRANSACTIONS_SUCCESS:
       return {
         ...state,
-        transactions: action.payload.subaccount
-          ? state.transactions
-          : action.payload.txs,
+        transactions: action.payload.subaccount ? state.transactions : action.payload.txs,
         subaccount: {
           ...state.subaccount,
-          transactions: action.payload.subaccount
-            ? action.payload.txs
-            : state.subaccount.transactions
+          transactions: action.payload.subaccount ? action.payload.txs : state.subaccount.transactions
         }
       };
 

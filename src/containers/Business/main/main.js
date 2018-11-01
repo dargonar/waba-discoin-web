@@ -133,6 +133,18 @@ export class Dashboard extends Component {
           className="flexRow w-100"
         >
           <Col md={12} className="col">
+            <AcceptDiscount
+              {...this.state.bill}
+              percentage={this.props.discount.discount}
+              onSubmit={data => {
+                console.log("Submited", { data });
+                //this.setTimmer(1000, 20000);
+              }}
+              setTimmer={this.setTimmer}
+            />
+          </Col>
+          
+          <Col md={12} className="col">
             <SendRefund
               {...this.state.bill}
               account={this.props.account}
@@ -144,17 +156,7 @@ export class Dashboard extends Component {
             />
           </Col>
 
-          <Col md={12} className="col">
-            <AcceptDiscount
-              {...this.state.bill}
-              percentage={this.props.discount.discount}
-              onSubmit={data => {
-                console.log("Submited", { data });
-                //this.setTimmer(1000, 20000);
-              }}
-              setTimmer={this.setTimmer}
-            />
-          </Col>
+          
         </Row>
 
         <Row style={{ width: "100%", paddingTop: "40px" }} gutter={16}>

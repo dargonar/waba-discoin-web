@@ -7,13 +7,13 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import appActions from "../../../redux/app/actions";
 
-const LineItem = ({ title, value }) => (
-  <Row type="flex" justify="space-around" align="middle">
-    <Col xs={12}>
-      <h3 style={{ color: "rgb(255, 158, 93)" }}>{title}</h3>
+const LineItem = ({ title, value, bold , even}) => (
+  <Row type="flex" justify="space-around" align="middle" style={{ paddingRight:5, backgroundColor:(even=='odd'?'#ddd':'transparent')}}>
+    <Col style={{ flex:4}}>
+      <h4 style={{  color: "rgb(255, 158, 93)" }}>{title}</h4>
     </Col>
-    <Col xs={12} style={{ textAlign: "right", paddingRight: "20px" }}>
-      <h3>{value}</h3>
+    <Col style={{ flex:5, textAlign: "right", paddingRight: "20px" }}>
+      {bold? (<h3><b>{value}</b></h3>) : (<h3>{value}</h3>) }
     </Col>
   </Row>
 );
@@ -85,18 +85,24 @@ class RewardQrComponent extends Component {
         <Row>
           <Col md={12}>
             <LineItem
+              even="odd"
+              bold="false"
               title={
                 <IntlMessages id="qr.total" defaultMessage="Total to pay" />
               }
               value={"$ " + Number(bill_amount).toFixed(2)}
             />
             <LineItem
+              even="even"
+              bold="false"
               title={
                 <IntlMessages id="qr.discount" defaultMessage="Discount" />
               }
               value={"% " + this.props.reward}
             />
             <LineItem
+              even="odd"
+              bold="false"
               title={
                 <IntlMessages
                   id="qr.totalCoins"
@@ -107,6 +113,8 @@ class RewardQrComponent extends Component {
               value={currency.symbol + " " + Number(discount_dsc).toFixed(2)}
             />
             <LineItem
+              even="even"
+              bold="true"
               title={
                 <IntlMessages
                   id="qr.totalCoins"
@@ -117,6 +125,8 @@ class RewardQrComponent extends Component {
               value={"$ " + Number(discount_ars).toFixed(2)}
             />
             <LineItem
+              even="odd"
+              bold="false"
               title={<IntlMessages id="qr.ticket" defaultMessage="Ticket/ID" />}
               value={bill_id}
             />

@@ -125,7 +125,8 @@ const SidebarWrapper = styled.div`
       }
 
       .ant-menu-item-selected {
-        background: linear-gradient(to right, rgba(190,51,255,1) 0%,rgba(155,93,255,1) 100%);
+        // background: linear-gradient(to right, rgba(190,51,255,1) 0%,rgba(155,93,255,1) 100%);
+        background: linear-gradient(to right, rgba(58,153,217,1) 0%,rgba(161,204,236,1) 100%);
         .anticon {
           color: #fff;
         }
@@ -143,7 +144,7 @@ const SidebarWrapper = styled.div`
         &:hover {
           i,
           .nav-text {
-            color: rgba(190,51,255,1);
+            color: rgba(58,153,217,1);
           }
         }
       }

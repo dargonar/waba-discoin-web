@@ -104,7 +104,7 @@ class FindAccounts extends Component {
 
   componentDidMount() {
     console.log(" --- FindAccounts::componentDidMount PRE");
-    this.props.searchAccount("");
+    // this.props.searchAccount("");
     console.log(" --- FindAccounts::componentDidMount DONE");
   }
 
@@ -225,54 +225,62 @@ class FindAccounts extends Component {
 
     console.log(JSON.stringify(this.props.account));
 
-    // return;
+    
+
     getKeys()
       .then(keys =>
-        subaccountAddOrUpdate(keys.active.wif, tx).then(
-          res => {
-            this.props.showLoading("Autorizando subcuenta. Por favor aguarde.");
-            console.log(
-              "find_account::subaccountAddOrUpdate",
-              "====OK===>",
-              JSON.stringify(res)
-            );
-            this.props.endLoading();
-            if ("error" in res) {
-              this.openNotificationWithIcon(
-                "error",
-                this.props.intl.messages["subaccounts.genericError"] ||
-                  "An error has occurred",
-                res.error
-              );
-            } else {
-              this.openNotificationWithIcon(
-                "success",
-                this.props.intl.messages[
-                  "subaccounts.authorizeSubaccountSuccess"
-                ] || "Add subaccount",
-                this.props.intl.messages["subaccounts.succesLimit"] ||
-                  "The daily sub-account limit was successfully authorized"
-              );
-              this.goBack();
-            }
-          },
-          err => {
-            console.log(
-              "subaccountAddOrUpdate",
-              "====ERR===>",
-              JSON.stringify(err)
-            );
-            this.openNotificationWithIcon(
-              "error",
-              this.props.intl.messages["subaccounts.genericError"] ||
-                "An error has occurred",
-              err
-            );
-            this.props.endLoading();
-          }
-        )
+        {
+          this.props.showLoading("Autorizando subcuenta. Por favor aguarde.");
+          subaccountAddOrUpdate(keys.active.wif, tx).then(
+                  res => {
+                    
+                    console.log(
+                      "find_account::subaccountAddOrUpdate",
+                      "====OK===>",
+                      JSON.stringify(res)
+                    );
+                    this.props.endLoading();
+                    if ("error" in res) {
+                      this.openNotificationWithIcon(
+                        "error",
+                        this.props.intl.messages["subaccounts.genericError"] ||
+                          "An error has occurred",
+                        res.error
+                      );
+                    } else {
+                      this.openNotificationWithIcon(
+                        "success",
+                        this.props.intl.messages[
+                          "subaccounts.authorizeSubaccountSuccess"
+                        ] || "Add subaccount",
+                        this.props.intl.messages["subaccounts.succesLimit"] ||
+                          "The daily sub-account limit was successfully authorized"
+                      );
+                      this.goBack();
+                    }
+                  },
+                  err => {
+                    console.log(
+                      "subaccountAddOrUpdate",
+                      "====ERR===>",
+                      JSON.stringify(err)
+                    );
+                    this.openNotificationWithIcon(
+                      "error",
+                      this.props.intl.messages["subaccounts.genericError"] ||
+                        "An error has occurred",
+                      err
+                    );
+                    this.props.endLoading();
+                  }
+                , err => {
+                  this.props.endLoading();
+                })}
       )
-      .catch(e => this.openNotificationWithIcon("error", e));
+      .catch(e => {
+        this.openNotificationWithIcon("error", e);
+        this.props.endLoading();
+      });
   }
 
   goBack() {
@@ -407,7 +415,7 @@ class FindAccounts extends Component {
 // Filtering of already assigned sub-accounts
 const filterCustomers = state => {
   const subaccounts =
-    state.Owner.subaccounts && state.Owner.subaccounts[0].subaccounts
+    state.Owner.subaccounts && state.Owner.subaccounts[0] && state.Owner.subaccounts[0].subaccounts
       ? state.Owner.subaccounts[0].subaccounts.permissions
       : [];
   const customers = state.Api.customers ? state.Api.customers : [];

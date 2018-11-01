@@ -6,6 +6,7 @@ import { notification } from "antd";
 import { Checkbox } from "antd";
 import { injectIntl } from "react-intl";
 import IntlMessages from "../../../components/utility/intlMessages";
+import moment from "moment";
 
 /* 
   const minutesOffset = 1;
@@ -19,13 +20,15 @@ import IntlMessages from "../../../components/utility/intlMessages";
   return date.utc().valueOf();
 };
  */
+const dateFormat = "YYYY-MM-DD HH:mm:ss";
+
 export class SubAccountBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
       amount: 0,
       from: "",
-      to: "",
+      to: { date_utc: moment().add(1, "year").utc().valueOf(), dateString: moment().add(1, "year").utc().format(dateFormat) },
       checked_now: true
     };
 
@@ -47,7 +50,7 @@ export class SubAccountBox extends Component {
   }
 
   null_or_zero(value) {
-    return value === null || parseInt < 0;
+    return value === null || parseInt(value) <= 0;
   }
   null_or_empty(value) {
     return !value || value === null || value === "";
@@ -65,7 +68,7 @@ export class SubAccountBox extends Component {
     if (!this.state.checked_now)
       // _from = checkActualDate(this.state.from.date_utc);
       _from = this.state.from.date_utc;
-    let _to = this.state.to.date_utc; //.date.utc().valueOf()
+    let _to = this.state.to.date_utc;
 
     let period = 86400;
     let periods = Math.floor((_to - _from) / 86400 / 1000);
@@ -115,8 +118,6 @@ export class SubAccountBox extends Component {
       return;
     }
 
-    // console.log("updateFrom:: ", date, dateString, moment);
-
     //Check time offset
     // date = moment(checkActualDate(date.utc().valueOf()));
 
@@ -149,6 +150,8 @@ export class SubAccountBox extends Component {
 
   render() {
     const colStyle = { marginBottom: "15px" };
+    // const one_year_from_now = moment().add(1, "year").format(dateFormat);
+    // console.log(' ------ one_year_from_now:', one_year_from_now);
 
     let name;
     try {
@@ -182,18 +185,20 @@ export class SubAccountBox extends Component {
               onChange={this.updateAmount}
             />
           </Col>
-          <Col style={colStyle} xs={24} md={12}>
+          <Col style={colStyle} xs={24} md={24}>
             <IntlMessages
               defaultMessage="Enabled since"
               id="subaccounts.enabledSince"
             />
+            <br/>
             <DatePicker
               showTime
-              format="YYYY-MM-DD HH:mm:ss"
+              format={dateFormat}
               onChange={this.updateFrom}
               size="large"
               disabled={this.state.checked_now}
             />
+            <br/>
             <Checkbox
               checked={this.state.checked_now}
               onChange={this.onChangeNow}
@@ -204,19 +209,22 @@ export class SubAccountBox extends Component {
               />
             </Checkbox>
           </Col>
-          <Col style={colStyle} xs={24} md={12}>
-            <IntlMessages defaultMessage="Until" id="subaccounts.until" />
-            <DatePicker
-              showTime
-              format="YYYY-MM-DD HH:mm:ss"
-              onChange={this.updateTo}
-              size="large"
-            />
-          </Col>
+          
         </Row>
       </Modal>
     );
   }
 }
 
+/*
+<Col style={colStyle} xs={24} md={12}>
+    <IntlMessages defaultMessage="Until" id="subaccounts.until" />
+    <DatePicker
+      showTime
+      format={dateFormat}
+      onChange={this.updateTo}
+      size="large"
+    />
+  </Col>
+*/
 export default injectIntl(SubAccountBox);

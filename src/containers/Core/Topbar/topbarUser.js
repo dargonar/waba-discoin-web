@@ -59,7 +59,6 @@ class TopbarUser extends Component {
               text={this.props.account}
               size={430}
             />
-            <span className="userActivity online" />
           </div>
         </Popover>
         {this.state.isIntlActivated ? (

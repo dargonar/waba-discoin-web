@@ -19,7 +19,7 @@ import apiActions from "../../../redux/api/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { generateAccount } from "../../../httpService";
+// import { generateAccount } from "../../../httpService";
 
 const FormItem = Form.Item;
 
@@ -90,11 +90,12 @@ class CreateStore extends Component {
       console.log(JSON.stringify(this.state.form));
       this.props.saveBusiness(this.state.form);
     } else {
-      console.log(this.state.form.name);
-      generateAccount(this.state.form.name);
+      // console.log(this.state.form.name);
+      alert('NO SE PUEDE CREAR');
+      // generateAccount(this.state.form.name);
     }
 
-    // updateBusinessProfile()
+    
   }
 
   changeSchedule(type, key, value) {
