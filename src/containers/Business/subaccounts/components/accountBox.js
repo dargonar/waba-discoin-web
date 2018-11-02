@@ -82,7 +82,7 @@ const AccountBox = ({
           {": "}
           <b>
             {currency.symbol}{" "}
-            {Number(account.claimed_this_period || 0).toLocaleString()}
+            {(Number(account.claimed_this_period || 0)/Math.pow(10,currency.asset_precision)).toLocaleString()}
           </b>
           <br />
         </p>

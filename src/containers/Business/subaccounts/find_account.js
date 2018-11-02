@@ -30,13 +30,24 @@ const { rowStyle } = basicStyle;
 
 const minutesOffset = 2;
 
-const checkActualDate = stringDate => {
-  let date = moment(stringDate);
+const checkActualDate = _Date => {
+  
+  let date = moment(_Date);
   // We need at least 1 minutes to get confirmation
+
+  console.log(' ------------- checkActualDate');
   if (date.isBefore(moment().add(minutesOffset, "m"))) {
     // date.add(minutesOffset, "m");
     date = moment().add(minutesOffset, "m");
   }
+  
+  // console.log('A RETORNAR date.valueOf(): ',             date.valueOf() );
+  // console.log('A RETORNAR date.utc(): ',                 date.utc() );
+  // console.log('A RETORNAR moment.utc(date).valueOf(): ', moment.utc(date).valueOf());
+  // console.log('A RETORNAR date.utc().valueOf(): ',       date.utc().valueOf());
+  
+  // console.log('A RETORNAR date.utc().toString(): ',      date.utc().toString() ); 
+  //return moment.utc(date).valueOf();
   return date.utc().valueOf();
 };
 
@@ -183,6 +194,8 @@ class FindAccounts extends Component {
     });
 
     let _now = Date.now();
+    // var d     = new Date();
+    // var _now  = d.getUTCDate();
 
     let _from = _now;
     if (!this.state.subaccount_auth.checked_now)
@@ -206,6 +219,7 @@ class FindAccounts extends Component {
       return;
     }
 
+
     // let _from = this.state.subaccount_auth.from.date_utc; //.date.utc().valueOf();
     // let _to = this.state.subaccount_auth.to.date_utc; //.date.utc().valueOf()
     // let period = 86400;
@@ -224,8 +238,6 @@ class FindAccounts extends Component {
     console.log(JSON.stringify(tx));
 
     console.log(JSON.stringify(this.props.account));
-
-    
 
     getKeys()
       .then(keys =>

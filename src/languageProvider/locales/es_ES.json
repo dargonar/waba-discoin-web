@@ -698,6 +698,7 @@
   "transactions.refund": "Recompensa",
   "transactions.discount": "Descuento",
   "transactions.tx": "Transferencia",
+  "transactions.transfer": "Transferencia",
   "transactions.amountInvoiced": "Total",
   "transactions.invoice": "Factura",
   "transactions.date": "Fecha",
@@ -820,7 +821,7 @@
   "qr.total": "Total a cobrar",
   "qr.totalCoins": "Total en {currency}",
   "qr.ticket": "Ticket/N° de factura:",
-  "connectionStatus.times": "Sin conexión, intentos faillidos: {times}",
+  "connectionStatus.times": "Sin conexión, intentos fallidos: {times}",
   "connectionStatus.fail": "Error en la conexión, intentamos {times} veces. {newLine} Prueba nuevamente luego de comprobar tu conexión a internet",
   "connectionStatus.retry": "Intentar de nuevo",
   "qr.discount": "Descuento"

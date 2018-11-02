@@ -20,6 +20,7 @@ import moment from "moment";
   return date.utc().valueOf();
 };
  */
+
 const dateFormat = "YYYY-MM-DD HH:mm:ss";
 
 export class SubAccountBox extends Component {
@@ -57,17 +58,22 @@ export class SubAccountBox extends Component {
   }
 
   onOk() {
-    // console.log(' normal: ', this.state.from.date.valueOf());
-    // console.log(' utc: ', this.state.from.date.utc().valueOf());
+    // console.log(' -------------- subaccountbox ------------------');
+    // console.log(' normal: ', this.state.from.date_utc.valueOf());
+    
     // validar fechas from > now > to
 
+    // var d     = new Date();
+    // var _now  = d.getUTCDate();
     let _now = Date.now();
 
     let _from = _now;
     console.log("this.state.checked_now:", this.state.checked_now);
     if (!this.state.checked_now)
-      // _from = checkActualDate(this.state.from.date_utc);
+    {
       _from = this.state.from.date_utc;
+      // { date_utc: moment().add(1, "year").utc().valueOf(), dateString: moment().add(1, "year").utc().format(dateFormat) }
+    }
     let _to = this.state.to.date_utc;
 
     let period = 86400;
@@ -172,6 +178,7 @@ export class SubAccountBox extends Component {
         visible={this.props.visible}
         onCancel={this.props.cancel}
         onOk={this.onOk}
+        className="add_subaccount_box"
       >
         <Row gutter={16}>
           <Col style={colStyle} xs={24}>
