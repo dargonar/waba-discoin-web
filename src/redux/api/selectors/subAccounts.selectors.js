@@ -16,8 +16,7 @@ const Box = x => ({
 export const isLoading = state => state.Api.loading || state.Api.actionLoading;
 
 //Fists inject an accountId, and use the result in a filter function
-export const onlyAccountTx = account_id => tx =>
-  tx.from.id === account_id || tx.to.id === account_id;
+export const onlyAccountTx = account_id => tx => tx.from.id === account_id || tx.to.id === account_id;
 
 //Subaccount state
 export const subAccount = state => get(state, "Api.subaccount.data", {});
@@ -28,14 +27,11 @@ export const subAccountId = state => subAccount(state).id;
 //List of subaccount transactions that match to user id
 // Unless all has value true (false ad default)
 export const subAccountTxs = (state, all = false) =>
-  get(state, "Api.subaccount.transactions", []).filter(
-    !all ? onlyAccountTx(accountId(state)) : () => true
-  );
+  get(state, "Api.subaccount.transactions", []).filter(!all ? onlyAccountTx(accountId(state)) : () => true);
 
 //See if the subaccount in the store is the one we want.
 //Returns a function in which we must enter the subaccount id
-export const isCurrentSubAccount = state => subaccount_id =>
-  subAccountId(state) === subaccount_id ? true : false;
+export const isCurrentSubAccount = state => subaccount_id => (subAccountId(state) === subaccount_id ? true : false);
 
 //Get only refunds txs
 export const txRefunds = txs => txs.filter(tx => tx.type === "refund");
@@ -64,8 +60,7 @@ export const txTotals = (txs = []) => ({
 });
 
 //Get today txs
-export const txToday = (txs = []) =>
-  txs.filter(tx => moment().diff(tx.date, "days") === 0);
+export const txToday = (txs = []) => txs.filter(tx => moment().diff(tx.date, "days") === 0);
 
 export const txYesterday = (txs = []) =>
   txs.filter(
@@ -75,8 +70,7 @@ export const txYesterday = (txs = []) =>
         .diff(tx.date, "days") === 0
   );
 
-export const txBetween = ({ from, until }, txs = []) =>
-  txs.filter(tx => moment(tx.date).isBetween(from, until));
+export const txBetween = ({ from, until }, txs = []) => txs.filter(tx => moment(tx.date).isBetween(from, until, "days", "[]"));
 
 //Get today totals
 export const txTodayTotals = (txs = []) =>
@@ -87,9 +81,9 @@ export const txTodayTotals = (txs = []) =>
 //Get all account in tx
 export const txAccounts = (txs = []) =>
   [
-    ...new Set(
-      txs
-        .reduce((prev, tx) => [...prev, tx.from, tx.to], [])
-        .map(o => JSON.stringify(o))
-    ) //all accounts in string
+    ...new Set(txs.reduce((prev, tx) => [...prev, tx.from, tx.to], []).map(o => JSON.stringify(o))) //all accounts in string
   ].map(s => JSON.parse(s)); // parse and remove duplicated
+
+export const txOnlyFrom = (id = "", txs = []) => txs.filter(tx => tx.from.id === id);
+
+export const txOnlyTo = (id = "", txs = []) => txs.filter(tx => tx.to.id === id);
