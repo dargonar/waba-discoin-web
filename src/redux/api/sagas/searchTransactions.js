@@ -53,7 +53,7 @@ export const searchAllTransactions = function*() {
     const { data, error } = yield call(fetchData);
     console.log(" --- runRequestSuggest:", data);
     if (data && !error) {
-      yield put({ type: actions.SEARCH_TRANSACTIONS_SUCCESS, payload: data });
+      yield put({ type: actions.SEARCH_TRANSACTIONS_SUCCESS, payload: { ...data, subaccount: action.payload.subaccount } });
       //yield put({ type: 'GLOBAL_LOADING_END'})
     } else {
       yield put({ type: actions.SEARCH_TRANSACTIONS_FAILD, payload: error });
