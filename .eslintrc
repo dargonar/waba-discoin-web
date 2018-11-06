@@ -2,7 +2,7 @@
   "extends": ["react-app", "plugin:prettier/recommended"],
   "rules": {
     "react/jsx-uses-vars": 2,
-    "max-len": [2, 140, 4, {
+    "max-len": [4, 140, 4, {
       "ignoreUrls": true
     }]
   }

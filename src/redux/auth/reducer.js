@@ -15,8 +15,9 @@ export default function authReducer(state = initState, action) {
         ...state,
         inLocal: true,
         encrypted: true,
-        accountType: action.payload.account === "admin" ? "owner" : "business",
+        // accountType: action.payload.account === "admin" ? "owner" : "business",
         // accountType: action.payload.account === siteConfig.adminAccount ? "admin" : "business",
+        accountType: siteConfig.adminAccount.indexOf(action.payload.account) !== -1 ? "owner" : "business",
         account: action.payload.account,
         account_id: action.payload.account_id
       };
@@ -58,10 +59,7 @@ export default function authReducer(state = initState, action) {
         account_id: action.payload.account_id,
         secret: action.payload.secret,
         raw: action.payload.raw,
-        accountType:
-          siteConfig.adminAccount.indexOf(action.payload.account) !== -1
-            ? "owner"
-            : "business"
+        accountType: siteConfig.adminAccount.indexOf(action.payload.account) !== -1 ? "owner" : "business"
       };
     case actions.LOGIN_ERROR:
       return {

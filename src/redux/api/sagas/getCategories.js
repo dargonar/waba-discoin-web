@@ -8,21 +8,19 @@ export const getCategories = function*() {
     const url = getPath("URL/GET_CATEGORIES");
     const fetchData = apiCall(url);
 
-    const { data, err } = yield call(fetchData);
-
-    if (data)
-      yield put({ type: actions.GET_CATEGORIES_SUCCESS, payload: data });
-    else yield put({ type: actions.GET_CATEGORIES_FAILD, payload: err });
+    const { data } = yield call(fetchData);
+    console.log(data);
+    if (data && typeof data.error === "undefined") yield put({ type: actions.GET_CATEGORIES_SUCCESS, payload: data });
+    else yield put({ type: actions.GET_CATEGORIES_FAILD, payload: data.error });
   });
 
   yield takeEvery(actions.GET_CATEGORIES_LIST, function*(action) {
     const url = getPath("URL/GET_CATEGORIES_LIST");
     const fetchData = apiCall(url);
 
-    const { data, err } = yield call(fetchData);
+    const { data } = yield call(fetchData);
 
-    if (data)
-      yield put({ type: actions.GET_CATEGORIES_LIST_SUCCESS, payload: data });
-    else yield put({ type: actions.GET_CATEGORIES_LIST_FAILD, payload: err });
+    if (data && typeof data.error === "undefined") yield put({ type: actions.GET_CATEGORIES_LIST_SUCCESS, payload: data });
+    else yield put({ type: actions.GET_CATEGORIES_LIST_FAILD, payload: data.error });
   });
 };

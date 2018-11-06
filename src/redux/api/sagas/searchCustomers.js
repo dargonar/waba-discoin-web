@@ -14,12 +14,12 @@ export const searchAccount = function*() {
     });
     const fetchData = apiCall(url);
 
-    const { data, error } = yield call(fetchData);
-    console.log(" --- runRequestSuggest:", action.payload, data, error);
-    if (data && !data.error && !error) {
+    const { data } = yield call(fetchData);
+    console.log(" --- runRequestSuggest:", action.payload, data);
+    if (data && typeof data.error === "undefined") {
       yield put({ type: actions.SEARCH_ACCOUNT_SUCCESS, payload: data });
     } else {
-      yield put({ type: actions.SEARCH_ACCOUNT_FAILD, payload: error });
+      yield put({ type: actions.SEARCH_ACCOUNT_FAILD, payload: { error: data.error } });
     }
   });
 };

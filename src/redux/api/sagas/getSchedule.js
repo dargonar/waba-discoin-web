@@ -12,8 +12,8 @@ export const getSchedule = function*() {
     const url = getPath("URL/GET_PROFILE", { id: action.payload.account_id });
     const fetchData = apiCall(url);
     console.log(url);
-    const { data, err } = yield call(fetchData);
-    if (data) {
+    const { data } = yield call(fetchData);
+    if (data && typeof data.error === "undefined") {
       yield put({
         type: actions.GET_SCHEDULE_SUCCESS,
         payload: { discount_schedule: data.business.discount_schedule }
@@ -25,7 +25,7 @@ export const getSchedule = function*() {
       });
       yield put({ type: "GLOBAL_LOADING_END" });
     } else {
-      yield put({ type: actions.GET_SCHEDULE_FAILD, payload: err });
+      yield put({ type: actions.GET_SCHEDULE_FAILD, payload: data.error });
       yield put({ type: "GLOBAL_LOADING_END" });
     }
   });

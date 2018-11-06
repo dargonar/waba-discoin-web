@@ -14,13 +14,13 @@ export const manageBusinessCategories = function*() {
     // Make api request
     const url = getPath("URL/ADD_OR_UPDATE_CATEGORY");
     const fetchData = apiCall(url, "POST", action.payload);
-    const { data, err } = yield call(fetchData);
+    const { data } = yield call(fetchData);
 
     //Hide global loading
     yield put({ type: actionsUI.GLOBAL_LOADING_END });
 
     //Prepare response
-    if (data.ok === "ok") {
+    if (data && data.ok === "ok") {
       yield put({
         type: actions.ADD_OR_UPDATE_CATEGORY_SUCCESS,
         payload: data
@@ -42,7 +42,7 @@ export const manageBusinessCategories = function*() {
     else {
       yield put({
         type: actions.ADD_OR_UPDATE_CATEGORY_FAILD,
-        payload: { err, error: data.error }
+        payload: { error: data.error }
       });
       yield put({
         type: actionsUI.GLOBAL_MSG,
@@ -63,13 +63,13 @@ export const manageBusinessCategories = function*() {
     const url = getPath("URL/DELETE_CATEGORY");
     const fetchData = apiCall(url, "POST", action.payload);
 
-    const { data, err } = yield call(fetchData);
+    const { data } = yield call(fetchData);
 
     //Hide global loading
     yield put({ type: actionsUI.GLOBAL_LOADING_END });
 
     //Prepare response
-    if (data && !data.error) {
+    if (data && typeof data.error === "undefined") {
       yield put({
         type: actions.DELETE_CATEGORY_SUCCESS,
         payload: data
@@ -91,7 +91,7 @@ export const manageBusinessCategories = function*() {
     else {
       yield put({
         type: actions.DELETE_CATEGORY_FAILD,
-        payload: { err, error: data.error }
+        payload: { error: data.error }
       });
       yield put({
         type: actionsUI.GLOBAL_MSG,
