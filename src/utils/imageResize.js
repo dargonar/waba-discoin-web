@@ -112,7 +112,7 @@ export const createThumbnailFromUrl = (file, width, height, callback) => {
       let canvas = document.createElement("canvas");
       let ctx = canvas.getContext("2d");
 
-      let resizeInfo = resize(file, width, height, "crop");
+      let resizeInfo = resize(file, width, height);
 
       canvas.width = resizeInfo.trgWidth;
       canvas.height = resizeInfo.trgHeight;
@@ -148,10 +148,7 @@ export const createThumbnailFromUrl = (file, width, height, callback) => {
   return fileReader.readAsDataURL(file);
 };
 
-export const getMimetype = base64file =>
-  base64file.match(/[^:]\w+\/[\w-+\d.]+(?=;|,)/)[0];
+export const getMimetype = base64file => base64file.match(/[^:]\w+\/[\w-+\d.]+(?=;|,)/)[0];
 
 export const isAllowed = (base64file, allowedTypes) =>
-  allowedTypes.length === 0
-    ? true
-    : allowedTypes.indexOf(getMimetype(base64file)) !== -1;
+  allowedTypes.length === 0 ? true : allowedTypes.indexOf(getMimetype(base64file)) !== -1;
