@@ -26,7 +26,8 @@ const AccountBox = ({
   dailyPermission,
   account,
   changeAmount,
-  changePassword
+  changePassword,
+  showInfo
 }) => (
   <Card
     style={style.box}
@@ -40,7 +41,21 @@ const AccountBox = ({
         }
         icon="edit"
         action={changeAmount}
-      />
+      />,
+      ...(typeof showInfo === "function"
+        ? [
+            <BtnInfo
+              text={
+                <IntlMessages
+                  id="subaccounts.showTransactions"
+                  defaultMessage="Show transactions"
+                />
+              }
+              icon="search"
+              action={showInfo}
+            />
+          ]
+        : [])
     ]}
   >
     <Card.Meta

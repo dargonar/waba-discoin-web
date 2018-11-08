@@ -40,7 +40,7 @@ class AcceptDiscountComponent extends Component {
       from: moment()
     });
     //update tx every second in the next twenty secconds
-    this.props.setTimmer(1000, 20000);
+    // this.props.setTimmer(1000, 20000);
   }
 
   updateReward(value) {

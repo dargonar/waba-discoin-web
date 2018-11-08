@@ -43,6 +43,9 @@ const apiConfig = {
   baseFiles: base_url+"files/",
   baseImages: base_url+"static/uploads/",
   
+  interval_update_tx_ms: 30000,
+  timeout_force_update_tx_ms: 15000,
+  interval_status_check_ms: 60000,
   // chain_id: "1d70881f06a5d2ece91313a00f7eda5e1c7a7183957f3a6539deb4aa95237fe5",   // TUTI TESNET
   // admin_pub_key : 'BTS5KqreoEjBrfuPC8G5ntzv3p1ByHe2HCyUMyDnvex7B42MYzo4u',        // TUTI TESNET
   

@@ -5,6 +5,7 @@ import apiActions from "../../../redux/api/actions";
 import styled from "styled-components";
 import Button from "../../../components/uielements/button";
 import IntlMessages from "../../../components/utility/intlMessages";
+import { apiConfig } from "../../../config";
 
 const ConnectionStatusgWrapper = styled.div`
   .globalLoading {
@@ -62,7 +63,7 @@ class ConnectionStatusComponent extends Component {
     //Check every 10 seconds
     const timer = setInterval(() => {
       this.props.checkStatus();
-    }, 5000);
+    }, apiConfig.interval_status_check_ms);
     //Save timer in state
     this.setState({ timer, stoped: false });
   }

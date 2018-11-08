@@ -11,9 +11,13 @@ function* runRequestSuggest({ name, account_id }) {
   });
   const fetchData = apiCall(url);
 
-  const { data } = yield call(fetchData);
+  // const { data } = yield call(fetchData);
+  // console.log(" --- runRequestSuggest:", name, data);
+  // if (data && typeof data.error === "undefined") {
+
+  const { data, error } = yield call(fetchData);
   console.log(" --- runRequestSuggest:", name, data);
-  if (data && typeof data.error === "undefined") {
+  if (data && !error && (!data.error || typeof data.error === "undefined")) {
     yield put({ type: actions.SEARCH_TRANSACTIONS_SUCCESS, payload: data });
   } else {
     yield put({ type: actions.SEARCH_TRANSACTIONS_FAILD, payload: { error: data.error } });
@@ -48,16 +52,30 @@ export const searchAllTransactions = function*() {
     });
     const fetchData = apiCall(url);
 
-    //yield put({ type: 'GLOBAL_LOADING_START', payload: { msg: 'Cargando transacciones'}})
+    // const { data, error } = yield call(fetchData);
+    // console.log(" --- runRequestSuggest:", data);
+    // if (data && typeof data.error === "undefined") {
+    //   yield put({ type: actions.SEARCH_TRANSACTIONS_SUCCESS, payload: data });
+    // } else {
+    //   yield put({ type: actions.SEARCH_TRANSACTIONS_FAILD, payload: { error: data.error } });
+
+    yield put({
+      type: "GLOBAL_LOADING_START",
+      payload: { msg: "Cargando transacciones" }
+    });
 
     const { data, error } = yield call(fetchData);
     console.log(" --- runRequestSuggest:", data);
-    if (data && typeof data.error === "undefined") {
-      yield put({ type: actions.SEARCH_TRANSACTIONS_SUCCESS, payload: data });
-      //yield put({ type: 'GLOBAL_LOADING_END'})
+    if (data && !error && (!data.error || typeof data.error === "undefined")) {
+      yield put({
+        type: actions.SEARCH_TRANSACTIONS_SUCCESS,
+        payload: { ...data, subaccount: action.payload.subaccount }
+      });
+      yield put({ type: "GLOBAL_LOADING_END" });
     } else {
-      yield put({ type: actions.SEARCH_TRANSACTIONS_FAILD, payload: { error: data.error } });
-      //yield put({ type: 'GLOBAL_LOADING_END'})
+      yield put({ type: actions.SEARCH_TRANSACTIONS_FAILD, payload: error });
+      yield put({ type: "GLOBAL_LOADING_END" });
+
     }
   });
 };
