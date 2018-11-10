@@ -14,6 +14,7 @@ import { bindActionCreators } from "redux";
 import message from "../../../components/uielements/message";
 import { injectIntl } from "react-intl";
 import { siteConfig } from "../../../config";
+import IntlBox from "../LanguageSwitcher/withModal";
 
 import Image from '../../../image/logo.png';
 
@@ -38,6 +39,16 @@ class SignIn extends Component {
     this.toggle = this.toggle.bind(this);
     this.cancelLocal = this.cancelLocal.bind(this);
     this._handleKeyPress = this._handleKeyPress.bind(this);
+
+    this.state = {
+      isIntlActivated: false
+    };
+    this.switchActivation = this.switchActivation.bind(this);
+  }
+
+
+  switchActivation() {
+    this.setState({ isIntlActivated: !this.state.isIntlActivated });
   }
 
   _handleKeyPress(e) {
@@ -83,7 +94,7 @@ class SignIn extends Component {
     if (this.state.remember && this.state.rememberKey === "") {
       message.warning(
         this.props.intl.messages["core.sessionPasswordWarning"] ||
-          "You must enter a session password"
+          "You must enter a session PIN"
       );
       return;
     }
@@ -120,6 +131,11 @@ class SignIn extends Component {
           loading={this.props.loading}
           error={this.props.error}
         />
+        
+        { /*<a className="isoDropdownLink" onClick={this.switchActivation}>
+                  <IntlMessages id="intlselector" />
+                </a> */}
+
         <div className="isoLoginContentWrapper">
           <div className="isoLoginContent">
             <div className="isoLogoWrapper">
@@ -131,6 +147,12 @@ class SignIn extends Component {
                 />
 
               </Link>
+
+              {/* 
+                  <div style={{position:'absolute', right:50, top:66}}>
+                    <Button shape="circle" icon="flag" onClick={this.switchActivation}/>
+                  </div>
+              */}
             </div>
 
             <div className="isoSignInForm">
@@ -150,7 +172,7 @@ class SignIn extends Component {
                   size="large"
                   type="text"
                   placeholder={
-                    this.props.intl.messages["core.password"] || "Password"
+                    this.props.intl.messages["core.password"] || "Password or mnemonics"
                   }
                   value={this.state.words}
                   onKeyPress={this._handleKeyPress}
@@ -168,7 +190,7 @@ class SignIn extends Component {
                     type="text"
                     placeholder={
                       this.props.intl.messages["core.sessionPassword"] ||
-                      "Session password"
+                      "Session PIN"
                     }
                     value={this.state.rememberKey}
                     onKeyPress={this._handleKeyPress}
@@ -199,15 +221,6 @@ class SignIn extends Component {
                     defaultMessage="Remember me"
                   />
                 </Checkbox>
-                {/*<Checkbox
-                                  defaultChecked={this.state.is_brainkey}
-                                  onChange={() => this.toggle("is_brainkey")}
-                                >
-                                  <IntlMessages
-                                    id="page.isBrainKey"
-                                    defaultMessage="Is brain key"
-                                  />
-                                </Checkbox>*/}
                 <Button
                   type="primary"
                   onClick={this.handleLogin}
@@ -237,6 +250,11 @@ class SignIn extends Component {
             </div>
           </div>
         </div>
+        {this.state.isIntlActivated ? (
+          <IntlBox switchActivation={this.switchActivation} />
+        ) : (
+          false
+        )}
       </SignInStyleWrapper>
     );
   }

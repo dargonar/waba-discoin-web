@@ -629,6 +629,7 @@ class CreateStore extends Component {
                   label={
                     <IntlMessages id="profile.logo" defaultMessage="Logo" />
                   }
+                  extra={<span className="hint2"><IntlMessages id="profile.logo_hint" defaultMessage="" /></span>}
                 >
                   {getFieldDecorator("logo", {
                     initialValue: this.state.form.logo
@@ -648,8 +649,9 @@ class CreateStore extends Component {
                     <IntlMessages
                       id="profile.image"
                       defaultMessage="Imagen promocional"
-                    />
-                  }
+                    />}
+                  extra={<span className="hint2"><IntlMessages id="profile.image_hint" defaultMessage="" /></span>}
+                  
                 >
                   {getFieldDecorator("image", {
                     initialValue: this.state.form.image
@@ -660,6 +662,7 @@ class CreateStore extends Component {
                     defaultImage={this.state.form.image}
                   />
                 </FormItem>
+
               </Col>
             </Row>
 

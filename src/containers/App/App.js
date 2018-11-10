@@ -83,7 +83,7 @@ export class App extends Component {
                             </strong>
                             {": "}
                             <IntlMessages
-                              defaultMessage="Please enter your local storage password to unlock them"
+                              defaultMessage="Please enter your PIN to unlock session"
                               id="localLogin.keysEncryptedMessage"
                             />
                           </Col>

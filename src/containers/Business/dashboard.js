@@ -288,7 +288,7 @@ export class Dashboard extends Component {
                 percentage={true}
                 text={
                   <IntlMessage
-                    defaultMessage="Today reward"
+                    defaultMessage="Today reward %"
                     id="dashboard.todayReward"
                   />
                 }

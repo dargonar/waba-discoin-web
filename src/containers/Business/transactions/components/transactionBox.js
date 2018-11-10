@@ -58,7 +58,7 @@ export default ({ transaction }) => (
         
         <div className="tx_list_item_data_container">
           <span className="first"> 
-            Tipo: 
+            <IntlMessages id="transactions.type" defautlMessage="Tipo" />:
           </span> 
           <span className="second"> 
             <IntlMessages id={ "transactions." + (transaction.type || 'transfer') } defautlMessage="N/D" />

@@ -53,7 +53,7 @@ class LocalLogin extends Component {
           type="password"
           placeholder={
             this.props.intl.messages["core.sessionPassword"] ||
-            "Local storage password"
+            "Session PIN"
           }
           onKeyPress={this._handleKeyPress}
           onChange={e => this.setState({ value: e.target.value })}

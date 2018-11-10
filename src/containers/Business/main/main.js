@@ -5,7 +5,7 @@ import IntlMessage from "../../../components/utility/intlMessages";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import actions from "../../../redux/api/actions";
-import { currency } from "../../../config";
+import { currency, apiConfig } from "../../../config";
 import { Row, Col, Input } from "antd";
 import { SendRefund } from "./components/sendRefund";
 import { AcceptDiscount } from "./components/acceptDiscount";
@@ -23,11 +23,14 @@ export class Dashboard extends Component {
         reference: null
       }
     };
-    this.clearState = this.clearState.bind(this);
-    this.setTimmer = this.setTimmer.bind(this);
-    this.changeBillAmount = this.changeBillAmount.bind(this);
-    this.changeBillReference = this.changeBillReference.bind(this);
-    this.renderContent = this.renderContent.bind(this);
+    this.clearState           = this.clearState.bind(this);
+    this.startTxTimer         = this.startTxTimer.bind(this);
+    this.forceLoadTx          = this.forceLoadTx.bind(this);
+    this.changeBillAmount     = this.changeBillAmount.bind(this);
+    this.changeBillReference  = this.changeBillReference.bind(this);
+    this.renderContent        = this.renderContent.bind(this);
+    this.loop                 = undefined;
+    this.force                = undefined;
   }
 
   clearState() {
@@ -58,22 +61,22 @@ export class Dashboard extends Component {
     });
   }
 
-  setTimmer(time, duration) {
+  startTxTimer (){
     try {
       clearInterval(this.loop);
     } catch (_) {}
 
-    this.loop = setInterval(this.props.loadTx, time || 10000);
-
-    if (typeof duration !== "undefined") {
-      setTimeout(() => this.setTimmer(10000), duration);
-    }
+    this.loop = setInterval(this.props.loadTx, apiConfig.interval_update_tx_ms);
   }
-
+  
+  forceLoadTx(){
+    setTimeout( () => this.props.loadTx , apiConfig.timeout_force_update_tx_ms);
+  }
+  
   componentWillMount() {
     this.props.loadTx();
     this.props.loadSchedule();
-    this.setTimmer(10000);
+    this.startTxTimer();
   }
 
   componentWillUnmount() {
@@ -138,9 +141,7 @@ export class Dashboard extends Component {
               percentage={this.props.discount.discount}
               onSubmit={data => {
                 console.log("Submited", { data });
-                //this.setTimmer(1000, 20000);
               }}
-              setTimmer={this.setTimmer}
             />
           </Col>
           
@@ -151,7 +152,7 @@ export class Dashboard extends Component {
               percentage={this.props.discount.reward}
               onSubmit={data => {
                 console.log("Submited", { data });
-                this.setTimmer(1000, 20000);
+                this.forceLoadTx();
               }}
             />
           </Col>
