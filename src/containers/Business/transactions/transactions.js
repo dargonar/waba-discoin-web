@@ -1,50 +1,56 @@
 import React, { Component } from "react";
 import LayoutContentWrapper from "../../../components/utility/layoutWrapper";
 import PageHeader from "../../../components/utility/pageHeader";
-import { Row, Col } from "antd";
+import { Row, Col, Button, Pagination } from "antd";
 import basicStyle from "../../../config/basicStyle";
-import { InputSearch } from "../../../components/uielements/input";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import actions from "../../../redux/api/actions";
-import appActions from "../../../redux/app/actions";
 import IntlMessages from "../../../components/utility/intlMessages";
 import { injectIntl } from "react-intl";
 import TransactionBox from "./components/transactionBox";
 import PageLoading from "../../../components/pageLoading";
+import { TxFilterModal } from "./components/filterModal";
+import { FiltetersToTags } from "./components/filterBar";
 
 class Transactions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchValue: null
+      searchValue: null,
+      filters: [],
+      page: 1,
+      showFiltersBox: false
     };
     this.renderContent = this.renderContent.bind(this);
-    this._handleChange = this._handleChange.bind(this);
-    this._handleKeyPress = this._handleKeyPress.bind(this);
+    this._filterRemove = this._filterRemove.bind(this);
+    this._filtersChange = this._filtersChange.bind(this);
+  }
+
+  _filterRemove(name) {
+    const filters = this.state.filters.filter(x => x.filter !== name);
+    this._filtersChange(filters);
+  }
+
+  _filtersChange(filters) {
+    this.setState({ filters, showFiltersBox: false, page: 1 });
+    this.props.fetchTransactions({ filters, page: 1 });
+  }
+
+  _pageChange(page) {
+    this.setState({ page });
+    this.props.fetchTransactions({ filters: this.state.filters, page });
   }
 
   componentDidMount() {
     console.log(" --- Transactions::componentDidMount PRE");
-    this.props.searchTransactions();
+    this.props.fetchTransactions({ filters: [], page: 1 });
     console.log(" --- Transactions::componentDidMount DONE");
   }
 
   componentWillReceiveProps(newProps) {
-    console.log(
-      " ------- > transactions.js::componentWillReceiveProps",
-      JSON.stringify(newProps)
-    );
-  }
-
-  _handleChange(e) {
-    this.setState({ searchValue: e.target.value });
-  }
-
-  _handleKeyPress(e) {
-    if (e.key === "Enter")
-      this.props.searchTransactions(this.state.searchValue);
+    console.log(" ------- > transactions.js::componentWillReceiveProps", JSON.stringify(newProps));
   }
 
   renderContent() {
@@ -52,38 +58,47 @@ class Transactions extends Component {
 
     return (
       <Row style={rowStyle} gutter={16} justify="start">
-        <Col xs={24} style={{ marginBottom: "15px" }}>
-          <InputSearch
-            placeholder={
-              this.props.intl.messages["transactions.filter"] || "Filter"
-            }
-            onKeyPress={this._handleKeyPress}
-            onChange={this._handleChange}
+        <TxFilterModal
+          filters={this.state.filters}
+          visible={this.state.showFiltersBox}
+          onOk={this._filtersChange}
+          onCancel={() => {
+            this.setState({ showFiltersBox: false });
+          }}
+        />
+        <div style={{ margin: "10px", display: "flex", width: "100%" }}>
+          <Button onClick={() => this.setState({ showFiltersBox: true })}>Filtros</Button>
+          <FiltetersToTags
+            filters={this.state.filters}
+            removeFilter={filter => this._filterRemove(filter)}
+            style={{
+              padding: "4px 0px 3px 7px",
+              background: "#fff",
+              borderWidth: "1px 1px 1px 0",
+              borderColor: " #d9d9d9",
+              borderStyle: "solid",
+              flex: "1",
+              borderRadius: "0 4px 4px 0"
+            }}
           />
-        </Col>
+        </div>
+
         {this.props.loading ? (
           <PageLoading />
         ) : (
           <Col xs={24}>
-            {this.props.transactions === "undefined" ||
-            !this.props.transactions ||
-            this.props.transactions.length === 0 ? (
+            {this.props.transactions === "undefined" || !this.props.transactions || this.props.transactions.length === 0 ? (
               <Col style={{ textAlign: "center", padding: "10px" }} xs={24}>
-                <IntlMessages
-                  id="transactions.notFound"
-                  defaultMessage="No transactions were found"
-                />
+                <IntlMessages id="transactions.notFound" defaultMessage="No transactions were found" />
               </Col>
             ) : (
-              this.props.transactions.map(transaction => (
-                <TransactionBox
-                  transaction={transaction}
-                  key={transaction.date}
-                />
-              ))
+              this.props.transactions.map(transaction => <TransactionBox transaction={transaction} key={transaction.date} />)
             )}
           </Col>
         )}
+        <Col xs={24}>
+          <Pagination page={this.state.page} total={this.props.transactionsTotal} onChange={this._pageChange} />
+        </Col>
       </Row>
     );
   }
@@ -92,10 +107,7 @@ class Transactions extends Component {
     return (
       <LayoutContentWrapper>
         <PageHeader>
-          <IntlMessages
-            id="sidebar.transactions"
-            defaultMessage="Transactions"
-          />
+          <IntlMessages id="sidebar.transactions" defaultMessage="Transactions" />
         </PageHeader>
         {this.renderContent()}
       </LayoutContentWrapper>
@@ -105,11 +117,12 @@ class Transactions extends Component {
 
 const mapStateToProps = state => ({
   transactions: state.Api.transactions || [],
+  transactionsTotal: state.Api.transactionsTotal || 0,
   loading: state.Api.transactionsLoading
 });
 
 const mapDispatchToProps = dispatch => ({
-  searchTransactions: bindActionCreators(actions.searchTransactions, dispatch)
+  fetchTransactions: bindActionCreators(actions.fetchTransactions, dispatch)
 });
 
 export default injectIntl(
