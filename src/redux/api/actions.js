@@ -34,6 +34,10 @@ const actions = {
   SEARCH_TRANSACTIONS_SUCCESS: "[Api] Search transactions success",
   SEARCH_TRANSACTIONS_FAILD: "[Api] Search transactions faild",
 
+  FETCH_TRANSACTIONS: "[Api] Fetch transactions",
+  FETCH_TRANSACTIONS_SUCCESS: "[Api] Fetch transactions success",
+  FETCH_TRANSACTIONS_FAILD: "[Api] Fetch transactions faild",
+
   GET_SCHEDULE: "[Api] Get schedule",
   GET_SCHEDULE_SUCCESS: "[Api] Get schedule success",
   GET_SCHEDULE_FAILD: "[Api] Get schedule faild",
@@ -124,6 +128,19 @@ const actions = {
       payload: {
         name,
         account_id: getState().Auth.account_id
+      }
+    });
+  },
+
+  fetchTransactions: query => (dispatch, getState) => {
+    dispatch({
+      type: actions.FETCH_TRANSACTIONS,
+      payload: {
+        query: {
+          page: query.page || 1, // numero de página de los resultados
+          filters: query.filters || [] //array con los filtros y sus configuraciones
+        },
+        account_id: getState().Auth.account_id //account desde la que se realiza la consulta
       }
     });
   },

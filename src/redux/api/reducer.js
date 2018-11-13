@@ -8,6 +8,7 @@ const initState = {
   customers: [],
   loading: false,
   transactionsLoading: false,
+  transactionsTotal: 0,
   error: false,
   actionLoading: false,
   msg: null,
@@ -157,6 +158,22 @@ export default function apiReducer(state = initState, action) {
         transactions: action.payload.txs,
         transactionsLoading: false
       };
+
+    case actions.FETCH_TRANSACTIONS:
+      return {
+        ...state,
+        transactionsTotal: 0,
+        transactionsLoading: true
+      };
+
+    case actions.FETCH_TRANSACTIONS_SUCCESS:
+      return {
+        ...state,
+        transactionsTotal: action.payload.total,
+        transactions: action.payload.txs,
+        transactionsLoading: false
+      };
+
     case actions.CLEAR_MSG:
       return {
         ...state,
