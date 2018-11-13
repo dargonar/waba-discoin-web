@@ -7,22 +7,19 @@ import { LocaleProvider } from "antd";
 import { IntlProvider } from "react-intl";
 import themes from "./config/themes";
 import AppLocale from "./languageProvider";
-import config, {
-  getCurrentLanguage
-} from "./containers/Core/LanguageSwitcher/config";
+import config, { getCurrentLanguage } from "./containers/Core/LanguageSwitcher/config";
 import { themeConfig } from "./config";
 import DashAppHolder from "./dashAppStyle";
 import Boot from "./redux/boot";
+import moment from "moment";
+import "moment/locale/es";
 
-const currentAppLocale =
-  AppLocale[getCurrentLanguage(config.defaultLanguage || "english").locale];
-
+const currentAppLocale = AppLocale[getCurrentLanguage(config.defaultLanguage || "english").locale];
+moment.locale(currentAppLocale.locale);
+console.log(moment);
 const DashApp = () => (
   <LocaleProvider locale={currentAppLocale.antd}>
-    <IntlProvider
-      locale={currentAppLocale.locale}
-      messages={currentAppLocale.messages}
-    >
+    <IntlProvider locale={currentAppLocale.locale} messages={currentAppLocale.messages}>
       <ThemeProvider theme={themes[themeConfig.theme]}>
         <DashAppHolder>
           <Provider store={store}>
