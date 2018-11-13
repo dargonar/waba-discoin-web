@@ -8,8 +8,7 @@ const siteConfig = {
 //const base_url = 'http://127.0.0.1:8088/';            // TUTI TESNET
 // const base_url = 'https://api.discoin.com.ar/';      // MAIN NET
 // const base_url = 'https://54.245.222.250/';      // MAIN NET
-const base_url = 'https://devapi.discoin.com.ar/';      // PRIVATE TESNET
-
+const base_url = "https://devapi.discoin.com.ar/"; // PRIVATE TESNET
 
 const themeConfig = {
   topbar: "themedefault",
@@ -39,19 +38,19 @@ const mapboxConfig = {
 };
 
 const apiConfig = {
-  base: base_url+"api/",
-  baseFiles: base_url+"files/",
-  baseImages: base_url+"static/uploads/",
-  
+  base: base_url + "api/",
+  baseFiles: base_url + "files/",
+  baseImages: base_url + "static/uploads/",
+
   // chain_id: "1d70881f06a5d2ece91313a00f7eda5e1c7a7183957f3a6539deb4aa95237fe5",   // TUTI TESNET
   // admin_pub_key : 'BTS5KqreoEjBrfuPC8G5ntzv3p1ByHe2HCyUMyDnvex7B42MYzo4u',        // TUTI TESNET
-  
-  chain_id: "bde617520673d18e67db5d7060ca2740f80e28093519c30176044c8d4a227e73",      // DEVAPI
-  admin_pub_key : 'BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk',           // DEVAPI
-  
+
+  chain_id: "bde617520673d18e67db5d7060ca2740f80e28093519c30176044c8d4a227e73", // DEVAPI
+  admin_pub_key: "BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk", // DEVAPI
+
   // chain_id: "4018d7844c78f6a6c41c6a552b898022310fc5dec06da467ee7905a8dad512c8",   // MAIN NET
   // admin_pub_key : 'BTS5QnCpdUT696G8LA6xBonNsuD1PwP5Xgr5GvYXBrxGx6YnqMmdC',        // MAIN NET
-  
+
   version: "v3",
   urls: [
     { action: "URL/UPDATE_BUSINESS", path: "/dashboard/business/profile/:account_id/update" },
@@ -65,6 +64,7 @@ const apiConfig = {
     { action: "URL/SEARCH_CUSTOMERS", path: "/account/search?search=:name&search_filter=:filter" },
     { action: "URL/ALL_CUSTOMERS", path: "/account/search" },
     { action: "URL/ALL_TRANSACTIONS", path: "/business/:id/transactions/list" },
+    { action: "URL/FETCH_TRANSACTIONS", path: "/business/:id/transactions/list" },
     { action: "URL/ACCOUNT_BY_NAME", path: "/account/by_name/:name" },
     { action: "URL/PUSH_TX", path: "/push_tx" },
     { action: "URL/PUSH_SIGN_TX", path: "/sign_and_push_tx" },
