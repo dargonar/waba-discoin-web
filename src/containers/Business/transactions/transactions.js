@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import LayoutContentWrapper from "../../../components/utility/layoutWrapper";
 import PageHeader from "../../../components/utility/pageHeader";
-import { Row, Col, Button, Pagination } from "antd";
+import { Row, Col, Button, Pagination, Alert } from "antd";
 import basicStyle from "../../../config/basicStyle";
 
 import { connect } from "react-redux";
@@ -82,7 +82,27 @@ class Transactions extends Component {
             }}
           />
         </div>
-
+        <Alert
+          message={"Request - (Debug)"}
+          style={{ margin: "10px", width: "100%", padding: "10px" }}
+          description={
+            <code>
+              <pre>
+                {JSON.stringify(
+                  {
+                    account_id: this.props.account_id,
+                    query: {
+                      filters: this.state.filters,
+                      page: this.state.page
+                    }
+                  },
+                  null,
+                  "  "
+                )}
+              </pre>
+            </code>
+          }
+        />
         {this.props.loading ? (
           <PageLoading />
         ) : (
@@ -116,6 +136,7 @@ class Transactions extends Component {
 }
 
 const mapStateToProps = state => ({
+  account_id: state.Auth.account_id,
   transactions: state.Api.transactions || [],
   transactionsTotal: state.Api.transactionsTotal || 0,
   loading: state.Api.transactionsLoading
