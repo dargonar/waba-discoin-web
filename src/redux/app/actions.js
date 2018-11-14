@@ -27,6 +27,7 @@ const actions = {
   CONNECTION_STATUS: "[UI] Change connection status",
   CONNECTION_STATUS_TRY: "[UI] Try to reconnect",
   CONNECTION_STATUS_RETRY: "[UI] Retry to reconnect",
+  TOOGLE_OVERDRAFT_STRIP: "[UI] Toggle overfraft strip",
 
   changeLanguage: language => {
     return {
@@ -75,6 +76,9 @@ const actions = {
   connectionStatus: (status = false) => ({
     type: actions.CONNECTION_STATUS,
     payload: status
+  }),
+  toggleOverdraft: () => ({
+    type: actions.TOOGLE_OVERDRAFT_STRIP
   })
 };
 export default actions;
