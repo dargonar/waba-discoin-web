@@ -32,8 +32,8 @@ class OverdraftStrip extends Component {
     const hasOverdraft =
       this.props.business !== null && this.props.business.balances !== null && this.props.business.balances.ready_to_access > 0;
 
-    //return !hasOverdraft && this.props.ignoreOverdraft ? (
-    return !this.props.ignoreOverdraft ? (
+    return !hasOverdraft && this.props.ignoreOverdraft ? (
+      // return !this.props.ignoreOverdraft ? ( //  <--- for debug
       <div>
         <Modal
           visible={this.state.confirm_overdraft_visible}
