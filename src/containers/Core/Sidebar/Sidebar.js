@@ -8,18 +8,16 @@ import Menu from "../../../components/uielements/menu";
 import IntlMessages from "../../../components/utility/intlMessages";
 import SidebarWrapper from "./sidebar.style";
 
+import authActions from "../../../redux/auth/actions";
 import appActions from "../../../redux/app/actions";
 import Logo from "../../../components/utility/logo";
 import { getCurrentTheme } from "../ThemeSwitcher/config";
 import { themeConfig } from "../../../config";
+import { bindActionCreators } from "redux";
 
 const { Sider } = Layout;
-const {
-  toggleOpenDrawer,
-  changeOpenKeys,
-  changeCurrent,
-  toggleCollapsed
-} = appActions;
+const { logout } = authActions;
+const { toggleOpenDrawer, changeOpenKeys, changeCurrent, toggleCollapsed } = appActions;
 
 class Sidebar extends Component {
   constructor(props) {
@@ -38,12 +36,8 @@ class Sidebar extends Component {
   }
   onOpenChange(newOpenKeys) {
     const { app, changeOpenKeys } = this.props;
-    const latestOpenKey = newOpenKeys.find(
-      key => !(app.openKeys.indexOf(key) > -1)
-    );
-    const latestCloseKey = app.openKeys.find(
-      key => !(newOpenKeys.indexOf(key) > -1)
-    );
+    const latestOpenKey = newOpenKeys.find(key => !(app.openKeys.indexOf(key) > -1));
+    const latestCloseKey = app.openKeys.find(key => !(newOpenKeys.indexOf(key) > -1));
     let nextOpenKeys = [];
     if (latestOpenKey) {
       nextOpenKeys = this.getAncestorKeys(latestOpenKey).concat(latestOpenKey);
@@ -94,7 +88,6 @@ class Sidebar extends Component {
           className="isomorphicSidebar"
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
-
         >
           <Logo collapsed={collapsed} />
           <Scrollbars style={{ height: scrollheight - 70 }}>
@@ -119,6 +112,14 @@ class Sidebar extends Component {
                   </Link>
                 </Menu.Item>
               ))}
+              <Menu.Item key={`logout`} onClick={this.props.logout}>
+                <span className="isoMenuHolder" style={submenuColor}>
+                  <i className={"ion-log-out"} />
+                  <span className="nav-text">
+                    <IntlMessages id={"topbar.logout"} />
+                  </span>
+                </span>
+              </Menu.Item>
             </Menu>
           </Scrollbars>
         </Sider>
@@ -132,5 +133,11 @@ export default connect(
     app: state.App.toJS(),
     router: state.router
   }),
-  { toggleOpenDrawer, changeOpenKeys, changeCurrent, toggleCollapsed }
+  {
+    toggleOpenDrawer,
+    changeOpenKeys,
+    changeCurrent,
+    toggleCollapsed,
+    logout
+  }
 )(Sidebar);
