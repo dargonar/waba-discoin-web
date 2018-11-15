@@ -8,9 +8,14 @@ import moment from "moment";
 import { bindActionCreators } from "redux";
 import actions from "../../../../redux/api/actions";
 
-const filterTx = (memo, from) => txs => {
-  return txs.filter(tx => tx.memo.message === memo && moment(from).isBefore(moment(tx.date))).length > 0;
+const filterTx = (memo, from) => (txs = []) => {
+  console.log({ memo, from, tx: txs[0] ? txs[0].memo.message : null });
+  return txs.filter(tx => tx.memo.message === memo && moment(from).isBefore(moment(tx.date))).reduce((prev, act) => act, false);
 };
+
+// const filterTx = (memo, from) => txs => {
+//   return txs.filter(tx => tx.memo.message === memo && moment(from).isBefore(moment(tx.date))).length > 0;
+// };
 
 class AcceptDiscountComponent extends Component {
   constructor(props) {
