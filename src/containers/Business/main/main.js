@@ -23,14 +23,14 @@ export class Dashboard extends Component {
         reference: null
       }
     };
-    this.clearState           = this.clearState.bind(this);
-    this.startTxTimer         = this.startTxTimer.bind(this);
-    this.forceLoadTx          = this.forceLoadTx.bind(this);
-    this.changeBillAmount     = this.changeBillAmount.bind(this);
-    this.changeBillReference  = this.changeBillReference.bind(this);
-    this.renderContent        = this.renderContent.bind(this);
-    this.loop                 = undefined;
-    this.force                = undefined;
+    this.clearState = this.clearState.bind(this);
+    this.startTxTimer = this.startTxTimer.bind(this);
+    this.forceLoadTx = this.forceLoadTx.bind(this);
+    this.changeBillAmount = this.changeBillAmount.bind(this);
+    this.changeBillReference = this.changeBillReference.bind(this);
+    this.renderContent = this.renderContent.bind(this);
+    this.loop = undefined;
+    this.force = undefined;
   }
 
   clearState() {
@@ -61,18 +61,18 @@ export class Dashboard extends Component {
     });
   }
 
-  startTxTimer (){
+  startTxTimer() {
     try {
       clearInterval(this.loop);
     } catch (_) {}
 
     this.loop = setInterval(this.props.loadTx, apiConfig.interval_update_tx_ms);
   }
-  
-  forceLoadTx(){
-    setTimeout( () => this.props.loadTx , apiConfig.timeout_force_update_tx_ms);
+
+  forceLoadTx() {
+    setTimeout(() => this.props.loadTx, apiConfig.timeout_force_update_tx_ms);
   }
-  
+
   componentWillMount() {
     this.props.loadTx();
     this.props.loadSchedule();
@@ -91,12 +91,7 @@ export class Dashboard extends Component {
             <span class="label">Monto de la factura</span>
           </Col>
         </Row>
-        <Row
-          justify="start"
-          type="flex"
-          flexDirection={Row}
-          className="flexRow input-bill-container"
-        >
+        <Row justify="start" type="flex" flexDirection={Row} className="flexRow input-bill-container">
           <Col md={12} className="col">
             <Row type="flex" flexDirection={Row} className="flexRow">
               <Col className="d-flex flex-column text-right bill-currency">
@@ -121,20 +116,12 @@ export class Dashboard extends Component {
             <Input
               className="input-bill-reference"
               size="large"
-              placeholder={
-                this.props.intl.messages["bussinesMain.billReference"] ||
-                "Reference (ticket number, invoice, other)"
-              }
+              placeholder={this.props.intl.messages["bussinesMain.billReference"] || "Reference (ticket number, invoice, other)"}
               onChange={e => this.changeBillReference(e.target.value)}
             />
           </Col>
         </Row>
-        <Row
-          justify="start"
-          type="flex"
-          flexDirection={Row}
-          className="flexRow w-100"
-        >
+        <Row justify="start" type="flex" flexDirection={Row} className="flexRow w-100">
           <Col md={12} className="col">
             <AcceptDiscount
               {...this.state.bill}
@@ -144,7 +131,7 @@ export class Dashboard extends Component {
               }}
             />
           </Col>
-          
+
           <Col md={12} className="col">
             <SendRefund
               {...this.state.bill}
@@ -156,17 +143,12 @@ export class Dashboard extends Component {
               }}
             />
           </Col>
-
-          
         </Row>
 
         <Row style={{ width: "100%", paddingTop: "40px" }} gutter={16}>
           <Col md={24} style={{ paddingTop: "40px" }}>
             <PageHeader>
-              <IntlMessage
-                defaultMessage="Transactions"
-                id="businessMain.transactions"
-              />
+              <IntlMessage defaultMessage="Transactions" id="businessMain.transactions" />
             </PageHeader>
             <TransactionList txs={this.props.transactions} />
           </Col>
@@ -178,8 +160,7 @@ export class Dashboard extends Component {
   render() {
     return (
       <LayoutContentWrapper className="reward_discount-view">
-        {typeof this.props.discount.discount !== "undefined" &&
-        typeof this.props.discount.reward !== "undefined" ? (
+        {typeof this.props.discount.discount !== "undefined" && typeof this.props.discount.reward !== "undefined" ? (
           this.renderContent()
         ) : (
           <PageLoading />
@@ -212,9 +193,7 @@ const getDiscount = discounts => {
 
 const mapStateToProps = state => ({
   transactions: state.Api.transactions || [],
-  discount: getDiscount(
-    state.Api.business ? state.Api.business.discount_schedule : []
-  )
+  discount: getDiscount(state.Api.business ? state.Api.business.discount_schedule : [])
 });
 
 const dispatchToProps = dispatch => ({
