@@ -256,7 +256,7 @@ export class Register extends Component {
                     message: this.props.intl.messages["register.email.empty"]
                   }
                 ]
-              })(<Input name="email" id="email" />)}
+              })(<Input name="email" id="email" email="email" />)}
             </FormItem>
 
             <FormItem

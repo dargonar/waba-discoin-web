@@ -13,7 +13,7 @@ export function* loginRequest() {
   
   // localStorage.removeItem("business_account");
   yield takeEvery(actions.LOGIN_REQUEST, function*(action) {
-    let { account_name, mnemonics, is_brainkey, remember, rememberKey, just_registered_data, from_storage_data } = action.payload;
+    let { account_name, mnemonics, is_brainkey, remember, rememberKey, just_registered_data, from_storage_data, force_clear_storage } = action.payload;
 
     yield put({
       type: actionsUI.GLOBAL_LOADING_START,
@@ -31,6 +31,9 @@ export function* loginRequest() {
     }
 
     let account = {};
+    if (typeof force_clear_storage !== "undefined" && force_clear_storage) {
+      localStorage.removeItem("business_account");
+    }
     if (typeof from_storage_data !== "undefined") {
       console.log("[redux/auth/saga]---- from_storage_data :", JSON.stringify(from_storage_data));
       // recien se registro
