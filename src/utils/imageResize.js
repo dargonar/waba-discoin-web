@@ -1,6 +1,6 @@
 //Extracted and adapted from Dropzone.js
 
-const resize = (file, width, height, resizeMethod) => {
+const resize = (file, width, height, resizeMethod = "contain") => {
   let info = {
     srcX: 0,
     srcY: 0,
