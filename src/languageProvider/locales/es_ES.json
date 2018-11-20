@@ -696,7 +696,7 @@
   "subaccounts.changeAmount": "Cambiar límite diario",
   "subaccounts.withdrawn": "Retirado en este período",
   "subaccounts.allocateCredit": "Allocate pre-arranged credit",
-  "transactions.type" : "Tipo",
+  "transactions.type": "Tipo",
   "transactions.loading": "Cargando transacciones",
   "transactions.notFound": "No se encontraron transacciones.",
   "transactions.filter": "Filtrar",
@@ -835,5 +835,6 @@
   "connectionStatus.fail": "Error en la conexión, intentamos {times} veces. {newLine} Prueba nuevamente luego de comprobar tu conexión a internet",
   "connectionStatus.retry": "Intentar de nuevo",
   "qr.discount": "Descuento",
-  "input.typeAndPressEnter" : "Presione enter para iniciar búsqueda..."
+  "input.typeAndPressEnter": "Presione enter para iniciar búsqueda...",
+  "userBox.message": "¿Desea continuar la sesión con el usuario {account} ({account_id})?"
 }
