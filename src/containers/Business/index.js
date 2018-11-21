@@ -22,7 +22,7 @@ class LoadingCheckComponent extends React.Component {
 
   componentWillReceiveProps(newProps) {
     const hasOverdraft =
-      newProps.business !== null && newProps.business.balances !== null && newProps.business.balances.ready_to_access > 0;
+      (typeof newProps.business != 'undefined') && newProps.business !== null && newProps.business.balances !== null && newProps.business.balances.ready_to_access > 0;
     const hasProfile = newProps.business !== null;
 
     // Si ya tiene todo cargado y ademas tiene overfraft que redirecciones a home

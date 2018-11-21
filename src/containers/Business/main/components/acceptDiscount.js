@@ -8,13 +8,14 @@ import moment from "moment";
 import { bindActionCreators } from "redux";
 import actions from "../../../../redux/api/actions";
 
-const filterTx = (memo, from) => txs => {
-  return (
-    txs.filter(
-      tx => tx.memo.message === memo && moment(from).isBefore(moment(tx.date))
-    ).length > 0
-  );
+const filterTx = (memo, from) => (txs = []) => {
+  // console.log({ memo, from, tx: txs[0] ? txs[0].memo.message : null });
+  return txs.filter(tx => tx.memo.message === memo && moment(from).isBefore(moment(tx.date))).reduce((prev, act) => act, false);
 };
+
+// const filterTx = (memo, from) => txs => {
+//   return txs.filter(tx => tx.memo.message === memo && moment(from).isBefore(moment(tx.date))).length > 0;
+// };
 
 class AcceptDiscountComponent extends Component {
   constructor(props) {
@@ -66,10 +67,7 @@ class AcceptDiscountComponent extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (
-      this.props.percentage !== newProps.percentage ||
-      this.state.reward < newProps.percentage
-    ) {
+    if (this.props.percentage !== newProps.percentage || this.state.reward < newProps.percentage) {
       this.updateReward(newProps.percentage);
     }
   }
@@ -100,35 +98,21 @@ class AcceptDiscountComponent extends Component {
           submit={() => {
             this.setState({ qr: false });
           }}
-          autoClose={filterTx(this.state.memo, this.state.from)(
-            this.props.transactions
-          )}
+          autoClose={filterTx(this.state.memo, this.state.from)(this.props.transactions)}
           visible={this.state.qr}
           bill_amount={this.props.amount}
           bill_id={this.props.reference}
-          discount_dsc={roundAmount(
-            (this.state.reward * (this.props.amount || 0)) / 100
-          )}
-          discount_ars={
-            this.props.amount -
-            roundAmount((this.state.reward * (this.props.amount || 0)) / 100)
-          }
+          discount_dsc={roundAmount((this.state.reward * (this.props.amount || 0)) / 100)}
+          discount_ars={this.props.amount - roundAmount((this.state.reward * (this.props.amount || 0)) / 100)}
           account_id={this.props.account.account_id}
           account_name={this.props.account.account}
           reward={this.state.reward}
           id="INVOICE_DISCOUNT"
         />
         <ColorBox
-          title={
-            <IntlMessages
-              id="mainBusiness.discount"
-              defaultMessage="Discount"
-            />
-          }
+          title={<IntlMessages id="mainBusiness.discount" defaultMessage="Discount" />}
           value={this.state.reward}
-          valid={
-            this.props.percentage <= this.state.reward && this.props.amount > 0
-          }
+          valid={this.props.percentage <= this.state.reward && this.props.amount > 0}
           onChange={this.updateReward}
           onSubmit={this.showQr}
           buttonText={
@@ -140,28 +124,18 @@ class AcceptDiscountComponent extends Component {
           }
           color="#3A99D9"
           arrow="arrow-down"
-          
         >
           <div class="w-100 d-flex flex-row bill-amount">
             <div class="col flex-1 text-left">
               <span class="label">ARS</span>
               <span class="bill-amount-value">
                 {" "}
-                {Number(
-                  this.props.amount -
-                    roundAmount(
-                      (this.state.reward * (this.props.amount || 0)) / 100
-                    )
-                ).toFixed(2)}
+                {Number(this.props.amount - roundAmount((this.state.reward * (this.props.amount || 0)) / 100)).toFixed(2)}
               </span>
             </div>
             <div class="col flex-1 text-right">
               <span class="label">{currency.symbol} </span>
-              <span class="bill-amount-value">
-                {roundAmount(
-                  (this.state.reward * (this.props.amount || 0)) / 100
-                ).toFixed(2)}
-              </span>
+              <span class="bill-amount-value">{roundAmount((this.state.reward * (this.props.amount || 0)) / 100).toFixed(2)}</span>
             </div>
           </div>
         </ColorBox>

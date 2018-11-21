@@ -88,7 +88,7 @@ export class App extends Component {
                       ) : (
                         false
                       )}
-                      <AskUserModal />
+                      {/*<AskUserModal />*/}
                       <LocalLogin />
                       <AppRouter url={url} />
                     </Content>

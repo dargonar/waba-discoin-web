@@ -13,7 +13,7 @@ class PrompLogin extends Component {
       <Modal visible={isEncrypted} onOk={onOk} onCancel={onCancel}>
         <IntlMessages
           id={"userBox.message"}
-          defaultMessage={"You want to continue the session with the user {account} ({account_id})?"}
+          defaultMessage={"Are you {account} ({account_id})?"}
           values={{ ...account }}
         />
       </Modal>

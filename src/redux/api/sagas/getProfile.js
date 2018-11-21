@@ -6,7 +6,7 @@ import { siteConfig } from "../../../config";
 
 export const getProfile = function*() {
   yield takeEvery(actions.GET_PROFILE, function*(action) {
-    console.log("action", action);
+    // console.log("action", action);
     const url = getPath("URL/GET_PROFILE", { id: action.payload.account_id });
     const fetchData = apiCall(url);
 
@@ -18,7 +18,7 @@ export const getProfile = function*() {
     } catch (err) {
       console.log("Network error: Fail loading profile!");
     }
-    console.log({ result });
+    // console.log({ result });
     //catch error message in response
     const { data, error, ex } = result;
 

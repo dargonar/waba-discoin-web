@@ -1,10 +1,10 @@
 const versionConfig={
   // // TUTI TESTNET
-  base_url          : 'http://127.0.0.1:8088/',        
-  asset_precision   : 5,
-  chain_id          : "1d70881f06a5d2ece91313a00f7eda5e1c7a7183957f3a6539deb4aa95237fe5",
-  admin_pub_key     : 'BTS5KqreoEjBrfuPC8G5ntzv3p1ByHe2HCyUMyDnvex7B42MYzo4u',  
-  language          : 'spanish',
+  // base_url          : 'http://127.0.0.1:8088/',        
+  // asset_precision   : 5,
+  // chain_id          : "1d70881f06a5d2ece91313a00f7eda5e1c7a7183957f3a6539deb4aa95237fe5",
+  // admin_pub_key     : 'BTS5KqreoEjBrfuPC8G5ntzv3p1ByHe2HCyUMyDnvex7B42MYzo4u',  
+  // language          : 'spanish',
   
   // // MAIN NET
   // base_url          : 'https://api.discoin.com.ar/',   
@@ -14,11 +14,11 @@ const versionConfig={
   // language          : 'spanish',
 
   // DEV/PRIVATE TESTNET
-  // base_url          : 'https://devapi.discoin.com.ar/',
-  // asset_precision   : 2,
-  // chain_id          : 'bde617520673d18e67db5d7060ca2740f80e28093519c30176044c8d4a227e73',
-  // admin_pub_key     : 'BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk',
-  // language          : 'english'
+  base_url          : 'https://devapi.discoin.com.ar/',
+  asset_precision   : 2,
+  chain_id          : 'bde617520673d18e67db5d7060ca2740f80e28093519c30176044c8d4a227e73',
+  admin_pub_key     : 'BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk',
+  language          : 'english'
 }
 
 const siteConfig = {
