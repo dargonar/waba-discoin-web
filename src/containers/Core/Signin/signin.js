@@ -73,8 +73,6 @@ class SignIn extends Component {
 
   componentWillMount() {
     this.props.getCategoriesList();
-    console.log(" --- signin::componentWillMount:: Forced cleaning of the local storege");
-    window.localStorage.clear();
   }
 
   handleLogin = () => {
