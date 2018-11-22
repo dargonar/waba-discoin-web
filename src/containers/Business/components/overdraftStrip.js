@@ -8,6 +8,8 @@ import IntlMessage from "../../../components/utility/intlMessages";
 import actions from "../../../redux/api/actions";
 import appActions from "../../../redux/app/actions";
 import { currency } from "../../../config";
+import { hasOverdraft, getOverdraft } from "../../../redux/api/selectors/business.selectors";
+import { key } from "bitsharesjs";
 
 class OverdraftStrip extends Component {
   constructor(props) {
@@ -29,10 +31,8 @@ class OverdraftStrip extends Component {
   }
 
   render() {
-    const hasOverdraft =
-      this.props.business !== null && this.props.business.balances !== null && this.props.business.balances.ready_to_access > 0;
-
-    return !hasOverdraft && this.props.ignoreOverdraft ? (
+    const { hasOverdraft, readyToAccess, ignoreOverdraft } = this.props;
+    return hasOverdraft && !ignoreOverdraft ? (
       // return !this.props.ignoreOverdraft ? ( //  <--- for debug
       <div>
         <Modal
@@ -54,7 +54,7 @@ class OverdraftStrip extends Component {
               defaultMessage={`You have a {symbol}{value} credit available. You want to take it?`}
               values={{
                 symbol: currency.symbol,
-                value: Number(this.props.business.balances.ready_to_access).toLocaleString()
+                value: Number(readyToAccess).toLocaleString()
               }}
             />
           }
@@ -79,7 +79,8 @@ class OverdraftStrip extends Component {
 export default connect(
   state => ({
     ignoreOverdraft: state.App.toJS().ignoreOverdraft,
-    business: state.Api.business
+    hasOverdraft: hasOverdraft(state),
+    readyToAccess: getOverdraft(state) || 0
   }),
   dispatch => ({
     toggleOverdraft: () => dispatch(appActions.toggleOverdraft()),
