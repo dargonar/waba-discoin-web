@@ -89,7 +89,7 @@ export class Dashboard extends Component {
       <div>
         <Row type="flex">
           <Col className="col">
-            <span class="label">Monto de la factura</span>
+            <span className="label">Monto de la factura</span>
           </Col>
         </Row>
         <Row justify="start" type="flex" flexDirection={Row} className="flexRow input-bill-container">
