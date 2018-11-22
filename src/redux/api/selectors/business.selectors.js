@@ -19,3 +19,25 @@ export const balanceWarnings = (warnings = []) =>
       raw: warnings[key]
     };
   });
+
+export const todayName = () => {
+  const now = new Date();
+  const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+  return days[now.getDay()];
+};
+
+export const todaySchedule = (schedule = []) => {
+  const today = todayName();
+  let discount = schedule.find(function(dis) {
+    return dis.date === today;
+  });
+  return {
+    discount: 0,
+    reward: 0,
+    ...discount
+  };
+};
+
+export const todayDiscount = (schedule = []) => todaySchedule(schedule).discount;
+
+export const todayReward = (schedule = []) => todaySchedule(schedule).reward;

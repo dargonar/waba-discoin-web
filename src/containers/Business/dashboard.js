@@ -3,9 +3,8 @@ import LayoutContentWrapper from "../../components/utility/layoutWrapper";
 import PageHeader from "../../components/utility/pageHeader";
 import IsoWidgetsWrapper from "../../components/utility/widgets-wrapper";
 import PageLoading from "../../components/pageLoading";
-import { Modal, Col, Row } from "antd";
+import { Col, Row } from "antd";
 import basicStyle from "../../config/basicStyle";
-import { StripMessage } from "../../components/uielements/stripMessage";
 import BalanceSticker from "../../components/balance-sticker/balance-sticker";
 import RatingSticker from "../../components/rating-sticker/rating-sticker";
 import IntlMessage from "../../components/utility/intlMessages";
@@ -16,7 +15,14 @@ import { push } from "react-router-redux";
 import OverdraftStrip from "./components/overdraftStrip";
 
 import { currency } from "../../config";
-import { balanceRatio, balanceWarnings, isBusiness, isConfiguration } from "../../redux/api/selectors/business.selectors";
+import {
+  balanceRatio,
+  balanceWarnings,
+  isBusiness,
+  isConfiguration,
+  todayDiscount,
+  todayReward
+} from "../../redux/api/selectors/business.selectors";
 
 export class Dashboard extends Component {
   constructor(props) {
@@ -32,34 +38,6 @@ export class Dashboard extends Component {
   componentWillMount() {
     this.props.fetchProfile();
     this.props.fetchConfiguration();
-  }
-
-  getDay() {
-    const now = new Date();
-    const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-    return days[now.getDay()];
-  }
-
-  getTodayDiscount() {
-    return this.getTodayRate("discount");
-  }
-  getTodayReward() {
-    return this.getTodayRate("reward");
-  }
-
-  getTodayRate(discount_reward) {
-    const today = this.getDay();
-    if (this.props.api.schedule === null) {
-      console.log(" -- Refund:componentWillMount() -- ");
-      this.props.getSchedule();
-      return;
-    }
-    let discount = this.props.api.schedule.find(function(dis) {
-      return dis.date === today;
-    });
-    //Check id discount is set
-
-    return discount_reward === "discount" ? discount.discount : discount.reward; //? discount : { discount: 0, reward: 0 };
   }
 
   renderContent() {
@@ -127,7 +105,7 @@ export class Dashboard extends Component {
         <Col md={6} sm={12} xs={24} style={colStyle} onClick={this.onPercentageClick}>
           <IsoWidgetsWrapper>
             <BalanceSticker
-              amount={this.getTodayDiscount()}
+              amount={this.props.todayDiscount}
               percentage={true}
               text={<IntlMessage defaultMessage="Reward & Discount" id="dashboard.todayDiscount" />}
               fontColor="#1C222C"
@@ -139,7 +117,7 @@ export class Dashboard extends Component {
         <Col md={6} sm={12} xs={24} style={colStyle} onClick={this.onPercentageClick}>
           <IsoWidgetsWrapper>
             <BalanceSticker
-              amount={this.getTodayReward()}
+              amount={this.props.todayReward}
               percentage={true}
               text={<IntlMessage defaultMessage="Today reward %" id="dashboard.todayReward" />}
               fontColor="#1C222C"
@@ -181,6 +159,8 @@ export class Dashboard extends Component {
 const mapStateToProps = state => ({
   balanceRatio: balanceRatio(state.Api.business),
   isReady: isBusiness(state.Api.business) && isConfiguration(state.Api.configuration) && !state.Api.loading,
+  todayDiscount: todayDiscount(state.Api.schedule || []),
+  todayReward: todayReward(state.Api.schedule || []),
   api: state.Api,
   account: state.Auth
 });
