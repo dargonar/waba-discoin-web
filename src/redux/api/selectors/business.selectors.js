@@ -14,6 +14,8 @@ export const hasBalances = state => typeof getBalances(state) !== "undefined";
 
 export const hasInitialCredit = state => hasBalances(state) && typeof getBalances(state).initial_credit !== "undefined";
 
+export const hasOverdraft = state => hasBalances(state) && typeof getBalances(state).ready_to_access !== "undefined";
+
 export const balanceRatio = state => (hasInitialCredit(state) ? (getBalances(state).balance * 100) / getBalances(state).initial_credit : 0);
 
 export const balanceWarnings = (warnings = []) =>
