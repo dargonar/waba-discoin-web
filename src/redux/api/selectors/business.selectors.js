@@ -1,3 +1,5 @@
+export const isConfiguration = configuration => typeof configuration !== "undefined" && configuration !== null;
+
 export const isBusiness = business => typeof business !== "undefined" && business !== null;
 
 export const hasBalances = business =>
@@ -8,3 +10,12 @@ export const hasInitialCredit = business =>
 
 export const balanceRatio = business =>
   hasInitialCredit(business) ? (business.balances.balance * 100) / business.balances.initial_credit : 0;
+
+export const balanceWarnings = (warnings = []) =>
+  Object.keys(warnings).map(key => {
+    return {
+      value: warnings[key].amount,
+      color: warnings[key].color,
+      raw: warnings[key]
+    };
+  });
