@@ -1,8 +1,6 @@
-import React, { Component, Children } from "react";
-import LayoutContentWrapper from "../../components/utility/layoutWrapper";
-import PageHeader from "../../components/utility/pageHeader";
+import React, { Component } from "react";
+import { BasicPage } from "../../components/basicPage";
 import IsoWidgetsWrapper from "../../components/utility/widgets-wrapper";
-import PageLoading from "../../components/pageLoading";
 import { Col, Row } from "antd";
 import basicStyle from "../../config/basicStyle";
 import BalanceSticker from "../../components/balance-sticker/balance-sticker";
@@ -132,13 +130,9 @@ export class Dashboard extends Component {
 
   render() {
     return (
-      <LayoutContentWrapper>
-        <PageHeader>
-          <IntlMessage id="dashboard.dashboard" defaultMessage="Dashboard" />
-        </PageHeader>
-
-        {!this.props.isReady ? <PageLoading /> : this.renderContent()}
-      </LayoutContentWrapper>
+      <BasicPage title={<IntlMessage id="dashboard.dashboard" defaultMessage="Dashboard" />} loading={!this.props.isReady}>
+        {this.props.isReady ? this.renderContent() : false}
+      </BasicPage>
     );
   }
 }
