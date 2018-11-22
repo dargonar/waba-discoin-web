@@ -17,11 +17,13 @@ import OverdraftStrip from "./components/overdraftStrip";
 import { currency } from "../../config";
 import {
   balanceRatio,
-  balanceWarnings,
   isBusiness,
   isConfiguration,
   todayDiscount,
-  todayReward
+  todayReward,
+  hasBalances,
+  warnings,
+  rating
 } from "../../redux/api/selectors/business.selectors";
 
 export class Dashboard extends Component {
@@ -47,7 +49,7 @@ export class Dashboard extends Component {
         <Col md={6} sm={12} xs={24} style={colStyle}>
           <IsoWidgetsWrapper>
             <BalanceSticker
-              amount={this.props.api.business.balances.balance}
+              amount={this.props.balances.balance}
               text={
                 <IntlMessage
                   id="dashboard.balance"
@@ -67,7 +69,7 @@ export class Dashboard extends Component {
         <Col md={6} sm={12} xs={24} style={colStyle}>
           <IsoWidgetsWrapper>
             <BalanceSticker
-              amount={this.props.api.business.balances.initial_credit}
+              amount={this.props.balances.initial_credit}
               text={<IntlMessage defaultMessage="Initial Credit" id="dashboard.initialCredit" />}
               coin={currency.symbol}
               fontColor="#1C222C"
@@ -79,7 +81,7 @@ export class Dashboard extends Component {
         <Col md={6} sm={12} xs={24} style={colStyle}>
           <IsoWidgetsWrapper>
             <BalanceSticker
-              amount={this.props.api.business.balances.ready_to_access}
+              amount={this.props.balances.ready_to_access}
               text={<IntlMessage defaultMessage="Endorsed" id="dashboard.endorsed" />}
               coin={currency.symbol}
               fontColor="#1C222C"
@@ -94,7 +96,7 @@ export class Dashboard extends Component {
             <BalanceSticker
               amount={this.props.balanceRatio}
               text={<IntlMessage defaultMessage="Accepted / Received ratio" id="dashboard.acceptedRatio" />}
-              scale={balanceWarnings(this.props.api.configuration.warnings)}
+              scale={this.props.warnings}
               percentage={true}
               fontColor="#1C222C"
               bgColor="#fff"
@@ -128,15 +130,7 @@ export class Dashboard extends Component {
 
         <Col md={6} sm={12} xs={24} style={colStyle}>
           <IsoWidgetsWrapper>
-            <RatingSticker
-              rating={this.props.api.business.rating}
-              full={0}
-              stars={0}
-              text={0}
-              icon="user"
-              fontColor="#1C222C"
-              bgColor="#fff"
-            />
+            <RatingSticker rating={this.props.rating} full={0} stars={0} text={0} icon="user" fontColor="#1C222C" bgColor="#fff" />
           </IsoWidgetsWrapper>
         </Col>
       </Row>
@@ -157,21 +151,21 @@ export class Dashboard extends Component {
 }
 
 const mapStateToProps = state => ({
-  balanceRatio: balanceRatio(state.Api.business),
-  isReady: isBusiness(state.Api.business) && isConfiguration(state.Api.configuration) && !state.Api.loading,
-  todayDiscount: todayDiscount(state.Api.schedule || []),
-  todayReward: todayReward(state.Api.schedule || []),
-  api: state.Api,
-  account: state.Auth
+  balanceRatio: balanceRatio(state),
+  isReady: isBusiness(state) && isConfiguration(state) && !state.Api.loading,
+  todayDiscount: todayDiscount(state),
+  todayReward: todayReward(state),
+  balances: hasBalances(state) ? state.Api.business.balances : {},
+  rating: rating(state),
+  warnings: warnings(state)
 });
 
 const dispatchToProps = dispatch => ({
-  cleanMsg: bindActionCreators(actions.cleanMsg, dispatch),
   fetchProfile: bindActionCreators(actions.fetchProfile, dispatch),
-  goTo: url => dispatch(push(url)),
   fetchConfiguration: bindActionCreators(actions.fetchConfiguration, dispatch),
-  applyOverdraft: bindActionCreators(actions.applyOverdraft, dispatch),
-  getSchedule: bindActionCreators(actions.getSchedule, dispatch)
+  getSchedule: bindActionCreators(actions.getSchedule, dispatch),
+  cleanMsg: bindActionCreators(actions.cleanMsg, dispatch),
+  goTo: url => dispatch(push(url))
 });
 
 export default connect(
