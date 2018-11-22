@@ -1,49 +1,27 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { siteConfig } from "../../config.js";
-import Image from '../../image/logo.png';
+import Image from "../../image/logo.png";
 
 export default ({ collapsed }) => {
-  // <img src={process.env.PUBLIC_URL + '/images/logo/logo-c-04.png'} alt="" className="logoSidebarClosed" />
-  //<img src={process.env.PUBLIC_URL + '/images/logo/logo-c-04.png'} alt="" className="logoSidebarOpen" />
   return (
     <div className="isoLogoWrapper">
       {collapsed ? (
-        <div class="brandLogoContainer">
-          <span class="brandLogo">
+        <div className="brandLogoContainer">
+          <span className="brandLogo">
             <Link to="./">
-              <img alt="#" src={Image} height='25'/>
+              <img alt="#" src={Image} height="25" />
             </Link>
-          </span> 
+          </span>
         </div>
       ) : (
-      <div class="brandLogoContainer">
-        <img alt="#" src={Image} height='25'/> 
-        <h3>
-          <Link to="./">
-            {siteConfig.siteName}
-          </Link>
-        </h3>
-      </div>  
+        <div className="brandLogoContainer">
+          <img alt="#" src={Image} height="25" />
+          <h3>
+            <Link to="./">{siteConfig.siteName}</Link>
+          </h3>
+        </div>
       )}
     </div>
   );
-
-  // return (
-  //   <div className="isoLogoWrapper">
-  //     {collapsed ? (
-  //       <div>
-  //         <h3>
-  //           <Link to="./">
-  //             <i className={siteConfig.siteIcon} />
-  //           </Link>
-  //         </h3>
-  //       </div>
-  //     ) : (
-  //       <h3>
-  //         <Link to="./">{siteConfig.siteName}</Link>
-  //       </h3>
-  //     )}
-  //   </div>
-  // );
 };
