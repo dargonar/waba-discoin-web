@@ -16,6 +16,7 @@ import { push } from "react-router-redux";
 import OverdraftStrip from "./components/overdraftStrip";
 
 import { currency } from "../../config";
+import { balanceRatio } from "../../redux/api/selectors/business.selectors";
 
 export class Dashboard extends Component {
   constructor(props) {
@@ -34,16 +35,6 @@ export class Dashboard extends Component {
     this.props.fetchConfiguration();
   }
 
-  calcRatio() {
-    if (this.props.api.business === null || this.props.api.configuration === null) return 0;
-    if (this.props.api.business.balances.balance === null || this.props.api.business.balances.initial_credit === null) return 0;
-    if (isNaN(this.props.api.business.balances.balance) || isNaN(this.props.api.business.balances.initial_credit)) return 0;
-    if (Number(this.props.api.business.balances.initial_credit) === 0) return 0;
-    console.log(" RATIO::", this.props.api.business.balances.balance, this.props.api.business.balances.initial_credit);
-    return (this.props.api.business.balances.balance * 100) / this.props.api.business.balances.initial_credit;
-  }
-
-  // robado de refunds
   getDay() {
     const now = new Date();
     const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
@@ -74,7 +65,6 @@ export class Dashboard extends Component {
 
   renderContent() {
     const { rowStyle, colStyle } = basicStyle;
-    let _ratio = this.calcRatio();
     const getBalanceWarnings = warnings => {
       return Object.keys(warnings).map(key => {
         return {
@@ -136,7 +126,7 @@ export class Dashboard extends Component {
           <Col md={6} sm={12} xs={24} style={colStyle}>
             <IsoWidgetsWrapper>
               <BalanceSticker
-                amount={_ratio}
+                amount={this.props.balanceRatio}
                 text={<IntlMessage defaultMessage="Accepted / Received ratio" id="dashboard.acceptedRatio" />}
                 scale={getBalanceWarnings(this.props.api.configuration.warnings)}
                 percentage={true}
@@ -208,6 +198,7 @@ export class Dashboard extends Component {
 }
 
 const mapStateToProps = state => ({
+  balanceRatio: balanceRatio(state.Api.business),
   api: state.Api,
   account: state.Auth
 });
