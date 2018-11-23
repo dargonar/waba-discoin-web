@@ -25,6 +25,8 @@ const resize = (file, width, height, resizeMethod = "contain") => {
   height = Math.min(height, info.srcHeight);
 
   let trgRatio = width / height;
+  
+  console.log(' imageResize.js ------------------ TARGET', 'trgRatio: ', trgRatio , 'width:', width, 'height:', height);
 
   if (info.srcWidth > width || info.srcHeight > height) {
     // Image is bigger and needs rescaling
@@ -38,11 +40,13 @@ const resize = (file, width, height, resizeMethod = "contain") => {
       }
     } else if (resizeMethod === "contain") {
       // Method 'contain'
+      console.log(' imageResize.js ------------------ ', 'srcRatio: ', srcRatio , 'trgRatio:', trgRatio);
       if (srcRatio > trgRatio) {
         height = width / srcRatio;
       } else {
         width = height * srcRatio;
       }
+      console.log(' imageResize.js ------------------ ', 'height: ', height , 'width:', width);
     } else {
       throw new Error(`Unknown resizeMethod '${resizeMethod}'`);
     }
@@ -53,6 +57,8 @@ const resize = (file, width, height, resizeMethod = "contain") => {
 
   info.trgWidth = width;
   info.trgHeight = height;
+
+  console.log(' imageResize.js ------------------ ', 'info: ', JSON.stringify(info));
 
   return info;
 };

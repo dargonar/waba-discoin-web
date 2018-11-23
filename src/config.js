@@ -68,6 +68,9 @@ const apiConfig = {
   chain_id: versionConfig.chain_id,
   admin_pub_key : versionConfig.admin_pub_key,
 
+  img_logo_width: 300,
+  img_promotional_width: 700,
+
   version: "v3",
   urls: [
     { action: "URL/UPDATE_BUSINESS", path: "/dashboard/business/profile/:account_id/update" },

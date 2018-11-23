@@ -8,6 +8,8 @@ import PageLoading from "../../../components/pageLoading";
 
 import { Col, Row } from "antd";
 
+import { apiConfig } from "../../../config";
+
 import Button from "../../../components/uielements/button";
 import actions from "../../../redux/owner/actions";
 import apiActions from "../../../redux/api/actions";
@@ -638,6 +640,8 @@ class CreateStore extends Component {
                     fileChange={image => this.imageUpload(image, "logo")}
                     defaultImage={this.state.form.logo}
                     onError={data => this.imageUploadError(data, "logo")}
+                    width={apiConfig.img_logo_width}
+                    height={null}
                   />
                 </FormItem>
 
@@ -660,6 +664,8 @@ class CreateStore extends Component {
                     fileChange={image => this.imageUpload(image, "image")}
                     onError={data => this.imageUploadError(data, "logo")}
                     defaultImage={this.state.form.image}
+                    width={apiConfig.img_promotional_width}
+                    height={null}
                   />
                 </FormItem>
 

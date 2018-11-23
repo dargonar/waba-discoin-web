@@ -6,8 +6,8 @@ import IntlMessages from "../../../components/utility/intlMessages";
 import { createThumbnailFromUrl, isAllowed } from "../../../utils/imageResize";
 
 const DEFAULT = {
-  width: 200,
-  height: 200,
+  width: null,
+  height: null,
   allowed: ["image/png", "image/jpeg"]
 };
 
@@ -51,6 +51,7 @@ export class ImageUpload extends Component {
   }
 
   render() {
+      console.log(' -------------------------- ImageUpload!!', this.props.width, this.props.height);
     const props = {
       action: "/",
       fileList: this.state.file,
