@@ -10,10 +10,10 @@ import { injectIntl } from "react-intl";
 import Steps from "../../../../components/uielements/steps";
 import PageLoading from "../../../../components/pageLoading";
 import { ChainValidation } from "bitsharesjs";
-import { getPath } from "../../../../httpService";
 import { recoverAccountFromSeed } from "../../../../utils";
 import { connect } from "react-redux";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { cleanMnemonics , getPath } from "../../../../httpService";
 import bip39 from "bip39";
 
 const FormItem = Form.Item;
@@ -147,10 +147,12 @@ export class Register extends Component {
   }
 
   newSeed() {
+    
+
     this.setState({
       form: {
         ...this.state.form,
-        seed: bip39.generateMnemonic(null, null, bip39.wordlists.spanish)
+        seed: cleanMnemonics(bip39.generateMnemonic(null, null, bip39.wordlists.spanish))
       }
     });
   }
