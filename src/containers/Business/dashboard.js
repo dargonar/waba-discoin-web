@@ -13,22 +13,15 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import actions from "../../redux/api/actions";
 import { push } from "react-router-redux";
+import OverdraftStrip from "./components/overdraftStrip";
 
 import { currency } from "../../config";
 
 export class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      confirm_overdraft_visible: false,
-      ignoreOverdraft: false
-    };
+
     this.renderContent = this.renderContent.bind(this);
-    this.showApplyOverdraft = this.showApplyOverdraft.bind(this);
-
-    this.doApplyOverdraft = this.doApplyOverdraft.bind(this);
-    this.doCancelOverdraft = this.doCancelOverdraft.bind(this);
-
     this.onPercentageClick = this.onPercentageClick.bind(this);
   }
 
@@ -41,62 +34,19 @@ export class Dashboard extends Component {
     this.props.fetchConfiguration();
   }
 
-  showApplyOverdraft() {
-    // alert(' -- applyOverdraft clicked');
-    this.setState({ confirm_overdraft_visible: true });
-  }
-
-  doApplyOverdraft() {
-    // console.log(' --- dashboard', this.props.account);
-    // return;
-    this.setState({ confirm_overdraft_visible: false });
-    this.props.applyOverdraft();
-  }
-
-  doCancelOverdraft() {
-    this.setState({ confirm_overdraft_visible: false });
-  }
-
   calcRatio() {
-    if (
-      this.props.api.business === null ||
-      this.props.api.configuration === null
-    )
-      return 0;
-    if (
-      this.props.api.business.balances.balance === null ||
-      this.props.api.business.balances.initial_credit === null
-    )
-      return 0;
-    if (
-      isNaN(this.props.api.business.balances.balance) ||
-      isNaN(this.props.api.business.balances.initial_credit)
-    )
-      return 0;
+    if (this.props.api.business === null || this.props.api.configuration === null) return 0;
+    if (this.props.api.business.balances.balance === null || this.props.api.business.balances.initial_credit === null) return 0;
+    if (isNaN(this.props.api.business.balances.balance) || isNaN(this.props.api.business.balances.initial_credit)) return 0;
     if (Number(this.props.api.business.balances.initial_credit) === 0) return 0;
-    console.log(
-      " RATIO::",
-      this.props.api.business.balances.balance,
-      this.props.api.business.balances.initial_credit
-    );
-    return (
-      (this.props.api.business.balances.balance * 100) /
-      this.props.api.business.balances.initial_credit
-    );
+    console.log(" RATIO::", this.props.api.business.balances.balance, this.props.api.business.balances.initial_credit);
+    return (this.props.api.business.balances.balance * 100) / this.props.api.business.balances.initial_credit;
   }
 
   // robado de refunds
   getDay() {
     const now = new Date();
-    const days = [
-      "sunday",
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday"
-    ];
+    const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
     return days[now.getDay()];
   }
 
@@ -135,46 +85,7 @@ export class Dashboard extends Component {
       });
     };
 
-    const hasOverdraft =
-      this.props.api.business !== null &&
-      this.props.api.business.balances !== null &&
-      this.props.api.business.balances.ready_to_access > 0;
-
-    let button = null;
-    if (hasOverdraft && !this.state.ignoreOverdraft)
-      button = (
-        <StripMessage
-          visible={true}
-          type={"info"}
-          msg={
-            <IntlMessage
-              id={"dashboard.overdraftQuestion"}
-              defaultMessage={`You have a {symbol}{value} credit available. You want to take it?`}
-              values={{
-                symbol: currency.symbol,
-                value: Number(
-                  this.props.api.business.balances.ready_to_access
-                ).toLocaleString()
-              }}
-            />
-          }
-          actions={[
-            {
-              msg: <IntlMessage id="apply" defaultMessage="Apply" />,
-              onClick: () => this.showApplyOverdraft()
-            },
-            {
-              msg: <IntlMessage id="ignore" defaultMessage="Ignore" />,
-              onClick: () => this.setState({ ignoreOverdraft: true })
-            }
-          ]}
-        />
-      );
-
-    if (
-      this.props.api.business !== null &&
-      this.props.api.configuration !== null
-    ) {
+    if (this.props.api.business !== null && this.props.api.configuration !== null) {
       return (
         <Row style={rowStyle} gutter={0} justify="start">
           <Col md={6} sm={12} xs={24} style={colStyle}>
@@ -201,12 +112,7 @@ export class Dashboard extends Component {
             <IsoWidgetsWrapper>
               <BalanceSticker
                 amount={this.props.api.business.balances.initial_credit}
-                text={
-                  <IntlMessage
-                    defaultMessage="Initial Credit"
-                    id="dashboard.initialCredit"
-                  />
-                }
+                text={<IntlMessage defaultMessage="Initial Credit" id="dashboard.initialCredit" />}
                 coin={currency.symbol}
                 fontColor="#1C222C"
                 bgColor="#fff"
@@ -218,17 +124,12 @@ export class Dashboard extends Component {
             <IsoWidgetsWrapper>
               <BalanceSticker
                 amount={this.props.api.business.balances.ready_to_access}
-                text={
-                  <IntlMessage
-                    defaultMessage="Endorsed"
-                    id="dashboard.endorsed"
-                  />
-                }
+                text={<IntlMessage defaultMessage="Endorsed" id="dashboard.endorsed" />}
                 coin={currency.symbol}
                 fontColor="#1C222C"
                 bgColor="#fff"
               />
-              {button}
+              <OverdraftStrip />
             </IsoWidgetsWrapper>
           </Col>
 
@@ -236,15 +137,8 @@ export class Dashboard extends Component {
             <IsoWidgetsWrapper>
               <BalanceSticker
                 amount={_ratio}
-                text={
-                  <IntlMessage
-                    defaultMessage="Accepted / Received ratio"
-                    id="dashboard.acceptedRatio"
-                  />
-                }
-                scale={getBalanceWarnings(
-                  this.props.api.configuration.warnings
-                )}
+                text={<IntlMessage defaultMessage="Accepted / Received ratio" id="dashboard.acceptedRatio" />}
+                scale={getBalanceWarnings(this.props.api.configuration.warnings)}
                 percentage={true}
                 fontColor="#1C222C"
                 bgColor="#fff"
@@ -252,46 +146,24 @@ export class Dashboard extends Component {
             </IsoWidgetsWrapper>
           </Col>
 
-          <Col
-            md={6}
-            sm={12}
-            xs={24}
-            style={colStyle}
-            onClick={this.onPercentageClick}
-          >
+          <Col md={6} sm={12} xs={24} style={colStyle} onClick={this.onPercentageClick}>
             <IsoWidgetsWrapper>
               <BalanceSticker
                 amount={this.getTodayDiscount()}
                 percentage={true}
-                text={
-                  <IntlMessage
-                    defaultMessage="Reward & Discount"
-                    id="dashboard.todayDiscount"
-                  />
-                }
+                text={<IntlMessage defaultMessage="Reward & Discount" id="dashboard.todayDiscount" />}
                 fontColor="#1C222C"
                 bgColor="#fff"
               />
             </IsoWidgetsWrapper>
           </Col>
 
-          <Col
-            md={6}
-            sm={12}
-            xs={24}
-            style={colStyle}
-            onClick={this.onPercentageClick}
-          >
+          <Col md={6} sm={12} xs={24} style={colStyle} onClick={this.onPercentageClick}>
             <IsoWidgetsWrapper>
               <BalanceSticker
                 amount={this.getTodayReward()}
                 percentage={true}
-                text={
-                  <IntlMessage
-                    defaultMessage="Today reward %"
-                    id="dashboard.todayReward"
-                  />
-                }
+                text={<IntlMessage defaultMessage="Today reward %" id="dashboard.todayReward" />}
                 fontColor="#1C222C"
                 bgColor="#fff"
               />
@@ -325,28 +197,7 @@ export class Dashboard extends Component {
           <IntlMessage id="dashboard.dashboard" defaultMessage="Dashboard" />
         </PageHeader>
 
-        <Modal
-          visible={this.state.confirm_overdraft_visible}
-          title={
-            <IntlMessage
-              defaultMessage="Credit available"
-              id="dashboard.overdraftAvailable"
-            />
-          }
-          onOk={this.doApplyOverdraft}
-          onCancel={this.doCancelOverdraft}
-        >
-          <label>
-            <IntlMessage
-              id="dashboard.acceptAvailableOverdraft"
-              defaultMessage="Do you wish to accept the available overdraft?"
-            />
-          </label>
-        </Modal>
-
-        {this.props.api.loading !== false ||
-        this.props.api.business === null ||
-        this.props.api.configuration === null ? (
+        {this.props.api.loading !== false || this.props.api.business === null || this.props.api.configuration === null ? (
           <PageLoading />
         ) : (
           this.renderContent()

@@ -664,5 +664,8 @@
   "profile.avatar": "Avatar",
   "profile.avatar_hint": "1:1 aspect ratio",
   "profile.logo": "Logo",
-  "profile.logo_hint": "1:1 aspect ratio"
+  "profile.logo_hint": "1:1 aspect ratio",
+
+  "businessMain.transactions": "Transactions",
+  "businessMain.billTotalAmount":   "Total"
 }

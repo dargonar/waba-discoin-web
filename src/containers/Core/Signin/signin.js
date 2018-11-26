@@ -18,6 +18,9 @@ import IntlBox from "../LanguageSwitcher/withModal";
 
 import Image from "../../../image/logo.png";
 
+import { cleanMnemonics, getPath } from "../../../httpService";
+import bip39 from "bip39";
+
 const { login, loginFromLocal, cleanStorage, register } = authAction;
 
 class SignIn extends Component {
@@ -76,18 +79,23 @@ class SignIn extends Component {
   }
 
   handleLogin = () => {
-    // alert(this.state.words);
+    // let x = cleanMnemonics(bip39.generateMnemonic(null, null, bip39.wordlists.spanish));
+    // alert (x);
+    // return;
+
     if (this.state.remember && this.state.rememberKey === "") {
       message.warning(this.props.intl.messages["core.sessionPasswordWarning"] || "You must enter a session PIN");
       return;
     }
+
     this.props.login({
       account_name: this.state.account,
       is_brainkey: this.state.words.split(" ").length > 1,
       remember: this.state.remember,
       rememberKey: this.state.rememberKey,
       mnemonics: this.state.words,
-      just_registered_data: null
+      just_registered_data: null,
+      force_clear_storage: true
     });
   };
 

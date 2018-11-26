@@ -232,7 +232,7 @@ html[dir='rtl'] .dz-hidden-input {
 
 /*////////////////*//*Components*/
 
-.label{
+span.label span, .label{
   text-transform: uppercase;
   font-size: 10px;
   color: #ABABAB;

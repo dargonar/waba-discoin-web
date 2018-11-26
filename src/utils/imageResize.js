@@ -1,6 +1,6 @@
 //Extracted and adapted from Dropzone.js
 
-const resize = (file, width, height, resizeMethod) => {
+const resize = (file, width, height, resizeMethod = "contain") => {
   let info = {
     srcX: 0,
     srcY: 0,
@@ -25,6 +25,8 @@ const resize = (file, width, height, resizeMethod) => {
   height = Math.min(height, info.srcHeight);
 
   let trgRatio = width / height;
+  
+  console.log(' imageResize.js ------------------ TARGET', 'trgRatio: ', trgRatio , 'width:', width, 'height:', height);
 
   if (info.srcWidth > width || info.srcHeight > height) {
     // Image is bigger and needs rescaling
@@ -38,11 +40,13 @@ const resize = (file, width, height, resizeMethod) => {
       }
     } else if (resizeMethod === "contain") {
       // Method 'contain'
+      console.log(' imageResize.js ------------------ ', 'srcRatio: ', srcRatio , 'trgRatio:', trgRatio);
       if (srcRatio > trgRatio) {
         height = width / srcRatio;
       } else {
         width = height * srcRatio;
       }
+      console.log(' imageResize.js ------------------ ', 'height: ', height , 'width:', width);
     } else {
       throw new Error(`Unknown resizeMethod '${resizeMethod}'`);
     }
@@ -53,6 +57,8 @@ const resize = (file, width, height, resizeMethod) => {
 
   info.trgWidth = width;
   info.trgHeight = height;
+
+  console.log(' imageResize.js ------------------ ', 'info: ', JSON.stringify(info));
 
   return info;
 };
@@ -112,7 +118,7 @@ export const createThumbnailFromUrl = (file, width, height, callback) => {
       let canvas = document.createElement("canvas");
       let ctx = canvas.getContext("2d");
 
-      let resizeInfo = resize(file, width, height, "crop");
+      let resizeInfo = resize(file, width, height);
 
       canvas.width = resizeInfo.trgWidth;
       canvas.height = resizeInfo.trgHeight;
@@ -148,10 +154,7 @@ export const createThumbnailFromUrl = (file, width, height, callback) => {
   return fileReader.readAsDataURL(file);
 };
 
-export const getMimetype = base64file =>
-  base64file.match(/[^:]\w+\/[\w-+\d.]+(?=;|,)/)[0];
+export const getMimetype = base64file => base64file.match(/[^:]\w+\/[\w-+\d.]+(?=;|,)/)[0];
 
 export const isAllowed = (base64file, allowedTypes) =>
-  allowedTypes.length === 0
-    ? true
-    : allowedTypes.indexOf(getMimetype(base64file)) !== -1;
+  allowedTypes.length === 0 ? true : allowedTypes.indexOf(getMimetype(base64file)) !== -1;
