@@ -79,9 +79,8 @@ class SignIn extends Component {
   }
 
   handleLogin = () => {
-    // let x = cleanMnemonics(bip39.generateMnemonic(null, null, bip39.wordlists.spanish));
-    // alert (x);
-    // return;
+    //Clean  local storage if some
+    window.localStorage.clear();
 
     if (this.state.remember && this.state.rememberKey === "") {
       message.warning(this.props.intl.messages["core.sessionPasswordWarning"] || "You must enter a session PIN");
