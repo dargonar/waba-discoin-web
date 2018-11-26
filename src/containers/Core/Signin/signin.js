@@ -89,7 +89,7 @@ class SignIn extends Component {
 
     this.props.login({
       account_name: this.state.account,
-      is_brainkey: this.state.words.split(" ").length > 1,
+      is_brainkey: (this.state.words || "").split(" ").length > 1,
       remember: this.state.remember,
       rememberKey: this.state.rememberKey,
       mnemonics: this.state.words,
