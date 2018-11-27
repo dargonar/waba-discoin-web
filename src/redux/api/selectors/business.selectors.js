@@ -12,13 +12,14 @@ export const isConfiguration = state => getConfiguration(state) !== null;
 export const getBalances = state => get(state, "Api.business.balances");
 export const hasBalances = state => typeof getBalances(state) !== "undefined";
 
-export const hasInitialCredit = state => {
-  const balances = getBalances(balances);
-  return hasBalances(state) && typeof balances.initial_credit !== "undefined" && balances.initial_credit > 0;
-};
-
 export const getOverdraft = state => get(state, "Api.business.balances.ready_to_access");
 export const hasOverdraft = state => typeof getOverdraft(state) !== "undefined";
+
+export const hasInitialCredit = state => {
+  if (!hasBalances(state)) return false;
+  const readyToAccess = getOverdraft(state);
+  return typeof readyToAccess !== "undefined" && readyToAccess > 0;
+};
 
 export const balanceRatio = state => (hasInitialCredit(state) ? (getBalances(state).balance * 100) / getBalances(state).initial_credit : 0);
 
