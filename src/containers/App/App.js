@@ -19,6 +19,7 @@ import AppHolder from "./commonStyle";
 import "./global.css";
 import { Icon, Button, Row, Col } from "antd";
 import IntlMessages from "../../components/utility/intlMessages";
+import AskUserModal from "../../components/askUserModal";
 const { Content, Footer } = Layout;
 const { logout } = authAction;
 const { toggleAll, togglePasswordBox } = appActions;
@@ -30,10 +31,7 @@ export class App extends Component {
     const currentAppLocale = AppLocale[locale];
     return (
       <LocaleProvider locale={currentAppLocale.antd}>
-        <IntlProvider
-          locale={currentAppLocale.locale}
-          messages={currentAppLocale.messages}
-        >
+        <IntlProvider locale={currentAppLocale.locale} messages={currentAppLocale.messages}>
           <ThemeProvider theme={themes[themeConfig.theme]}>
             <AppHolder>
               <Layout style={{ height: "100vh" }}>
@@ -76,32 +74,21 @@ export class App extends Component {
                             <Icon type="warning" />
                             <strong>
                               {" "}
-                              <IntlMessages
-                                defaultMessage="Your keys are encrypted"
-                                id="localLogin.keysEncryptedTitle"
-                              />
+                              <IntlMessages defaultMessage="Your keys are encrypted" id="localLogin.keysEncryptedTitle" />
                             </strong>
                             {": "}
-                            <IntlMessages
-                              defaultMessage="Please enter your PIN to unlock session"
-                              id="localLogin.keysEncryptedMessage"
-                            />
+                            <IntlMessages defaultMessage="Please enter your PIN to unlock session" id="localLogin.keysEncryptedMessage" />
                           </Col>
                           <Col md={4} style={{ textAlign: "right" }}>
-                            <Button
-                              type="danger"
-                              onClick={this.props.togglePasswordBox}
-                            >
-                              <IntlMessages
-                                defaultMessage="Unlock"
-                                id="localLogin.unlock"
-                              />
+                            <Button type="danger" onClick={this.props.togglePasswordBox}>
+                              <IntlMessages defaultMessage="Unlock" id="localLogin.unlock" />
                             </Button>
                           </Col>
                         </Row>
                       ) : (
                         false
                       )}
+                      {/*<AskUserModal />*/}
                       <LocalLogin />
                       <AppRouter url={url} />
                     </Content>

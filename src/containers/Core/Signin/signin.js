@@ -16,7 +16,11 @@ import { injectIntl } from "react-intl";
 import { siteConfig } from "../../../config";
 import IntlBox from "../LanguageSwitcher/withModal";
 
-import Image from '../../../image/logo.png';
+import Image from "../../../image/logo.png";
+
+import { cleanMnemonics , getPath } from "../../../httpService";
+import bip39 from "bip39";
+
 
 const { login, loginFromLocal, cleanStorage, register } = authAction;
 
@@ -46,7 +50,6 @@ class SignIn extends Component {
     this.switchActivation = this.switchActivation.bind(this);
   }
 
-
   switchActivation() {
     this.setState({ isIntlActivated: !this.state.isIntlActivated });
   }
@@ -74,37 +77,29 @@ class SignIn extends Component {
 
   componentWillMount() {
     this.props.getCategoriesList();
-    console.log(
-      " --- signin::componentWillMount::redirecting to referrer ???? "
-    );
-    console.log("SIGNED IN???", this.props.isLoggedIn);
-    if (this.props.isLoggedIn) {
-      console.log(
-        " --- this.props.isLoggedIn ---> signin::componentWillMount::redirecting to referrer"
-      );
-    }
-    console.log(
-      "-----signin::componentWillMount():",
-      JSON.stringify(this.props.inLocal)
-    );
+    console.log(" --- signin::componentWillMount:: Forced cleaning of the local storege");
+    // window.localStorage.clear();
   }
 
   handleLogin = () => {
-    // alert(this.state.words);
+    
+    // let x = cleanMnemonics(bip39.generateMnemonic(null, null, bip39.wordlists.spanish));
+    // alert (x);
+    // return;
+    
     if (this.state.remember && this.state.rememberKey === "") {
-      message.warning(
-        this.props.intl.messages["core.sessionPasswordWarning"] ||
-          "You must enter a session PIN"
-      );
+      message.warning(this.props.intl.messages["core.sessionPasswordWarning"] || "You must enter a session PIN");
       return;
     }
+
     this.props.login({
       account_name: this.state.account,
-      is_brainkey: this.state.words.split(' ').length>1,
+      is_brainkey: this.state.words.split(" ").length > 1,
       remember: this.state.remember,
       rememberKey: this.state.rememberKey,
       mnemonics: this.state.words,
-      just_registered_data: null
+      just_registered_data: null,
+      force_clear_storage: true
     });
   };
 
@@ -117,11 +112,7 @@ class SignIn extends Component {
 
     return (
       <SignInStyleWrapper className="isoSignInPage">
-        <LocalLogin
-          visible={this.props.inLocal && !this.state.ignoreLocal}
-          submit={this.loginLocal}
-          cancel={this.cancelLocal}
-        />
+        <LocalLogin visible={this.props.inLocal && !this.state.ignoreLocal} submit={this.loginLocal} cancel={this.cancelLocal} />
         <RegisterBox
           visible={this.state.register}
           cancel={() => {
@@ -131,8 +122,8 @@ class SignIn extends Component {
           loading={this.props.loading}
           error={this.props.error}
         />
-        
-        { /*<a className="isoDropdownLink" onClick={this.switchActivation}>
+
+        {/*<a className="isoDropdownLink" onClick={this.switchActivation}>
                   <IntlMessages id="intlselector" />
                 </a> */}
 
@@ -140,12 +131,8 @@ class SignIn extends Component {
           <div className="isoLoginContent">
             <div className="isoLogoWrapper">
               <Link to="/dashboard">
-                <img alt="#" src={Image} height='25px'/>
-                <IntlMessages
-                  id="page.signInTitle"
-                  defaultMessage={siteConfig.siteName}
-                />
-
+                <img alt="#" src={Image} height="25px" />
+                <IntlMessages id="page.signInTitle" defaultMessage={siteConfig.siteName} />
               </Link>
 
               {/* 
@@ -159,9 +146,7 @@ class SignIn extends Component {
               <div className="isoInputWrapper">
                 <Input
                   size="large"
-                  placeholder={
-                    this.props.intl.messages["core.username"] || "Username"
-                  }
+                  placeholder={this.props.intl.messages["core.username"] || "Username"}
                   value={this.state.account}
                   onChange={e => this.setState({ account: e.target.value })}
                 />
@@ -171,32 +156,22 @@ class SignIn extends Component {
                 <Input
                   size="large"
                   type="text"
-                  placeholder={
-                    this.props.intl.messages["core.password"] || "Password or mnemonics"
-                  }
+                  placeholder={this.props.intl.messages["core.password"] || "Password or mnemonics"}
                   value={this.state.words}
                   onKeyPress={this._handleKeyPress}
                   onChange={e => this.setState({ words: e.target.value })}
                 />
               </div>
               {this.state.remember ? (
-                <div
-                  className="isoInputWrapper"
-                  ref={this.sessionPasswordInput}
-                >
+                <div className="isoInputWrapper" ref={this.sessionPasswordInput}>
                   <Input
                     required={true}
                     size="large"
                     type="text"
-                    placeholder={
-                      this.props.intl.messages["core.sessionPassword"] ||
-                      "Session PIN"
-                    }
+                    placeholder={this.props.intl.messages["core.sessionPassword"] || "Session PIN"}
                     value={this.state.rememberKey}
                     onKeyPress={this._handleKeyPress}
-                    onChange={e =>
-                      this.setState({ rememberKey: e.target.value })
-                    }
+                    onChange={e => this.setState({ rememberKey: e.target.value })}
                   />
                 </div>
               ) : (
@@ -207,30 +182,13 @@ class SignIn extends Component {
                 <Checkbox
                   onChange={e => {
                     this.toggle("remember");
-                    setTimeout(
-                      () =>
-                        e.target.checked
-                          ? this.sessionPasswordInput.current.children[0].focus()
-                          : false,
-                      500
-                    );
+                    setTimeout(() => (e.target.checked ? this.sessionPasswordInput.current.children[0].focus() : false), 500);
                   }}
                 >
-                  <IntlMessages
-                    id="page.signInRememberMe"
-                    defaultMessage="Remember me"
-                  />
+                  <IntlMessages id="page.signInRememberMe" defaultMessage="Remember me" />
                 </Checkbox>
-                <Button
-                  type="primary"
-                  onClick={this.handleLogin}
-                  loading={this.props.isLoading}
-                  disabled={this.props.loading}
-                >
-                  <IntlMessages
-                    id="page.signInButton"
-                    defaultMessage="Sign In"
-                  />
+                <Button type="primary" onClick={this.handleLogin} loading={this.props.isLoading} disabled={this.props.loading}>
+                  <IntlMessages id="page.signInButton" defaultMessage="Sign In" />
                 </Button>
               </div>
 
@@ -241,20 +199,13 @@ class SignIn extends Component {
                     this.setState({ register: true });
                   }}
                 >
-                  <IntlMessages
-                    id="page.signUpButton"
-                    defaultMessage="Sign Up"
-                  />
+                  <IntlMessages id="page.signUpButton" defaultMessage="Sign Up" />
                 </Button>
               </div>
             </div>
           </div>
         </div>
-        {this.state.isIntlActivated ? (
-          <IntlBox switchActivation={this.switchActivation} />
-        ) : (
-          false
-        )}
+        {this.state.isIntlActivated ? <IntlBox switchActivation={this.switchActivation} /> : false}
       </SignInStyleWrapper>
     );
   }

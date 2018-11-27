@@ -696,7 +696,7 @@
   "subaccounts.changeAmount": "Cambiar límite diario",
   "subaccounts.withdrawn": "Retirado en este período",
   "subaccounts.allocateCredit": "Allocate pre-arranged credit",
-  "transactions.type" : "Tipo",
+  "transactions.type": "Tipo",
   "transactions.loading": "Cargando transacciones",
   "transactions.notFound": "No se encontraron transacciones.",
   "transactions.filter": "Filtrar",
@@ -813,6 +813,7 @@
   "mainBusiness.sendReward": "Recompensar cliente",
   "mainBusiness.acceptPayment": "Aceptar pago con descuento en {currency}",
   "businessMain.transactions": "Listado de transacciones",
+  "businessMain.billTotalAmount":   "Monto de la factura",
   "mainBusiness.reward": "Recompensar",
   "mainBusiness.discount": "Aceptar descuento",
   "bussinesMain.memo": "Memo",
@@ -831,9 +832,12 @@
   "qr.total": "Total a cobrar",
   "qr.totalCoins": "Total en {currency}",
   "qr.ticket": "Ticket/N° de factura:",
+  "qr.lessAmountTitle": "Pago parcial",
+  "qr.lessAmountDescription": "El usuario {user} envió {currency}{received} en lugar de los {currency}{expected} esperados.",
   "connectionStatus.times": "Sin conexión, intentos fallidos: {times}",
   "connectionStatus.fail": "Error en la conexión, intentamos {times} veces. {newLine} Prueba nuevamente luego de comprobar tu conexión a internet",
   "connectionStatus.retry": "Intentar de nuevo",
   "qr.discount": "Descuento",
-  "input.typeAndPressEnter" : "Presione enter para iniciar búsqueda..."
+  "input.typeAndPressEnter": "Presione enter para iniciar búsqueda...",
+  "userBox.message": "¿Desea continuar la sesión con el usuario {account} ({account_id})?"
 }

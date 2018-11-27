@@ -24,7 +24,7 @@ const versionConfig={
 const siteConfig = {
   siteName: "Discoin",
   siteIcon: "ion-flash",
-  footerText: "WABA.network ©2018 - v1.0.1",
+  footerText: "WABA.network ©2018 - v1.1.17",
   adminAccount: ["admin", "discoin-gov"] // (admin)-> PRIVATE TESNET || (discoin-dev) ->TUTI TESNET & MAIN NET
 };
 
@@ -67,6 +67,9 @@ const apiConfig = {
   interval_status_check_ms: 60000,
   chain_id: versionConfig.chain_id,
   admin_pub_key : versionConfig.admin_pub_key,
+
+  img_logo_width: 300,
+  img_promotional_width: 700,
 
   version: "v3",
   urls: [

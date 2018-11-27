@@ -89,7 +89,9 @@ export class Dashboard extends Component {
       <div>
         <Row type="flex">
           <Col className="col">
-            <span className="label">Monto de la factura</span>
+            <span class="label">
+              <IntlMessage id="businessMain.billTotalAmount" />
+            </span>
           </Col>
         </Row>
         <Row justify="start" type="flex" flexDirection={Row} className="flexRow input-bill-container">
@@ -173,14 +175,14 @@ export class Dashboard extends Component {
 }
 
 const getDiscount = discounts => {
-  console.log("----------------------");
-  console.log(
-    moment()
-      .format("dddd")
-      .toLowerCase(),
-    discounts,
-    getDiscount
-  );
+  // console.log("----------------------");
+  // console.log(
+  //   moment()
+  //     .format("dddd")
+  //     .toLowerCase(),
+  //   discounts,
+  //   getDiscount
+  // );
 
   return discounts
     .filter(

@@ -99,6 +99,45 @@ export const getPath = (action, parameters) => {
   return apiConfig.base + apiConfig.version + path;
 };
 
+export const cleanMnemonics = (mnemonics) => {
+    let m = mnemonics; //'reforma ligero chacal buceo fase esquí taza oca aleta cima intuir bloque'
+    let words = m.split(' ');
+    // let original_words = words;
+    let i, j;
+    let replace_indexes = [];
+    let vowels = ['á', 'é', 'í', 'ó', 'ú', 'ñ', 'ñ', 'ñ'];
+      //['á', 'é', 'í', 'ó', 'ú']
+      //['á', 'é', 'í', 'ó', 'u']
+    
+    for (i = 0; i < words.length; i++)
+      for (j = 0; j < vowels.length; j++)
+        if(words[i].toLowerCase().indexOf(vowels[j])!==-1 )
+        {
+          // console.log('--------------------')
+          // console.log('-- added word:')
+          // if(j>=5)
+          //   alert('enie!')
+          // if(j==5)
+          // {
+          //   console.log(' **************** cleanMnemonics  ñ !!!', words[i])
+          // }
+          // console.log('+++idx: ')
+          // console.log(i)
+          // console.log('+++vowel:')
+          // console.log(vowels[j]);
+          replace_indexes.push(i);
+          break;
+        }
+      
+    // console.log('-- replace_indexes: ')
+    // console.log(replace_indexes)
+
+    for (i = 0; i < replace_indexes.length; i++)
+      words[replace_indexes[i]] = 'reforma';
+
+    return words.join(' ');
+};
+
 // export const recoverAccountFromSeed = (mnemonics, is_brainkey) => {
 //   console.log("MNEMONICS:", mnemonics);
 //   var seed = bip39.mnemonicToSeedHex(mnemonics, "");

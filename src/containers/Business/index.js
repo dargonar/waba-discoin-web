@@ -8,7 +8,7 @@ import apiActions from "../../redux/api/actions";
 import businessMenu from "./businessMenu";
 import { bindActionCreators } from "redux";
 import { push } from "react-router-redux";
-import { hasOverdraft, isBusiness } from "../../redux/api/selectors/business.selectors";
+import { hasInitialCredit, isBusiness } from "../../redux/api/selectors/business.selectors";
 
 class LoadingCheckComponent extends React.Component {
   constructor(props) {
@@ -24,13 +24,13 @@ class LoadingCheckComponent extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { hasOverdraft, isBusiness } = newProps;
+    const { hasInitialCredit, isBusiness } = newProps;
     // Si ya tiene todo cargado y ademas tiene overfraft que redirecciones a home
-    if (isBusiness && hasOverdraft) {
+    if (isBusiness && hasInitialCredit) {
       this.props.goTo("/dashboard/business/home");
     }
     // Si ya tiene todo cargado y no tiene overfraft que redirecciones a main (cobrar)
-    else if (isBusiness && !hasOverdraft) {
+    else if (isBusiness && !hasInitialCredit) {
       this.props.goTo("/dashboard/business/main");
     }
   }
@@ -42,7 +42,7 @@ class LoadingCheckComponent extends React.Component {
 
 const LoadingCheck = connect(
   state => ({
-    hasOverdraft: hasOverdraft(state),
+    hasInitialCredit: hasInitialCredit(state),
     isBusiness: isBusiness(state),
     accountId: state.Auth.account_id
   }),

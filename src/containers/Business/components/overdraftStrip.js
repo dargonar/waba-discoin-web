@@ -31,8 +31,8 @@ class OverdraftStrip extends Component {
   }
 
   render() {
-    const { hasOverdraft, readyToAccess, ignoreOverdraft } = this.props;
-    return hasOverdraft && !ignoreOverdraft ? (
+    const { hasInitialCredit, readyToAccess, ignoreOverdraft } = this.props;
+    return hasInitialCredit && !ignoreOverdraft ? (
       // return !this.props.ignoreOverdraft ? ( //  <--- for debug
       <div>
         <Modal
@@ -79,7 +79,7 @@ class OverdraftStrip extends Component {
 export default connect(
   state => ({
     ignoreOverdraft: state.App.toJS().ignoreOverdraft,
-    hasOverdraft: hasInitialCredit(state),
+    hasInitialCredit: hasInitialCredit(state),
     readyToAccess: getOverdraft(state) || 0
   }),
   dispatch => ({

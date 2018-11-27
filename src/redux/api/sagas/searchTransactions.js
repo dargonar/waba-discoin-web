@@ -65,7 +65,7 @@ export const searchAllTransactions = function*() {
     });
 
     const { data, error } = yield call(fetchData);
-    console.log(" --- runRequestSuggest:", data);
+    // console.log(" --- runRequestSuggest:", data);
     if (data && !error && (!data.error || typeof data.error === "undefined")) {
       yield put({
         type: actions.SEARCH_TRANSACTIONS_SUCCESS,

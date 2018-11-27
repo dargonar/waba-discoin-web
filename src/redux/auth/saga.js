@@ -9,11 +9,26 @@ import { checkLS, writeLS, readLS, cleanLS } from "./sagas/secureLocalStorage";
 
 import { signMemo, recoverAccountFromSeed, formatAccountName } from "../../utils";
 
+function toUnicode(str) {
+  return str.split('').map(function (value, index, array) {
+    var temp = value.charCodeAt(0).toString(16).toUpperCase();
+    if (temp.length > 2) {
+      return '\\u' + temp;
+    }
+    return value;
+  }).join('');
+}
+
 export function* loginRequest() {
   
   // localStorage.removeItem("business_account");
   yield takeEvery(actions.LOGIN_REQUEST, function*(action) {
-    let { account_name, mnemonics, is_brainkey, remember, rememberKey, just_registered_data, from_storage_data } = action.payload;
+    let { account_name, mnemonics, is_brainkey, remember, rememberKey, just_registered_data, from_storage_data, force_clear_storage } = action.payload;
+
+    // console.log(' ---------------- RAW mnemonics:', mnemonics)
+    // if(mnemonics)
+    //   mnemonics = toUnicode(mnemonics);
+    // console.log('---------------- UNICODE? mnemonics:', mnemonics)
 
     yield put({
       type: actionsUI.GLOBAL_LOADING_START,
@@ -31,6 +46,9 @@ export function* loginRequest() {
     }
 
     let account = {};
+    if (typeof force_clear_storage !== "undefined" && force_clear_storage) {
+      localStorage.removeItem("business_account");
+    }
     if (typeof from_storage_data !== "undefined") {
       console.log("[redux/auth/saga]---- from_storage_data :", JSON.stringify(from_storage_data));
       // recien se registro
