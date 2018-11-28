@@ -50,7 +50,8 @@ const TransactionsCharts = ({ totals = [] }) => {
   const deltas = totals.map(day => ({
     name: day.key,
     DiscoinsSent: day.discount.coin,
-    DiscoinsReceived: day.refund.coin
+    DiscoinsReceived: day.refund.coin,
+    Total: day.txs
   }));
 
   return (
@@ -67,6 +68,7 @@ const TransactionsCharts = ({ totals = [] }) => {
           <Tooltip />
           <Line type="monotone" name={currency.symbol + " Sent"} dataKey="DiscoinsSent" stroke="blue" />
           <Line type="monotone" name={currency.symbol + " Received"} dataKey="DiscoinsReceived" stroke="red" />
+          <Line type="monotone" name={"Total transactions"} dataKey="Total" stroke="orange" />
         </LineChart>
       </ResponsiveContainer>
     </Col>

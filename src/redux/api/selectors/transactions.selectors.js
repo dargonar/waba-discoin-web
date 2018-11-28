@@ -72,6 +72,7 @@ export const txAccounts = (txs = []) =>
 const emptyWeek = [0, 1, 2, 3, 4, 5, 6].map(key => ({
   discount: { coin: 0, fiat: 0 },
   refund: { coin: 0, fiat: 0 },
+  txs: 0,
   date: moment()
     .subtract(key, "day")
     .format("YYYY-MM-DD")
@@ -79,7 +80,7 @@ const emptyWeek = [0, 1, 2, 3, 4, 5, 6].map(key => ({
 
 const txInRangeTotals = (arrTxs = {}) => {
   const arrTxsTotals = Object.keys(arrTxs)
-    .map(key => ({ [key]: { ...txTotals(arrTxs[key]), date: key } }))
+    .map(key => ({ [key]: { ...txTotals(arrTxs[key]), txs: arrTxs[key].length, date: key } }))
     .reduce((prev, act) => ({ ...prev, ...act }), {});
   return emptyWeek.map(day => ({
     ...day,
