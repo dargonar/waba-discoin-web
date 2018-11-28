@@ -16,16 +16,16 @@ import OverdraftStrip from "./components/overdraftStrip";
 import { currency } from "../../config";
 import {
   balanceRatio,
-  isBusiness,
-  isConfiguration,
   todayDiscount,
   todayReward,
+  getBalances,
+  isBusiness,
+  isConfiguration,
   warnings,
-  rating,
-  getBalances
+  rating
 } from "../../redux/api/selectors/business.selectors";
 
-import { txTodayTotals } from "../../redux/api/selectors/subAccounts.selectors";
+import { txTodayTotals } from "../../redux/api/selectors/transactions.selectors";
 
 let { rowStyle, colStyle } = basicStyle;
 
