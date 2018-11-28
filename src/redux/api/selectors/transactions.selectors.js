@@ -67,3 +67,22 @@ export const txAccounts = (txs = []) =>
   [
     ...new Set(txs.reduce((prev, tx) => [...prev, tx.from, tx.to], []).map(o => JSON.stringify(o))) //all accounts in string
   ].map(s => JSON.parse(s)); // parse and remove duplicated
+
+//Get weekly totals
+const txInRangeTotals = (arrTxs = {}) => Object.keys(arrTxs).map(key => ({ [key]: txTotals(arrTxs[key]) }));
+const formatDate = tx => moment(tx.date).format("YYYY-MM-DD");
+const txOnlyThisWeek = (txs = []) => txs.filter(tx => moment(tx.date).isSameOrAfter(moment().subtract(6, "day"), "day"));
+const txPerDay = (txs = []) =>
+  txs.reduce(
+    (prev, curr) => ({
+      ...prev,
+      ...{ [formatDate(curr)]: [...(prev[formatDate(curr)] || []), curr] }
+    }),
+    {}
+  );
+
+export const txWeekTotals = (txs = []) =>
+  Box(txs)
+    .map(txOnlyThisWeek)
+    .map(txPerDay)
+    .fold(txInRangeTotals);
