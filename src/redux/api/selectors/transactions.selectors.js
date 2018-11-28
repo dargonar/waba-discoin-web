@@ -69,7 +69,23 @@ export const txAccounts = (txs = []) =>
   ].map(s => JSON.parse(s)); // parse and remove duplicated
 
 //Get weekly totals
-const txInRangeTotals = (arrTxs = {}) => Object.keys(arrTxs).map(key => ({ [key]: txTotals(arrTxs[key]) }));
+const emptyWeek = [0, 1, 2, 3, 4, 5, 6].map(key => ({
+  discount: { coin: 0, fiat: 0 },
+  refund: { coin: 0, fiat: 0 },
+  date: moment()
+    .subtract(key, "day")
+    .format("YYYY-MM-DD")
+}));
+
+const txInRangeTotals = (arrTxs = {}) => {
+  const arrTxsTotals = Object.keys(arrTxs)
+    .map(key => ({ [key]: { ...txTotals(arrTxs[key]), date: key } }))
+    .reduce((prev, act) => ({ ...prev, ...act }), {});
+  return emptyWeek.map(day => ({
+    ...day,
+    ...(arrTxsTotals[day.date] ? arrTxsTotals[day.date] : {})
+  }));
+};
 const formatDate = tx => moment(tx.date).format("YYYY-MM-DD");
 const txOnlyThisWeek = (txs = []) => txs.filter(tx => moment(tx.date).isSameOrAfter(moment().subtract(6, "day"), "day"));
 const txPerDay = (txs = []) =>

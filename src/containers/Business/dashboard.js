@@ -12,6 +12,7 @@ import { bindActionCreators } from "redux";
 import actions from "../../redux/api/actions";
 import { push } from "react-router-redux";
 import OverdraftStrip from "./components/overdraftStrip";
+import { LineChart, ResponsiveContainer, XAxis, Line, Tooltip, CartesianGrid } from "recharts";
 
 import { currency } from "../../config";
 import {
@@ -25,7 +26,7 @@ import {
   rating
 } from "../../redux/api/selectors/business.selectors";
 
-import { txTodayTotals } from "../../redux/api/selectors/transactions.selectors";
+import { txTodayTotals, txWeekTotals } from "../../redux/api/selectors/transactions.selectors";
 
 let { rowStyle, colStyle } = basicStyle;
 
@@ -44,6 +45,33 @@ const Box = props => (
     </IsoWidgetsWrapper>
   </Col>
 );
+
+const TransactionsCharts = ({ totals = [] }) => {
+  const deltas = totals.map(day => ({
+    name: day.key,
+    DiscoinsSent: day.discount.coin,
+    DiscoinsReceived: day.refund.coin
+  }));
+
+  return (
+    <Col sm={24}>
+      <IsoWidgetsWrapper>
+        <PageHeader>
+          <IntlMessages defaultMessage="Discounts this week" id="discounts.chart" />
+        </PageHeader>
+      </IsoWidgetsWrapper>
+      <ResponsiveContainer width="100%" height={165}>
+        <LineChart data={deltas}>
+          <XAxis dataKey="name" />
+          <CartesianGrid strokeDasharray="3 3" />
+          <Tooltip />
+          <Line type="monotone" name={currency.symbol + " Sent"} dataKey="DiscoinsSent" stroke="blue" />
+          <Line type="monotone" name={currency.symbol + " Received"} dataKey="DiscoinsReceived" stroke="red" />
+        </LineChart>
+      </ResponsiveContainer>
+    </Col>
+  );
+};
 
 const TransactionsStickers = ({ txs }) => (
   <Col xs={24} md={24} style={colStyle}>
@@ -190,6 +218,7 @@ export class Dashboard extends Component {
           <RatingSticker rating={this.props.rating} full={0} stars={0} text={0} icon="user" fontColor="#1C222C" bgColor="#fff" />
         </ColWidget>
         <TransactionsStickers txs={this.props.txs} />
+        <TransactionsCharts totals={this.props.txWeekTotals} />
       </Row>
     );
   }
@@ -211,7 +240,8 @@ const mapStateToProps = state => ({
   balanceRatio: balanceRatio(state),
   rating: rating(state),
   warnings: warnings(state),
-  txs: txTodayTotals(state.Api.transactions || [])
+  txs: txTodayTotals(state.Api.transactions || []),
+  txWeekTotals: txWeekTotals(state.Api.transactions || [])
 });
 
 const dispatchToProps = dispatch => ({
