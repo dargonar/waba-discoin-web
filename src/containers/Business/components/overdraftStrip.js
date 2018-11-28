@@ -8,7 +8,7 @@ import IntlMessage from "../../../components/utility/intlMessages";
 import actions from "../../../redux/api/actions";
 import appActions from "../../../redux/app/actions";
 import { currency } from "../../../config";
-import { getOverdraft, hasInitialCredit } from "../../../redux/api/selectors/business.selectors";
+import { getOverdraft, hasInitialCredit, getInitialCredit } from "../../../redux/api/selectors/business.selectors";
 import { key } from "bitsharesjs";
 
 class OverdraftStrip extends Component {
@@ -80,7 +80,7 @@ export default connect(
   state => ({
     ignoreOverdraft: state.App.toJS().ignoreOverdraft,
     hasInitialCredit: hasInitialCredit(state),
-    readyToAccess: getOverdraft(state) || 0
+    readyToAccess: getInitialCredit(state) || 0
   }),
   dispatch => ({
     toggleOverdraft: () => dispatch(appActions.toggleOverdraft()),
