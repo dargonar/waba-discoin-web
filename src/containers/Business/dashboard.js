@@ -12,8 +12,8 @@ import { bindActionCreators } from "redux";
 import actions from "../../redux/api/actions";
 import { push } from "react-router-redux";
 import OverdraftStrip from "./components/overdraftStrip";
-import { LineChart, ResponsiveContainer, XAxis, Line, Tooltip, CartesianGrid } from "recharts";
-
+import { LineChart, ResponsiveContainer, XAxis, Legend, Line, Tooltip, CartesianGrid } from "recharts";
+import moment from "moment";
 import { currency } from "../../config";
 import {
   balanceRatio,
@@ -47,30 +47,48 @@ const Box = props => (
 );
 
 const TransactionsCharts = ({ totals = [] }) => {
-  const deltas = totals.map(day => ({
-    name: day.key,
-    DiscoinsSent: day.discount.coin,
-    DiscoinsReceived: day.refund.coin,
+  const deltas = totals.reverse().map(day => ({
+    name: moment(day.date).format("D/M/YY"),
+    DiscoinsSent: day.refund.coin,
+    DiscoinsReceived: day.discount.coin,
     Total: day.txs
   }));
 
   return (
     <Col sm={24}>
-      <IsoWidgetsWrapper>
-        <PageHeader>
-          <IntlMessages defaultMessage="Discounts this week" id="discounts.chart" />
-        </PageHeader>
-      </IsoWidgetsWrapper>
-      <ResponsiveContainer width="100%" height={165}>
-        <LineChart data={deltas}>
-          <XAxis dataKey="name" />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip />
-          <Line type="monotone" name={currency.symbol + " Sent"} dataKey="DiscoinsSent" stroke="blue" />
-          <Line type="monotone" name={currency.symbol + " Received"} dataKey="DiscoinsReceived" stroke="red" />
-          <Line type="monotone" name={"Total transactions"} dataKey="Total" stroke="orange" />
-        </LineChart>
-      </ResponsiveContainer>
+      <Col sm={24} md={12}>
+        <IsoWidgetsWrapper>
+          <PageHeader>
+            <IntlMessages defaultMessage="Discounts and Refunds this week" id="discounts.chart" />
+          </PageHeader>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={deltas}>
+              <XAxis dataKey="name" />
+              <CartesianGrid strokeDasharray="3 3" />
+              <Tooltip />
+              <Line type="monotone" strokeWidth="2" name={currency.symbol + " Sent"} dataKey="DiscoinsSent" stroke="blue" />
+              <Line type="monotone" strokeWidth="2" name={currency.symbol + " Received"} dataKey="DiscoinsReceived" stroke="red" />
+              <Legend />
+            </LineChart>
+          </ResponsiveContainer>
+        </IsoWidgetsWrapper>
+      </Col>
+      <Col sm={24} md={12}>
+        <IsoWidgetsWrapper>
+          <PageHeader>
+            <IntlMessages defaultMessage="Total transactions this week" id="discounts.chart" />
+          </PageHeader>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={deltas}>
+              <XAxis dataKey="name" />
+              <CartesianGrid strokeDasharray="3 3" />
+              <Tooltip />
+              <Line type="monotone" strokeWidth="2" name={"Total transactions"} dataKey="Total" stroke="orange" />
+              <Legend />
+            </LineChart>
+          </ResponsiveContainer>
+        </IsoWidgetsWrapper>
+      </Col>
     </Col>
   );
 };
