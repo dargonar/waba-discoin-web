@@ -15,7 +15,7 @@ export const hasBalances = state => typeof getBalances(state) !== "undefined";
 export const getOverdraft = state => get(state, "Api.business.balances.initial_credit");
 export const hasOverdraft = state => typeof getOverdraft(state) !== "undefined";
 
-export const getInitialCredit = state => get(state, "Api.business.ready_to_access");
+export const getInitialCredit = state => get(state, "Api.business.balances.ready_to_access");
 export const hasInitialCredit = state => {
   if (!hasBalances(state)) return false;
   const readyToAccess = getInitialCredit(state);
