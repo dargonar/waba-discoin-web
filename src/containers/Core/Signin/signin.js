@@ -17,9 +17,7 @@ import { siteConfig } from "../../../config";
 import IntlBox from "../LanguageSwitcher/withModal";
 
 import Image from "../../../image/logo.png";
-
-import { cleanMnemonics, getPath } from "../../../httpService";
-import bip39 from "bip39";
+import { Modal } from "antd";
 
 const { login, loginFromLocal, cleanStorage, register } = authAction;
 
@@ -38,11 +36,11 @@ class SignIn extends Component {
 
     this.sessionPasswordInput = React.createRef();
     this.handleLogin = this.handleLogin.bind(this);
+    this.handleRegister = this.handleRegister.bind(this);
     this.loginLocal = this.loginLocal.bind(this);
     this.toggle = this.toggle.bind(this);
     this.cancelLocal = this.cancelLocal.bind(this);
     this._handleKeyPress = this._handleKeyPress.bind(this);
-
     this.state = {
       isIntlActivated: false
     };
@@ -98,6 +96,42 @@ class SignIn extends Component {
     });
   };
 
+  handleRegister(data) {
+    let localPassword;
+    Modal.confirm({
+      title: "Contraseña de sesión",
+      content: (
+        <div>
+          <p>
+            {this.props.intl.messages["core.sessionPasswordInfo"] ||
+              `
+              You can save your account data in your browser for easy access. 
+              For them we need a session password. Please note that this password will never 
+              replace the one created during registration.
+              `}
+          </p>
+          <Input
+            onChange={e => (localPassword = e.target.value)}
+            placeholder={this.props.intl.messages["core.sessionPassword"] || "Session PIN"}
+          />
+        </div>
+      ),
+      onCancel: () => {
+        this.props.register(data);
+      },
+      onOk: () =>
+        new Promise((res, rej) => {
+          if (!localPassword || localPassword.length <= 0) {
+            message.warning(this.props.intl.messages["core.sessionPasswordWarning"] || "You must enter a session PIN");
+            rej();
+            return;
+          }
+          this.props.register(data, localPassword);
+          res();
+        })
+    });
+  }
+
   render() {
     const from = { pathname: `/dashboard/${this.props.userType}/` };
     if (this.props.isLoggedIn) {
@@ -113,7 +147,7 @@ class SignIn extends Component {
           cancel={() => {
             this.setState({ register: false });
           }}
-          submit={this.props.register}
+          submit={this.handleRegister}
           loading={this.props.loading}
           error={this.props.error}
         />

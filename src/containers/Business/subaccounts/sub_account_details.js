@@ -12,9 +12,9 @@ import actions from "../../../redux/api/actions";
 import Transacction from "../transactions/components/transactionBox";
 import Sticker from "../../../components/balance-sticker/balance-sticker";
 
+import { subAccount, isCurrentSubAccount } from "../../../redux/api/selectors/subAccounts.selectors";
+
 import {
-  subAccount,
-  isCurrentSubAccount,
   subAccountTxs,
   onlyAccountTx,
   txTotals,
@@ -22,10 +22,9 @@ import {
   txDiscounts,
   txRefunds,
   txBetween,
-  txYesterday,
-  txAccounts,
-  txTodayTotals
-} from "../../../redux/api/selectors/subAccounts.selectors";
+  txYesterday
+} from "../../../redux/api/selectors/transactions.selectors";
+
 import { Row, Col } from "antd";
 import { currency } from "../../../config";
 
@@ -64,9 +63,7 @@ class SubAccountPage extends Component {
   }
 
   componentWillMount() {
-    !this.props.isCurrentSubAccount(this.props.match.params.id)
-      ? this.props.fetchSubaccount(this.props.match.params.id)
-      : false;
+    !this.props.isCurrentSubAccount(this.props.match.params.id) ? this.props.fetchSubaccount(this.props.match.params.id) : false;
   }
 
   renderContent() {
@@ -85,29 +82,17 @@ class SubAccountPage extends Component {
 
     return (
       <div style={{ width: "100%" }}>
-        <AccountBox
-          name={this.props.subaccount.name}
-          dailyPermission={this.props.subaccount.amount}
-          account={this.props.subaccount}
-        />
+        <AccountBox name={this.props.subaccount.name} dailyPermission={this.props.subaccount.amount} account={this.props.subaccount} />
 
         <Row gutter={18} style={{ marginTop: "30px" }}>
           <Col xs={24} md={18}>
             <PageHeader>
-              <IntlMessages
-                defaultMessage="Subaccount transactions"
-                id="subaccountsDetails.transactions"
-              />
+              <IntlMessages defaultMessage="Subaccount transactions" id="subaccountsDetails.transactions" />
             </PageHeader>
             {this.props.transactions.length > 0 ? (
-              this.props.transactions.map((tx, key) => (
-                <Transacction transaction={tx} key={"tx-" + key} />
-              ))
+              this.props.transactions.map((tx, key) => <Transacction transaction={tx} key={"tx-" + key} />)
             ) : (
-              <p style={{ textAlign: "center" }}>
-                Esta subcuenta no ha realizado ninguna transacción por el
-                momento.
-              </p>
+              <p style={{ textAlign: "center" }}>Esta subcuenta no ha realizado ninguna transacción por el momento.</p>
             )}
           </Col>
 
@@ -119,13 +104,7 @@ class SubAccountPage extends Component {
             <Box
               amount={txTotals(this.props.transactions).discount.coin}
               text={<IntlMessages defaultMessage="Discounts" id="discounts" />}
-              subtext={
-                <IntlMessages
-                  defaultMessage="{currency} sent"
-                  id="discountsSent"
-                  values={{ currency: currency.plural }}
-                />
-              }
+              subtext={<IntlMessages defaultMessage="{currency} sent" id="discountsSent" values={{ currency: currency.plural }} />}
               bgColor="#fff"
               coin="DSC"
             />
@@ -165,16 +144,9 @@ class SubAccountPage extends Component {
     return (
       <LayoutContentWrapper>
         <PageHeader>
-          <IntlMessages
-            id="subaccountsDetails.title"
-            defaultMessage="Subaccount"
-          />
+          <IntlMessages id="subaccountsDetails.title" defaultMessage="Subaccount" />
         </PageHeader>
-        {!this.props.isCurrentSubAccount(this.props.match.params.id) ? (
-          <PageLoading />
-        ) : (
-          this.renderContent()
-        )}
+        {!this.props.isCurrentSubAccount(this.props.match.params.id) ? <PageLoading /> : this.renderContent()}
       </LayoutContentWrapper>
     );
   }
