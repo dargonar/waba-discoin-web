@@ -33,6 +33,10 @@ class LoadingCheckComponent extends React.Component {
     else if (isBusiness && !hasInitialCredit) {
       this.props.goTo("/dashboard/business/main");
     }
+    //Esta pantalla puede ser utilizada para explicar el sistema
+    else {
+      this.props.goTo("/dashboard/business/home");
+    }
   }
 
   render() {
