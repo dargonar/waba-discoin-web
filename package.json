@@ -8,6 +8,7 @@
     "bip39": "^2.5.0",
     "bitsharesjs": "^1.7.6",
     "bitsharesjs-ws": "^1.5.2",
+    "chai": "^4.2.0",
     "classnames": "^2.2.5",
     "clone": "^2.1.1",
     "hdkey": "^1.0.0",
