@@ -22,7 +22,7 @@ export const hasInitialCredit = state => {
   return typeof readyToAccess !== "undefined" && readyToAccess > 0;
 };
 
-export const balanceRatio = state => (hasOverdraft(state) ? (getBalances(state).balance * 100) / getOverdraft(state) : 0);
+export const balanceRatio = state => (hasOverdraft(state) ? (getBalances(state).balance * 100) / getOverdraft(state) || 0 : 0);
 
 export const balanceWarnings = (warnings = []) =>
   Object.keys(warnings).map(key => {
