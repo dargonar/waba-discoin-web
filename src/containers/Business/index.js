@@ -7,8 +7,8 @@ import actions from "../../redux/app/actions";
 import apiActions from "../../redux/api/actions";
 import businessMenu from "./businessMenu";
 import { bindActionCreators } from "redux";
-import { GlobalLoading } from "../../components/uielements/globalLoading";
 import { push } from "react-router-redux";
+import { hasInitialCredit, isBusiness } from "../../redux/api/selectors/business.selectors";
 
 class LoadingCheckComponent extends React.Component {
   constructor(props) {
@@ -17,25 +17,25 @@ class LoadingCheckComponent extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchProfile(this.props.accountId);
+    if (this.state.first) {
+      this.props.fetchProfile(this.props.accountId);
+      this.setState({ first: !this.state.first });
+    }
   }
 
   componentWillReceiveProps(newProps) {
-    const hasOverdraft =
-      (typeof newProps.business != 'undefined') && newProps.business !== null && newProps.business.balances !== null && newProps.business.balances.ready_to_access > 0;
-    const hasProfile = newProps.business !== null;
-
+    const { hasInitialCredit, isBusiness } = newProps;
     // Si ya tiene todo cargado y ademas tiene overfraft que redirecciones a home
-    if (hasProfile && hasOverdraft) {
+    if (isBusiness && hasInitialCredit) {
       this.props.goTo("/dashboard/business/home");
     }
     // Si ya tiene todo cargado y no tiene overfraft que redirecciones a main (cobrar)
-    else if (hasProfile && !hasOverdraft) {
+    else if (isBusiness && !hasInitialCredit) {
       this.props.goTo("/dashboard/business/main");
     }
-    //Si no tiene el profile cargado que continue esperadno hasta el proximo loop
+    //Esta pantalla puede ser utilizada para explicar el sistema
     else {
-      return;
+      this.props.goTo("/dashboard/business/home");
     }
   }
 
@@ -46,7 +46,8 @@ class LoadingCheckComponent extends React.Component {
 
 const LoadingCheck = connect(
   state => ({
-    business: state.Api.business,
+    hasInitialCredit: hasInitialCredit(state),
+    isBusiness: isBusiness(state),
     accountId: state.Auth.account_id
   }),
   dispatch => ({

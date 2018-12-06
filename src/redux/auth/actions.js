@@ -47,10 +47,10 @@ const actions = {
     dispatch({
       type: actions.CLEAR_MSG
     }),
-  register: data => dispatch =>
+  register: (data, localSession) => dispatch =>
     dispatch({
       type: actions.REGISTER,
-      payload: data
+      payload: { ...data, ...(localSession ? { remember: true, rememberKey: localSession } : { remember: false, rememberKey: "" }) }
     })
 };
 export default actions;

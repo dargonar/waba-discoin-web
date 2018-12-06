@@ -121,8 +121,10 @@ const actions = {
           account_id: getState().Auth.account_id
         }
       });
+      console.log('>>>>>>>>>>>>>>>> redux/api/actions.js::[#1]::', actions.SEARCH_ALL_TRANSACTIONS)
       return;
     }
+    console.log('>>>>>>>>>>>>>>>> redux/api/actions.js::[#2]::', actions.SEARCH_TRANSACTIONS)
     dispatch({
       type: actions.SEARCH_TRANSACTIONS,
       payload: {
