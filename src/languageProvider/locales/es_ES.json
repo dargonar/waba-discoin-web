@@ -841,5 +841,6 @@
   "input.typeAndPressEnter": "Presione enter para iniciar búsqueda...",
   "userBox.message": "¿Desea continuar la sesión con el usuario {account} ({account_id})?",
   "register.nameHelper": "Es el nombre de la empresa que se mostrará a los usuarios de la aplicación.",
-  "register.account_name.helper": "El nombre de cuenta se utilizará para acceder a la aplicación"
+  "register.account_name.helper": "El nombre de cuenta se utilizará para acceder a la aplicación",
+  "register.brainKey.helper": "La clave de palabras  se utiliza como fuente para todas las claves criptográficas generadas en la billetera. Si la tiene guardada en algun lugar seguro, podrá recuperar el acceso a sus cuentas y fondos (a menos que se hayan cambiado las claves de acceso). Es importante que la guarde antes de continuar."
 }
