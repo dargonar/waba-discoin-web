@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import IntlMessages from "../../../../components/utility/intlMessages";
-import { Modal, notification } from "antd";
-import { Tooltip } from "antd";
+import { Modal, notification, Tooltip, Icon } from "antd";
 import Form from "../../../../components/uielements/form";
 import Input from "../../../../components/uielements/input";
 import Button from "../../../../components/uielements/button";
@@ -167,11 +166,11 @@ export class Register extends Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 7 }
+        sm: { span: 8 }
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 17 }
+        sm: { span: 16 }
       }
     };
 
@@ -189,7 +188,24 @@ export class Register extends Component {
         title: <IntlMessages id="register.accountTitle" defaultMessage="Account" />,
         content: (
           <Form onSubmit={console.log}>
-            <FormItem {...formItemLayout} label={<IntlMessages id="register.name" defaultMessage="Name" />}>
+            <FormItem
+              {...formItemLayout}
+              label={
+                <span>
+                  <IntlMessages id="register.name" defaultMessage="Name" />{" "}
+                  <Tooltip
+                    title={
+                      <IntlMessages
+                        id="register.nameHelper"
+                        defaultMessage="This is the name of the business that will be shown to the users of the application."
+                      />
+                    }
+                  >
+                    <Icon type="question-circle-o" />
+                  </Tooltip>
+                </span>
+              }
+            >
               {getFieldDecorator("name", {
                 rules: [
                   {
@@ -218,7 +234,7 @@ export class Register extends Component {
                 rules: [
                   {
                     required: true,
-                    message: this.props.intl.messages["register.account_name.empty"]
+                    message: this.props.intl.messages["register.account_name.empty"] || "Account name is required"
                   },
                   {
                     validator: this.checkAccontName
@@ -256,7 +272,7 @@ export class Register extends Component {
                 rules: [
                   {
                     required: true,
-                    message: this.props.intl.messages["register.telephone.empty"]
+                    message: this.props.intl.messages["register.telephone.empty"] || "Telephone is required"
                   }
                 ]
               })(<Input name="telephone" id="telephone" />)}

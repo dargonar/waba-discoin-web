@@ -813,7 +813,7 @@
   "mainBusiness.sendReward": "Recompensar cliente",
   "mainBusiness.acceptPayment": "Aceptar pago con descuento en {currency}",
   "businessMain.transactions": "Listado de transacciones",
-  "businessMain.billTotalAmount":   "Monto de la factura",
+  "businessMain.billTotalAmount": "Monto de la factura",
   "mainBusiness.reward": "Recompensar",
   "mainBusiness.discount": "Aceptar descuento",
   "bussinesMain.memo": "Memo",
@@ -839,5 +839,6 @@
   "connectionStatus.retry": "Intentar de nuevo",
   "qr.discount": "Descuento",
   "input.typeAndPressEnter": "Presione enter para iniciar búsqueda...",
-  "userBox.message": "¿Desea continuar la sesión con el usuario {account} ({account_id})?"
+  "userBox.message": "¿Desea continuar la sesión con el usuario {account} ({account_id})?",
+  "register.nameHelper": "Es el nombre de la empresa que se mostrará a los usuarios de la aplicación."
 }
