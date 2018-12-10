@@ -229,7 +229,25 @@ export class Register extends Component {
               )}
             </FormItem>
 
-            <FormItem {...formItemLayout} label={<IntlMessages id="register.account_name" defaultMessage="Account name" />} hasFeedback>
+            <FormItem
+              {...formItemLayout}
+              label={
+                <span>
+                  <IntlMessages id="register.account_name" defaultMessage="Account name" />{" "}
+                  <Tooltip
+                    title={
+                      <IntlMessages
+                        defaultMessage={"The account name will be used to access the application"}
+                        id="register.account_name.helper"
+                      />
+                    }
+                  >
+                    <Icon type="question-circle-o" />
+                  </Tooltip>
+                </span>
+              }
+              hasFeedback
+            >
               {getFieldDecorator("account_name", {
                 rules: [
                   {

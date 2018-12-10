@@ -840,5 +840,6 @@
   "qr.discount": "Descuento",
   "input.typeAndPressEnter": "Presione enter para iniciar búsqueda...",
   "userBox.message": "¿Desea continuar la sesión con el usuario {account} ({account_id})?",
-  "register.nameHelper": "Es el nombre de la empresa que se mostrará a los usuarios de la aplicación."
+  "register.nameHelper": "Es el nombre de la empresa que se mostrará a los usuarios de la aplicación.",
+  "register.account_name.helper": "El nombre de cuenta se utilizará para acceder a la aplicación"
 }
