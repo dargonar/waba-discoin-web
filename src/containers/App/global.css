@@ -232,7 +232,7 @@ html[dir='rtl'] .dz-hidden-input {
 
 /*////////////////*//*Components*/
 
-.label{
+span.label span, .label{
   text-transform: uppercase;
   font-size: 10px;
   color: #ABABAB;
@@ -381,3 +381,12 @@ html[dir='rtl'] .dz-hidden-input {
 }
 
 .add_subaccount_box .ant-calendar-picker-large{width:100%!important;}
+
+span.hint span{
+  font-size: 11px;
+  color:#ccc;
+}
+span.hint2 span{
+  font-size: 13px;
+  color:#ccc;
+}

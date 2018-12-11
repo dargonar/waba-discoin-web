@@ -121,8 +121,10 @@ const actions = {
           account_id: getState().Auth.account_id
         }
       });
+      console.log(">>>>>>>>>>>>>>>> redux/api/actions.js::[#1]::", actions.SEARCH_ALL_TRANSACTIONS);
       return;
     }
+    console.log(">>>>>>>>>>>>>>>> redux/api/actions.js::[#2]::", actions.SEARCH_TRANSACTIONS);
     dispatch({
       type: actions.SEARCH_TRANSACTIONS,
       payload: {
@@ -170,15 +172,6 @@ const actions = {
     });
   },
 
-  fetchSubaccount: account_id => (dispatch, getState) => {
-    const subaccount = getState().Api.subaccount;
-    if (subaccount && subaccount.account_id === account_id) return true;
-    dispatch({
-      type: actions.GET_SUBACCOUNT,
-      payload: { account_id: account_id }
-    });
-  },
-
   checkStatus: () => (dispatch, getState) => {
     dispatch({
       type: appActions.CONNECTION_STATUS_TRY
@@ -192,6 +185,15 @@ const actions = {
     //force redirecto to home
     dispatch(push("/connectionError"));
     dispatch(push("/"));
+  },
+
+  fetchSubaccount: account_id => (dispatch, getState) => {
+    const subaccount = getState().Api.subaccount;
+    if (subaccount && subaccount.account_id === account_id) return true;
+    dispatch({
+      type: actions.GET_SUBACCOUNT,
+      payload: { account_id: account_id }
+    });
   },
 
   cleanMsg: () => dispatch =>

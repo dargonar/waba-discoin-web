@@ -8,6 +8,8 @@ import PageLoading from "../../../components/pageLoading";
 
 import { Col, Row } from "antd";
 
+import { apiConfig } from "../../../config";
+
 import Button from "../../../components/uielements/button";
 import actions from "../../../redux/owner/actions";
 import apiActions from "../../../redux/api/actions";
@@ -629,6 +631,7 @@ class CreateStore extends Component {
                   label={
                     <IntlMessages id="profile.logo" defaultMessage="Logo" />
                   }
+                  extra={<span className="hint2"><IntlMessages id="profile.logo_hint" defaultMessage="" /></span>}
                 >
                   {getFieldDecorator("logo", {
                     initialValue: this.state.form.logo
@@ -637,6 +640,8 @@ class CreateStore extends Component {
                     fileChange={image => this.imageUpload(image, "logo")}
                     defaultImage={this.state.form.logo}
                     onError={data => this.imageUploadError(data, "logo")}
+                    width={apiConfig.img_logo_width}
+                    height={null}
                   />
                 </FormItem>
 
@@ -648,8 +653,9 @@ class CreateStore extends Component {
                     <IntlMessages
                       id="profile.image"
                       defaultMessage="Imagen promocional"
-                    />
-                  }
+                    />}
+                  extra={<span className="hint2"><IntlMessages id="profile.image_hint" defaultMessage="" /></span>}
+                  
                 >
                   {getFieldDecorator("image", {
                     initialValue: this.state.form.image
@@ -658,8 +664,11 @@ class CreateStore extends Component {
                     fileChange={image => this.imageUpload(image, "image")}
                     onError={data => this.imageUploadError(data, "logo")}
                     defaultImage={this.state.form.image}
+                    width={apiConfig.img_promotional_width}
+                    height={null}
                   />
                 </FormItem>
+
               </Col>
             </Row>
 

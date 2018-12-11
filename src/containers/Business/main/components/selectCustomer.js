@@ -6,7 +6,8 @@ import { bindActionCreators } from "redux";
 import actions from "../../../../redux/api/actions";
 import HashImg from "../../../../components/hashImage";
 import { injectIntl } from "react-intl";
-import { Row, Col, Input } from "antd";
+import { Row, Col, Input, Tooltip } from "antd";
+import {FormattedMessage}  from 'react-intl';
 
 const InputSearch = Input.Search;
 
@@ -53,13 +54,15 @@ class CustomerPicker extends Component {
         footer={null}
         onCancel={this.props.onCancel}
       >
+
         <Row gutter={16} justify="start">
-          <Col xs={24} style={{ marginBottom: "15px" }}>
+         <Col xs={24} style={{ marginBottom: "15px" }}>
             <InputSearch
               placeholder={
                 this.props.intl.messages["refund.searchCustomer"] ||
                 "Search Customer"
               }
+              
               onKeyPress={this._handleKeyPress}
               value={this.state.searchValue}
               onSearch={() => this.props.searchAccount(this.state.searchValue)}
@@ -71,6 +74,7 @@ class CustomerPicker extends Component {
                 />
               }
             />
+            <span className="hint"><IntlMessages id="input.typeAndPressEnter" defaultMessage="" /></span>
           </Col>
           <Col xs={24}>
             <List

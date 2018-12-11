@@ -155,6 +155,8 @@ export default function apiReducer(state = initState, action) {
     case actions.SEARCH_TRANSACTIONS_SUCCESS:
       return {
         ...state,
+        // transactions: action.payload.txs,
+        transactionsLoading: false,
         transactions: action.payload.subaccount ? state.transactions : action.payload.txs,
         subaccount: {
           ...state.subaccount,

@@ -415,7 +415,7 @@ class DiscountsAndRewards extends Component {
             style={{ margin: "20px 0" }}
             onClick={this.submit}
           >
-            <IntlMessages id="profile.saveStore" defaultMessage="Save store" />
+            <IntlMessages id="profile.saveStore" defaultMessage="Save" />
           </Button>
         </Box>
       </Form>

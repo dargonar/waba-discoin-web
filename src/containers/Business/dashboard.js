@@ -1,373 +1,274 @@
 import React, { Component } from "react";
-import LayoutContentWrapper from "../../components/utility/layoutWrapper";
+import { BasicPage } from "../../components/basicPage";
 import PageHeader from "../../components/utility/pageHeader";
 import IsoWidgetsWrapper from "../../components/utility/widgets-wrapper";
-import PageLoading from "../../components/pageLoading";
-import { Modal, Col, Row } from "antd";
+import { Col, Row } from "antd";
 import basicStyle from "../../config/basicStyle";
-import { StripMessage } from "../../components/uielements/stripMessage";
 import BalanceSticker from "../../components/balance-sticker/balance-sticker";
 import RatingSticker from "../../components/rating-sticker/rating-sticker";
-import IntlMessage from "../../components/utility/intlMessages";
+import IntlMessages from "../../components/utility/intlMessages";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import actions from "../../redux/api/actions";
 import { push } from "react-router-redux";
-
+import OverdraftStrip from "./components/overdraftStrip";
+import { LineChart, ResponsiveContainer, XAxis, Legend, Line, Tooltip, CartesianGrid } from "recharts";
+import moment from "moment";
 import { currency } from "../../config";
+import {
+  balanceRatio,
+  todayDiscount,
+  todayReward,
+  getBalances,
+  isBusiness,
+  isConfiguration,
+  warnings,
+  rating
+} from "../../redux/api/selectors/business.selectors";
 
+import { txTodayTotals, txWeekTotals } from "../../redux/api/selectors/transactions.selectors";
+
+let { rowStyle, colStyle } = basicStyle;
+
+colStyle = { ...colStyle, marginBottom: "20px" };
+
+const ColWidget = ({ children }) => (
+  <Col md={6} sm={12} xs={24} style={colStyle}>
+    <IsoWidgetsWrapper>{children}</IsoWidgetsWrapper>
+  </Col>
+);
+
+const Box = props => (
+  <Col md={12} sm={24} style={colStyle}>
+    <IsoWidgetsWrapper>
+      <BalanceSticker {...props} />
+    </IsoWidgetsWrapper>
+  </Col>
+);
+
+const TransactionsCharts = ({ totals = [] }) => {
+  const deltas = totals.reverse().map(day => ({
+    name: moment(day.date).format("D/M/YY"),
+    DiscoinsSent: day.refund.coin,
+    DiscoinsReceived: day.discount.coin,
+    Total: day.txs
+  }));
+
+  return (
+    <Col sm={24}>
+      <Col sm={24} md={12}>
+        <IsoWidgetsWrapper>
+          <PageHeader>
+            <IntlMessages defaultMessage="Discounts and Refunds this week" id="discounts.chart" />
+          </PageHeader>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={deltas}>
+              <XAxis dataKey="name" />
+              <CartesianGrid strokeDasharray="3 3" />
+              <Tooltip />
+              <Line type="monotone" strokeWidth="2" name={currency.symbol + " Sent"} dataKey="DiscoinsSent" stroke="blue" />
+              <Line type="monotone" strokeWidth="2" name={currency.symbol + " Received"} dataKey="DiscoinsReceived" stroke="red" />
+              <Legend />
+            </LineChart>
+          </ResponsiveContainer>
+        </IsoWidgetsWrapper>
+      </Col>
+      <Col sm={24} md={12}>
+        <IsoWidgetsWrapper>
+          <PageHeader>
+            <IntlMessages defaultMessage="Total transactions this week" id="discounts.chart" />
+          </PageHeader>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={deltas}>
+              <XAxis dataKey="name" />
+              <CartesianGrid strokeDasharray="3 3" />
+              <Tooltip />
+              <Line type="monotone" strokeWidth="2" name={"Total transactions"} dataKey="Total" stroke="orange" />
+              <Legend />
+            </LineChart>
+          </ResponsiveContainer>
+        </IsoWidgetsWrapper>
+      </Col>
+    </Col>
+  );
+};
+
+const TransactionsStickers = ({ txs }) => (
+  <Col xs={24} md={24} style={colStyle}>
+    <Col xs={24} md={12} style={colStyle}>
+      <IsoWidgetsWrapper>
+        <PageHeader>
+          <IntlMessages defaultMessage="Discounts today" id="discounts.today" />
+        </PageHeader>
+      </IsoWidgetsWrapper>
+      <Box
+        amount={txs.discount.coin}
+        text={<IntlMessages defaultMessage="Discounts" id="discounts" />}
+        subtext={<IntlMessages defaultMessage="{currency} sent" id="discountsSent" values={{ currency: currency.plural }} />}
+        bgColor="#fff"
+        coin={currency.symbol}
+      />
+
+      <Box
+        amount={txs.discount.fiat}
+        text={<IntlMessages defaultMessage="Discounts" id="discounts" />}
+        subtext={<IntlMessages defaultMessage="Total invoiced" id="discounts.totalInvoiced" />}
+        bgColor="#fff"
+        coin={currency.fiat.symbol}
+      />
+    </Col>
+    <Col xs={24} md={12}>
+      <IsoWidgetsWrapper>
+        <PageHeader>
+          <IntlMessages defaultMessage="Refounds today" id="refund.refound.today" />
+        </PageHeader>
+      </IsoWidgetsWrapper>
+
+      <Box
+        amount={txs.refund.coin}
+        text={<IntlMessages defaultMessage="Refounds" id="refund.refound" />}
+        subtext={
+          <IntlMessages defaultMessage="Total accepted {currency}" id="refund.totalAccepted" values={{ currency: currency.plural }} />
+        }
+        bgColor="#fff"
+        coin={currency.symbol}
+      />
+
+      <Box
+        amount={txs.refund.fiat}
+        text={<IntlMessages defaultMessage="Refounds" id="refund.refound" />}
+        subtext={<IntlMessages defaultMessage="Total invoiced" id="discounts.totalInvoiced" />}
+        bgColor="#fff"
+        coin={currency.fiat.symbol}
+      />
+    </Col>
+  </Col>
+);
 export class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      confirm_overdraft_visible: false,
-      ignoreOverdraft: false
-    };
     this.renderContent = this.renderContent.bind(this);
-    this.showApplyOverdraft = this.showApplyOverdraft.bind(this);
-
-    this.doApplyOverdraft = this.doApplyOverdraft.bind(this);
-    this.doCancelOverdraft = this.doCancelOverdraft.bind(this);
-
     this.onPercentageClick = this.onPercentageClick.bind(this);
   }
 
   onPercentageClick() {
-    this.props.goTo("/dashboard/business/profile");
+    this.props.goTo("/dashboard/business/discount-and-rewards");
   }
 
   componentWillMount() {
     this.props.fetchProfile();
     this.props.fetchConfiguration();
-  }
-
-  showApplyOverdraft() {
-    // alert(' -- applyOverdraft clicked');
-    this.setState({ confirm_overdraft_visible: true });
-  }
-
-  doApplyOverdraft() {
-    // console.log(' --- dashboard', this.props.account);
-    // return;
-    this.setState({ confirm_overdraft_visible: false });
-    this.props.applyOverdraft();
-  }
-
-  doCancelOverdraft() {
-    this.setState({ confirm_overdraft_visible: false });
-  }
-
-  calcRatio() {
-    if (
-      this.props.api.business === null ||
-      this.props.api.configuration === null
-    )
-      return 0;
-    if (
-      this.props.api.business.balances.balance === null ||
-      this.props.api.business.balances.initial_credit === null
-    )
-      return 0;
-    if (
-      isNaN(this.props.api.business.balances.balance) ||
-      isNaN(this.props.api.business.balances.initial_credit)
-    )
-      return 0;
-    if (Number(this.props.api.business.balances.initial_credit) === 0) return 0;
-    console.log(
-      " RATIO::",
-      this.props.api.business.balances.balance,
-      this.props.api.business.balances.initial_credit
-    );
-    return (
-      (this.props.api.business.balances.balance * 100) /
-      this.props.api.business.balances.initial_credit
-    );
-  }
-
-  // robado de refunds
-  getDay() {
-    const now = new Date();
-    const days = [
-      "sunday",
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday"
-    ];
-    return days[now.getDay()];
-  }
-
-  getTodayDiscount() {
-    return this.getTodayRate("discount");
-  }
-  getTodayReward() {
-    return this.getTodayRate("reward");
-  }
-
-  getTodayRate(discount_reward) {
-    const today = this.getDay();
-    if (this.props.api.schedule === null) {
-      console.log(" -- Refund:componentWillMount() -- ");
-      this.props.getSchedule();
-      return;
-    }
-    let discount = this.props.api.schedule.find(function(dis) {
-      return dis.date === today;
-    });
-    //Check id discount is set
-
-    return discount_reward === "discount" ? discount.discount : discount.reward; //? discount : { discount: 0, reward: 0 };
+    this.props.fetchTx();
   }
 
   renderContent() {
-    const { rowStyle, colStyle } = basicStyle;
-    let _ratio = this.calcRatio();
-    const getBalanceWarnings = warnings => {
-      return Object.keys(warnings).map(key => {
-        return {
-          value: warnings[key].amount,
-          color: warnings[key].color,
-          raw: warnings[key]
-        };
-      });
-    };
-
-    const hasOverdraft =
-      this.props.api.business !== null &&
-      this.props.api.business.balances !== null &&
-      this.props.api.business.balances.ready_to_access > 0;
-
-    let button = null;
-    if (hasOverdraft && !this.state.ignoreOverdraft)
-      button = (
-        <StripMessage
-          visible={true}
-          type={"info"}
-          msg={
-            <IntlMessage
-              id={"dashboard.overdraftQuestion"}
-              defaultMessage={`You have a {symbol}{value} credit available. You want to take it?`}
-              values={{
-                symbol: currency.symbol,
-                value: Number(
-                  this.props.api.business.balances.ready_to_access
-                ).toLocaleString()
-              }}
-            />
-          }
-          actions={[
-            {
-              msg: <IntlMessage id="apply" defaultMessage="Apply" />,
-              onClick: () => this.showApplyOverdraft()
-            },
-            {
-              msg: <IntlMessage id="ignore" defaultMessage="Ignore" />,
-              onClick: () => this.setState({ ignoreOverdraft: true })
+    return (
+      <Row style={rowStyle} gutter={0} justify="start">
+        <ColWidget>
+          <BalanceSticker
+            amount={this.props.balances.balance}
+            text={
+              <IntlMessages
+                id="dashboard.balance"
+                values={{
+                  currency: currency.symbol
+                }}
+                defaultMessage={"{currency} Balance"}
+              />
             }
-          ]}
-        />
-      );
+            coin={currency.symbol}
+            fontColor="#1C222C"
+            bgColor="#fff"
+          />
+        </ColWidget>
 
-    if (
-      this.props.api.business !== null &&
-      this.props.api.configuration !== null
-    ) {
-      return (
-        <Row style={rowStyle} gutter={0} justify="start">
-          <Col md={6} sm={12} xs={24} style={colStyle}>
-            <IsoWidgetsWrapper>
-              <BalanceSticker
-                amount={this.props.api.business.balances.balance}
-                text={
-                  <IntlMessage
-                    id="dashboard.balance"
-                    values={{
-                      currency: currency.symbol
-                    }}
-                    defaultMessage={"{currency} Balance"}
-                  />
-                }
-                coin={currency.symbol}
-                fontColor="#1C222C"
-                bgColor="#fff"
-              />
-            </IsoWidgetsWrapper>
-          </Col>
+        <ColWidget>
+          <BalanceSticker
+            amount={this.props.balances.initial_credit}
+            text={<IntlMessages defaultMessage="Initial Credit" id="dashboard.initialCredit" />}
+            coin={currency.symbol}
+            fontColor="#1C222C"
+            bgColor="#fff"
+          />
+        </ColWidget>
 
-          <Col md={6} sm={12} xs={24} style={colStyle}>
-            <IsoWidgetsWrapper>
-              <BalanceSticker
-                amount={this.props.api.business.balances.initial_credit}
-                text={
-                  <IntlMessage
-                    defaultMessage="Initial Credit"
-                    id="dashboard.initialCredit"
-                  />
-                }
-                coin={currency.symbol}
-                fontColor="#1C222C"
-                bgColor="#fff"
-              />
-            </IsoWidgetsWrapper>
-          </Col>
+        <ColWidget>
+          <BalanceSticker
+            amount={this.props.balances.ready_to_access}
+            text={<IntlMessages defaultMessage="Endorsed" id="dashboard.endorsed" />}
+            coin={currency.symbol}
+            fontColor="#1C222C"
+            bgColor="#fff"
+          />
+          <OverdraftStrip />
+        </ColWidget>
 
-          <Col md={6} sm={12} xs={24} style={colStyle}>
-            <IsoWidgetsWrapper>
-              <BalanceSticker
-                amount={this.props.api.business.balances.ready_to_access}
-                text={
-                  <IntlMessage
-                    defaultMessage="Endorsed"
-                    id="dashboard.endorsed"
-                  />
-                }
-                coin={currency.symbol}
-                fontColor="#1C222C"
-                bgColor="#fff"
-              />
-              {button}
-            </IsoWidgetsWrapper>
-          </Col>
+        <ColWidget>
+          <BalanceSticker
+            amount={this.props.balanceRatio}
+            text={<IntlMessages defaultMessage="Accepted / Received ratio" id="dashboard.acceptedRatio" />}
+            scale={this.props.warnings}
+            percentage={true}
+            fontColor="#1C222C"
+            bgColor="#fff"
+          />
+        </ColWidget>
 
-          <Col md={6} sm={12} xs={24} style={colStyle}>
-            <IsoWidgetsWrapper>
-              <BalanceSticker
-                amount={_ratio}
-                text={
-                  <IntlMessage
-                    defaultMessage="Accepted / Received ratio"
-                    id="dashboard.acceptedRatio"
-                  />
-                }
-                scale={getBalanceWarnings(
-                  this.props.api.configuration.warnings
-                )}
-                percentage={true}
-                fontColor="#1C222C"
-                bgColor="#fff"
-              />
-            </IsoWidgetsWrapper>
-          </Col>
+        <ColWidget onClick={this.onPercentageClick}>
+          <BalanceSticker
+            amount={this.props.todayDiscount}
+            percentage={true}
+            text={<IntlMessages defaultMessage="Reward & Discount" id="dashboard.todayDiscount" />}
+            fontColor="#1C222C"
+            bgColor="#fff"
+          />
+        </ColWidget>
 
-          <Col
-            md={6}
-            sm={12}
-            xs={24}
-            style={colStyle}
-            onClick={this.onPercentageClick}
-          >
-            <IsoWidgetsWrapper>
-              <BalanceSticker
-                amount={this.getTodayDiscount()}
-                percentage={true}
-                text={
-                  <IntlMessage
-                    defaultMessage="Reward & Discount"
-                    id="dashboard.todayDiscount"
-                  />
-                }
-                fontColor="#1C222C"
-                bgColor="#fff"
-              />
-            </IsoWidgetsWrapper>
-          </Col>
+        <ColWidget onClick={this.onPercentageClick}>
+          <BalanceSticker
+            amount={this.props.todayReward}
+            percentage={true}
+            text={<IntlMessages defaultMessage="Today reward %" id="dashboard.todayReward" />}
+            fontColor="#1C222C"
+            bgColor="#fff"
+          />
+        </ColWidget>
 
-          <Col
-            md={6}
-            sm={12}
-            xs={24}
-            style={colStyle}
-            onClick={this.onPercentageClick}
-          >
-            <IsoWidgetsWrapper>
-              <BalanceSticker
-                amount={this.getTodayReward()}
-                percentage={true}
-                text={
-                  <IntlMessage
-                    defaultMessage="Today reward"
-                    id="dashboard.todayReward"
-                  />
-                }
-                fontColor="#1C222C"
-                bgColor="#fff"
-              />
-            </IsoWidgetsWrapper>
-          </Col>
-
-          <Col md={6} sm={12} xs={24} style={colStyle}>
-            <IsoWidgetsWrapper>
-              <RatingSticker
-                rating={this.props.api.business.rating}
-                full={0}
-                stars={0}
-                text={0}
-                icon="user"
-                fontColor="#1C222C"
-                bgColor="#fff"
-              />
-            </IsoWidgetsWrapper>
-          </Col>
-        </Row>
-      );
-    } else {
-      return false;
-    }
+        <ColWidget>
+          <RatingSticker rating={this.props.rating} full={0} stars={0} text={0} icon="user" fontColor="#1C222C" bgColor="#fff" />
+        </ColWidget>
+        <TransactionsStickers txs={this.props.txs} />
+        <TransactionsCharts totals={this.props.txWeekTotals} />
+      </Row>
+    );
   }
 
   render() {
     return (
-      <LayoutContentWrapper>
-        <PageHeader>
-          <IntlMessage id="dashboard.dashboard" defaultMessage="Dashboard" />
-        </PageHeader>
-
-        <Modal
-          visible={this.state.confirm_overdraft_visible}
-          title={
-            <IntlMessage
-              defaultMessage="Credit available"
-              id="dashboard.overdraftAvailable"
-            />
-          }
-          onOk={this.doApplyOverdraft}
-          onCancel={this.doCancelOverdraft}
-        >
-          <label>
-            <IntlMessage
-              id="dashboard.acceptAvailableOverdraft"
-              defaultMessage="Do you wish to accept the available overdraft?"
-            />
-          </label>
-        </Modal>
-
-        {this.props.api.loading !== false ||
-        this.props.api.business === null ||
-        this.props.api.configuration === null ? (
-          <PageLoading />
-        ) : (
-          this.renderContent()
-        )}
-      </LayoutContentWrapper>
+      <BasicPage title={<IntlMessages id="dashboard.dashboard" defaultMessage="Dashboard" />} loading={!this.props.isReady}>
+        {this.props.isReady ? this.renderContent() : false}
+      </BasicPage>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  api: state.Api,
-  account: state.Auth
+  isReady: isBusiness(state) && isConfiguration(state) && !state.Api.loading,
+  todayDiscount: todayDiscount(state),
+  todayReward: todayReward(state),
+  balances: getBalances(state),
+  balanceRatio: balanceRatio(state),
+  rating: rating(state),
+  warnings: warnings(state),
+  txs: txTodayTotals(state.Api.transactions || []),
+  txWeekTotals: txWeekTotals(state.Api.transactions || [])
 });
 
 const dispatchToProps = dispatch => ({
-  cleanMsg: bindActionCreators(actions.cleanMsg, dispatch),
   fetchProfile: bindActionCreators(actions.fetchProfile, dispatch),
-  goTo: url => dispatch(push(url)),
   fetchConfiguration: bindActionCreators(actions.fetchConfiguration, dispatch),
-  applyOverdraft: bindActionCreators(actions.applyOverdraft, dispatch),
-  getSchedule: bindActionCreators(actions.getSchedule, dispatch)
+  fetchTx: bindActionCreators(actions.searchTransactions, dispatch),
+  goTo: url => dispatch(push(url))
 });
 
 export default connect(

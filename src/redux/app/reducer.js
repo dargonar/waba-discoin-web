@@ -23,7 +23,8 @@ const initState = new Map({
   connectionStatus: {
     status: true,
     tryNumber: 0
-  }
+  },
+  ignoreOverdraft: false
 });
 
 export default function appReducer(state = initState, action) {
@@ -90,6 +91,8 @@ export default function appReducer(state = initState, action) {
         status: true,
         tryNumber: 0
       });
+    case actions.TOOGLE_OVERDRAFT_STRIP:
+      return state.set("ignoreOverdraft", !state.get("ignoreOverdraft"));
     default:
       return state;
   }
