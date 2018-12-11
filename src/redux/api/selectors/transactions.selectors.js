@@ -11,6 +11,10 @@ const Box = x => ({
 //Fists inject an accountId, and use the result in a filter function
 export const onlyAccountTx = account_id => tx => tx.from.id === account_id || tx.to.id === account_id;
 
+export const txOnlyFrom = (txs = []) => (id = "") => txs.filter(tx => tx.from.id === id);
+
+export const txOnlyTo = (txs = []) => (id = "") => txs.filter(tx => tx.to.id === id);
+
 export const getTranactions = state => get(state, "Api.subaccount.transactions", []);
 
 //List of subaccount transactions that match to user id

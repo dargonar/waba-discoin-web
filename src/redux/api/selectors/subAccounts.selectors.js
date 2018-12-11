@@ -14,7 +14,6 @@ export const subAccount = state => get(state, "Api.subaccount.data", {});
 //Subaccount id
 export const subAccountId = state => subAccount(state).id;
 
-//List of subaccount transactions that match to user id
-// Unless all has value true (false ad default)
-export const subAccountTxs = (state, all = false) =>
-  get(state, "Api.subaccount.transactions", []).filter(!all ? onlyAccountTx(accountId(state)) : () => true);
+//See if the subaccount in the store is the one we want.
+//Returns a function in which we must enter the subaccount id
+export const isCurrentSubAccount = state => subaccount_id => (subAccountId(state) === subaccount_id ? true : false);

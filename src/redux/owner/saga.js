@@ -213,10 +213,10 @@ function* getSubaccounts() {
       start: action.payload.start || "0"
     });
 
-    yield put({
-      type: actionsUI.GLOBAL_LOADING_START,
-      payload: { msg: "Cargando subcuenta(s)" }
-    });
+    // yield put({
+    //   type: actionsUI.GLOBAL_LOADING_START,
+    //   payload: { msg: "Cargando subcuenta(s)" }
+    // });
     const fetchData = apiCall(url);
     const { data } = yield call(fetchData);
     if (data && typeof data.error === "undefined") {
@@ -227,10 +227,10 @@ function* getSubaccounts() {
           subaccounts: data
         }
       });
-      yield put({ type: actionsUI.GLOBAL_LOADING_END });
+      // yield put({ type: actionsUI.GLOBAL_LOADING_END });
     } else {
       yield put({ type: actions.GET_SUBACCOUNTS_FAIL, payload: { error: data.error } });
-      yield put({ type: actionsUI.GLOBAL_LOADING_END });
+      // yield put({ type: actionsUI.GLOBAL_LOADING_END });
     }
   });
   // yield takeEvery(actions.FETCH_CONFIGURATION_SUBACCOUNTS, function*(action) {

@@ -3,7 +3,7 @@ import { Col } from "antd";
 import PageHeader from "../../../../components/utility/pageHeader";
 import IntlMessages from "../../../../components/utility/intlMessages";
 import Sticker from "../../../../components/balance-sticker/balance-sticker";
-import { txTotals } from "../../../../redux/api/selectors/subAccounts.selectors";
+import { txTotals } from "../../../../redux/api/selectors/transactions.selectors";
 import { currency } from "../../../../config";
 
 const Box = props => (

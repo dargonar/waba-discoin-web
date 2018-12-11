@@ -7,7 +7,7 @@ import {
   txYesterday,
   txOnlyFrom,
   txOnlyTo
-} from "../../../../redux/api/selectors/subAccounts.selectors";
+} from "../../../../redux/api/selectors/transactions.selectors";
 
 const filters = {
   //arg = "today" (Default) || "yesterday"
@@ -20,9 +20,9 @@ const filters = {
   user: ({ account_id, direction }) => txs => {
     switch (direction) {
       case true:
-        return txOnlyFrom(account_id, txs);
+        return txOnlyFrom(txs)(account_id);
       case false:
-        return txOnlyTo(account_id, txs);
+        return txOnlyTo(txs)(account_id);
       default:
         return txs.filter(onlyAccountTx(account_id));
     }

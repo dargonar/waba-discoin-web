@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Col, Switch, AutoComplete, DatePicker } from "antd";
 import moment from "moment";
-import { txAccounts } from "../../../../redux/api/selectors/subAccounts.selectors";
+import { txAccounts } from "../../../../redux/api/selectors/transactions.selectors";
 import { getFilter } from "../utils/txFilter";
 
 export class FilterBox extends Component {
