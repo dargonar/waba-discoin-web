@@ -132,6 +132,22 @@ export class TxFilterModal extends Component {
     const filterArgs = filterType =>
       filters.filter(x => x.filter === filterType).reduce((prev, act) => (act.filter === filterType ? act.arg : {}), {});
 
+    const selectUser = value => {
+      this.filterChange({
+        filters: [
+          ...filters.filter(filter => filter.filter !== "user"),
+          {
+            filter: "user",
+            arg: {
+              account_id: value,
+              account_name: txAccounts(transactions)
+                .filter(account => account.id === value)
+                .reduce((p, a) => a, {}).name
+            }
+          }
+        ]
+      });
+    };
     return (
       <Modal
         visible={visible}
@@ -143,17 +159,9 @@ export class TxFilterModal extends Component {
           <AutoComplete
             placeholder={<IntlMessages id="account" defaultMessage="Account" />}
             dataSource={txAccounts(transactions).map(account => ({ text: account.name, value: account.id }))}
-            onSelect={value => {
-              this.filterChange({
-                filters: [
-                  ...filters.filter(filter => filter.filter !== "user"),
-                  {
-                    filter: "user",
-                    arg: { account_id: value, account_name: txAccounts(transactions).filter(account => account.id === value)[0].name }
-                  }
-                ]
-              });
-            }}
+            value={filterArgs("user").account_id}
+            onChange={selectUser}
+            onSelect={selectUser}
           />
         </FormItem>
 
