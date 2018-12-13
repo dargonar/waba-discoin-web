@@ -844,5 +844,18 @@
   "connectionStatus.retry": "Intentar de nuevo",
   "qr.discount": "Descuento",
   "input.typeAndPressEnter": "Presione enter para iniciar búsqueda...",
-  "userBox.message": "¿Desea continuar la sesión con el usuario {account} ({account_id})?"
+  "userBox.message": "¿Desea continuar la sesión con el usuario {account} ({account_id})?",
+  "addFilters": "Agregar filtros",
+  "today": "Hoy",
+  "dates": "Fechas",
+  "transactions": "Transacciones",
+  "transactions.all": "Todas",
+  "transactions.sent": "Enviadas",
+  "transactions.received": "Recividas",
+  "account": "Cuenta",
+  "tag.dateRange": "Desde {from} hasta {until}",
+  "tag.all_transactions": "Todas las transacciones",
+  "tag.only_received": "Solo recibidas",
+  "tag.only_sent": "Solo enviadas",
+  "unfiltredTransacctions": "Transacciones sin filtrar"
 }

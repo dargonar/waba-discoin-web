@@ -4,17 +4,28 @@ import moment from "moment";
 import { txAccounts } from "../../../../redux/api/selectors/transactions.selectors";
 import { getFilter } from "../utils/txFilter";
 import { Modal, Radio, Form, DatePicker, Tag } from "antd";
-
+import IntlMessages from "../../../../components/utility/intlMessages";
+import intlMessages from "../../../../components/utility/intlMessages";
 const RadioGroup = Radio.Group;
 
+const IntlText = ({ text = "", pre = "", values }) => (
+  <IntlMessages id={pre + text.toLowerCase().replace(/ /g, "_")} defaultMessage={text} values={values} />
+);
+
+const formatDates = ({ from, until }) => ({
+  from: moment(from).format("l"),
+  until: moment(until).format("l")
+});
+
 const timeToString = item => {
+  const { from, until } = formatDates(item.arg);
   const isToday = moment().diff(item.arg.from, "days") === 0 && moment().diff(item.arg.until, "days") === 0;
   switch (isToday) {
     case false:
-      return `Desde ${moment(item.arg.from).format("l")} hasta ${moment(item.arg.until).format("l")}`;
+      return `From ${from} until ${until}`;
       break;
     case true:
-      return `Solo hoy`;
+      return `Only today`;
       break;
   }
 };
@@ -24,11 +35,11 @@ const accountToString = item => item.arg.account_name || item.arg.account_id;
 const transactionTypeToString = item => {
   switch (item.arg.direction) {
     case undefined:
-      return "Enviadas y Recividas";
+      return "All transactions";
     case true:
-      return "Solo recibidas";
+      return "Only received";
     case false:
-      return "Solo enviadas";
+      return "Only sent";
   }
 };
 
@@ -39,7 +50,11 @@ export const FiltetersToTags = ({ style, filters = [], removeFilter }) => {
         if (item.filter === "between")
           return (
             <Tag key={item.filter} closable onClose={() => removeFilter("between")}>
-              {timeToString(item)}
+              {timeToString(item).indexOf("today") !== -1 ? (
+                <IntlMessages defaultMessage="Today" id="today" />
+              ) : (
+                <IntlMessages defaultMessage={"From {from} until {until}"} values={formatDates(item.arg)} id={"tag.dateRange"} />
+              )}
             </Tag>
           );
         else if (item.filter === "user")
@@ -51,7 +66,7 @@ export const FiltetersToTags = ({ style, filters = [], removeFilter }) => {
         else if (item.filter === "direction")
           return (
             <Tag key={item.filter} closable onClose={() => removeFilter("direction")}>
-              {transactionTypeToString(item)}
+              <IntlText text={transactionTypeToString(item)} pre="tag." />
             </Tag>
           );
         else return false;
@@ -59,13 +74,14 @@ export const FiltetersToTags = ({ style, filters = [], removeFilter }) => {
     </div>
   ) : (
     <div style={style}>
-      <Tag>Transacciones sin filtrar</Tag>
+      <Tag>
+        <IntlMessages id="unfiltredTransacctions" defaultMessage="Unfiltred transactoins" />
+      </Tag>
     </div>
   );
 };
 
 const FormItem = Form.Item;
-const RangePicker = DatePicker.RangePicker;
 
 const formItemLayout = {
   labelCol: {
@@ -119,13 +135,13 @@ export class TxFilterModal extends Component {
     return (
       <Modal
         visible={visible}
-        title="Filtrar transacciones"
+        title={<IntlMessages defaultMessage="Add filters" id="addFilters" />}
         onCancel={this.props.onCancel ? this.props.onCancel : false}
         onOk={() => (this.props.onOk ? this.props.onOk(filters) : false)}
       >
-        <FormItem {...formItemLayout} label={"Cuenta"}>
+        <FormItem {...formItemLayout} label={<IntlMessages id="account" defaultMessage="Account" />}>
           <AutoComplete
-            placeholder="Account"
+            placeholder={<IntlMessages id="account" defaultMessage="Account" />}
             dataSource={txAccounts(transactions).map(account => ({ text: account.name, value: account.id }))}
             onSelect={value => {
               this.filterChange({
@@ -141,19 +157,25 @@ export class TxFilterModal extends Component {
           />
         </FormItem>
 
-        <FormItem {...formItemLayout} label={"Transacciones"}>
+        <FormItem {...formItemLayout} label={<IntlMessages defaultMessage="Transactions" id="transactions" />}>
           <RadioGroup
             disabled={getFilter(filters, "user").notFound}
             onChange={e => this.onChange("direction", { ...filterArgs("direction"), direction: e.target.value })}
             value={filterArgs("direction").direction}
           >
-            <Radio value={undefined}>Todas</Radio>
-            <Radio value={true}>Recibidas</Radio>
-            <Radio value={false}>Enviadas</Radio>
+            <Radio value={undefined}>
+              <IntlMessages id="transactions.all" defaultMessage="All" />
+            </Radio>
+            <Radio value={true}>
+              <IntlMessages id="transactions.received" defaultMessage="Received" />
+            </Radio>
+            <Radio value={false}>
+              <IntlMessages id="transactions.sent" defaultMessage="Sent" />
+            </Radio>
           </RadioGroup>
         </FormItem>
 
-        <FormItem {...formItemLayout} label={"Fechas"}>
+        <FormItem {...formItemLayout} label={<IntlMessages id="dates" defaultMessage="Dates" />}>
           {/* <Input value={filterArgs("subaccount")} onChange={value => this.onChange("subaccount", value)} /> */}
           <DatePicker.RangePicker
             value={
@@ -181,8 +203,8 @@ export class TxFilterModal extends Component {
             }}
           />
           <Switch
-            checkedChildren="Hoy"
-            unCheckedChildren="Hoy"
+            checkedChildren={<IntlMessages id="today" defaultMessage="Today" />}
+            unCheckedChildren={<IntlMessages id="today" defaultMessage="Today" />}
             checked={
               getFilter(filters, "between").notFound !== true
                 ? getFilter(filters, "between").arg.from.isBetween(moment(), moment(), "days", []) &&
