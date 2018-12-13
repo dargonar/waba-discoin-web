@@ -4,11 +4,12 @@ import PageHeader from "../../../../components/utility/pageHeader";
 import IntlMessages from "../../../../components/utility/intlMessages";
 import Transacction from "../../transactions/components/transactionBox";
 
-export const TransactionsList = ({ transactions }) => (
+export const TransactionsList = ({ transactions, children }) => (
   <Col xs={24} md={18}>
     <PageHeader>
       <IntlMessages defaultMessage="Subaccount transactions" id="subaccountsDetails.transactions" />
     </PageHeader>
+    {children}
     {transactions.length > 0 ? (
       transactions.map((tx, key) => <Transacction transaction={tx} key={"tx-" + key} />)
     ) : (
