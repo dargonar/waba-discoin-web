@@ -9,12 +9,12 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import actions from "../../../redux/api/actions";
 
-import { Pagination, Alert, Button } from "antd";
+import { Pagination, Button } from "antd";
 
 import { subAccount, isCurrentSubAccount } from "../../../redux/api/selectors/subAccounts.selectors";
 import { TransactionsList } from "./components/transactionList";
 import { TransactionsTotals } from "./components/transactionsTotals";
-import { FilterBox, FiltetersToTags, TxFilterModal } from "./components/filterBox";
+import { FiltetersToTags, TxFilterModal } from "./components/filterBox";
 
 import {
   subAccountTxs,
@@ -24,8 +24,8 @@ import {
   txRefunds,
   txBetween,
   txYesterday,
-  txOnlyFrom,
-  txOnlyTo
+  txOnlyDiscounts,
+  txOnlyRefounds
 } from "../../../redux/api/selectors/transactions.selectors";
 
 import { Row, Col } from "antd";
@@ -43,7 +43,7 @@ const filters = {
   user: ({ account_id = "", direction }) => (txs = []) => txs.filter(onlyAccountTx(account_id)),
 
   //arg = true (from) false (to)
-  direction: ({ account_id = "", direction }) => (txs = []) => (direction ? txOnlyFrom(txs)(account_id) : txOnlyTo(txs)(account_id)),
+  direction: ({ account_id = "", direction }) => (txs = []) => (direction ? txOnlyDiscounts(txs)() : txOnlyRefounds(txs)()),
 
   //arg = "discount" (Default) || "refund"
   byType: arg => txs => {

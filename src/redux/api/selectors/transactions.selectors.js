@@ -15,6 +15,12 @@ export const txOnlyFrom = (txs = []) => (id = "") => txs.filter(tx => tx.from.id
 
 export const txOnlyTo = (txs = []) => (id = "") => txs.filter(tx => tx.to.id === id);
 
+export const txOnlyDiscounts = (txs = []) => () => txs.filter(tx => tx.type === "discount");
+
+export const txOnlyRefounds = (txs = []) => () => txs.filter(tx => tx.type === "refund");
+
+export const txOnlyTransfers = (txs = []) => () => txs.filter(tx => tx.type === "transfer");
+
 export const getTranactions = state => get(state, "Api.subaccount.transactions", []);
 
 //List of subaccount transactions that match to user id
