@@ -29,6 +29,12 @@ export default [
     icon: "ion-android-list",
     intlMessage: "sidebar.list"
   },
+  {
+    name: "push-notifications",
+    url: "owner/pushNotifications",
+    icon: "ion-android-send",
+    intlMessage: "sidebar.pushNotifications"
+  }
   // {
   //   name: "store-create",
   //   url: "owner/store/create",
