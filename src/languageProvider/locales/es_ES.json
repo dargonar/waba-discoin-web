@@ -557,6 +557,7 @@
   "sidebar.balance": "Balances",
   "sidebar.accounts": "Cuentas",
   "sidebar.businessCategories": "Categorías",
+  "sidebar.pushNotifications": "Notificaciones Push",
   "topbar.help": "Ayuda",
   "topbar.logout": "Cerrar sesión",
   "topbar.viewAll": "Ver todo",
@@ -857,5 +858,13 @@
   "tag.all_transactions": "Todas las transacciones",
   "tag.only_received": "Solo recibidas",
   "tag.only_sent": "Solo enviadas",
-  "unfiltredTransacctions": "Transacciones sin filtrar"
+  "unfiltredTransacctions": "Transacciones sin filtrar",
+  "push.title": "Título",
+  "push.shortMessage": "Mensaje Corto",
+  "push.imageUrl": "Url de la imagen",
+  "push.bajada": "Bajada",
+  "push.Remate": "Remate",
+  "push.bussinesId": "Id del comercio",
+  "push.amount": "Cantidad de {symbol}",
+  "push.send": "Enviar"
 }

@@ -544,6 +544,7 @@
   "email.noMessage": "Please select a mail to read",
   "themeSwitcher.purchase": "PURCHAGE NOW",
   "themeSwitcher.settings": "Settings",
+  "sidebar.pushNotifications": "Push notifications",
   "sidebar.selectbox": "Select",
   "sidebar.frappeChart": "Frappe Charts",
   "sidebar.kpis": "KPIs",
@@ -604,8 +605,8 @@
   "dashboard.initialCredit": "Initial Credit",
   "dashboard.endorsed": "Endorsed",
   "dashboard.acceptedRatio": "Accepted / Received ratio",
-  "dashboard.todayDiscount" : "Today discount %",
-  "dashboard.todayReward" : "Today reward %",
+  "dashboard.todayDiscount": "Today discount %",
+  "dashboard.todayReward": "Today reward %",
   "dashboard.rewardAndRefund": "Reward & Refund",
   "dashboard.overdraftAvailable": "Credit available",
   "dashboard.acceptAvailableOverdraft": "Do you wish to accept the available overdraft?",
@@ -623,12 +624,12 @@
   "sidebar.panelControl": "Dashboard",
   "sidebar.main": "Home",
   "kpis.amountRefered": "{amount} issued by referrals",
-  "core.sessionPasswordWarning" : "You must enter a session PIN",
+  "core.sessionPasswordWarning": "You must enter a session PIN",
   "core.sessionPassword": "Session PIN",
-  "localLogin.keysEncryptedMessage" : "Please enter your PIN to unlock session",
-  "input.typeAndPressEnter" : "Press enter to init search...",
+  "localLogin.keysEncryptedMessage": "Please enter your PIN to unlock session",
+  "input.typeAndPressEnter": "Press enter to init search...",
 
-  "transactions.type" : "TX Type",
+  "transactions.type": "TX Type",
   "transactions.loading": "Loading TXs",
   "transactions.notFound": "No TX found",
   "transactions.filter": "Filter",
@@ -667,5 +668,5 @@
   "profile.logo_hint": "1:1 aspect ratio",
 
   "businessMain.transactions": "Transactions",
-  "businessMain.billTotalAmount":   "Total"
+  "businessMain.billTotalAmount": "Total"
 }
