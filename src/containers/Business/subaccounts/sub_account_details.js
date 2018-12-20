@@ -28,7 +28,7 @@ import {
   txOnlyRefounds
 } from "../../../redux/api/selectors/transactions.selectors";
 
-import { Row, Col } from "antd";
+import { Row, Col, Alert } from "antd";
 import { currency } from "../../../config";
 import transactions from "../transactions/transactions";
 
@@ -119,7 +119,6 @@ class SubAccountPage extends Component {
           }}
         />
         <AccountBox name={this.props.subaccount.name} dailyPermission={this.props.subaccount.amount} account={this.props.subaccount} />
-
         <Row style={{ marginTop: "30px", marginLeft: "10px", marginRight: "10px" }} gutter={16}>
           <TransactionsList transactions={txFiltred}>
             <div style={{ display: "flex", width: "100%", marginBottom: "20px" }}>
@@ -138,6 +137,16 @@ class SubAccountPage extends Component {
                 }}
               />
             </div>
+            <Alert
+              type="info"
+              style={{ width: "100%" }}
+              message={
+                <span>
+                  <b>FILTERS REQUEST:</b>
+                  <pre>{JSON.stringify({ filters: this.state.filters }, null, "  ")}</pre>
+                </span>
+              }
+            />
           </TransactionsList>
           <TransactionsTotals transactions={txFiltred} />
         </Row>
