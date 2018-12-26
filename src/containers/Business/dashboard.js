@@ -262,7 +262,7 @@ const mapStateToProps = state => ({
   rating: rating(state),
   warnings: warnings(state),
   txs: businessTotals(state),
-  txWeekTotals: txWeekTotals(state.kpis ? state.Api.kpis.last_week_txs || [] : [])
+  txWeekTotals: txWeekTotals(state.Api.kpis ? state.Api.kpis.last_week_txs || [] : [])
 });
 
 const dispatchToProps = dispatch => ({
