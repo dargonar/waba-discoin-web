@@ -12,6 +12,7 @@ import { applyOverdraft } from "./sagas/applyOverdraft";
 import { startSystem } from "./sagas/startSystem";
 import { checkConnection } from "./sagas/checkConnection";
 import { getSubaccount } from "./sagas/getSubaccount";
+import { getKpis } from "./sagas/getKpis";
 
 export default function* rootSaga() {
   yield all([
@@ -26,6 +27,7 @@ export default function* rootSaga() {
     fork(applyOverdraft),
     fork(startSystem),
     fork(checkConnection),
-    fork(getSubaccount)
+    fork(getSubaccount),
+    fork(getKpis)
   ]);
 }

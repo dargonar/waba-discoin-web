@@ -23,7 +23,8 @@ import {
   isBusiness,
   isConfiguration,
   warnings,
-  rating
+  rating,
+  businessTotals
 } from "../../redux/api/selectors/business.selectors";
 
 import { txTodayTotals, txWeekTotals } from "../../redux/api/selectors/transactions.selectors";
@@ -158,7 +159,7 @@ export class Dashboard extends Component {
   componentWillMount() {
     this.props.fetchProfile();
     this.props.fetchConfiguration();
-    this.props.fetchTx();
+    this.props.fetchKpis();
   }
 
   renderContent() {
@@ -260,14 +261,14 @@ const mapStateToProps = state => ({
   balanceRatio: balanceRatio(state),
   rating: rating(state),
   warnings: warnings(state),
-  txs: txTodayTotals(state.Api.transactions || []),
-  txWeekTotals: txWeekTotals(state.Api.transactions || [])
+  txs: businessTotals(state),
+  txWeekTotals: txWeekTotals(state.kpis ? state.Api.kpis.last_week_txs || [] : [])
 });
 
 const dispatchToProps = dispatch => ({
   fetchProfile: bindActionCreators(actions.fetchProfile, dispatch),
   fetchConfiguration: bindActionCreators(actions.fetchConfiguration, dispatch),
-  fetchTx: bindActionCreators(actions.searchTransactions, dispatch),
+  fetchKpis: bindActionCreators(actions.fetchKpis, dispatch),
   goTo: url => dispatch(push(url))
 });
 

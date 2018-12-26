@@ -13,11 +13,17 @@ const initState = {
   msg: null,
   categories: [],
   categoriesList: [],
-  subaccount: {}
+  subaccount: {},
+  kpis: undefined
 };
 
 export default function apiReducer(state = initState, action) {
   switch (action.type) {
+    case actions.GET_KPIS_SUCCESS:
+      return {
+        ...state,
+        kpis: action.payload
+      };
     case actions.GET_PROFILE:
       return {
         ...state,

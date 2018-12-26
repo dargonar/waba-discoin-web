@@ -5,6 +5,10 @@ const actions = {
   GET_PROFILE_SUCCESS: "[Api] Get profile success",
   GET_PROFILE_FAILD: "[Api] Get profile faild",
 
+  GET_KPIS: "[Api] Get Kpis ",
+  GET_KPIS_SUCCESS: "[Api] Get Kpis  success",
+  GET_KPIS_FAILD: "[Api] Get Kpis  faild",
+
   GET_CONFIGURATION: "[Api] Get configuration",
   GET_CONFIGURATION_SUCCESS: "[Api] Get configuration success",
   GET_CONFIGURATION_FAILD: "[Api] Get configuration faild",
@@ -65,6 +69,14 @@ const actions = {
       type: actions.GET_CONFIGURATION
     });
   },
+
+  fetchKpis: account_id => (dispatch, getState) =>
+    dispatch({
+      type: actions.GET_KPIS,
+      payload: {
+        account_id: account_id || getState().Auth.account_id
+      }
+    }),
 
   getSchedule: account_id => (dispatch, getState) => {
     dispatch({

@@ -1,25 +1,25 @@
-const versionConfig={
+const versionConfig = {
   // // TUTI TESTNET
-  base_url          : 'http://127.0.0.1:8088/',        
-  asset_precision   : 5,
-  chain_id          : "1d70881f06a5d2ece91313a00f7eda5e1c7a7183957f3a6539deb4aa95237fe5",
-  admin_pub_key     : 'BTS5KqreoEjBrfuPC8G5ntzv3p1ByHe2HCyUMyDnvex7B42MYzo4u',  
-  language          : 'spanish',
-  
+  base_url: "http://127.0.0.1:8088/",
+  asset_precision: 5,
+  chain_id: "1d70881f06a5d2ece91313a00f7eda5e1c7a7183957f3a6539deb4aa95237fe5",
+  admin_pub_key: "BTS5KqreoEjBrfuPC8G5ntzv3p1ByHe2HCyUMyDnvex7B42MYzo4u",
+  language: "spanish"
+
   // // MAIN NET
-  // base_url          : 'https://api.discoin.com.ar/',   
+  // base_url          : 'https://api.discoin.com.ar/',
   // asset_precision   : 5,
   // chain_id          : '4018d7844c78f6a6c41c6a552b898022310fc5dec06da467ee7905a8dad512c8',
   // admin_pub_key     : 'BTS5QnCpdUT696G8LA6xBonNsuD1PwP5Xgr5GvYXBrxGx6YnqMmdC',
   // language          : 'spanish',
 
   // DEV/PRIVATE TESTNET
-  // base_url          : 'https://devapi.discoin.com.ar/',
-  // asset_precision   : 2,
-  // chain_id          : 'bde617520673d18e67db5d7060ca2740f80e28093519c30176044c8d4a227e73',
-  // admin_pub_key     : 'BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk',
-  // language          : 'english'
-}
+  //   base_url: "https://devapi.discoin.com.ar/",
+  //   asset_precision: 2,
+  //   chain_id: "bde617520673d18e67db5d7060ca2740f80e28093519c30176044c8d4a227e73",
+  //   admin_pub_key: "BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk",
+  //   language: "english"
+};
 
 const siteConfig = {
   siteName: "Discoin",
@@ -29,7 +29,6 @@ const siteConfig = {
 };
 
 const base_url = versionConfig.base_url;
-
 
 const themeConfig = {
   topbar: "themedefault",
@@ -58,15 +57,15 @@ const mapboxConfig = {
 };
 
 const apiConfig = {
-  base: base_url+"api/",
-  baseFiles: base_url+"files/",
-  baseImages: base_url+"static/uploads/",
-  
+  base: base_url + "api/",
+  baseFiles: base_url + "files/",
+  baseImages: base_url + "static/uploads/",
+
   interval_update_tx_ms: 30000,
   timeout_force_update_tx_ms: 15000,
   interval_status_check_ms: 60000,
   chain_id: versionConfig.chain_id,
-  admin_pub_key : versionConfig.admin_pub_key,
+  admin_pub_key: versionConfig.admin_pub_key,
 
   img_logo_width: 300,
   img_promotional_width: 700,
@@ -94,6 +93,7 @@ const apiConfig = {
     { action: "URL/GET_SUBACCOUNTS", path: "/business/:id/subaccount/list/:start" },
     { action: "URL/NEW_SUBACCOUNT", path: "/business/subaccount/add_or_update/create" },
     { action: "URL/GET_KPIS", path: "/dashboard/kpis" },
+    { action: "URL/GET_BUSINESS_KPIS", path: "/business/:id/kpis" },
     { action: "URL/GET_PARAMETERS", path: "/dashboard/configuration" },
     { action: "URL/GET_CATEGORIES", path: "/dashboard/categories" },
     { action: "URL/GET_CATEGORIES_LIST", path: "/business/category/list" },

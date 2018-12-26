@@ -1,5 +1,14 @@
 import get from "lodash.get";
 
+const defaultTotal = {
+  coind: 0,
+  fiat: 0
+};
+const defaultTotals = {
+  discount: { ...defaultTotal },
+  refund: { ...defaultTotal }
+};
+
 export const getBusiness = state => get(state, "Api.business", null);
 export const isBusiness = state => getBusiness(state) !== null;
 
@@ -11,6 +20,9 @@ export const isConfiguration = state => getConfiguration(state) !== null;
 
 export const getBalances = state => get(state, "Api.business.balances");
 export const hasBalances = state => typeof getBalances(state) !== "undefined";
+
+export const getKpis = state => get(state, "Api.kpis");
+export const hasKpis = state => typeof getKpis(state) !== "undefined";
 
 export const getOverdraft = state => get(state, "Api.business.balances.initial_credit");
 export const hasOverdraft = state => typeof getOverdraft(state) !== "undefined";
@@ -58,3 +70,17 @@ export const todayReward = (schedule = []) => todaySchedule(schedule).reward;
 export const warnings = state => (isConfiguration(state) ? balanceWarnings(getConfiguration(state).warnings) : []);
 
 export const rating = state => (isBusiness(state) ? getBusiness(state).rating : 0);
+
+export const businessTotals = state =>
+  hasKpis(state)
+    ? {
+        discount: {
+          coin: getKpis(state).lastw_discounts,
+          fiat: getKpis(state).lastw_billed_discounts
+        },
+        refund: {
+          coin: getKpis(state).lastw_rewards,
+          fiat: getKpis(state).lastw_billed_rewards
+        }
+      }
+    : { ...defaultTotals };
