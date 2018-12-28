@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import IntlMessages from "../../../../components/utility/intlMessages";
-import { Modal, notification } from "antd";
-import { Tooltip } from "antd";
+import { Input, Select, Modal, notification, Tooltip, Icon } from "antd";
 import Form from "../../../../components/uielements/form";
-import Input from "../../../../components/uielements/input";
 import Button from "../../../../components/uielements/button";
-import Select, { SelectOption } from "../../../../components/uielements/select";
 import { injectIntl } from "react-intl";
 import Steps from "../../../../components/uielements/steps";
 import PageLoading from "../../../../components/pageLoading";
@@ -18,6 +15,20 @@ import bip39 from "bip39";
 
 const FormItem = Form.Item;
 const Step = Steps.Step;
+const SelectOption = Select.Option;
+
+export const accountGenerator = (value = "") =>
+  value
+    .toLowerCase()
+    .replace(/ä|á|à|â|ã|ª/g, "a")
+    .replace(/ë|é|è|ê/g, "e")
+    .replace(/ï|í|ì|î/g, "i")
+    .replace(/ö|ó|ò|ô|õ|º/g, "o")
+    .replace(/ü|ú|ù|û/g, "u")
+    .replace(/ñ/g, "n")
+    .replace(/ç/g, "c")
+    .replace(/ /g, ".")
+    .replace(/[^a-z0-9.]/g, "");
 
 export class Register extends Component {
   constructor(props) {
@@ -57,9 +68,13 @@ export class Register extends Component {
         this.setState({
           form: {
             ...this.state.form,
-            ...values
+            ...values,
+            seed: cleanMnemonics(bip39.generateMnemonic(null, null, bip39.wordlists.spanish)),
+            keys: undefined,
+            privKey: undefined
           },
-          current
+          current,
+          copied: false
         });
         console.log(this.state);
       }
@@ -67,17 +82,9 @@ export class Register extends Component {
   }
 
   prev() {
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        const current = this.state.current - 1;
-        this.setState({
-          form: {
-            ...this.state.form,
-            ...values
-          },
-          current
-        });
-      }
+    const current = this.state.current - 1;
+    this.setState({
+      current
     });
   }
 
@@ -100,9 +107,7 @@ export class Register extends Component {
     return callback(ChainValidation.is_account_name_error(value) || undefined);
   }
 
-  componentWillMount() {
-    this.newSeed();
-  }
+  componentWillMount() {}
 
   checkAccontNameAvailable(rule, value, callback) {
     let url;
@@ -141,24 +146,21 @@ export class Register extends Component {
   newSeed() {
     this.setState({
       form: {
-        ...this.state.form,
-        seed: cleanMnemonics(bip39.generateMnemonic(null, null, bip39.wordlists.spanish))
+        ...this.state.form
       }
     });
   }
 
-  render() {
+  getStep(step) {
     const { getFieldDecorator } = this.props.form;
-    const { current } = this.state;
-
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 7 }
+        sm: { span: 8 }
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 17 }
+        sm: { span: 16 }
       }
     };
 
@@ -170,167 +172,240 @@ export class Register extends Component {
       background: "#f5f5f5"
     };
 
-    const steps = [
-      {
-        id: "account",
-        title: <IntlMessages id="register.accountTitle" defaultMessage="Account" />,
-        content: (
-          <Form onSubmit={console.log}>
-            <FormItem {...formItemLayout} label={<IntlMessages id="register.name" defaultMessage="Name" />}>
-              {getFieldDecorator("name", {
-                rules: [
-                  {
-                    required: true,
-                    message: this.props.intl.messages["register.name.empty"]
-                  }
-                ]
-              })(<Input name="name" id="name" title="Nombre del comercio" />)}
-            </FormItem>
-
-            <FormItem {...formItemLayout} label={<IntlMessages id="register.account_name" defaultMessage="Account name" />} hasFeedback>
-              {getFieldDecorator("account_name", {
-                rules: [
-                  {
-                    required: true,
-                    message: this.props.intl.messages["register.account_name.empty"]
-                  },
-                  {
-                    validator: this.checkAccontName
-                  },
-                  {
-                    validator: this.checkAccontNameAvailable
-                  }
-                ]
-              })(
-                <Input
-                  name="account_name"
-                  id="account_name"
-                  title="Nombre de usuario: Sólo letras minúsculas, números, puntos y guiones, debe comenzar con una letra y finalizar con letra o número. Longitud mayor a 2 caracteres."
-                  onChange={e => {
-                    this.props.form.setFieldsValue({ account_name: e.target.value.toLowerCase() });
-                    e.target.value = e.target.value.toLowerCase();
-                  }}
-                />
-              )}
-            </FormItem>
-
-            <FormItem {...formItemLayout} label={<IntlMessages id="register.email" defaultMessage="Email" />} hasFeedback>
-              {getFieldDecorator("email", {
-                rules: [
-                  {
-                    type: "email",
-                    message: this.props.intl.messages["register.email.invalid"]
-                  },
-                  {
-                    required: true,
-                    message: this.props.intl.messages["register.email.empty"]
-                  }
-                ]
-              })(<Input name="email" id="email" email="email" />)}
-            </FormItem>
-
-            <FormItem {...formItemLayout} label={<IntlMessages id="register.telephone" defaultMessage="Telephone" />} hasFeedback>
-              {getFieldDecorator("telephone", {
-                rules: [
-                  {
-                    required: true,
-                    message: this.props.intl.messages["register.telephone.empty"]
-                  }
-                ]
-              })(<Input name="telephone" id="telephone" />)}
-            </FormItem>
-          </Form>
-        )
-      },
-      {
-        id: "caregories",
-        title: <IntlMessages id="register.categoriesTitle" defaultMessage="Categories" />,
-        content: (
-          <Form onSubmit={console.log}>
-            <FormItem {...formItemLayout} label={<IntlMessages id="register.category" defaultMessage="Category" />}>
-              {this.state.current === 1
-                ? getFieldDecorator("category", {
-                    rules: [
-                      {
-                        required: true,
-                        message: this.props.intl.messages["register.category.empty"]
-                      }
-                    ]
-                  })(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder={<IntlMessages id="register.pleaseSelect" defaultMessage="Please select one" />}
-                      onChange={() =>
-                        this.props.form.setFieldsValue({
-                          subcategory: undefined
-                        })
+    switch (step) {
+      case 0:
+        return {
+          id: "account",
+          title: <IntlMessages id="register.accountTitle" defaultMessage="Account" />,
+          content: (
+            <Form onSubmit={console.log}>
+              <FormItem
+                {...formItemLayout}
+                label={
+                  <span>
+                    <IntlMessages id="register.name" defaultMessage="Name" />{" "}
+                    <Tooltip
+                      title={
+                        <IntlMessages
+                          id="register.nameHelper"
+                          defaultMessage="This is the name of the business that will be shown to the users of the application."
+                        />
                       }
                     >
-                      {this.props.categories.map((category, index) => (
-                        <SelectOption key={category.id} value={Number(category.id)}>
-                          {category.name}
-                        </SelectOption>
-                      ))}
-                    </Select>
-                  )
-                : false}
-            </FormItem>
-
-            <FormItem {...formItemLayout} label={<IntlMessages id="register.subcategory" defaultMessage="Subcategory" />}>
-              {this.state.current === 1
-                ? getFieldDecorator("subcategory", {
-                    rules: [
-                      {
-                        required: true,
-                        message: this.props.intl.messages["register.subcategory.empty"]
+                      <Icon type="question-circle-o" />
+                    </Tooltip>
+                  </span>
+                }
+              >
+                {getFieldDecorator("name", {
+                  initialValue: this.state.form.name,
+                  rules: [
+                    {
+                      required: true,
+                      message: this.props.intl.messages["register.name.empty"]
+                    }
+                  ]
+                })(
+                  <Input
+                    name="name"
+                    id="name"
+                    title="Nombre del comercio"
+                    onChange={e => {
+                      const accountName = accountGenerator(e.target.value);
+                      if (!this.props.form.isFieldTouched()) {
+                        this.props.form.setFieldsValue({ account_name: accountName });
+                        this.props.form.validateFields(["account_name"]);
                       }
-                    ]
-                  })(
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder={<IntlMessages id="register.pleaseSelect" defaultMessage="Please select one" />}
+                    }}
+                  />
+                )}
+              </FormItem>
+
+              <FormItem
+                {...formItemLayout}
+                label={
+                  <span>
+                    <IntlMessages id="register.account_name" defaultMessage="Account name" />{" "}
+                    <Tooltip
+                      title={
+                        <IntlMessages
+                          defaultMessage={"The account name will be used to access the application"}
+                          id="register.account_name.helper"
+                        />
+                      }
                     >
-                      {this.props.subcategories
-                        .filter(category => Number(category.parent_id) === Number(this.props.form.getFieldValue("category")))
-                        .map((category, index) => (
+                      <Icon type="question-circle-o" />
+                    </Tooltip>
+                  </span>
+                }
+                hasFeedback
+              >
+                {getFieldDecorator("account_name", {
+                  initialValue: this.state.form.account_name,
+                  rules: [
+                    {
+                      required: true,
+                      message: this.props.intl.messages["register.account_name.empty"] || "Account name is required"
+                    },
+                    {
+                      validator: this.checkAccontName
+                    },
+                    {
+                      validator: this.checkAccontNameAvailable
+                    }
+                  ]
+                })(
+                  <Input
+                    name="account_name"
+                    id="account_name"
+                    title="Nombre de usuario: Sólo letras minúsculas, números, puntos y guiones, debe comenzar con una letra y finalizar con letra o número. Longitud mayor a 2 caracteres."
+                  />
+                )}
+              </FormItem>
+
+              <FormItem {...formItemLayout} label={<IntlMessages id="register.email" defaultMessage="Email" />} hasFeedback>
+                {getFieldDecorator("email", {
+                  initialValue: this.state.form.email,
+                  rules: [
+                    {
+                      type: "email",
+                      message: this.props.intl.messages["register.email.invalid"]
+                    },
+                    {
+                      required: true,
+                      message: this.props.intl.messages["register.email.empty"]
+                    }
+                  ]
+                })(<Input name="email" id="email" email="email" />)}
+              </FormItem>
+
+              <FormItem {...formItemLayout} label={<IntlMessages id="register.telephone" defaultMessage="Telephone" />} hasFeedback>
+                {getFieldDecorator("telephone", {
+                  initialValue: this.state.form.telephone,
+                  rules: [
+                    {
+                      required: true,
+                      message: this.props.intl.messages["register.telephone.empty"] || "Telephone is required"
+                    }
+                  ]
+                })(<Input name="telephone" id="telephone" />)}
+              </FormItem>
+            </Form>
+          )
+        };
+      case 1:
+        return {
+          id: "caregories",
+          title: <IntlMessages id="register.categoriesTitle" defaultMessage="Categories" />,
+          content: (
+            <Form onSubmit={console.log}>
+              <FormItem {...formItemLayout} label={<IntlMessages id="register.category" defaultMessage="Category" />}>
+                {this.state.current === 1
+                  ? getFieldDecorator("category", {
+                      initialValue: this.state.form.category,
+                      rules: [
+                        {
+                          required: true,
+                          message: this.props.intl.messages["register.category.empty"]
+                        }
+                      ]
+                    })(
+                      <Select
+                        style={{ width: "100%" }}
+                        placeholder={<IntlMessages id="register.pleaseSelect" defaultMessage="Please select one" />}
+                        onChange={() =>
+                          this.props.form.setFieldsValue({
+                            subcategory: undefined
+                          })
+                        }
+                      >
+                        {this.props.categories.map((category, index) => (
                           <SelectOption key={category.id} value={Number(category.id)}>
                             {category.name}
                           </SelectOption>
                         ))}
-                    </Select>
-                  )
-                : false}
-            </FormItem>
-          </Form>
-        )
-      },
-      {
-        id: "credentials",
-        title: <IntlMessages id="register.credentialsTitle" defaultMessage="Credentials" />,
-        content: (
-          <div>
-            <h3>
-              <IntlMessages defaultMessage="Brain Key" id="register.brainKey" />
-            </h3>
-            <code style={codeStyle}>{this.state.form.seed}</code>
-            <h3>
-              <IntlMessages defaultMessage="Private Key (Wip)" id="register.wip" />
-            </h3>
-            <code style={codeStyle}>{this.state.form.privKey}</code>
-            <CopyToClipboard
-              text={this.state.form.seed}
-              disabled={typeof this.state.form.privKey !== "undefined"}
-              type="primary"
-              onCopy={this.setPrivateKey}
-            >
-              <Button>
-                <IntlMessages defaultMessage="I have saved this brainkey" id="register.brainKeyCopy" />
-              </Button>
-            </CopyToClipboard>
-          </div>
-        )
-      }
-    ];
+                      </Select>
+                    )
+                  : false}
+              </FormItem>
+
+              <FormItem {...formItemLayout} label={<IntlMessages id="register.subcategory" defaultMessage="Subcategory" />}>
+                {this.state.current === 1
+                  ? getFieldDecorator("subcategory", {
+                      initialValue: this.state.form.subcategory,
+                      rules: [
+                        {
+                          required: true,
+                          message: this.props.intl.messages["register.subcategory.empty"]
+                        }
+                      ]
+                    })(
+                      <Select
+                        style={{ width: "100%" }}
+                        placeholder={<IntlMessages id="register.pleaseSelect" defaultMessage="Please select one" />}
+                      >
+                        {this.props.subcategories
+                          .filter(category => Number(category.parent_id) === Number(this.props.form.getFieldValue("category")))
+                          .map((category, index) => (
+                            <SelectOption key={category.id} value={Number(category.id)}>
+                              {category.name}
+                            </SelectOption>
+                          ))}
+                      </Select>
+                    )
+                  : false}
+              </FormItem>
+            </Form>
+          )
+        };
+      case 2:
+        return {
+          id: "credentials",
+          title: <IntlMessages id="register.credentialsTitle" defaultMessage="Credentials" />,
+          content: (
+            <div>
+              <h3>
+                <IntlMessages defaultMessage="Brain Key" id="register.brainKey" />
+              </h3>
+              <p>
+                <IntlMessages
+                  defaultMessage={
+                    "The brain key is used as source for all cryptographic keys generated in the wallet. If you have it secured, you will be able to regain access to your accounts and funds (unless the access keys have been changed)"
+                  }
+                  id={"register.brainKey.helper"}
+                />
+              </p>
+              <code style={codeStyle}>{this.state.form.seed}</code>
+              {typeof this.state.form.privKey !== "undefined" ? (
+                <div>
+                  <h3>
+                    <IntlMessages defaultMessage="Private Key (Wip)" id="register.wip" />
+                  </h3>
+                  <code style={codeStyle}>{this.state.form.privKey}</code>
+                </div>
+              ) : (
+                false
+              )}
+              <CopyToClipboard
+                text={this.state.form.seed}
+                disabled={typeof this.state.form.privKey !== "undefined"}
+                type="primary"
+                onCopy={this.setPrivateKey}
+              >
+                <Button>
+                  <IntlMessages defaultMessage="I have saved this brainkey" id="register.brainKeyCopy" />
+                </Button>
+              </CopyToClipboard>
+            </div>
+          )
+        };
+      default:
+        return false;
+    }
+  }
+
+  render() {
+    const { current } = this.state;
 
     return (
       <Modal
@@ -344,12 +419,12 @@ export class Register extends Component {
             false
           ) : (
             <div className="steps-action">
-              {this.state.current < steps.length - 1 && (
+              {this.state.current < 2 && (
                 <Button type="primary" onClick={() => this.next()}>
                   <IntlMessages defaultMessage="Next" id="register.next" />
                 </Button>
               )}
-              {this.state.current === steps.length - 1 && (
+              {this.state.current === 2 && (
                 <Button type="primary" onClick={this.submit} disabled={typeof this.state.form.privKey === "undefined"}>
                   <IntlMessages defaultMessage="Done" id="register.done" />
                 </Button>
@@ -364,14 +439,27 @@ export class Register extends Component {
         }
       >
         <Steps current={current}>
-          {steps.map(item => (
+          {[
+            {
+              id: "account",
+              title: <IntlMessages id="register.accountTitle" defaultMessage="Account" />
+            },
+            {
+              id: "caregories",
+              title: <IntlMessages id="register.categoriesTitle" defaultMessage="Categories" />
+            },
+            {
+              id: "credentials",
+              title: <IntlMessages id="register.credentialsTitle" defaultMessage="Credentials" />
+            }
+          ].map(item => (
             <Step key={item.id} title={item.title} />
           ))}
         </Steps>
 
         {!this.props.loading ? (
           <div s="steps-content" style={{ margin: "20px 0" }}>
-            {steps[this.state.current].content}
+            {this.getStep(this.state.current).content}
           </div>
         ) : (
           <div style={{ width: "100%", margin: "40px 0", textAlign: "center" }}>

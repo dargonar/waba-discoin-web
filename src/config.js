@@ -14,11 +14,11 @@ const versionConfig = {
   // language          : 'spanish',
 
   // DEV/PRIVATE TESTNET
-  //   base_url: "https://devapi.discoin.com.ar/",
-  //   asset_precision: 2,
-  //   chain_id: "bde617520673d18e67db5d7060ca2740f80e28093519c30176044c8d4a227e73",
-  //   admin_pub_key: "BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk",
-  //   language: "english"
+  // base_url          : 'https://devapi.discoin.com.ar/',
+  // asset_precision   : 2,
+  // chain_id          : 'bde617520673d18e67db5d7060ca2740f80e28093519c30176044c8d4a227e73',
+  // admin_pub_key     : 'BTS6bM4zBP7PKcSmXV7voEdauT6khCDGUqXyAsq5NCHcyYaNSMYBk',
+  // language          : 'english'
 };
 
 const siteConfig = {
