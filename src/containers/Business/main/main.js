@@ -89,7 +89,9 @@ export class Dashboard extends Component {
       <div>
         <Row type="flex">
           <Col className="col">
-            <span class="label"><IntlMessage id="businessMain.billTotalAmount" /></span>
+            <span class="label">
+              <IntlMessage id="businessMain.billTotalAmount" />
+            </span>
           </Col>
         </Row>
         <Row justify="start" type="flex" flexDirection={Row} className="flexRow input-bill-container">

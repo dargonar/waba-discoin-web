@@ -52,30 +52,16 @@ export const searchAllTransactions = function*() {
     });
     const fetchData = apiCall(url);
 
-    // const { data, error } = yield call(fetchData);
-    // console.log(" --- runRequestSuggest:", data);
-    // if (data && typeof data.error === "undefined") {
-    //   yield put({ type: actions.SEARCH_TRANSACTIONS_SUCCESS, payload: data });
-    // } else {
-    //   yield put({ type: actions.SEARCH_TRANSACTIONS_FAILD, payload: { error: data.error } });
-
-    yield put({
-      type: "GLOBAL_LOADING_START",
-      payload: { msg: "Cargando transacciones" }
-    });
+    //yield put({ type: 'GLOBAL_LOADING_START', payload: { msg: 'Cargando transacciones'}})
 
     const { data, error } = yield call(fetchData);
-    // console.log(" --- runRequestSuggest:", data);
-    if (data && !error && (!data.error || typeof data.error === "undefined")) {
-      yield put({
-        type: actions.SEARCH_TRANSACTIONS_SUCCESS,
-        payload: { ...data, subaccount: action.payload.subaccount }
-      });
-      yield put({ type: "GLOBAL_LOADING_END" });
+    console.log(" --- runRequestSuggest:", data);
+    if (data && !error) {
+      yield put({ type: actions.SEARCH_TRANSACTIONS_SUCCESS, payload: { ...data, subaccount: action.payload.subaccount } });
+      //yield put({ type: 'GLOBAL_LOADING_END'})
     } else {
-      yield put({ type: actions.SEARCH_TRANSACTIONS_FAILD, payload: error });
-      yield put({ type: "GLOBAL_LOADING_END" });
-
+      yield put({ type: actions.SEARCH_TRANSACTIONS_FAILD, payload: { error: data.error } });
+      //yield put({ type: 'GLOBAL_LOADING_END'})
     }
   });
 };

@@ -157,14 +157,10 @@ export default function apiReducer(state = initState, action) {
         ...state,
         // transactions: action.payload.txs,
         transactionsLoading: false,
-        transactions: action.payload.subaccount
-          ? state.transactions
-          : action.payload.txs,
+        transactions: action.payload.subaccount ? state.transactions : action.payload.txs,
         subaccount: {
           ...state.subaccount,
-          transactions: action.payload.subaccount
-            ? action.payload.txs
-            : state.subaccount.transactions
+          transactions: action.payload.subaccount ? action.payload.txs : state.subaccount.transactions
         }
       };
 

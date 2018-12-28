@@ -5,11 +5,7 @@ export class TransactionList extends Component {
   render() {
     return (
       <div>
-        {this.props.txs
-          ? this.props.txs.map(tx => (
-              <Transaction transaction={tx} style={{ margin: "10px 0" }} />
-            ))
-          : false}
+        {this.props.txs ? this.props.txs.map(tx => <Transaction key={tx.id} transaction={tx} style={{ margin: "10px 0" }} />) : false}
       </div>
     );
   }

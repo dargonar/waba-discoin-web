@@ -8,6 +8,8 @@ import IntlMessage from "../../../components/utility/intlMessages";
 import actions from "../../../redux/api/actions";
 import appActions from "../../../redux/app/actions";
 import { currency } from "../../../config";
+import { getOverdraft, hasInitialCredit, getInitialCredit } from "../../../redux/api/selectors/business.selectors";
+import { key } from "bitsharesjs";
 
 class OverdraftStrip extends Component {
   constructor(props) {
@@ -29,13 +31,9 @@ class OverdraftStrip extends Component {
   }
 
   render() {
-    const hasOverdraft =
-      (typeof this.props.business != 'undefined') && this.props.business !== null && this.props.business.balances !== null && !isNaN(this.props.business.balances.ready_to_access) && Number(this.props.business.balances.ready_to_access) > 0;
-
-    if(hasOverdraft)
-      console.log(' ---------- OverdraftStrip:', this.props.business.balances.ready_to_access);
-    //return !hasOverdraft && this.props.ignoreOverdraft ? (
-    return (!this.props.ignoreOverdraft&&hasOverdraft) ? (
+    const { hasInitialCredit, readyToAccess, ignoreOverdraft } = this.props;
+    return hasInitialCredit && !ignoreOverdraft ? (
+      // return !this.props.ignoreOverdraft ? ( //  <--- for debug
       <div>
         <Modal
           visible={this.state.confirm_overdraft_visible}
@@ -56,7 +54,7 @@ class OverdraftStrip extends Component {
               defaultMessage={`You have a {symbol}{value} credit available. You want to take it?`}
               values={{
                 symbol: currency.symbol,
-                value: Number(this.props.business.balances.ready_to_access).toLocaleString()
+                value: Number(readyToAccess).toLocaleString()
               }}
             />
           }
@@ -81,7 +79,8 @@ class OverdraftStrip extends Component {
 export default connect(
   state => ({
     ignoreOverdraft: state.App.toJS().ignoreOverdraft,
-    business: state.Api.business
+    hasInitialCredit: hasInitialCredit(state),
+    readyToAccess: getInitialCredit(state) || 0
   }),
   dispatch => ({
     toggleOverdraft: () => dispatch(appActions.toggleOverdraft()),
