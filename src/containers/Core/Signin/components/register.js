@@ -69,9 +69,12 @@ export class Register extends Component {
           form: {
             ...this.state.form,
             ...values,
-            seed: cleanMnemonics(bip39.generateMnemonic(null, null, bip39.wordlists.spanish))
+            seed: cleanMnemonics(bip39.generateMnemonic(null, null, bip39.wordlists.spanish)),
+            keys: undefined,
+            privKey: undefined
           },
-          current
+          current,
+          copied: false
         });
         console.log(this.state);
       }
